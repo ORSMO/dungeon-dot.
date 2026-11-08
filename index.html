@@ -19,9 +19,13 @@ const hits=[];for(let a of angles){let dx=Math.cos(a),dy=Math.sin(a),nearest=FOG
 for(let q of segments){let sx=q[2]-q[0],sy=q[3]-q[1],cross=dx*sy-dy*sx;if(Math.abs(cross)<.000001)continue;let px=q[0]-p.x,py=q[1]-p.y,t=(px*sy-py*sx)/cross,u=(px*dy-py*dx)/cross;if(t>=0&&u>=0&&u<=1&&t<nearest)nearest=t}
 hits.push({a,x:p.x+dx*nearest,y:p.y+dy*nearest})}
 hits.sort((a,b)=>a.a-b.a);
-g.save();g.beginPath();g.rect(0,0,W,F);g.clip();g.fillStyle='rgba(4,5,13,'+FOG_DARKNESS+')';g.fillRect(0,0,W,F);
-g.globalCompositeOperation='destination-out';g.beginPath();g.moveTo(p.x,p.y);for(let h of hits)g.lineTo(h.x,h.y);g.closePath();g.fillStyle='rgba(0,0,0,1)';g.fill();
-g.restore();
+// Build the darkness on a separate layer so destination-out removes fog, not the game.
+const layer=document.createElement('canvas');layer.width=W;layer.height=F;const fg=layer.getContext('2d');
+fg.fillStyle='rgba(4,5,13,'+FOG_DARKNESS+')';fg.fillRect(0,0,W,F);
+fg.globalCompositeOperation='destination-out';fg.beginPath();fg.moveTo(p.x,p.y);
+for(let h of hits)fg.lineTo(h.x,h.y);
+fg.closePath();fg.fillStyle='#000';fg.fill();fg.globalCompositeOperation='source-over';
+g.drawImage(layer,0,0);
 }
 function spawn(){for(let n=0;n<80;n++){let x=26+Math.random()*308,y=26+Math.random()*229;if(Math.hypot(x-p.x,y-p.y)<85||blocked(x,y,12)||enemies.some(e=>Math.hypot(e.x-x,e.y-y)<25))continue;let roll=Math.random(),shape=roll<.32?'square':roll<.60?'round':roll<.78?'healer':roll<.91?'merge':'splitter',maxHp=shape==='square'?4:shape==='merge'?5:shape==='splitter'?9:3;enemies.push({x,y,vx:0,vy:0,r:shape==='splitter'?17:10,shape,mass:shape==='splitter'?2.5:shape==='square'?1.45:1,hp:maxHp,maxHp,healGlow:0,cool:0,impactCooldown:0,playerHealCooldown:0});break}}
 function hud(){document.querySelector('#hp-fill').style.width=(Math.max(0,hp))+'%';document.querySelector('#hp-fill').style.background=hp<=30?'#f06470':hp<=60?'#e7bb62':'#69d58a';document.querySelector('#hp-label').textContent=Math.round(Math.max(0,hp))+'%';document.querySelector('#kills').textContent='KILLS '+kills}
