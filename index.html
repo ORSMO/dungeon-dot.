@@ -29,7 +29,7 @@ if(distance<39+target.r&&canDamage(target,speed))target.hp-=2}
 if(Math.hypot(p.x-e.x,p.y-e.y)<48&&inv<=0){hp=Math.max(0,hp-6);inv=.65;if(hp<=0)over=true}
 }else if(e.shape==='water'){
 e.elementCooldown=1.45;puddles.push({x:e.x,y:e.y,r:34,life:3.6,maxLife:3.6});
-else if(e.shape==='electric'){
+}else if(e.shape==='electric'){
 e.elementCooldown=1.35;
 let candidates=enemies.filter(t=>t!==e&&t.hp>0&&Math.hypot(t.x-e.x,t.y-e.y)<115)
 .map(t=>({t,d:Math.hypot(t.x-e.x,t.y-e.y)})).sort((a,b)=>a.d-b.d);
@@ -42,7 +42,6 @@ if(target){if(!canDamage(target,speed))continue;target.hp-=2;target.cool=Math.ma
 else{if(inv<=0){hp=Math.max(0,hp-5);inv=.65;if(hp<=0)over=true}}
 elementFx.push({type:'lightning',x:origin.x,y:origin.y,x2:target?target.x:p.x,y2:target?target.y:p.y,life:.23,maxLife:.23});
 origin=target||p;hits++;
-}
 }
 }
 function steamBurst(x,y){elementFx.push({type:'steam',x,y,life:.9,maxLife:.9})}
