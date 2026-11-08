@@ -4,7 +4,7 @@
 const PLAYER_HEALING_ENABLED=true;
 const sticks=[{x:89,y:345,dx:0,dy:0,id:null},{x:271,y:345,dx:0,dy:0,id:null}];
 const walls=[{x:67,y:67,w:69,h:13,type:'bounce'},{x:224,y:66,w:70,h:13,type:'spike'},{x:156,y:123,w:13,h:70,type:'sticky'},{x:66,y:213,w:69,h:13,type:'spike'},{x:226,y:212,w:69,h:13,type:'bounce'}];
-let p,enemies,hp,kills,inv,over,last=0,spawnClock=0,healFx=[],wallFx=[],elementFx=[],puddles=[];
+let p,enemies,hp,kills,inv,over,last=0,spawnClock=0,healFx=[],wallFx=[],elementFx=[],puddles=[],poisonPuddles=[],poisonPlayerTimer=0;
 function showHeal(x,y){healFx.push({x,y,life:.85})}
 function showWallHit(w,x,y,nx,ny,speed){
 if(speed<22)return;
@@ -29,6 +29,8 @@ if(distance<39+target.r&&canDamage(target,speed))target.hp-=2}
 if(Math.hypot(p.x-e.x,p.y-e.y)<48&&inv<=0){hp=Math.max(0,hp-6);inv=.65;if(hp<=0)over=true}
 }else if(e.shape==='water'){
 e.elementCooldown=1.45;puddles.push({x:e.x,y:e.y,r:34,life:3.6,maxLife:3.6});
+}else if(e.shape==='poison'){
+e.elementCooldown=1.6;poisonPuddles.push({x:e.x,y:e.y,r:e.elite?40:30,life:4,maxLife:4});
 }else if(e.shape==='electric'){
 e.elementCooldown=1.35;
 let candidates=enemies.filter(t=>t!==e&&t.hp>0&&Math.hypot(t.x-e.x,t.y-e.y)<115)
@@ -99,17 +101,19 @@ for(let h of hits)fg.lineTo(h.x,h.y);
 fg.closePath();fg.fillStyle='#000';fg.fill();fg.globalCompositeOperation='source-over';
 g.drawImage(layer,0,0);
 }
-function spawn(){for(let n=0;n<80;n++){let x=26+Math.random()*308,y=26+Math.random()*229;if(Math.hypot(x-p.x,y-p.y)<85||blocked(x,y,12)||enemies.some(e=>Math.hypot(e.x-x,e.y-y)<25))continue;let roll=Math.random(),shape=roll<.17?'square':roll<.32?'round':roll<.43?'healer':roll<.54?'merge':roll<.64?'splitter':roll<.72?'armored':roll<.79?'fire':roll<.86?'water':roll<.93?'electric':'rubber',elite=Math.random()<.17,maxHp=shape==='square'?4:shape==='merge'?5:shape==='splitter'?9:shape==='armored'?7:shape==='fire'||shape==='water'||shape==='electric'||shape==='rubber'?4:3,r=(shape==='splitter'?17:shape==='armored'?12:10)*(elite?1.4:1),mass=(shape==='splitter'?2.5:shape==='armored'?2:shape==='rubber'?.8:shape==='square'?1.45:1)*(elite?2:1);if(blocked(x,y,r+2)||enemies.some(e=>Math.hypot(e.x-x,e.y-y)<e.r+r+3))continue;maxHp=Math.ceil(maxHp*(elite?2:1));enemies.push({x,y,vx:0,vy:0,r,shape,elite,mass,hp:maxHp,maxHp,healGlow:0,cool:0,impactCooldown:0,playerHealCooldown:0,elementCooldown:0});break}}
+function spawn(){for(let n=0;n<80;n++){let x=26+Math.random()*308,y=26+Math.random()*229;if(Math.hypot(x-p.x,y-p.y)<85||blocked(x,y,12)||enemies.some(e=>Math.hypot(e.x-x,e.y-y)<25))continue;let roll=Math.random(),shape=roll<.15?'square':roll<.29?'round':roll<.39?'healer':roll<.49?'merge':roll<.58?'splitter':roll<.66?'armored':roll<.73?'fire':roll<.80?'water':roll<.87?'electric':roll<.94?'rubber':'poison',elite=Math.random()<.17,maxHp=shape==='square'?4:shape==='merge'?5:shape==='splitter'?9:shape==='armored'?7:shape==='fire'||shape==='water'||shape==='electric'||shape==='rubber'||shape==='poison'?4:3,r=(shape==='splitter'?17:shape==='armored'?12:10)*(elite?1.4:1),mass=(shape==='splitter'?2.5:shape==='armored'?2:shape==='rubber'?.8:shape==='square'?1.45:1)*(elite?2:1);if(blocked(x,y,r+2)||enemies.some(e=>Math.hypot(e.x-x,e.y-y)<e.r+r+3))continue;maxHp=Math.ceil(maxHp*(elite?2:1));enemies.push({x,y,vx:0,vy:0,r,shape,elite,mass,hp:maxHp,maxHp,healGlow:0,cool:0,impactCooldown:0,playerHealCooldown:0,elementCooldown:0,poisonTimer:0});break}}
 function hud(){document.querySelector('#hp-fill').style.width=(Math.max(0,hp))+'%';document.querySelector('#hp-fill').style.background=hp<=30?'#f06470':hp<=60?'#e7bb62':'#69d58a';document.querySelector('#hp-label').textContent=Math.round(Math.max(0,hp))+'%';document.querySelector('#kills').textContent='KILLS '+kills}
-function reset(){p={x:180,y:35,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];hp=100;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});for(let i=0;i<7;i++)spawn();hud()}
+function reset(){p={x:180,y:35,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];hp=100;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});for(let i=0;i<7;i++)spawn();hud()}
 function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}}
 function setStick(s,v){let dx=v.x-s.x,dy=v.y-s.y,d=Math.hypot(dx,dy),k=d?Math.min(d,R)/d/R:0;s.dx=dx*k;s.dy=dy*k}
 c.addEventListener('pointerdown',e=>{e.preventDefault();let v=pt(e),s=sticks[v.x<W/2?0:1];if(s.id!==null)return;s.id=e.pointerId;c.setPointerCapture(e.pointerId);setStick(s,v)});
 c.addEventListener('pointermove',e=>{let s=sticks.find(s=>s.id===e.pointerId);if(s){e.preventDefault();setStick(s,pt(e))}});
 function up(e){let s=sticks.find(s=>s.id===e.pointerId);if(s){s.id=null;s.dx=s.dy=0}}c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);document.querySelector('#restart').onclick=reset;
 function frame(t){let dt=Math.min((t-last)/1000||0,.035);last=t;
-healFx=healFx.filter(f=>(f.life-=dt)>0);wallFx=wallFx.filter(f=>{f.life-=dt;if(f.type==='particle'){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.exp(-5*dt);f.vy*=Math.exp(-5*dt)}return f.life>0});elementFx=elementFx.filter(f=>(f.life-=dt)>0);puddles=puddles.filter(q=>(q.life-=dt)>0);
+healFx=healFx.filter(f=>(f.life-=dt)>0);wallFx=wallFx.filter(f=>{f.life-=dt;if(f.type==='particle'){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.exp(-5*dt);f.vy*=Math.exp(-5*dt)}return f.life>0});elementFx=elementFx.filter(f=>(f.life-=dt)>0);puddles=puddles.filter(q=>(q.life-=dt)>0);poisonPuddles=poisonPuddles.filter(q=>(q.life-=dt)>0);
 if(!over){let l=sticks[0],r=sticks[1],ox=p.x,oy=p.y;
+poisonPlayerTimer=Math.max(0,poisonPlayerTimer-dt);
+if(poisonPlayerTimer<=0&&poisonPuddles.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<q.r+7)){hp=Math.max(0,hp-3);poisonPlayerTimer=.65;if(hp<=0)over=true}
 let onPuddle=puddles.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<q.r+7);let slideBoost=onPuddle?1.65:1;
 p.kvx=(p.kvx||0)*Math.exp(-6*dt);p.kvy=(p.kvy||0)*Math.exp(-6*dt);
 p.x=clamp(p.x+(l.dx*118*slideBoost+p.kvx)*dt,23,W-23);p.y=clamp(p.y+(l.dy*118*slideBoost+p.kvy)*dt,23,F-23);
@@ -119,7 +123,7 @@ p.x=playerBody.x;p.y=playerBody.y;p.sticky=playerBody.sticky;p.wallCooldowns=pla
 if(Math.hypot(r.dx,r.dy)>.15)p.target=Math.atan2(r.dy,r.dx);
 let diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a)),force=Math.sign(diff)*Math.min(1,Math.abs(diff)*1.6);
 let previousBatAngle=p.a;p.vel=clamp(p.vel+(force*23-p.vel*3.1)*dt,-7.4,7.4);if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
-for(let e of enemies){e.elementCooldown=Math.max(0,(e.elementCooldown||0)-dt);e.cool=Math.max(0,e.cool-dt);e.impactCooldown=Math.max(0,e.impactCooldown-dt);e.playerHealCooldown=Math.max(0,e.playerHealCooldown-dt);e.healGlow=Math.max(0,e.healGlow-dt);let dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy)||1;
+for(let e of enemies){e.poisonTimer=Math.max(0,(e.poisonTimer||0)-dt);if(e.shape!=='poison'&&e.poisonTimer<=0&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r)){if(canDamage(e,115)){e.hp-=1;e.cool=Math.max(e.cool,.12)}e.poisonTimer=.7}e.elementCooldown=Math.max(0,(e.elementCooldown||0)-dt);e.cool=Math.max(0,e.cool-dt);e.impactCooldown=Math.max(0,e.impactCooldown-dt);e.playerHealCooldown=Math.max(0,e.playerHealCooldown-dt);e.healGlow=Math.max(0,e.healGlow-dt);let dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy)||1;
 // Mild chase force, with velocity retained after impacts.
 if(d>21){e.vx+=dx/d*43*dt;e.vy+=dy/d*43*dt}
 let puddleBoost=puddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r)?1.55:1;
@@ -194,6 +198,7 @@ let defeated=enemies.filter(e=>e.hp<=0&&e.hp!==-999);let newborn=[];for(let e of
 g.fillStyle='#191724';g.fillRect(0,0,W,H);
 for(let y=14;y<F-10;y+=25)for(let x=12;x<W-10;x+=25){g.fillStyle=((x+y)/25|0)%2?'#272438':'#2d293e';g.fillRect(x,y,24,24)}
 g.strokeStyle='#746383';g.lineWidth=9;g.strokeRect(8,8,W-16,F-16);
+for(let q of poisonPuddles){g.save();g.globalAlpha=Math.min(.7,q.life/.65*.62);g.fillStyle='#65c831';g.beginPath();g.ellipse(q.x,q.y,q.r,q.r*.73,0,0,Math.PI*2);g.fill();g.strokeStyle='#c4ff70';g.lineWidth=2;g.stroke();for(let i=0;i<3;i++){let a=i*2.4+q.life;g.fillStyle='#c4ff70';g.beginPath();g.arc(q.x+Math.cos(a)*q.r*.48,q.y+Math.sin(a)*q.r*.3,2.5,0,Math.PI*2);g.fill()}g.restore()}
 for(let q of puddles){g.save();g.globalAlpha=Math.min(.65,q.life/.6*.55);g.fillStyle='#2c96ed';g.beginPath();g.ellipse(q.x,q.y,q.r,q.r*.68,0,0,Math.PI*2);g.fill();g.strokeStyle='#a0e9ff';g.lineWidth=2;g.stroke();g.restore()}
 for(let w of walls){
 g.fillStyle=w.type==='bounce'?'#246bba':w.type==='spike'?'#a93245':w.type==='sticky'?'#8050a6':'#51475f';g.fillRect(w.x,w.y,w.w,w.h);
@@ -214,7 +219,7 @@ if(f.type==='sticky'){g.globalAlpha=a*.5;g.beginPath();g.arc(f.x,f.y,(1-a)*10+3,
 g.restore()}
 for(let e of enemies){
 if(e.healGlow>0){g.save();g.globalAlpha=.36*e.healGlow/.75;g.fillStyle='#5eff83';g.beginPath();g.arc(e.x,e.y,e.r+10,0,Math.PI*2);g.fill();g.restore()}
-g.fillStyle=e.cool>0?'#ffb2a9':e.shape==='square'?'#ec5274':e.shape==='round'?'#55c9ce':e.shape==='healer'?'#60df79':e.shape==='splitter'?'#ff9e48':e.shape==='mini'?'#ffca73':e.shape==='armored'?'#d9ad50':e.shape==='fire'?'#ff6b2f':e.shape==='water'?'#4aabff':e.shape==='electric'?'#ffe75c':e.shape==='rubber'?'#7ce77c':'#b388fa';
+g.fillStyle=e.cool>0?'#ffb2a9':e.shape==='square'?'#ec5274':e.shape==='round'?'#55c9ce':e.shape==='healer'?'#60df79':e.shape==='splitter'?'#ff9e48':e.shape==='mini'?'#ffca73':e.shape==='armored'?'#d9ad50':e.shape==='fire'?'#ff6b2f':e.shape==='water'?'#4aabff':e.shape==='electric'?'#ffe75c':e.shape==='rubber'?'#7ce77c':e.shape==='poison'?'#9bdc38':'#b388fa';
 g.beginPath();if(e.shape==='square')g.rect(e.x-e.r,e.y-e.r,e.r*2,e.r*2);else g.arc(e.x,e.y,e.r,0,Math.PI*2);g.fill();
 if(e.elite||e.shape==='armored'){g.save();g.strokeStyle=e.elite?'#f6d66f':'#fff0a6';g.lineWidth=e.elite?3:2.5;g.shadowColor=e.elite?'#f8c954':'#ffdf8a';g.shadowBlur=e.elite?10:5;g.beginPath();g.arc(e.x,e.y,e.r+4,0,Math.PI*2);g.stroke();g.restore()}
 if(e.shape==='healer'){g.fillStyle='#174e29';g.fillRect(e.x-2,e.y-7,4,14);g.fillRect(e.x-7,e.y-2,14,4)}
