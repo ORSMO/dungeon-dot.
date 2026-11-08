@@ -10,6 +10,8 @@ function collideWall(e,w){let cx=clamp(e.x,w.x,w.x+w.w),cy=clamp(e.y,w.y,w.y+w.h
 function blocked(x,y,r){return walls.some(w=>x+r>w.x&&x-r<w.x+w.w&&y+r>w.y&&y-r<w.y+w.h)}
 // Visibility polygon: rays stop at dungeon walls, never at enemies.
 const FOG_RADIUS=154,FOG_DARKNESS=1;
+// Hidden fog-of-war switch. Set true to re-enable darkness.
+const FOG_OF_WAR_ENABLED=false;
 function drawFog(){
 const segments=[];for(let w of walls){let x=w.x,y=w.y,X=x+w.w,Y=y+w.h;segments.push([x,y,X,y],[X,y,X,Y],[X,Y,x,Y],[x,Y,x,y])}
 segments.push([17,17,343,17],[343,17,343,268],[343,268,17,268],[17,268,17,17]);
@@ -124,7 +126,7 @@ if(e.shape==='merge'){g.strokeStyle='#e3caff';g.lineWidth=1.5;g.beginPath();g.ar
 for(let f of healFx){let progress=1-f.life/.85,alpha=Math.min(1,f.life/.25);g.save();g.globalAlpha=alpha;g.fillStyle='#70ff90';let x=f.x+12+progress*7,y=f.y-14-progress*21;g.fillRect(x-2,y-8,4,16);g.fillRect(x-8,y-2,16,4);g.restore()}
 if(inv===0||Math.floor(t/110)%2===0){g.fillStyle='#fff';g.beginPath();g.arc(p.x,p.y,9,0,Math.PI*2);g.fill()}
 g.save();g.translate(p.x,p.y);g.rotate(p.a);g.fillStyle='#fff';g.fillRect(17,-3,31,6);g.fillStyle='#bdb7d5';g.fillRect(19,2,27,2);g.restore();
-drawFog();
+if(FOG_OF_WAR_ENABLED)drawFog();
 g.fillStyle='#11101c';g.fillRect(0,F,W,H-F);for(let i=0;i<2;i++){let s=sticks[i];g.beginPath();g.arc(s.x,s.y,R,0,Math.PI*2);g.fillStyle='#28263c';g.fill();g.strokeStyle=i?'#b8a6ed':'#7e90ad';g.lineWidth=2;g.stroke();g.beginPath();g.arc(s.x+s.dx*R,s.y+s.dy*R,19,0,Math.PI*2);g.fillStyle=i?'#a38bd2':'#7486a7';g.fill()}
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',89,402);g.fillText('BAT',271,402);
 if(over){g.fillStyle='#100e1acc';g.fillRect(12,12,336,F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('GAME OVER',180,130);g.font='12px monospace';g.fillText('Kills '+kills,180,155)}
