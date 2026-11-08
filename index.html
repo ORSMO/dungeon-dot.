@@ -6,9 +6,9 @@ let p,enemies,hp,kills,inv,over,last=0,spawnClock=0;
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 function collideWall(e,w){let cx=clamp(e.x,w.x,w.x+w.w),cy=clamp(e.y,w.y,w.y+w.h),dx=e.x-cx,dy=e.y-cy,d=Math.hypot(dx,dy);if(d<e.r){let nx,ny,depth;if(d>.0001){nx=dx/d;ny=dy/d;depth=e.r-d}else{let edges=[e.x-w.x,w.x+w.w-e.x,e.y-w.y,w.y+w.h-e.y],i=edges.indexOf(Math.min(...edges));nx=i===0?-1:i===1?1:0;ny=i===2?-1:i===3?1:0;depth=e.r+edges[i]}e.x+=nx*depth;e.y+=ny*depth;let vn=e.vx*nx+e.vy*ny;if(vn<0){e.vx-=1.78*vn*nx;e.vy-=1.78*vn*ny}}}
 function blocked(x,y,r){return walls.some(w=>x+r>w.x&&x-r<w.x+w.w&&y+r>w.y&&y-r<w.y+w.h)}
-function spawn(){for(let n=0;n<80;n++){let x=26+Math.random()*308,y=26+Math.random()*229;if(Math.hypot(x-p.x,y-p.y)<85||blocked(x,y,12)||enemies.some(e=>Math.hypot(e.x-x,e.y-y)<25))continue;let shape=Math.random()<.5?'square':'round';enemies.push({x,y,vx:0,vy:0,r:shape==='square'?10:10,shape,mass:shape==='square'?1.45:1,hp:shape==='square'?4:3,cool:0});break}}
-function hud(){document.querySelector('#hp-fill').style.width=(Math.max(0,hp)/3*100)+'%';document.querySelector('#hp-fill').style.background=hp<=1?'#f06470':hp===2?'#e7bb62':'#69d58a';document.querySelector('#hp-label').textContent=Math.round(Math.max(0,hp)/3*100)+'%';document.querySelector('#kills').textContent='KILLS '+kills}
-function reset(){p={x:180,y:35,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];hp=3;kills=0;inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});for(let i=0;i<7;i++)spawn();hud()}
+function spawn(){for(let n=0;n<80;n++){let x=26+Math.random()*308,y=26+Math.random()*229;if(Math.hypot(x-p.x,y-p.y)<85||blocked(x,y,12)||enemies.some(e=>Math.hypot(e.x-x,e.y-y)<25))continue;let shape=Math.random()<.5?'square':'round';enemies.push({x,y,vx:0,vy:0,r:shape==='square'?10:10,shape,mass:shape==='square'?1.45:1,hp:shape==='square'?4:3,cool:0,impactCooldown:0});break}}
+function hud(){document.querySelector('#hp-fill').style.width=(Math.max(0,hp))+'%';document.querySelector('#hp-fill').style.background=hp<=30?'#f06470':hp<=60?'#e7bb62':'#69d58a';document.querySelector('#hp-label').textContent=Math.round(Math.max(0,hp))+'%';document.querySelector('#kills').textContent='KILLS '+kills}
+function reset(){p={x:180,y:35,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];hp=100;kills=0;inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});for(let i=0;i<7;i++)spawn();hud()}
 function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}}
 function setStick(s,v){let dx=v.x-s.x,dy=v.y-s.y,d=Math.hypot(dx,dy),k=d?Math.min(d,R)/d/R:0;s.dx=dx*k;s.dy=dy*k}
 c.addEventListener('pointerdown',e=>{e.preventDefault();let v=pt(e),s=sticks[v.x<W/2?0:1];if(s.id!==null)return;s.id=e.pointerId;c.setPointerCapture(e.pointerId);setStick(s,v)});
@@ -21,7 +21,7 @@ let playerBody={x:p.x,y:p.y,vx:0,vy:0,r:9};for(let w of walls)collideWall(player
 if(Math.hypot(r.dx,r.dy)>.15)p.target=Math.atan2(r.dy,r.dx);
 let diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a)),force=Math.sign(diff)*Math.min(1,Math.abs(diff)*1.6);
 let previousBatAngle=p.a;p.vel=clamp(p.vel+(force*23-p.vel*3.1)*dt,-7.4,7.4);if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
-for(let e of enemies){e.cool=Math.max(0,e.cool-dt);let dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy)||1;
+for(let e of enemies){e.cool=Math.max(0,e.cool-dt);e.impactCooldown=Math.max(0,e.impactCooldown-dt);let dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy)||1;
 // Mild chase force, with velocity retained after impacts.
 if(d>21){e.vx+=dx/d*43*dt;e.vy+=dy/d*43*dt}
 let damp=Math.exp(-.38*dt);e.vx*=damp;e.vy*=damp;let speed=Math.hypot(e.vx,e.vy);if(speed>270){e.vx*=270/speed;e.vy*=270/speed}
@@ -29,7 +29,7 @@ e.x+=e.vx*dt;e.y+=e.vy*dt;
 if(e.x<18+e.r){e.x=18+e.r;e.vx=Math.abs(e.vx)*.85}if(e.x>W-18-e.r){e.x=W-18-e.r;e.vx=-Math.abs(e.vx)*.85}
 if(e.y<18+e.r){e.y=18+e.r;e.vy=Math.abs(e.vy)*.85}if(e.y>F-18-e.r){e.y=F-18-e.r;e.vy=-Math.abs(e.vy)*.85}
 for(let w of walls)collideWall(e,w);
-let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(inv===0){hp--;inv=1.1;if(hp<=0)over=true}}
+let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(inv===0){hp=Math.max(0,hp-8);inv=1.1;if(hp<=0)over=true}}
 // Solid bat: sweep its full arc so fast swings cannot tunnel through enemies.
 let sweep=p.a-previousBatAngle,steps=Math.max(1,Math.ceil(Math.abs(sweep)/.055)),hit=false;
 for(let k=0;k<=steps;k++){
@@ -56,7 +56,7 @@ if(d<e.r+4){let nx=d>.001?dx/d:-uy,ny=d>.001?dy/d:ux;e.x+=nx*(e.r+4-d+.5);e.y+=n
 // Elastic-ish circle collision, including square enemies with circular collision bounds.
 for(let i=0;i<enemies.length;i++)for(let j=i+1;j<enemies.length;j++){let a=enemies[i],b=enemies[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||.0001,overlap=a.r+b.r-d;if(overlap<=0)continue;let nx=dx/d,ny=dy/d,invA=1/a.mass,invB=1/b.mass,tot=invA+invB;
 a.x-=nx*overlap*invA/tot;b.x+=nx*overlap*invB/tot;a.y-=ny*overlap*invA/tot;b.y+=ny*overlap*invB/tot;
-let rel=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;if(rel<0){let jimp=-(1+.92)*rel/tot;a.vx-=jimp*nx*invA;a.vy-=jimp*ny*invA;b.vx+=jimp*nx*invB;b.vy+=jimp*ny*invB}}
+let rel=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;if(rel<0){let impactSpeed=-rel;if(impactSpeed>75&&a.impactCooldown<=0&&b.impactCooldown<=0){let damage=impactSpeed>175?3:impactSpeed>125?2:1;a.hp-=damage;b.hp-=damage;a.impactCooldown=.3;b.impactCooldown=.3;a.cool=Math.max(a.cool,.15);b.cool=Math.max(b.cool,.15)}let jimp=-(1+.92)*rel/tot;a.vx-=jimp*nx*invA;a.vy-=jimp*ny*invA;b.vx+=jimp*nx*invB;b.vy+=jimp*ny*invB}}
 let before=enemies.length;enemies=enemies.filter(e=>e.hp>0);kills+=before-enemies.length;spawnClock+=dt;if(enemies.length<7&&spawnClock>.6){spawn();spawnClock=0}hud()}
 g.fillStyle='#191724';g.fillRect(0,0,W,H);
 for(let y=14;y<F-10;y+=25)for(let x=12;x<W-10;x+=25){g.fillStyle=((x+y)/25|0)%2?'#272438':'#2d293e';g.fillRect(x,y,24,24)}
