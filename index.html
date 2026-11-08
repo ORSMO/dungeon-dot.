@@ -23,25 +23,28 @@ const WALL_HIT_COOLDOWN=.085;
 function collideWall(e,w,dt=.016){
 let cx=clamp(e.x,w.x,w.x+w.w),cy=clamp(e.y,w.y,w.y+w.h),dx=e.x-cx,dy=e.y-cy,d=Math.hypot(dx,dy);
 if(!e.wallCooldowns)e.wallCooldowns=new Map();
+if(!e.wallContacts)e.wallContacts=new Set();
 let remaining=Math.max(0,(e.wallCooldowns.get(w)||0)-dt);
 if(remaining)e.wallCooldowns.set(w,remaining);else e.wallCooldowns.delete(w);
-if(d>=e.r){if(e.sticky&&e.sticky.wall===w)e.sticky=null;return 0}
+if(d>=e.r){if(d>=e.r+.8){e.wallContacts.delete(w);if(e.sticky&&e.sticky.wall===w)e.sticky=null}return 0}
+const newContact=!e.wallContacts.has(w);
+e.wallContacts.add(w);
 let nx,ny,depth;if(d>.0001){nx=dx/d;ny=dy/d;depth=e.r-d}else{let edges=[e.x-w.x,w.x+w.w-e.x,e.y-w.y,w.y+w.h-e.y],i=edges.indexOf(Math.min(...edges));nx=i===0?-1:i===1?1:0;ny=i===2?-1:i===3?1:0;depth=e.r+edges[i]}
 let vn=e.vx*nx+e.vy*ny,impact=Math.max(0,-vn);
 if(w.type==='sticky'){
-if(!e.sticky||e.sticky.wall!==w){e.sticky={wall:w,allow:remaining?0:Math.min(e.r*.72,impact*.065),age:0};if(!remaining){e.wallCooldowns.set(w,WALL_HIT_COOLDOWN);showWallHit(w,cx,cy,nx,ny,impact)}}
+if(!e.sticky||e.sticky.wall!==w){e.sticky={wall:w,allow:newContact&&!remaining?Math.min(e.r*.72,impact*.065):0,age:0};if(newContact&&!remaining){e.wallCooldowns.set(w,WALL_HIT_COOLDOWN);if(!e.isPlayer||e.knockbackSpeed>90)showWallHit(w,cx,cy,nx,ny,impact)}}
 e.sticky.age+=dt;e.sticky.allow=Math.max(0,e.sticky.allow-7*dt);
 let allowed=e.sticky.allow;
 if(depth>allowed){e.x+=nx*(depth-allowed);e.y+=ny*(depth-allowed)}
 if(vn<0){e.vx-=vn*nx;e.vy-=vn*ny}
 e.vx*=Math.exp(-5*dt);e.vy*=Math.exp(-5*dt);
-return remaining?0:impact
+return remaining||!newContact?0:impact
 }
 // Always resolve penetration, but only apply a new bounce impulse once per pair cooldown.
 e.x+=nx*depth;e.y+=ny*depth;
-if(vn<0){if(!remaining){let restitution=w.type==='bounce'?2.45:w.type==='spike'?.65:.78;e.vx-=(1+restitution)*vn*nx;e.vy-=(1+restitution)*vn*ny;e.wallCooldowns.set(w,WALL_HIT_COOLDOWN);showWallHit(w,cx,cy,nx,ny,impact)}
+if(vn<0){if(newContact&&!remaining){let restitution=w.type==='bounce'?2.45:w.type==='spike'?.65:.78;e.vx-=(1+restitution)*vn*nx;e.vy-=(1+restitution)*vn*ny;e.wallCooldowns.set(w,WALL_HIT_COOLDOWN);if(!e.isPlayer||e.knockbackSpeed>90)showWallHit(w,cx,cy,nx,ny,impact)}
 else{e.vx-=vn*nx;e.vy-=vn*ny}}
-return remaining?0:impact
+return remaining||!newContact?0:impact
 }
 function blocked(x,y,r){return walls.some(w=>x+r>w.x&&x-r<w.x+w.w&&y+r>w.y&&y-r<w.y+w.h)}
 // Visibility polygon: rays stop at dungeon walls, never at enemies.
@@ -77,9 +80,9 @@ function frame(t){let dt=Math.min((t-last)/1000||0,.035);last=t;
 healFx=healFx.filter(f=>(f.life-=dt)>0);wallFx=wallFx.filter(f=>{f.life-=dt;if(f.type==='particle'){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.exp(-5*dt);f.vy*=Math.exp(-5*dt)}return f.life>0});if(!over){let l=sticks[0],r=sticks[1],ox=p.x,oy=p.y;
 p.kvx=(p.kvx||0)*Math.exp(-6*dt);p.kvy=(p.kvy||0)*Math.exp(-6*dt);
 p.x=clamp(p.x+(l.dx*118+p.kvx)*dt,23,W-23);p.y=clamp(p.y+(l.dy*118+p.kvy)*dt,23,F-23);
-let playerBody={x:p.x,y:p.y,vx:l.dx*118+p.kvx,vy:l.dy*118+p.kvy,r:9,sticky:p.sticky||null,wallCooldowns:p.wallCooldowns||new Map()};
+let playerBody={x:p.x,y:p.y,vx:l.dx*118+p.kvx,vy:l.dy*118+p.kvy,r:9,isPlayer:true,knockbackSpeed:Math.hypot(p.kvx,p.kvy),sticky:p.sticky||null,wallCooldowns:p.wallCooldowns||new Map(),wallContacts:p.wallContacts||new Set()};
 for(let w of walls){let impact=collideWall(playerBody,w,dt);if(w.type==='spike'&&impact>90&&Math.hypot(p.kvx,p.kvy)>95&&inv<=0){let damage=impact>180?16:impact>130?10:5;hp=Math.max(0,hp-damage);inv=.7;if(hp<=0)over=true}}
-p.x=playerBody.x;p.y=playerBody.y;p.sticky=playerBody.sticky;p.wallCooldowns=playerBody.wallCooldowns;p.vx=(p.x-ox)/Math.max(dt,.001);p.vy=(p.y-oy)/Math.max(dt,.001);
+p.x=playerBody.x;p.y=playerBody.y;p.sticky=playerBody.sticky;p.wallCooldowns=playerBody.wallCooldowns;p.wallContacts=playerBody.wallContacts;p.vx=(p.x-ox)/Math.max(dt,.001);p.vy=(p.y-oy)/Math.max(dt,.001);
 if(Math.hypot(r.dx,r.dy)>.15)p.target=Math.atan2(r.dy,r.dx);
 let diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a)),force=Math.sign(diff)*Math.min(1,Math.abs(diff)*1.6);
 let previousBatAngle=p.a;p.vel=clamp(p.vel+(force*23-p.vel*3.1)*dt,-7.4,7.4);if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
