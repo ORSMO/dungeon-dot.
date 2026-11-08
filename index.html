@@ -8,6 +8,21 @@ let p,enemies,hp,kills,inv,over,last=0,spawnClock=0,healFx=[];function showHeal(
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 function collideWall(e,w){let cx=clamp(e.x,w.x,w.x+w.w),cy=clamp(e.y,w.y,w.y+w.h),dx=e.x-cx,dy=e.y-cy,d=Math.hypot(dx,dy);if(d<e.r){let nx,ny,depth;if(d>.0001){nx=dx/d;ny=dy/d;depth=e.r-d}else{let edges=[e.x-w.x,w.x+w.w-e.x,e.y-w.y,w.y+w.h-e.y],i=edges.indexOf(Math.min(...edges));nx=i===0?-1:i===1?1:0;ny=i===2?-1:i===3?1:0;depth=e.r+edges[i]}e.x+=nx*depth;e.y+=ny*depth;let vn=e.vx*nx+e.vy*ny;if(vn<0){e.vx-=1.78*vn*nx;e.vy-=1.78*vn*ny}}}
 function blocked(x,y,r){return walls.some(w=>x+r>w.x&&x-r<w.x+w.w&&y+r>w.y&&y-r<w.y+w.h)}
+// Visibility polygon: rays stop at dungeon walls, never at enemies.
+const FOG_RADIUS=154,FOG_DARKNESS=.91;
+function drawFog(){
+const segments=[];for(let w of walls){let x=w.x,y=w.y,X=x+w.w,Y=y+w.h;segments.push([x,y,X,y],[X,y,X,Y],[X,Y,x,Y],[x,Y,x,y])}
+segments.push([17,17,343,17],[343,17,343,268],[343,268,17,268],[17,268,17,17]);
+let angles=[];for(let seg of segments)for(let k=0;k<2;k++){let a=Math.atan2(seg[k*2+1]-p.y,seg[k*2]-p.x);angles.push(a-.0001,a,a+.0001)}
+for(let i=0;i<240;i++)angles.push(i*Math.PI*2/240);
+const hits=[];for(let a of angles){let dx=Math.cos(a),dy=Math.sin(a),nearest=FOG_RADIUS;
+for(let q of segments){let sx=q[2]-q[0],sy=q[3]-q[1],cross=dx*sy-dy*sx;if(Math.abs(cross)<.000001)continue;let px=q[0]-p.x,py=q[1]-p.y,t=(px*sy-py*sx)/cross,u=(px*dy-py*dx)/cross;if(t>=0&&u>=0&&u<=1&&t<nearest)nearest=t}
+hits.push({a,x:p.x+dx*nearest,y:p.y+dy*nearest})}
+hits.sort((a,b)=>a.a-b.a);
+g.save();g.beginPath();g.rect(0,0,W,F);g.clip();g.fillStyle='rgba(4,5,13,'+FOG_DARKNESS+')';g.fillRect(0,0,W,F);
+g.globalCompositeOperation='destination-out';g.beginPath();g.moveTo(p.x,p.y);for(let h of hits)g.lineTo(h.x,h.y);g.closePath();g.fillStyle='rgba(0,0,0,1)';g.fill();
+g.restore();
+}
 function spawn(){for(let n=0;n<80;n++){let x=26+Math.random()*308,y=26+Math.random()*229;if(Math.hypot(x-p.x,y-p.y)<85||blocked(x,y,12)||enemies.some(e=>Math.hypot(e.x-x,e.y-y)<25))continue;let roll=Math.random(),shape=roll<.32?'square':roll<.60?'round':roll<.78?'healer':roll<.91?'merge':'splitter',maxHp=shape==='square'?4:shape==='merge'?5:shape==='splitter'?9:3;enemies.push({x,y,vx:0,vy:0,r:shape==='splitter'?17:10,shape,mass:shape==='splitter'?2.5:shape==='square'?1.45:1,hp:maxHp,maxHp,healGlow:0,cool:0,impactCooldown:0,playerHealCooldown:0});break}}
 function hud(){document.querySelector('#hp-fill').style.width=(Math.max(0,hp))+'%';document.querySelector('#hp-fill').style.background=hp<=30?'#f06470':hp<=60?'#e7bb62':'#69d58a';document.querySelector('#hp-label').textContent=Math.round(Math.max(0,hp))+'%';document.querySelector('#kills').textContent='KILLS '+kills}
 function reset(){p={x:180,y:35,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];hp=100;kills=0;healFx=[];inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});for(let i=0;i<7;i++)spawn();hud()}
@@ -105,6 +120,7 @@ if(e.shape==='merge'){g.strokeStyle='#e3caff';g.lineWidth=1.5;g.beginPath();g.ar
 for(let f of healFx){let progress=1-f.life/.85,alpha=Math.min(1,f.life/.25);g.save();g.globalAlpha=alpha;g.fillStyle='#70ff90';let x=f.x+12+progress*7,y=f.y-14-progress*21;g.fillRect(x-2,y-8,4,16);g.fillRect(x-8,y-2,16,4);g.restore()}
 if(inv===0||Math.floor(t/110)%2===0){g.fillStyle='#fff';g.beginPath();g.arc(p.x,p.y,9,0,Math.PI*2);g.fill()}
 g.save();g.translate(p.x,p.y);g.rotate(p.a);g.fillStyle='#fff';g.fillRect(17,-3,31,6);g.fillStyle='#bdb7d5';g.fillRect(19,2,27,2);g.restore();
+drawFog();
 g.fillStyle='#11101c';g.fillRect(0,F,W,H-F);for(let i=0;i<2;i++){let s=sticks[i];g.beginPath();g.arc(s.x,s.y,R,0,Math.PI*2);g.fillStyle='#28263c';g.fill();g.strokeStyle=i?'#b8a6ed':'#7e90ad';g.lineWidth=2;g.stroke();g.beginPath();g.arc(s.x+s.dx*R,s.y+s.dy*R,19,0,Math.PI*2);g.fillStyle=i?'#a38bd2':'#7486a7';g.fill()}
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',89,402);g.fillText('BAT',271,402);
 if(over){g.fillStyle='#100e1acc';g.fillRect(12,12,336,F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('GAME OVER',180,130);g.font='12px monospace';g.fillText('Kills '+kills,180,155)}
