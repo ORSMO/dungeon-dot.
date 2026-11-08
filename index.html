@@ -9,7 +9,7 @@ const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 function collideWall(e,w){let cx=clamp(e.x,w.x,w.x+w.w),cy=clamp(e.y,w.y,w.y+w.h),dx=e.x-cx,dy=e.y-cy,d=Math.hypot(dx,dy);if(d<e.r){let nx,ny,depth;if(d>.0001){nx=dx/d;ny=dy/d;depth=e.r-d}else{let edges=[e.x-w.x,w.x+w.w-e.x,e.y-w.y,w.y+w.h-e.y],i=edges.indexOf(Math.min(...edges));nx=i===0?-1:i===1?1:0;ny=i===2?-1:i===3?1:0;depth=e.r+edges[i]}e.x+=nx*depth;e.y+=ny*depth;let vn=e.vx*nx+e.vy*ny;if(vn<0){e.vx-=1.78*vn*nx;e.vy-=1.78*vn*ny}}}
 function blocked(x,y,r){return walls.some(w=>x+r>w.x&&x-r<w.x+w.w&&y+r>w.y&&y-r<w.y+w.h)}
 // Visibility polygon: rays stop at dungeon walls, never at enemies.
-const FOG_RADIUS=154,FOG_DARKNESS=.91;
+const FOG_RADIUS=154,FOG_DARKNESS=1;
 function drawFog(){
 const segments=[];for(let w of walls){let x=w.x,y=w.y,X=x+w.w,Y=y+w.h;segments.push([x,y,X,y],[X,y,X,Y],[X,Y,x,Y],[x,Y,x,y])}
 segments.push([17,17,343,17],[343,17,343,268],[343,268,17,268],[17,268,17,17]);
@@ -21,7 +21,7 @@ hits.push({a,x:p.x+dx*nearest,y:p.y+dy*nearest})}
 hits.sort((a,b)=>a.a-b.a);
 // Build the darkness on a separate layer so destination-out removes fog, not the game.
 const layer=document.createElement('canvas');layer.width=W;layer.height=F;const fg=layer.getContext('2d');
-fg.fillStyle='rgba(4,5,13,'+FOG_DARKNESS+')';fg.fillRect(0,0,W,F);
+fg.fillStyle='rgba(0,0,0,'+FOG_DARKNESS+')';fg.fillRect(0,0,W,F);
 fg.globalCompositeOperation='destination-out';fg.beginPath();fg.moveTo(p.x,p.y);
 for(let h of hits)fg.lineTo(h.x,h.y);
 fg.closePath();fg.fillStyle='#000';fg.fill();fg.globalCompositeOperation='source-over';
