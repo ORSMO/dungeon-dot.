@@ -44,6 +44,7 @@ elementFx.push({type:'lightning',x:origin.x,y:origin.y,x2:target?target.x:p.x,y2
 origin=target||p;hits++;
 }
 }
+}
 function steamBurst(x,y){elementFx.push({type:'steam',x,y,life:.9,maxLife:.9})}
 // Each body owns its own cooldown for each individual wall.
 // Armor and elite protection use actual impact speed, not mere contact.
