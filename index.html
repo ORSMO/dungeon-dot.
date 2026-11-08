@@ -3,10 +3,29 @@
 // Hidden gameplay switch: set to false to disable player healing from green Plus enemies.
 const PLAYER_HEALING_ENABLED=true;
 const sticks=[{x:89,y:345,dx:0,dy:0,id:null},{x:271,y:345,dx:0,dy:0,id:null}];
-const walls=[{x:67,y:67,w:69,h:13,type:'bounce'},{x:224,y:66,w:70,h:13,type:'spike'},{x:156,y:123,w:13,h:70,type:'normal'},{x:66,y:213,w:69,h:13,type:'spike'},{x:226,y:212,w:69,h:13,type:'bounce'}];
+const walls=[{x:67,y:67,w:69,h:13,type:'bounce'},{x:224,y:66,w:70,h:13,type:'spike'},{x:156,y:123,w:13,h:70,type:'sticky'},{x:66,y:213,w:69,h:13,type:'spike'},{x:226,y:212,w:69,h:13,type:'bounce'}];
 let p,enemies,hp,kills,inv,over,last=0,spawnClock=0,healFx=[];function showHeal(x,y){healFx.push({x,y,life:.85})}
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
-function collideWall(e,w){let cx=clamp(e.x,w.x,w.x+w.w),cy=clamp(e.y,w.y,w.y+w.h),dx=e.x-cx,dy=e.y-cy,d=Math.hypot(dx,dy);if(d<e.r){let nx,ny,depth;if(d>.0001){nx=dx/d;ny=dy/d;depth=e.r-d}else{let edges=[e.x-w.x,w.x+w.w-e.x,e.y-w.y,w.y+w.h-e.y],i=edges.indexOf(Math.min(...edges));nx=i===0?-1:i===1?1:0;ny=i===2?-1:i===3?1:0;depth=e.r+edges[i]}e.x+=nx*depth;e.y+=ny*depth;let vn=e.vx*nx+e.vy*ny;if(vn<0){let restitution=w.type==='bounce'?2.45:w.type==='spike'?.65:.78;e.vx-=(1+restitution)*vn*nx;e.vy-=(1+restitution)*vn*ny}return Math.max(0,-vn)}return 0}
+function collideWall(e,w,dt=.016){
+let cx=clamp(e.x,w.x,w.x+w.w),cy=clamp(e.y,w.y,w.y+w.h),dx=e.x-cx,dy=e.y-cy,d=Math.hypot(dx,dy);
+if(d>=e.r){if(e.sticky&&e.sticky.wall===w)e.sticky=null;return 0}
+let nx,ny,depth;if(d>.0001){nx=dx/d;ny=dy/d;depth=e.r-d}else{let edges=[e.x-w.x,w.x+w.w-e.x,e.y-w.y,w.y+w.h-e.y],i=edges.indexOf(Math.min(...edges));nx=i===0?-1:i===1?1:0;ny=i===2?-1:i===3?1:0;depth=e.r+edges[i]}
+let vn=e.vx*nx+e.vy*ny,impact=Math.max(0,-vn);
+if(w.type==='sticky'){
+// Impact speed controls initial indentation. The stored indentation then decays,
+// giving a slow, visible squeeze-out rather than an instant hard-wall snap.
+if(!e.sticky||e.sticky.wall!==w){e.sticky={wall:w,allow:Math.min(e.r*.72,impact*.065),age:0}}
+e.sticky.age+=dt;e.sticky.allow=Math.max(0,e.sticky.allow-7*dt);
+let allowed=e.sticky.allow;
+if(depth>allowed){e.x+=nx*(depth-allowed);e.y+=ny*(depth-allowed)}
+if(vn<0){e.vx-=vn*nx;e.vy-=vn*ny}
+e.vx*=Math.exp(-5*dt);e.vy*=Math.exp(-5*dt);
+return impact
+}
+e.x+=nx*depth;e.y+=ny*depth;
+if(vn<0){let restitution=w.type==='bounce'?2.45:w.type==='spike'?.65:.78;e.vx-=(1+restitution)*vn*nx;e.vy-=(1+restitution)*vn*ny}
+return impact
+}
 function blocked(x,y,r){return walls.some(w=>x+r>w.x&&x-r<w.x+w.w&&y+r>w.y&&y-r<w.y+w.h)}
 // Visibility polygon: rays stop at dungeon walls, never at enemies.
 const FOG_RADIUS=154,FOG_DARKNESS=1;
@@ -40,9 +59,9 @@ function up(e){let s=sticks.find(s=>s.id===e.pointerId);if(s){s.id=null;s.dx=s.d
 function frame(t){let dt=Math.min((t-last)/1000||0,.035);last=t;
 healFx=healFx.filter(f=>(f.life-=dt)>0);if(!over){let l=sticks[0],r=sticks[1],ox=p.x,oy=p.y;
 p.x=clamp(p.x+l.dx*118*dt,23,W-23);p.y=clamp(p.y+l.dy*118*dt,23,F-23);
-let playerBody={x:p.x,y:p.y,vx:l.dx*118,vy:l.dy*118,r:9};
-for(let w of walls){let impact=collideWall(playerBody,w);if(w.type==='spike'&&impact>38&&inv<=0){let damage=impact>98?16:impact>70?10:5;hp=Math.max(0,hp-damage);inv=.7;if(hp<=0)over=true}}
-p.x=playerBody.x;p.y=playerBody.y;p.vx=(p.x-ox)/Math.max(dt,.001);p.vy=(p.y-oy)/Math.max(dt,.001);
+let playerBody={x:p.x,y:p.y,vx:l.dx*118,vy:l.dy*118,r:9,sticky:p.sticky||null};
+for(let w of walls){let impact=collideWall(playerBody,w,dt);if(w.type==='spike'&&impact>38&&inv<=0){let damage=impact>98?16:impact>70?10:5;hp=Math.max(0,hp-damage);inv=.7;if(hp<=0)over=true}}
+p.x=playerBody.x;p.y=playerBody.y;p.sticky=playerBody.sticky;p.vx=(p.x-ox)/Math.max(dt,.001);p.vy=(p.y-oy)/Math.max(dt,.001);
 if(Math.hypot(r.dx,r.dy)>.15)p.target=Math.atan2(r.dy,r.dx);
 let diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a)),force=Math.sign(diff)*Math.min(1,Math.abs(diff)*1.6);
 let previousBatAngle=p.a;p.vel=clamp(p.vel+(force*23-p.vel*3.1)*dt,-7.4,7.4);if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
@@ -53,7 +72,7 @@ let damp=Math.exp(-.38*dt);e.vx*=damp;e.vy*=damp;let speed=Math.hypot(e.vx,e.vy)
 e.x+=e.vx*dt;e.y+=e.vy*dt;
 if(e.x<18+e.r){e.x=18+e.r;e.vx=Math.abs(e.vx)*.85}if(e.x>W-18-e.r){e.x=W-18-e.r;e.vx=-Math.abs(e.vx)*.85}
 if(e.y<18+e.r){e.y=18+e.r;e.vy=Math.abs(e.vy)*.85}if(e.y>F-18-e.r){e.y=F-18-e.r;e.vy=-Math.abs(e.vy)*.85}
-for(let w of walls)collideWall(e,w);
+for(let w of walls)collideWall(e,w,dt);
 let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(e.shape==='healer'){let speed=Math.hypot(e.vx-p.vx,e.vy-p.vy);if(PLAYER_HEALING_ENABLED&&speed>50&&e.playerHealCooldown<=0){let oldHp=hp;hp=Math.min(100,hp+Math.min(18,Math.floor((speed-35)/13)));if(hp>oldHp)showHeal(p.x,p.y);e.playerHealCooldown=.65}}else if(inv===0){hp=Math.max(0,hp-8);inv=1.1;if(hp<=0)over=true}}
 // Solid bat: sweep its full arc so fast swings cannot tunnel through enemies.
 let sweep=p.a-previousBatAngle,steps=Math.max(1,Math.ceil(Math.abs(sweep)/.055)),hit=false;
@@ -69,7 +88,7 @@ let batSpeed=Math.abs(p.vel)*at,relative=e.vx*tx+e.vy*ty;
 let kick=Math.max(0,batSpeed-relative);
 if(kick>0){let impulse=kick*(1.5/e.mass);e.vx+=tx*impulse;e.vy+=ty*impulse}
 e.vx+=nx*24/e.mass;e.vy+=ny*24/e.mass;
-for(let w of walls)collideWall(e,w);
+for(let w of walls)collideWall(e,w,dt);
 e.x=clamp(e.x,18+e.r,W-18-e.r);e.y=clamp(e.y,18+e.r,F-18-e.r);
 if(e.cool===0&&Math.abs(p.vel)>1.1){e.hp-=Math.abs(p.vel)>4.4?2:1;e.cool=.28}
 hit=true;break;
@@ -116,8 +135,9 @@ g.fillStyle='#191724';g.fillRect(0,0,W,H);
 for(let y=14;y<F-10;y+=25)for(let x=12;x<W-10;x+=25){g.fillStyle=((x+y)/25|0)%2?'#272438':'#2d293e';g.fillRect(x,y,24,24)}
 g.strokeStyle='#746383';g.lineWidth=9;g.strokeRect(8,8,W-16,F-16);
 for(let w of walls){
-g.fillStyle=w.type==='bounce'?'#246bba':w.type==='spike'?'#a93245':'#51475f';g.fillRect(w.x,w.y,w.w,w.h);
-g.fillStyle=w.type==='bounce'?'#79d7ff':w.type==='spike'?'#ff7c80':'#8b789f';g.fillRect(w.x,w.y,w.w,3);
+g.fillStyle=w.type==='bounce'?'#246bba':w.type==='spike'?'#a93245':w.type==='sticky'?'#8050a6':'#51475f';g.fillRect(w.x,w.y,w.w,w.h);
+g.fillStyle=w.type==='bounce'?'#79d7ff':w.type==='spike'?'#ff7c80':w.type==='sticky'?'#d9a1f5':'#8b789f';g.fillRect(w.x,w.y,w.w,3);
+if(w.type==='sticky'){g.fillStyle='#c58af0';if(w.w>w.h){for(let x=w.x+8;x<w.x+w.w-3;x+=13){g.beginPath();g.arc(x,w.y+8,2.5,0,Math.PI*2);g.fill()}}else{for(let y=w.y+8;y<w.y+w.h-3;y+=13){g.beginPath();g.arc(w.x+7,y,2.5,0,Math.PI*2);g.fill()}}}
 if(w.type==='bounce'){g.fillStyle='#a4ebff';if(w.w>w.h){for(let x=w.x+9;x<w.x+w.w-4;x+=15)g.fillRect(x,w.y+6,7,3)}else for(let y=w.y+9;y<w.y+w.h-4;y+=15)g.fillRect(w.x+5,y,3,7)}
 if(w.type==='spike'){g.fillStyle='#ffc0ba';if(w.w>w.h){for(let x=w.x+7;x<w.x+w.w-4;x+=12){g.beginPath();g.moveTo(x,w.y+4);g.lineTo(x+4,w.y+10);g.lineTo(x+8,w.y+4);g.fill()}}else for(let y=w.y+7;y<w.y+w.h-4;y+=12){g.beginPath();g.moveTo(w.x+4,y);g.lineTo(w.x+10,y+4);g.lineTo(w.x+4,y+8);g.fill()}}
 }
