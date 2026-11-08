@@ -1,20 +1,51 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#191724"><title>Dungeon Dot — Heavy Bat</title><style>*{box-sizing:border-box}body{margin:0;background:#11101a;color:#eee;font:14px system-ui;display:flex;align-items:center;justify-content:center;min-height:100dvh}main{width:min(100vw,470px);padding:8px}header{display:flex;justify-content:space-between;margin:4px 4px 8px}canvas{width:100%;height:auto;display:block;touch-action:none;border-radius:12px}footer{display:flex;align-items:center;justify-content:space-between;padding:10px 4px}button{border:0;background:#504365;color:white;border-radius:8px;padding:10px 16px}small{color:#bdb3cc}</style></head><body><main><header><b id="hp">♥ ♥ ♥</b><b id="kills">KILLS 0</b></header><canvas id="game" width="360" height="406"></canvas><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="restart">Restart</button></footer></main><script>
-(()=>{const c=document.querySelector('#game'),g=c.getContext('2d'),W=360,H=406,F=285,R=42,sticks=[{x:89,y:345,dx:0,dy:0,id:null},{x:271,y:345,dx:0,dy:0,id:null}];let p,enemies,hp,kills,inv,over,last=0,spawnClock=0;
-function spawn(){let x=28+Math.random()*304,y=28+Math.random()*225;if(Math.hypot(x-p.x,y-p.y)<95){x=x<180?28:332;y=y<145?28:257}enemies.push({x,y,hp:3,cool:0})}
-function reset(){p={x:180,y:140,a:-Math.PI/2,target:-Math.PI/2,vel:0};enemies=[];hp=3;kills=0;inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});for(let i=0;i<5;i++)spawn();hud()}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#191724"><title>Dungeon Dot — Billiards Combat</title><style>*{box-sizing:border-box}body{margin:0;background:#11101a;color:#eee;font:14px system-ui;display:flex;align-items:center;justify-content:center;min-height:100dvh}main{width:min(100vw,470px);padding:8px}header{display:flex;justify-content:space-between;margin:4px 4px 8px}canvas{width:100%;height:auto;display:block;touch-action:none;border-radius:12px}footer{display:flex;align-items:center;justify-content:space-between;padding:10px 4px}button{border:0;background:#504365;color:white;border-radius:8px;padding:10px 16px}small{color:#bdb3cc}</style></head><body><main><header><b id="hp">♥ ♥ ♥</b><b id="kills">KILLS 0</b></header><canvas id="game" width="360" height="406"></canvas><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="restart">Restart</button></footer></main><script>
+(()=>{const c=document.querySelector('#game'),g=c.getContext('2d'),W=360,H=406,F=285,R=42;
+const sticks=[{x:89,y:345,dx:0,dy:0,id:null},{x:271,y:345,dx:0,dy:0,id:null}];
+const walls=[{x:67,y:67,w:69,h:13},{x:224,y:66,w:70,h:13},{x:156,y:123,w:13,h:70},{x:66,y:213,w:69,h:13},{x:226,y:212,w:69,h:13}];
+let p,enemies,hp,kills,inv,over,last=0,spawnClock=0;
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+function collideWall(e,w){let cx=clamp(e.x,w.x,w.x+w.w),cy=clamp(e.y,w.y,w.y+w.h),dx=e.x-cx,dy=e.y-cy,d=Math.hypot(dx,dy);if(d<e.r){let nx,ny,depth;if(d>.0001){nx=dx/d;ny=dy/d;depth=e.r-d}else{let edges=[e.x-w.x,w.x+w.w-e.x,e.y-w.y,w.y+w.h-e.y],i=edges.indexOf(Math.min(...edges));nx=i===0?-1:i===1?1:0;ny=i===2?-1:i===3?1:0;depth=e.r+edges[i]}e.x+=nx*depth;e.y+=ny*depth;let vn=e.vx*nx+e.vy*ny;if(vn<0){e.vx-=1.78*vn*nx;e.vy-=1.78*vn*ny}}}
+function blocked(x,y,r){return walls.some(w=>x+r>w.x&&x-r<w.x+w.w&&y+r>w.y&&y-r<w.y+w.h)}
+function spawn(){for(let n=0;n<80;n++){let x=26+Math.random()*308,y=26+Math.random()*229;if(Math.hypot(x-p.x,y-p.y)<85||blocked(x,y,12)||enemies.some(e=>Math.hypot(e.x-x,e.y-y)<25))continue;let shape=Math.random()<.5?'square':'round';enemies.push({x,y,vx:0,vy:0,r:shape==='square'?10:10,shape,mass:shape==='square'?1.45:1,hp:shape==='square'?4:3,cool:0});break}}
 function hud(){document.querySelector('#hp').textContent='♥ '.repeat(Math.max(0,hp));document.querySelector('#kills').textContent='KILLS '+kills}
+function reset(){p={x:180,y:35,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];hp=3;kills=0;inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});for(let i=0;i<7;i++)spawn();hud()}
 function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}}
 function setStick(s,v){let dx=v.x-s.x,dy=v.y-s.y,d=Math.hypot(dx,dy),k=d?Math.min(d,R)/d/R:0;s.dx=dx*k;s.dy=dy*k}
 c.addEventListener('pointerdown',e=>{e.preventDefault();let v=pt(e),s=sticks[v.x<W/2?0:1];if(s.id!==null)return;s.id=e.pointerId;c.setPointerCapture(e.pointerId);setStick(s,v)});
 c.addEventListener('pointermove',e=>{let s=sticks.find(s=>s.id===e.pointerId);if(s){e.preventDefault();setStick(s,pt(e))}});
 function up(e){let s=sticks.find(s=>s.id===e.pointerId);if(s){s.id=null;s.dx=s.dy=0}}c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);document.querySelector('#restart').onclick=reset;
-function frame(t){let dt=Math.min((t-last)/1000||0,.04);last=t;if(!over){let l=sticks[0],r=sticks[1];p.x=Math.max(23,Math.min(W-23,p.x+l.dx*118*dt));p.y=Math.max(23,Math.min(F-23,p.y+l.dy*118*dt));if(Math.hypot(r.dx,r.dy)>.15)p.target=Math.atan2(r.dy,r.dx);
-let diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a));let force=Math.sign(diff)*Math.min(1,Math.abs(diff)*1.6);let acceleration=force*17-p.vel*2.5;p.vel+=acceleration*dt;p.vel=Math.max(-6.7,Math.min(6.7,p.vel));if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
-for(let e of enemies){let dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy)||1;e.cool=Math.max(0,e.cool-dt);if(d>15){e.x+=dx/d*28*dt;e.y+=dy/d*28*dt}if(d<17&&inv===0){hp--;inv=1.1;if(hp<=0)over=true}
-let vx=e.x-p.x,vy=e.y-p.y,along=vx*Math.cos(p.a)+vy*Math.sin(p.a),across=Math.abs(-vx*Math.sin(p.a)+vy*Math.cos(p.a));if(along>16&&along<50&&across<11&&e.cool===0&&Math.abs(p.vel)>1.2){e.hp-=Math.abs(p.vel)>4?2:1;e.cool=.48}}
-let before=enemies.length;enemies=enemies.filter(e=>e.hp>0);kills+=before-enemies.length;spawnClock+=dt;if(enemies.length<5&&spawnClock>.45){spawn();spawnClock=0}hud()}
-g.fillStyle='#191724';g.fillRect(0,0,W,H);for(let y=14;y<F-10;y+=25)for(let x=12;x<W-10;x+=25){g.fillStyle=((x+y)/25|0)%2?'#272438':'#2d293e';g.fillRect(x,y,24,24)}g.strokeStyle='#746383';g.lineWidth=9;g.strokeRect(8,8,W-16,F-16);
-for(let e of enemies){g.fillStyle=e.cool>0?'#ffb2a9':'#ec5274';g.fillRect(e.x-8,e.y-8,16,16);g.fillStyle='#371e36';g.fillRect(e.x-4,e.y-3,3,3);g.fillRect(e.x+3,e.y-3,3,3)}
+function frame(t){let dt=Math.min((t-last)/1000||0,.035);last=t;
+if(!over){let l=sticks[0],r=sticks[1],ox=p.x,oy=p.y;
+p.x=clamp(p.x+l.dx*118*dt,23,W-23);p.y=clamp(p.y+l.dy*118*dt,23,F-23);
+let playerBody={x:p.x,y:p.y,vx:0,vy:0,r:9};for(let w of walls)collideWall(playerBody,w);p.x=playerBody.x;p.y=playerBody.y;p.vx=(p.x-ox)/Math.max(dt,.001);p.vy=(p.y-oy)/Math.max(dt,.001);
+if(Math.hypot(r.dx,r.dy)>.15)p.target=Math.atan2(r.dy,r.dx);
+let diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a)),force=Math.sign(diff)*Math.min(1,Math.abs(diff)*1.6);
+p.vel=clamp(p.vel+(force*17-p.vel*2.5)*dt,-6.7,6.7);if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
+for(let e of enemies){e.cool=Math.max(0,e.cool-dt);let dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy)||1;
+// Mild chase force, with velocity retained after impacts.
+if(d>21){e.vx+=dx/d*43*dt;e.vy+=dy/d*43*dt}
+let damp=Math.exp(-.38*dt);e.vx*=damp;e.vy*=damp;let speed=Math.hypot(e.vx,e.vy);if(speed>270){e.vx*=270/speed;e.vy*=270/speed}
+e.x+=e.vx*dt;e.y+=e.vy*dt;
+if(e.x<18+e.r){e.x=18+e.r;e.vx=Math.abs(e.vx)*.85}if(e.x>W-18-e.r){e.x=W-18-e.r;e.vx=-Math.abs(e.vx)*.85}
+if(e.y<18+e.r){e.y=18+e.r;e.vy=Math.abs(e.vy)*.85}if(e.y>F-18-e.r){e.y=F-18-e.r;e.vy=-Math.abs(e.vy)*.85}
+for(let w of walls)collideWall(e,w);
+let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(inv===0){hp--;inv=1.1;if(hp<=0)over=true}}
+// Bat segment from radius 17 to 48; closest point to center of enemy.
+let ux=Math.cos(p.a),uy=Math.sin(p.a),along=(e.x-p.x)*ux+(e.y-p.y)*uy,at=clamp(along,17,48),bx=p.x+ux*at,by=p.y+uy*at,dist=Math.hypot(e.x-bx,e.y-by);
+if(dist<e.r+4&&e.cool===0&&Math.abs(p.vel)>1.1){let tangentX=-uy*Math.sign(p.vel),tangentY=ux*Math.sign(p.vel),impact=Math.abs(p.vel)*at;
+let impulse=impact*(e.mass===1?1.65:1.25);e.vx+=tangentX*impulse/e.mass;e.vy+=tangentY*impulse/e.mass;
+e.hp-=Math.abs(p.vel)>4.4?2:1;e.cool=.3}
+}
+// Elastic-ish circle collision, including square enemies with circular collision bounds.
+for(let i=0;i<enemies.length;i++)for(let j=i+1;j<enemies.length;j++){let a=enemies[i],b=enemies[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||.0001,overlap=a.r+b.r-d;if(overlap<=0)continue;let nx=dx/d,ny=dy/d,invA=1/a.mass,invB=1/b.mass,tot=invA+invB;
+a.x-=nx*overlap*invA/tot;b.x+=nx*overlap*invB/tot;a.y-=ny*overlap*invA/tot;b.y+=ny*overlap*invB/tot;
+let rel=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;if(rel<0){let jimp=-(1+.92)*rel/tot;a.vx-=jimp*nx*invA;a.vy-=jimp*ny*invA;b.vx+=jimp*nx*invB;b.vy+=jimp*ny*invB}}
+let before=enemies.length;enemies=enemies.filter(e=>e.hp>0);kills+=before-enemies.length;spawnClock+=dt;if(enemies.length<7&&spawnClock>.6){spawn();spawnClock=0}hud()}
+g.fillStyle='#191724';g.fillRect(0,0,W,H);
+for(let y=14;y<F-10;y+=25)for(let x=12;x<W-10;x+=25){g.fillStyle=((x+y)/25|0)%2?'#272438':'#2d293e';g.fillRect(x,y,24,24)}
+g.strokeStyle='#746383';g.lineWidth=9;g.strokeRect(8,8,W-16,F-16);
+for(let w of walls){g.fillStyle='#51475f';g.fillRect(w.x,w.y,w.w,w.h);g.fillStyle='#8b789f';g.fillRect(w.x,w.y,w.w,3)}
+for(let e of enemies){g.fillStyle=e.cool>0?'#ffb2a9':e.shape==='square'?'#ec5274':'#55c9ce';g.beginPath();if(e.shape==='square')g.rect(e.x-e.r,e.y-e.r,e.r*2,e.r*2);else g.arc(e.x,e.y,e.r,0,Math.PI*2);g.fill();g.fillStyle='#231c32';g.fillRect(e.x-5,e.y-3,3,3);g.fillRect(e.x+3,e.y-3,3,3)}
 if(inv===0||Math.floor(t/110)%2===0){g.fillStyle='#fff';g.beginPath();g.arc(p.x,p.y,9,0,Math.PI*2);g.fill()}
 g.save();g.translate(p.x,p.y);g.rotate(p.a);g.fillStyle='#fff';g.fillRect(17,-3,31,6);g.fillStyle='#bdb7d5';g.fillRect(19,2,27,2);g.restore();
 g.fillStyle='#11101c';g.fillRect(0,F,W,H-F);for(let i=0;i<2;i++){let s=sticks[i];g.beginPath();g.arc(s.x,s.y,R,0,Math.PI*2);g.fillStyle='#28263c';g.fill();g.strokeStyle=i?'#b8a6ed':'#7e90ad';g.lineWidth=2;g.stroke();g.beginPath();g.arc(s.x+s.dx*R,s.y+s.dy*R,19,0,Math.PI*2);g.fillStyle=i?'#a38bd2':'#7486a7';g.fill()}
