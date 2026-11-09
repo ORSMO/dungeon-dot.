@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#191724"><title>Dungeon Dot — Healers & Mergers</title><style>*{box-sizing:border-box}body{margin:0;background:#11101a;color:#eee;font:14px system-ui;display:flex;align-items:center;justify-content:center;min-height:100dvh}main{width:min(100vw,470px);padding:8px}header{display:flex;justify-content:space-between;margin:4px 4px 8px}canvas{width:100%;height:auto;display:block;touch-action:none;border-radius:12px}footer{display:flex;align-items:center;justify-content:space-between;padding:10px 4px}button{border:0;background:#504365;color:white;border-radius:8px;padding:10px 16px}small{color:#bdb3cc}.health{display:flex;align-items:center;gap:8px;min-width:170px;font-weight:700}.hp-track{width:116px;height:13px;border:2px solid #756782;border-radius:4px;background:#382938;overflow:hidden}#hp-fill{height:100%;width:100%;background:#69d58a;transition:width .16s ease}#hp-bleed{position:absolute;right:0;top:0;height:100%;width:0;background:#ec3855;transition:width .12s linear}.hp-track{position:relative}#hp-label{font-size:11px;color:#d5cadc}main{width:100vw;height:100dvh;padding:0;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}body{overflow:hidden;min-height:100dvh;background:#080812}#arena{position:relative;width:100vw;height:100dvh;flex:none}#game{width:100%;height:100%;border-radius:0}header{position:absolute;z-index:4;top:0;left:0;right:0;margin:0;padding:8px 12px;background:linear-gradient(#0d0b1ce8,#0d0b1c88);align-items:center;pointer-events:none;gap:12px}header .health{min-width:0}header .hp-track{width:clamp(65px,12vw,160px)}header #kills{font:800 12px monospace;white-space:nowrap}header #shield-durability{max-width:180px!important}footer{position:absolute;z-index:4;right:clamp(95px,17vw,145px);bottom:7px;gap:6px;padding:0;display:flex;flex-wrap:wrap;justify-content:flex-end;pointer-events:none}footer small{display:none}footer button{pointer-events:auto;background:#3a3057dd;border:1px solid #8e76b0;border-radius:8px;padding:7px 10px;font:600 10px monospace;white-space:nowrap}#stats-panel{position:absolute;right:8px;top:44px;z-index:6;background:#161226f0;border:1px solid #77629c;border-radius:10px;max-width:240px;max-height:calc(100dvh - 70px);overflow:auto}#shield-choice{font-size:13px!important}#rotate-overlay{display:none;position:fixed;inset:0;z-index:100;background:radial-gradient(circle at center,#31204b,#0a0914);color:white;align-items:center;justify-content:center;flex-direction:column;gap:18px;text-align:center;padding:24px;font:700 19px system-ui}#rotate-overlay .turn-icon{font-size:64px;animation:turnphone 2s ease-in-out infinite alternate}@keyframes turnphone{to{transform:rotate(90deg)}}#rotate-overlay button{font-size:16px;padding:14px 22px;background:#7654bc}@media(orientation:portrait){#rotate-overlay{display:flex}main{visibility:hidden}}@media(max-height:380px){header{padding:3px 9px}footer button{padding:5px 7px;font-size:9px}}@media(orientation:landscape){#rotate-overlay{display:none}} #settings-panel{position:absolute;right:10px;top:42px;z-index:15;background:#1c1532f5;color:white;border:1px solid #a58bdb;border-radius:12px;padding:12px;width:min(280px,72vw);max-height:calc(100dvh - 50px);overflow:auto;font:12px system-ui}#settings-panel[hidden],#controls-settings[hidden],#edit-hint[hidden]{display:none!important}#settings-panel button{margin:4px;background:#53416f;border:1px solid #8d75ae;padding:7px;border-radius:6px;color:white}#controls-settings{display:grid;gap:6px}#controls-settings label{display:grid;gap:4px}#controls-settings input[type=range]{width:100%;accent-color:#ac83ef}#edit-hint{position:absolute;top:42px;left:50%;transform:translateX(-50%);z-index:15;background:#271b45;padding:8px;border:1px solid #b59aea;border-radius:8px;color:white;font:700 12px monospace} #room-status{position:absolute;top:43px;left:12px;z-index:4;max-width:calc(100vw - 140px);padding:5px 8px;background:#100e1ddd;border:1px solid #6d5b87;border-radius:6px;pointer-events:none;font:700 10px monospace;color:#d7eedf} #boss-hud{position:absolute;z-index:5;top:76px;left:50%;transform:translateX(-50%);width:min(360px,52vw);padding:7px 10px;background:#1a1025ed;border:1px solid #bd8858;border-radius:8px;pointer-events:none;font:10px monospace}#boss-hud[hidden]{display:none!important}.boss-heading{display:flex;justify-content:space-between;gap:8px;color:#f4dba2}.boss-track{height:9px;background:#3d2638;border:1px solid #90677c;margin:4px 0;overflow:hidden;border-radius:3px}#boss-fill{height:100%;background:linear-gradient(90deg,#bb405d,#fa9871);width:100%}#boss-hint{display:block;color:#d6c0e9;font-size:9px} </style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V5.0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks to reposition them. Each stays on its own half.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><div id="edit-hint" hidden>DRAG JOYSTICKS <button id="edit-done">DONE ✓</button></div></main><script>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#191724"><title>Dungeon Dot — Healers & Mergers</title><style>*{box-sizing:border-box}body{margin:0;background:#11101a;color:#eee;font:14px system-ui;display:flex;align-items:center;justify-content:center;min-height:100dvh}main{width:min(100vw,470px);padding:8px}header{display:flex;justify-content:space-between;margin:4px 4px 8px}canvas{width:100%;height:auto;display:block;touch-action:none;border-radius:12px}footer{display:flex;align-items:center;justify-content:space-between;padding:10px 4px}button{border:0;background:#504365;color:white;border-radius:8px;padding:10px 16px}small{color:#bdb3cc}.health{display:flex;align-items:center;gap:8px;min-width:170px;font-weight:700}.hp-track{width:116px;height:13px;border:2px solid #756782;border-radius:4px;background:#382938;overflow:hidden}#hp-fill{height:100%;width:100%;background:#69d58a;transition:width .16s ease}#hp-bleed{position:absolute;right:0;top:0;height:100%;width:0;background:#ec3855;transition:width .12s linear}.hp-track{position:relative}#hp-label{font-size:11px;color:#d5cadc}main{width:100vw;height:100dvh;padding:0;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}body{overflow:hidden;min-height:100dvh;background:#080812}#arena{position:relative;width:100vw;height:100dvh;flex:none}#game{width:100%;height:100%;border-radius:0}header{position:absolute;z-index:4;top:0;left:0;right:0;margin:0;padding:8px 12px;background:linear-gradient(#0d0b1ce8,#0d0b1c88);align-items:center;pointer-events:none;gap:12px}header .health{min-width:0}header .hp-track{width:clamp(65px,12vw,160px)}header #kills{font:800 12px monospace;white-space:nowrap}header #shield-durability{max-width:180px!important}footer{position:absolute;z-index:4;right:clamp(95px,17vw,145px);bottom:7px;gap:6px;padding:0;display:flex;flex-wrap:wrap;justify-content:flex-end;pointer-events:none}footer small{display:none}footer button{pointer-events:auto;background:#3a3057dd;border:1px solid #8e76b0;border-radius:8px;padding:7px 10px;font:600 10px monospace;white-space:nowrap}#stats-panel{position:absolute;right:8px;top:44px;z-index:6;background:#161226f0;border:1px solid #77629c;border-radius:10px;max-width:240px;max-height:calc(100dvh - 70px);overflow:auto}#shield-choice{font-size:13px!important}#rotate-overlay{display:none;position:fixed;inset:0;z-index:100;background:radial-gradient(circle at center,#31204b,#0a0914);color:white;align-items:center;justify-content:center;flex-direction:column;gap:18px;text-align:center;padding:24px;font:700 19px system-ui}#rotate-overlay .turn-icon{font-size:64px;animation:turnphone 2s ease-in-out infinite alternate}@keyframes turnphone{to{transform:rotate(90deg)}}#rotate-overlay button{font-size:16px;padding:14px 22px;background:#7654bc}@media(orientation:portrait){#rotate-overlay{display:flex}main{visibility:hidden}}@media(max-height:380px){header{padding:3px 9px}footer button{padding:5px 7px;font-size:9px}}@media(orientation:landscape){#rotate-overlay{display:none}} #settings-panel{position:absolute;right:10px;top:42px;z-index:15;background:#1c1532f5;color:white;border:1px solid #a58bdb;border-radius:12px;padding:12px;width:min(280px,72vw);max-height:calc(100dvh - 50px);overflow:auto;font:12px system-ui}#settings-panel[hidden],#controls-settings[hidden],#edit-hint[hidden]{display:none!important}#settings-panel button{margin:4px;background:#53416f;border:1px solid #8d75ae;padding:7px;border-radius:6px;color:white}#controls-settings{display:grid;gap:6px}#controls-settings label{display:grid;gap:4px}#controls-settings input[type=range]{width:100%;accent-color:#ac83ef}#edit-hint{position:absolute;top:42px;left:50%;transform:translateX(-50%);z-index:15;background:#271b45;padding:8px;border:1px solid #b59aea;border-radius:8px;color:white;font:700 12px monospace} #room-status{position:absolute;top:43px;left:12px;z-index:4;max-width:calc(100vw - 140px);padding:5px 8px;background:#100e1ddd;border:1px solid #6d5b87;border-radius:6px;pointer-events:none;font:700 10px monospace;color:#d7eedf} #boss-hud{position:absolute;z-index:5;top:76px;left:50%;transform:translateX(-50%);width:min(360px,52vw);padding:7px 10px;background:#1a1025ed;border:1px solid #bd8858;border-radius:8px;pointer-events:none;font:10px monospace}#boss-hud[hidden]{display:none!important}.boss-heading{display:flex;justify-content:space-between;gap:8px;color:#f4dba2}.boss-track{height:9px;background:#3d2638;border:1px solid #90677c;margin:4px 0;overflow:hidden;border-radius:3px}#boss-fill{height:100%;background:linear-gradient(90deg,#bb405d,#fa9871);width:100%}#boss-hint{display:block;color:#d6c0e9;font-size:9px} #sandbox-toggle[hidden],#sandbox-panel[hidden],#sandbox-start[hidden],#sandbox-tools[hidden]{display:none!important}#sandbox-panel{position:absolute;z-index:20;right:10px;top:42px;width:min(302px,44vw);max-height:calc(100dvh - 100px);overflow:auto;padding:9px;background:#171c2ff5;border:1px solid #79b6dc;border-radius:10px;font:11px system-ui;color:#e0edfa}.sandbox-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;color:#b5e8ff}#sandbox-panel button{border:1px solid #6886a9;border-radius:6px;background:#334260;padding:6px 7px;font:600 10px system-ui;color:#fff}.sandbox-switches,.sandbox-actions{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}.sandbox-switches button{flex:1}.sandbox-switches button[aria-pressed=true]{background:#245648!important;border-color:#86e6b5!important}#sandbox-panel small{display:block;color:#b4c5dd;font:9px system-ui;line-height:1.35}#sandbox-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;max-height:calc(100dvh - 240px);min-height:72px;overflow:auto;margin:7px 0;padding:2px}.spawn-tile{aspect-ratio:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;min-width:0;padding:4px!important;background:#252d43!important}.spawn-tile svg{width:70%;max-height:52px;flex:1;min-height:28px}.spawn-tile span{font:9px system-ui;line-height:1.1;overflow-wrap:anywhere}.spawn-tile[aria-pressed=true]{border:2px solid #ffe1a0!important;background:#433d4d!important} </style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V5.1</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks to reposition them. Each stays on its own half.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><div id="edit-hint" hidden>DRAG JOYSTICKS <button id="edit-done">DONE ✓</button></div></main><script>
 (()=>{const c=document.querySelector('#game'),g=c.getContext('2d');let viewW=640,W=480,F=480;const H=360,VIEW_F=304,R=35;const arena=document.querySelector('#arena');function resizeArena(){const r=arena.getBoundingClientRect();if(!r.width||!r.height)return;const oldW=viewW;viewW=Math.max(360,Math.round(H*r.width/r.height));c.width=viewW;c.height=H;try{if(oldW!==viewW&&typeof controls!=='undefined'){controls.positions=controls.positions.map(p=>[p[0]*viewW/oldW,p[1]]);sticks.forEach((s,i)=>{s.x=controls.positions[i][0];s.y=controls.positions[i][1]})}}catch(err){}}resizeArena();window.addEventListener('resize',resizeArena);window.visualViewport?.addEventListener('resize',resizeArena);
 // Hidden gameplay switch: set to false to disable player healing from green Plus enemies.
 const PLAYER_HEALING_ENABLED=true;
@@ -19,18 +19,18 @@ const RANGED_COLOR={laser:'#ff3f9a',shooter:'#ff6969',scatter:'#c18aff',frostcas
 let projectiles=[],artillery=[],gravityWells=[],reactionZones=[];
 function laserPath(x,y,a){let segments=[],dx=Math.cos(a),dy=Math.sin(a),sx=x,sy=y;for(let bounce=0;bounce<2;bounce++){let best=Math.hypot(W,F)*2,nx=0,ny=0;const boxes=[{x:13,y:13,w:W-26,h:F-26,outer:true},...walls];for(let w of boxes){let edges=w.outer?[[w.x,0,-1,0],[w.x+w.w,0,1,0],[0,w.y,0,-1],[0,w.y+w.h,0,1]]:[[w.x,0,-1,0],[w.x+w.w,0,1,0],[0,w.y,0,-1],[0,w.y+w.h,0,1]];for(let [v,_,ex,ey] of edges){if(ex){if(Math.abs(dx)<.00001)continue;let t=(v-sx)/dx,hitY=sy+dy*t;if(t>.01&&t<best&&(w.outer?hitY>=w.y&&hitY<=w.y+w.h:hitY>=w.y&&hitY<=w.y+w.h)){if(w.outer?dx*ex>0:dx*ex<0){best=t;nx=ex;ny=0}}}else{if(Math.abs(dy)<.00001)continue;let t=((ey?_:v)-sy)/dy;let hitX=sx+dx*t;if(t>.01&&t<best&&hitX>=w.x&&hitX<=w.x+w.w){if(w.outer?dy*ey>0:dy*ey<0){best=t;nx=0;ny=ey}}}}}let ex=sx+dx*best,ey=sy+dy*best;segments.push({x1:sx,y1:sy,x2:ex,y2:ey});if(bounce===1||(!nx&&!ny))break;sx=ex-nx*.25;sy=ey-ny*.25;dx=nx?-dx:dx;dy=ny?-dy:dy}return segments}
 function laserDistance(x,y,s){let dx=s.x2-s.x1,dy=s.y2-s.y1,t=Math.max(0,Math.min(1,((x-s.x1)*dx+(y-s.y1)*dy)/(dx*dx+dy*dy||1)));return Math.hypot(x-s.x1-t*dx,y-s.y1-t*dy)}
-function updateLasers(dt){for(let e of enemies){if(e.shape!=='laser'||e.hp<=0||e.phaseIn>0)continue;e.laserClock=(e.laserClock||0)-dt;if(e.laserClock<=0&&e.laserState!=='charge'&&e.laserState!=='fire'){e.laserState='charge';e.laserTime=1.8;e.laserAngle=Math.atan2(p.y-e.y,p.x-e.x)}if(e.laserState==='charge'){e.laserTime-=dt;let target=Math.atan2(p.y-e.y,p.x-e.x),diff=Math.atan2(Math.sin(target-e.laserAngle),Math.cos(target-e.laserAngle));e.laserAngle+=Math.max(-.38*dt,Math.min(.38*dt,diff));if(e.laserTime<=0){e.laserState='fire';e.laserTime=2;e.laserHit=.15}}else if(e.laserState==='fire'){e.laserTime-=dt;let target=Math.atan2(p.y-e.y,p.x-e.x),diff=Math.atan2(Math.sin(target-e.laserAngle),Math.cos(target-e.laserAngle));e.laserAngle+=Math.max(-.16*dt,Math.min(.16*dt,diff));let rawLines=laserPath(e.x,e.y,e.laserAngle);if(shieldBlocksLaser(rawLines)){shieldLaserTick+=dt;if(shieldLaserTick>=.1){shieldDamage(1.8);shieldLaserTick=0}}let lines=shieldLaserLines(rawLines);e.laserHit-=dt;if(e.laserHit<=0){if(lines.some(seg=>laserDistance(p.x,p.y,seg)<11)&&inv<=0){hp=Math.max(0,hp-3);inv=.32;if(hp<=0)over=true}for(let t of enemies){if(t===e||t.hp<=0)continue;if(lines.some(seg=>laserDistance(t.x,t.y,seg)<t.r+2)&&canDamage(t,150))t.hp-=1}e.laserHit=.28}if(e.laserTime<=0){e.laserState='cooldown';e.laserClock=3.4+Math.random()*1.1}}}}
+function updateLasers(dt){if(!enemyAttacksEnabled())return;for(let e of enemies){if(e.shape!=='laser'||e.hp<=0||e.phaseIn>0)continue;e.laserClock=(e.laserClock||0)-dt;if(e.laserClock<=0&&e.laserState!=='charge'&&e.laserState!=='fire'){e.laserState='charge';e.laserTime=1.8;e.laserAngle=Math.atan2(p.y-e.y,p.x-e.x)}if(e.laserState==='charge'){e.laserTime-=dt;let target=Math.atan2(p.y-e.y,p.x-e.x),diff=Math.atan2(Math.sin(target-e.laserAngle),Math.cos(target-e.laserAngle));e.laserAngle+=Math.max(-.38*dt,Math.min(.38*dt,diff));if(e.laserTime<=0){e.laserState='fire';e.laserTime=2;e.laserHit=.15}}else if(e.laserState==='fire'){e.laserTime-=dt;let target=Math.atan2(p.y-e.y,p.x-e.x),diff=Math.atan2(Math.sin(target-e.laserAngle),Math.cos(target-e.laserAngle));e.laserAngle+=Math.max(-.16*dt,Math.min(.16*dt,diff));let rawLines=laserPath(e.x,e.y,e.laserAngle);if(shieldBlocksLaser(rawLines)){shieldLaserTick+=dt;if(shieldLaserTick>=.1){shieldDamage(1.8);shieldLaserTick=0}}let lines=shieldLaserLines(rawLines);e.laserHit-=dt;if(e.laserHit<=0){if(lines.some(seg=>laserDistance(p.x,p.y,seg)<11)&&inv<=0){hp=Math.max(0,hp-3);inv=.32;if(hp<=0)over=true}for(let t of enemies){if(t===e||t.hp<=0)continue;if(lines.some(seg=>laserDistance(t.x,t.y,seg)<t.r+2)&&canDamage(t,150))t.hp-=1}e.laserHit=.28}if(e.laserTime<=0){e.laserState='cooldown';e.laserClock=3.4+Math.random()*1.1}}}}
 
 function triggerReaction(type,x,y,r=35){if(type==='steam'){elementFx.push({type:'steam',x,y,life:.55,maxLife:.55});return}reactionZones.push({type,x,y,r,life:type==='electric'?1.6:type==='fire'?2.2:2.8,tick:0});elementFx.push({type:type==='fire'?'fire':'shock',x,y,radius:r,life:.4,maxLife:.4})}
-function updateReactions(dt){for(let w of gravityWells){w.life-=dt;let elapsed=w.maxLife-w.life,range=w.range;for(let e of enemies){if(e.hp<=0)continue;let dx=w.x-e.x,dy=w.y-e.y,d=Math.hypot(dx,dy)||1;if(d<range){let force=175*(1-d/range)*dt/Math.max(.5,e.mass);e.vx+=dx/d*force;e.vy+=dy/d*force}}let dx=w.x-p.x,dy=w.y-p.y,d=Math.hypot(dx,dy)||1;if(d<range){let force=105*(1-d/range)*dt;p.kvx=(p.kvx||0)+dx/d*force;p.kvy=(p.kvy||0)+dy/d*force}for(let q of projectiles){let dx=w.x-q.x,dy=w.y-q.y,d=Math.hypot(dx,dy)||1;if(d<range){q.vx+=dx/d*460*(1-d/range)*dt;q.vy+=dy/d*460*(1-d/range)*dt}}if(w.life<=0){shockwave({x:w.x,y:w.y},w.elite?390:300,range);elementFx.push({type:'shock',x:w.x,y:w.y,radius:range,life:.55,maxLife:.55})}}gravityWells=gravityWells.filter(w=>w.life>0);
+function updateReactions(dt){if(!enemyAttacksEnabled())return;for(let w of gravityWells){w.life-=dt;let elapsed=w.maxLife-w.life,range=w.range;for(let e of enemies){if(e.hp<=0)continue;let dx=w.x-e.x,dy=w.y-e.y,d=Math.hypot(dx,dy)||1;if(d<range){let force=175*(1-d/range)*dt/Math.max(.5,e.mass);e.vx+=dx/d*force;e.vy+=dy/d*force}}let dx=w.x-p.x,dy=w.y-p.y,d=Math.hypot(dx,dy)||1;if(d<range){let force=105*(1-d/range)*dt;p.kvx=(p.kvx||0)+dx/d*force;p.kvy=(p.kvy||0)+dy/d*force}for(let q of projectiles){let dx=w.x-q.x,dy=w.y-q.y,d=Math.hypot(dx,dy)||1;if(d<range){q.vx+=dx/d*460*(1-d/range)*dt;q.vy+=dy/d*460*(1-d/range)*dt}}if(w.life<=0){shockwave({x:w.x,y:w.y},w.elite?390:300,range);elementFx.push({type:'shock',x:w.x,y:w.y,radius:range,life:.55,maxLife:.55})}}gravityWells=gravityWells.filter(w=>w.life>0);
 for(let z of reactionZones){z.life-=dt;z.tick+=dt;if(z.tick<.3)continue;z.tick=0;for(let e of enemies){if(e.hp<=0||Math.hypot(e.x-z.x,e.y-z.y)>z.r+e.r)continue;if(z.type==='ice'){e.vx*=.65;e.vy*=.65}else if(z.type==='electric'||z.type==='fire'){e.hp-=z.type==='fire'?.6:.4;e.vx+=(e.x-z.x)*.02;e.vy+=(e.y-z.y)*.02}}if(Math.hypot(p.x-z.x,p.y-z.y)<z.r+8){if(z.type==='ice')p.slowUntil=Math.max(p.slowUntil||0,arenaTime+.45);else if(inv<=0){hp=Math.max(0,hp-(z.type==='fire'?2:1));inv=.25;if(hp<=0)over=true}}}reactionZones=reactionZones.filter(z=>z.life>0);
 for(let water of puddles){if(water.reacted)continue;let electric=enemies.find(e=>e.shape==='electric'&&e.elementCooldown>0&&Math.hypot(e.x-water.x,e.y-water.y)<water.r+e.r)||projectiles.find(q=>q.kind==='seeker'&&Math.hypot(q.x-water.x,q.y-water.y)<water.r);if(electric){water.reacted=true;triggerReaction('electric',water.x,water.y,water.r)}}
 for(let poison of poisonPuddles){if(poison.reacted)continue;let fire=enemies.find(e=>e.shape==='fire'&&e.elementCooldown>0&&Math.hypot(e.x-poison.x,e.y-poison.y)<poison.r+e.r)||artillery.find(a=>a.life<=0&&Math.hypot(a.x-poison.x,a.y-poison.y)<poison.r+a.r);if(fire){poison.reacted=true;poison.life=Math.min(poison.life,.25);triggerReaction('fire',poison.x,poison.y,poison.r+8)}}}
 
-function fireRanged(e){let dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy)||1,angle=Math.atan2(dy,dx),kind=e.shape;
+function fireRanged(e){if(!enemyAttacksEnabled())return;let dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy)||1,angle=Math.atan2(dy,dx),kind=e.shape;
 if(kind==='cannon'){let lead=.55;artillery.push({x:Math.max(25,Math.min(W-25,p.x+(p.vx||0)*lead)),y:Math.max(25,Math.min(F-25,p.y+(p.vy||0)*lead)),startX:e.x,startY:e.y,life:1.35,maxLife:1.35,r:26,owner:e});return}
 let count=kind==='scatter'?3:1;for(let k=0;k<count;k++){let a=angle+(k-(count-1)/2)*.24,speed=kind==='seeker'?83:kind==='spitter'?110:kind==='bloodcaster'?145:kind==='frostcaster'?135:kind==='scatter'?153:165;projectiles.push({x:e.x+Math.cos(a)*(e.r+7),y:e.y+Math.sin(a)*(e.r+7),vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,kind,r:kind==='spitter'?5:4,life:4,owner:e,reflected:false})}}
-function rangedUpdate(dt){for(let a of artillery){a.life-=dt;if(a.life<=0){if(Math.hypot(p.x-a.x,p.y-a.y)<a.r+7&&inv<=0){hp=Math.max(0,hp-13);inv=.55;if(hp<=0)over=true}for(let e of enemies){if(e!==a.owner&&e.hp>0&&Math.hypot(e.x-a.x,e.y-a.y)<a.r+e.r&&canDamage(e,150))e.hp-=2}elementFx.push({type:'fire',x:a.x,y:a.y,r:0,life:.38,maxLife:.38})}}artillery=artillery.filter(a=>a.life>0);
+function rangedUpdate(dt){if(!enemyAttacksEnabled())return;for(let a of artillery){a.life-=dt;if(a.life<=0){if(Math.hypot(p.x-a.x,p.y-a.y)<a.r+7&&inv<=0){hp=Math.max(0,hp-13);inv=.55;if(hp<=0)over=true}for(let e of enemies){if(e!==a.owner&&e.hp>0&&Math.hypot(e.x-a.x,e.y-a.y)<a.r+e.r&&canDamage(e,150))e.hp-=2}elementFx.push({type:'fire',x:a.x,y:a.y,r:0,life:.38,maxLife:.38})}}artillery=artillery.filter(a=>a.life>0);
 for(let q of projectiles){q.life-=dt;if(q.life<=0)continue;if(q.kind==='seeker'){let target=q.reflected?enemies.filter(e=>e.hp>0&&e!==q.owner).sort((a,b)=>Math.hypot(a.x-q.x,a.y-q.y)-Math.hypot(b.x-q.x,b.y-q.y))[0]:p;if(target){let a=Math.atan2(target.y-q.y,target.x-q.x),v=Math.hypot(q.vx,q.vy),cur=Math.atan2(q.vy,q.vx),diff=Math.atan2(Math.sin(a-cur),Math.cos(a-cur)),next=cur+Math.max(-1.8*dt,Math.min(1.8*dt,diff));q.vx=Math.cos(next)*v;q.vy=Math.sin(next)*v}}
 let ox=q.x,oy=q.y;q.x+=q.vx*dt;q.y+=q.vy*dt;
 if(q.x<16||q.x>W-16||q.y<16||q.y>F-16){q.life=0;continue}
@@ -129,7 +129,7 @@ function bossSpark(x,y,color='#ffe4a3'){
  wallFx.push({type:'particle',x,y,vx:0,vy:-25,life:.35,maxLife:.35,color,size:4});
 }
 function hurtBossPlayer(amount,x,y,blockable=false,radius=0){
- if(inv>0||over||p.falling)return;
+ if(!enemyAttacksEnabled()||inv>0||over||p.falling)return;
  if(blockable&&shieldHit(x,y,radius)){shieldDamage(amount*1.8);inv=.45;bossSpark(p.x,p.y,'#8ceaff');return}
  hp=Math.max(0,hp-amount);inv=.8;
  const dx=p.x-x,dy=p.y-y,d=Math.hypot(dx,dy)||1;
@@ -185,7 +185,7 @@ function updateGatekeeper(unit,dt){
   if(unit.timer>.35)unit.aim=Math.atan2(p.y-unit.y,p.x-unit.x);
   if(unit.timer<=0){unit.state='charge';unit.timer=4}
  }else if(unit.state==='charge'){
-  const speed=unit.phase2?260:230,nx=unit.x+Math.cos(unit.aim)*speed*dt,ny=unit.y+Math.sin(unit.aim)*speed*dt;
+  const speed=enemyMovementEnabled()?(unit.phase2?260:230):0,nx=unit.x+Math.cos(unit.aim)*speed*dt,ny=unit.y+Math.sin(unit.aim)*speed*dt;
   unit.x=clamp(nx,unit.r+18,W-unit.r-18);unit.y=clamp(ny,unit.r+18,F-unit.r-18);
   if(nx!==unit.x||ny!==unit.y||unit.timer<=0){
    elementFx.push({type:'shock',x:unit.x,y:unit.y,radius:50,life:.35,maxLife:.35});
@@ -220,12 +220,12 @@ function updateSlimeKing(unit,dt){
  unit.timer-=dt;
  if(unit.state==='recover'&&unit.timer<=0){
   unit.state='jumpWarn';unit.timer=unit.part?.8:1;
-  unit.targetX=clamp(p.x,unit.r+22,W-unit.r-22);unit.targetY=clamp(p.y,unit.r+22,F-unit.r-22);
+  unit.targetX=enemyMovementEnabled()?clamp(p.x,unit.r+22,W-unit.r-22):unit.x;unit.targetY=enemyMovementEnabled()?clamp(p.y,unit.r+22,F-unit.r-22):unit.y;
  }else if(unit.state==='jumpWarn'&&unit.timer<=0){
   unit.state='jump';unit.timer=.75;unit.jumpX=unit.x;unit.jumpY=unit.y;
  }else if(unit.state==='jump'){
   const progress=1-Math.max(0,unit.timer)/.75;
-  unit.x=unit.jumpX+(unit.targetX-unit.jumpX)*progress;unit.y=unit.jumpY+(unit.targetY-unit.jumpY)*progress;
+  if(enemyMovementEnabled()){unit.x=unit.jumpX+(unit.targetX-unit.jumpX)*progress;unit.y=unit.jumpY+(unit.targetY-unit.jumpY)*progress;}
   if(unit.timer<=0){
    if(Math.hypot(p.x-unit.x,p.y-unit.y)<unit.r+19)hurtBossPlayer(unit.part?11:15,unit.x,unit.y);
    elementFx.push({type:'shock',x:unit.x,y:unit.y,radius:unit.r+20,life:.4,maxLife:.4});
@@ -257,6 +257,7 @@ function updateBossShots(dt,previousAngle){
  bossFight.shots=bossFight.shots.filter(shot=>shot.life>0);
 }
 function finishBossFight(){
+ if(inSandbox()){bossFight.done=true;bossFight.shots=[];bossFight.hazards=[];enemies=enemies.filter(e=>!e.bossMinion);sandbox.notice='Test boss defeated. Choose another enemy.';return}
  bossFight.done=true;currentRoom.bossDefeated=true;currentRoom.cleared=true;
  bossFight.shots=[];bossFight.hazards=[];enemies=[];pendingSplits=[];
  projectiles=[];artillery=[];gravityWells=[];reactionZones=[];shards=[];poisonPuddles=[];
@@ -264,14 +265,14 @@ function finishBossFight(){
  elementFx.push({type:'fusion',x:W/2,y:F/2,life:1,maxLife:1});
 }
 function updateBossFight(dt,previousAngle){
- if(!bossFight||bossFight.done||currentRoom.kind!=='boss')return;
+ if(!bossFight||bossFight.done||(currentRoom.kind!=='boss'&&!inSandbox()))return;
  for(const unit of bossFight.units){
   if(unit.hp<=0)continue;
   unit.hitCooldown=Math.max(0,unit.hitCooldown-dt);unit.flash=Math.max(0,(unit.flash||0)-dt);
   unit.phase2=unit.part||unit.hp<=unit.maxHp/2;
-  if(unit.kind==='gatekeeper')updateGatekeeper(unit,dt);
-  else if(unit.kind==='crystal')updateCrystalEye(unit,dt);
-  else updateSlimeKing(unit,dt);
+  if(enemyAttacksEnabled()){
+   if(unit.kind==='gatekeeper')updateGatekeeper(unit,dt);else if(unit.kind==='crystal')updateCrystalEye(unit,dt);else updateSlimeKing(unit,dt);
+  }else if(unit.state==='stunned'){unit.timer-=dt;if(unit.timer<=0){unit.state='recover';unit.timer=1.2}}
   if(unit.state!=='jump'){
    if(unit.hitCooldown===0&&Math.abs(p.vel)>1.1&&bossBatHits(unit.x,unit.y,unit.r,previousAngle)){
     const heavy=Math.abs(p.vel)>4.4;damageBoss(unit,heavy?12:8,'bat');unit.hitCooldown=.3;
@@ -309,7 +310,8 @@ function updateBossFight(dt,previousAngle){
  if(!bossFight.units.some(unit=>unit.hp>0))finishBossFight();
 }
 function bossHint(){
- if(bossFight.done)return 'VICTORY · CHOOSE A COLOURED DOOR';
+ if(bossFight.done)return inSandbox()?'TEST BOSS DEFEATED · SPAWN ANOTHER':'VICTORY · CHOOSE A COLOURED DOOR';
+ if(inSandbox()&&!sandbox.attacks)return 'ATTACKS OFF · ENABLE THEM IN THE SPAWN MENU';
  const alive=bossFight.units.filter(u=>u.hp>0),unit=alive[0];
  if(bossFight.kind==='gatekeeper')return unit.state==='stunned'?'STUNNED · HIT IT WITH YOUR BAT':unit.phase2?'DOUBLE CHARGE · DODGE INTO AN OPENING':'DODGE THE CHARGE · RETURN CANNONBALLS';
  if(bossFight.kind==='crystal')return unit.armour>0?'RETURN CRYSTALS · ARMOUR '+unit.armour+'/4':'CORE EXPOSED · ATTACK!';
@@ -317,7 +319,7 @@ function bossHint(){
 }
 function updateBossHud(){
  const panel=document.querySelector('#boss-hud');
- panel.hidden=currentRoom?.kind!=='boss'||!bossFight;
+ panel.hidden=(currentRoom?.kind!=='boss'&&!inSandbox())||!bossFight;
  if(panel.hidden)return;
  const remaining=bossFight.units.reduce((sum,unit)=>sum+Math.max(0,unit.hp),0);
  document.querySelector('#boss-name').textContent=bossFight.name+(bossFight.split?' · SPLIT':'');
@@ -375,8 +377,136 @@ function drawBossFight(){
  }
 }
 
+
+const SANDBOX_CATALOG=[
+ ['square','Square','#ec5274'],['round','Round','#55c9ce'],['healer','Healer','#60df79'],['merge','Merger','#b388fa'],['splitter','Splitter','#ff9e48'],['mini','Mini','#ffca73'],['armored','Armoured','#d9ad50'],
+ ['fire','Fire','#ff6b2f'],['water','Water','#4aabff'],['electric','Electric','#ffe75c'],['rubber','Rubber','#7ce77c'],['poison','Poison','#9bdc38'],['magnet','Magnet','#5cbcff'],['crystal','Crystal','#86f5f7'],['bomb','Bomb','#ef6646'],['mirror','Mirror','#d9e5f4'],['sponge','Sponge','#e2d469'],['regenerator','Regenerator','#ff82c4'],['bloodletter','Bloodletter','#b5284b'],['gravity','Gravity','#a36bff'],
+ ['laser','Laser','#ff3f9a'],['shooter','Shooter','#ff6969'],['scatter','Scatter','#c18aff'],['frostcaster','Frostcaster','#86dfff'],['spitter','Spitter','#a4ed4d'],['cannon','Cannon','#d6b277'],['seeker','Seeker','#f4e76b'],['bloodcaster','Bloodcaster','#e44e7a'],
+ ['boss:gatekeeper','Gatekeeper','#b39b7a'],['boss:crystal','Crystal Eye','#a0cdff'],['boss:slime','Slime King','#80d682']
+].map(([id,name,color])=>({id,name,color}));
+let sandboxRoom=null,sandboxSavedRun=null;
+const sandbox={movement:false,attacks:false,selected:null,spawnIndex:0,notice:'Tap a picture to spawn one.'};
+const sandboxTiles=[];
+function inSandbox(){return currentRoom?.kind==='sandbox'}
+function enemyMovementEnabled(){return !inSandbox()||sandbox.movement}
+function enemyAttacksEnabled(){return !inSandbox()||sandbox.attacks}
+function sandboxDoorSide(){return Object.keys(DIRECTIONS).find(side=>!dungeon[0].doors.some(door=>door.side===side))}
+function enterSandbox(){
+ if(currentRoom?.kind!=='start'||sandboxSavedRun)return;
+ sandboxSavedRun={hp,kills,inv,arenaTime,shieldType,shieldHp,shieldBroken,shieldCooldown,shieldLastHit,shieldLaserTick,bleedStacks,temporaryBleed:[...temporaryBleed],playerBleed:playerBleed.map(b=>({...b})),runStats:{...runStats},angle:p.a,target:p.target};
+ const side=sandboxDoorSide();
+ sandboxRoom={id:'sandbox',name:'SANDBOX',kind:'sandbox',shape:'sandbox',w:1100,h:900,count:0,cleared:true,visited:true,discovered:true,doors:[{side:DIRECTIONS[side].opposite,to:0}]};
+ sandbox.movement=false;sandbox.attacks=false;sandbox.notice='Tap a picture to spawn one.';
+ closeSettings();if(editingControls)endEditing();enterRoom('sandbox',DIRECTIONS[side].opposite);
+ hp=100;over=false;playerBleed=[];shieldPaused=false;
+ document.querySelector('#sandbox-panel').hidden=false;hud();
+}
+function leaveSandbox(){
+ if(!inSandbox()||!sandboxSavedRun)return;
+ const saved=sandboxSavedRun,side=sandboxDoorSide();sandboxSavedRun=null;shieldPaused=false;
+ document.querySelector('#shield-choice').style.display='none';enterRoom(0,side);
+ hp=saved.hp;kills=saved.kills;inv=saved.inv;arenaTime=saved.arenaTime;shieldType=saved.shieldType;shieldHp=saved.shieldHp;shieldBroken=saved.shieldBroken;shieldCooldown=saved.shieldCooldown;shieldLastHit=saved.shieldLastHit;shieldLaserTick=saved.shieldLaserTick;bleedStacks=saved.bleedStacks;temporaryBleed=saved.temporaryBleed;playerBleed=saved.playerBleed;runStats=saved.runStats;p.a=saved.angle;p.target=saved.target;over=false;
+ document.querySelector('#sandbox-panel').hidden=true;document.querySelector('#shield-durability').style.display=shieldType?'flex':'none';hud();
+}
+function clearSandbox(){
+ if(!inSandbox())return;
+ enemies=[];pendingSplits=[];projectiles=[];artillery=[];gravityWells=[];reactionZones=[];shards=[];puddles=[];poisonPuddles=[];elementFx=[];healFx=[];wallFx=[];fallingFx=[];bossFight=null;
+ sandbox.notice='Room cleared. Choose another enemy.';hud();
+}
+function healSandbox(){
+ if(!inSandbox())return;
+ hp=100;over=false;inv=1;playerBleed=[];p.falling=0;p.slowUntil=0;p.kvx=p.kvy=0;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldPaused=false;document.querySelector('#shield-choice').style.display='none';hud();
+}
+function resetSandbox(){clearSandbox();setSandboxMovement(false);setSandboxAttacks(false);healSandbox()}
+function setSandboxMovement(value){
+ sandbox.movement=!!value;
+ if(!sandbox.movement){for(const e of enemies)e.vx=e.vy=0;if(bossFight)for(const unit of bossFight.units)if(unit.state==='jump'||unit.state==='jumpWarn'){unit.state='recover';unit.timer=1.2}}
+ updateSandboxMenu();
+}
+function setSandboxAttacks(value){
+ sandbox.attacks=!!value;
+ if(!sandbox.attacks){
+  projectiles=[];artillery=[];gravityWells=[];reactionZones=[];shards=[];poisonPuddles=[];playerBleed=[];
+  for(const e of enemies){e.laserState='cooldown';e.laserClock=1.2;e.shootClock=1;e.bombTimer=0}
+  if(bossFight){bossFight.shots=[];bossFight.hazards=[];for(const unit of bossFight.units)if(unit.state!=='stunned'){unit.state='recover';unit.timer=1.2}}
+ }
+ updateSandboxMenu();
+}
+function sandboxSpawnSpot(radius){
+ for(let n=0;n<100;n++){
+  const angle=(sandbox.spawnIndex++*2.399963)+n*.2,distance=120+(n%4)*30;
+  const x=clamp(p.x+Math.cos(angle)*distance,radius+24,W-radius-24),y=clamp(p.y+Math.sin(angle)*distance,radius+24,F-radius-24);
+  if(Math.hypot(x-p.x,y-p.y)<radius+55||enemies.some(e=>e.hp>0&&Math.hypot(e.x-x,e.y-y)<e.r+radius+12)||bossFight?.units.some(unit=>unit.hp>0&&Math.hypot(unit.x-x,unit.y-y)<unit.r+radius+18))continue;
+  return {x,y};
+ }
+ return null;
+}
+function spawnSandboxEnemy(id){
+ if(!inSandbox())return false;
+ const item=SANDBOX_CATALOG.find(item=>item.id===id);if(!item)return false;
+ if(!id.startsWith('boss:')&&enemies.filter(e=>e.hp>0).length>=36){sandbox.notice='36 enemies maximum. Clear the room to add more.';updateSandboxMenu();return false}
+ const shape=id,r=shape==='splitter'?17:shape==='armored'?12:shape==='mini'?7:10;
+ const spot=sandboxSpawnSpot(id.startsWith('boss:')?35:r);if(!spot){sandbox.notice='No free space nearby. Move or clear the room.';updateSandboxMenu();return false}
+ if(id.startsWith('boss:')){
+  enemies=enemies.filter(e=>!e.bossMinion);startBossFight(id.slice(5));bossFight.units[0].x=spot.x;bossFight.units[0].y=spot.y;
+ }else{
+  const maxHp=shape==='square'?4:shape==='merge'?5:shape==='splitter'?9:shape==='armored'?7:shape==='regenerator'||shape==='gravity'?6:shape==='bloodletter'?5:shape==='mini'?2:RANGED.includes(shape)?4:['fire','water','electric','rubber','poison','magnet','crystal','bomb','mirror','sponge'].includes(shape)?4:3;
+  const mass=shape==='splitter'?2.5:shape==='armored'?2:shape==='rubber'?.8:shape==='sponge'?2.2:shape==='regenerator'?1.15:shape==='mirror'?1.7:shape==='square'?1.45:shape==='mini'?.55:1;
+  enemies.push({...spot,vx:0,vy:0,r,shape,origins:null,elite:false,mass,hp:maxHp,maxHp,phaseIn:.35,healGlow:0,cool:0,impactCooldown:0,playerHealCooldown:0,elementCooldown:0,poisonTimer:0,magnetMode:1,magnetCooldown:0,bombTimer:0,spongeEnergy:0,specialCooldown:0,regenPulse:0,shootClock:1,laserClock:1.2,laserState:'cooldown',laserTime:0,laserAngle:0,strafe:Math.random()<.5?-1:1});
+ }
+ sandbox.selected=id;sandbox.notice=item.name+' spawned.';for(const tile of sandboxTiles)tile.button.setAttribute('aria-pressed',String(tile.id===id));hud();return true;
+}
+function sandboxEnemyIcon(item){
+ const id=item.id,color=item.color;
+ let body=id==='square'?'<rect x="14" y="14" width="36" height="36" rx="2"/>':id==='crystal'||id==='boss:crystal'?'<path d="M32 8L53 32 32 56 11 32Z"/>':'<circle cx="32" cy="33" r="20"/>';
+ let detail='<g fill="#231c32"><rect x="24" y="29" width="5" height="5"/><rect x="36" y="29" width="5" height="5"/></g>';
+ if(id==='healer'||id==='regenerator')detail='<path d="M32 21V45M20 33H44" stroke="'+(id==='healer'?'#174e29':'#ffe0f1')+'" stroke-width="6"/>';
+ else if(id==='armored')detail+='<circle cx="32" cy="33" r="24" fill="none" stroke="#fff0a6" stroke-width="3"/>';
+ else if(id==='splitter')detail+='<path d="M19 20L45 46M45 20L19 46" stroke="#ffe0a5" stroke-width="3"/>';
+ else if(id==='merge')detail+='<circle cx="32" cy="33" r="15" fill="none" stroke="#e3caff" stroke-width="2"/>';
+ else if(id==='fire')detail='<path d="M31 17Q45 31 40 41Q32 50 23 41Q17 34 27 25L27 34Z" fill="#ffdf65"/>';
+ else if(id==='water')detail='<path d="M32 16Q18 33 22 40Q32 51 42 40Q46 33 32 16" fill="#bcefff"/>';
+ else if(id==='electric')detail='<path d="M34 14L23 35H32L28 51 43 29H34Z" fill="#65571a"/>';
+ else if(id==='magnet')detail='<text x="32" y="42" text-anchor="middle" font-size="28" fill="#132239">±</text>';
+ else if(id==='bomb')detail+='<path d="M32 13Q39 4 47 10" fill="none" stroke="#ffe477" stroke-width="3"/>';
+ else if(id==='mirror')detail+='<path d="M21 44L44 21" stroke="#fff" stroke-width="3"/>';
+ else if(id==='sponge')detail+='<g fill="#82752d"><circle cx="23" cy="22" r="3"/><circle cx="44" cy="40" r="3"/><circle cx="26" cy="43" r="3"/></g>';
+ else if(id==='bloodletter')detail='<path d="M32 18L41 34A10 10 0 1 1 23 34Z" fill="#ffb4c5"/>';
+ else if(id==='gravity')detail='<path d="M22 33A10 10 0 1 1 32 43A6 6 0 1 1 38 33" fill="none" stroke="#e6c6ff" stroke-width="3"/>';
+ else if(RANGED.includes(id))detail='<circle cx="32" cy="33" r="9" fill="#181524"/><path d="M19 33H45" stroke="#fff" stroke-width="3"/>'+(id==='laser'?'<circle cx="32" cy="33" r="13" fill="none" stroke="#fff" stroke-width="2"/>':'');
+ if(id==='boss:gatekeeper'){body='<rect x="11" y="13" width="38" height="38" fill="#5b5267" stroke="#e1bc78" stroke-width="3"/><path d="M55 20V53M47 18H62" stroke="#c3a57d" stroke-width="6"/>';detail='<path d="M19 31H41" stroke="#ffaf68" stroke-width="5"/>'}
+ if(id==='boss:crystal')detail='<ellipse cx="32" cy="32" rx="12" ry="7" fill="#261c49"/><circle cx="32" cy="32" r="4" fill="#fff"/>';
+ if(id==='boss:slime')detail+='<path d="M18 17L15 6 26 11 32 2 38 11 49 6 46 17Z" fill="#e8be67"/>';
+ return '<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><g fill="'+color+'">'+body+'</g>'+detail+'</svg>';
+}
+function updateSandboxMenu(){
+ const here=inSandbox(),available=here||currentRoom?.kind==='start';
+ document.querySelector('#sandbox-toggle').hidden=!available;document.querySelector('#sandbox-toggle').textContent=here?'Spawn menu':'Test room';
+ if(!available)document.querySelector('#sandbox-panel').hidden=true;
+ document.querySelector('#sandbox-start').hidden=here;document.querySelector('#sandbox-tools').hidden=!here;
+ for(const [id,value,label] of [['sandbox-movement',sandbox.movement,'Movement'],['sandbox-attacks',sandbox.attacks,'Attacks']]){
+  const button=document.querySelector('#'+id);button.textContent=label+': '+(value?'ON':'OFF');button.setAttribute('aria-pressed',String(value));
+ }
+ const count=enemies?.filter(e=>e.hp>0).length||0;
+ document.querySelector('#sandbox-notice').textContent=sandbox.notice+' · '+count+' enemies'+(bossFight&&!bossFight.done?' + boss':'');
+}
+function setupSandboxMenu(){
+ const grid=document.querySelector('#sandbox-grid');
+ for(const item of SANDBOX_CATALOG){
+  const button=document.createElement('button');button.type='button';button.className='spawn-tile';button.setAttribute('aria-label','Spawn '+item.name);button.setAttribute('aria-pressed','false');button.innerHTML=sandboxEnemyIcon(item)+'<span>'+item.name+'</span>';
+  button.onclick=()=>spawnSandboxEnemy(item.id);grid.appendChild(button);sandboxTiles.push({id:item.id,button});
+ }
+ document.querySelector('#sandbox-toggle').onclick=()=>{const panel=document.querySelector('#sandbox-panel');if(panel.hidden){closeSettings();if(editingControls)endEditing()}panel.hidden=!panel.hidden;updateSandboxMenu()};
+ document.querySelector('#sandbox-close').onclick=()=>{document.querySelector('#sandbox-panel').hidden=true};
+ document.querySelector('#sandbox-enter').onclick=enterSandbox;
+ document.querySelector('#sandbox-movement').onclick=()=>setSandboxMovement(!sandbox.movement);
+ document.querySelector('#sandbox-attacks').onclick=()=>setSandboxAttacks(!sandbox.attacks);
+ document.querySelector('#sandbox-clear').onclick=clearSandbox;document.querySelector('#sandbox-heal').onclick=healSandbox;document.querySelector('#sandbox-return').onclick=leaveSandbox;
+}
+
 function roomDoors(){
- const doors=currentRoom.doors.map(door=>({...door,kind:'room'}));
+ const doors=currentRoom.doors.map(door=>({...door,kind:inSandbox()?'sandboxExit':'room'}));
+ if(currentRoom.kind==='start')doors.push({side:sandboxDoorSide(),kind:'sandbox',to:'sandbox'});
  if(currentRoom.kind==='boss'){
   const free=Object.keys(DIRECTIONS).filter(side=>!doors.some(door=>door.side===side));
   BIOME_PATHS.forEach((biome,i)=>doors.push({side:free[i],kind:'biome',biome:biome.id}));
@@ -393,7 +523,7 @@ function makeRoomLayout(room){
  portals.push({x:W*.18,y:F*.5,type:'linked',pair:1},{x:W*.82,y:F*.5,type:'linked',pair:0});
 }
 function enterRoom(id,entry=null){
- currentRoom=dungeon[id];currentRoom.visited=currentRoom.discovered=true;W=currentRoom.w;F=currentRoom.h;
+ currentRoom=id==='sandbox'?sandboxRoom:dungeon[id];currentRoom.visited=currentRoom.discovered=true;W=currentRoom.w;F=currentRoom.h;
  for(const door of currentRoom.doors)dungeon[door.to].discovered=true;
  makeRoomLayout(currentRoom);
  const x=entry==='west'?62:entry==='east'?W-62:W/2;
@@ -412,26 +542,29 @@ function nextDungeon(biome){
  selectedBiome=biome;dungeonDepth++;buildDungeon();enterRoom(0);
 }
 function updateRoomProgress(){
+ if(inSandbox()){currentRoom.cleared=true;return}
  if(currentRoom.kind==='boss'){currentRoom.cleared=!!currentRoom.bossDefeated;return}
  if(!currentRoom.cleared&&enemies.length===0)currentRoom.cleared=true;
 }
 function checkRoomDoors(dt){
  doorCooldown=Math.max(0,doorCooldown-dt);
- if(doorCooldown>0||!currentRoom.cleared||over||p.falling||shieldPaused||editingControls||!settings.hidden)return;
+ if(doorCooldown>0||!currentRoom.cleared||(!inSandbox()&&over)||p.falling||shieldPaused||editingControls||!settings.hidden)return;
  const move=sticks[0];
  for(const door of roomDoors()){
   const dir=DIRECTIONS[door.side];
   const aligned=dir.dx?Math.abs(p.y-door.y)<26:Math.abs(p.x-door.x)<26;
   const near=dir.dx?Math.abs(p.x-door.x)<24:Math.abs(p.y-door.y)<24;
   if(aligned&&near&&move.dx*dir.dx+move.dy*dir.dy>.25){
-   if(door.kind==='biome')nextDungeon(door.biome);else enterRoom(door.to,dir.opposite);
+   if(door.kind==='sandbox')enterSandbox();else if(door.kind==='sandboxExit')leaveSandbox();else if(door.kind==='biome')nextDungeon(door.biome);else enterRoom(door.to,dir.opposite);
    return;
   }
  }
 }
 function drawRoomDecor(){
  g.save();g.textAlign='center';
- if(currentRoom.kind==='start'){
+ if(inSandbox()){
+  g.fillStyle='#263a55';g.fillRect(W/2-150,F/2-55,300,110);g.strokeStyle='#79ddff';g.lineWidth=2;g.strokeRect(W/2-150,F/2-55,300,110);g.fillStyle='#bfedff';g.font='bold 25px monospace';g.fillText('SANDBOX',W/2,F/2-12);g.font='12px monospace';g.fillText('OPEN THE SPAWN MENU TO BEGIN',W/2,F/2+16);
+ }else if(currentRoom.kind==='start'){
   g.fillStyle='#16372f';g.beginPath();g.arc(W/2,F/2,68,0,Math.PI*2);g.fill();
   g.strokeStyle='#70bda0';g.lineWidth=2;g.beginPath();g.arc(W/2,F/2,61,0,Math.PI*2);g.stroke();
   g.fillStyle='#b4f5d6';g.font='bold 15px monospace';g.fillText('SAFE START',W/2,F/2-32);
@@ -457,8 +590,8 @@ function drawRoomDoors(){
  for(const door of roomDoors()){
   const vertical=door.side==='west'||door.side==='east',biome=BIOME_PATHS.find(path=>path.id===door.biome);
   const target=door.kind==='room'?dungeon[door.to]:null,boss=target?.kind==='boss';
-  const color=biome?biome.color:!currentRoom.cleared?'#f58b99':boss?'#ebbd70':'#75f2bd';
-  const label=biome?biome.name:target.kind==='start'?'START':boss?'BOSS':'ROOM '+(door.to+1);
+  const color=door.kind==='sandbox'||door.kind==='sandboxExit'?'#79ddff':biome?biome.color:!currentRoom.cleared?'#f58b99':boss?'#ebbd70':'#75f2bd';
+  const label=door.kind==='sandbox'?'SANDBOX':door.kind==='sandboxExit'?'RETURN':biome?biome.name:target?.kind==='start'?'START':boss?'BOSS':'ROOM '+(door.to+1);
   g.save();g.translate(door.x,door.y);if(vertical)g.rotate(Math.PI/2);
   g.fillStyle=biome?biome.dark:boss?'#482537':currentRoom.cleared?'#163e38':'#492536';g.fillRect(-39,-10,78,20);
   g.strokeStyle=color;g.lineWidth=boss||biome?4:3;g.strokeRect(-39,-10,78,20);
@@ -476,7 +609,7 @@ function drawDungeonMap(){
  const ox=x+boxW/2-(minCol+maxCol)*step/2,oy=y+58-(minRow+maxRow)*step/2;
  const pos=room=>({x:ox+room.col*step,y:oy+room.row*step});
  g.save();g.fillStyle='#100e1def';g.fillRect(x,y,boxW,boxH);g.strokeStyle='#6d5b87';g.lineWidth=1;g.strokeRect(x,y,boxW,boxH);
- g.textAlign='center';g.font='bold 9px monospace';g.fillStyle='#eee4ff';g.fillText('DUNGEON '+dungeonDepth,x+boxW/2,y+12);
+ g.textAlign='center';g.font='bold 9px monospace';g.fillStyle='#eee4ff';g.fillText(inSandbox()?'SANDBOX · START':('DUNGEON '+dungeonDepth),x+boxW/2,y+12);
  for(const room of dungeon)for(const door of room.doors)if(door.to>room.id){
   const a=pos(room),b=pos(dungeon[door.to]);g.strokeStyle=room.visited&&dungeon[door.to].visited?'#82b59b':'#53465f';g.lineWidth=2;g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke();
  }
@@ -485,10 +618,10 @@ function drawDungeonMap(){
   const w=ratio>=1?size:size*ratio,h=ratio>=1?size/ratio:size;
   const known=room.discovered||room.visited,isBoss=known&&room.kind==='boss';
   g.fillStyle=isBoss?'#643448':room.visited?(room.cleared?'#28533f':'#543543'):'#2c2638';g.fillRect(at.x-w/2,at.y-h/2,w,h);
-  g.strokeStyle=room.id===currentRoom.id?'#ffe2a0':isBoss?'#dbad68':room.visited?'#8dd4ad':'#776187';g.lineWidth=room.id===currentRoom.id?2:1;g.strokeRect(at.x-w/2,at.y-h/2,w,h);
+  g.strokeStyle=room.id===(inSandbox()?0:currentRoom.id)?'#ffe2a0':isBoss?'#dbad68':room.visited?'#8dd4ad':'#776187';g.lineWidth=room.id===(inSandbox()?0:currentRoom.id)?2:1;g.strokeRect(at.x-w/2,at.y-h/2,w,h);
   const label=room.kind==='start'?'S':isBoss?'B':room.visited?'':'?';
   if(label){g.fillStyle='#f0e5cf';g.font='bold 8px monospace';g.fillText(label,at.x,at.y+3)}
-  if(room.id===currentRoom.id){g.fillStyle='#fff5cc';g.beginPath();g.arc(at.x,at.y+Math.min(h/2+4,step/2-1),1.7,0,Math.PI*2);g.fill()}
+  if(room.id===(inSandbox()?0:currentRoom.id)){g.fillStyle='#fff5cc';g.beginPath();g.arc(at.x,at.y+Math.min(h/2+4,step/2-1),1.7,0,Math.PI*2);g.fill()}
  }
  g.font='8px monospace';g.fillStyle='#cfbfdf';g.fillText('S START  B BOSS  ? UNVISITED',x+boxW/2,y+108);
  g.fillStyle='#ecd29a';g.fillText('GOLD: YOU   GREEN: CLEARED',x+boxW/2,y+119);g.restore();
@@ -498,7 +631,7 @@ function drawRoomMap(){
  const ox=x+(boxW-W*scale)/2,oy=y+(boxH-F*scale)/2;
  g.save();g.fillStyle='#100e1de8';g.fillRect(x,y,boxW,boxH);
  g.fillStyle=currentRoom.kind==='boss'?'#492536':'#312b43';g.fillRect(ox,oy,W*scale,F*scale);g.strokeStyle='#88779d';g.lineWidth=1;g.strokeRect(ox,oy,W*scale,F*scale);
- for(const door of roomDoors()){const biome=BIOME_PATHS.find(path=>path.id===door.biome);g.fillStyle=biome?biome.color:currentRoom.cleared?'#75f2bd':'#f58b99';g.fillRect(ox+door.x*scale-3,oy+door.y*scale-3,6,6)}
+ for(const door of roomDoors()){const biome=BIOME_PATHS.find(path=>path.id===door.biome);g.fillStyle=door.kind==='sandbox'||door.kind==='sandboxExit'?'#79ddff':biome?biome.color:currentRoom.cleared?'#75f2bd':'#f58b99';g.fillRect(ox+door.x*scale-3,oy+door.y*scale-3,6,6)}
  g.fillStyle='#ed7a98';for(const enemy of enemies){if(enemy.hp>0){g.beginPath();g.arc(ox+enemy.x*scale,oy+enemy.y*scale,1.5,0,Math.PI*2);g.fill()}}
  if(bossFight&&!bossFight.done){g.fillStyle='#ffbc70';for(const unit of bossFight.units)if(unit.hp>0){g.beginPath();g.arc(ox+unit.x*scale,oy+unit.y*scale,3,0,Math.PI*2);g.fill()}}
  g.fillStyle='#fff';g.beginPath();g.arc(ox+p.x*scale,oy+p.y*scale,2.5,0,Math.PI*2);g.fill();g.restore();
@@ -521,11 +654,13 @@ wallFx.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:.28+Math.random()*.2,max
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 // Elemental powers trigger only on distinct, sufficiently hard impacts.
 function shockwave(e,power,radius){
+if(!enemyAttacksEnabled())return;
 elementFx.push({type:'shock',x:e.x,y:e.y,radius,life:.45,maxLife:.45});
 for(let t of enemies){if(t===e||t.hp<=0)continue;let dx=t.x-e.x,dy=t.y-e.y,d=Math.hypot(dx,dy)||1;if(d<radius+t.r){let f=power*(1-Math.min(1,d/(radius+t.r)));t.vx+=dx/d*f/t.mass;t.vy+=dy/d*f/t.mass}}
 let dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy)||1;if(d<radius+9){let f=power*.7*(1-Math.min(1,d/(radius+9)));p.kvx=(p.kvx||0)+dx/d*f;p.kvy=(p.kvy||0)+dy/d*f}
 }
 function specialImpact(e,speed){
+if(!enemyAttacksEnabled())return;
 if(e.hp<=0||speed<85)return;
 if(e.shape==='bomb'&&speed>=120&&e.bombTimer<=0&&e.specialCooldown<=0){e.bombTimer=2;e.specialCooldown=3.5}
 if(e.shape==='crystal'&&speed>=110&&e.specialCooldown<=0){
@@ -541,6 +676,7 @@ e.magnetMode=-(e.magnetMode||1);e.magnetCooldown=.7;
 elementFx.push({type:'magnet',x:e.x,y:e.y,mode:e.magnetMode,life:.4,maxLife:.4});
 }
 function elementalHit(e,speed){
+if(!enemyAttacksEnabled())return;
 specialImpact(e,speed);
 if(e.hp<=0||speed<105||e.elementCooldown>0)return;
 if(e.shape==='fire'){
@@ -687,21 +823,21 @@ function hud(){
  document.querySelector('#hp-fill').style.background=hp<=30?'#f06470':hp<=60?'#e7bb62':'#69d58a';document.querySelector('#hp-label').textContent=Math.round(Math.max(0,hp))+'%';document.querySelector('#kills').textContent='KILLS '+kills;
  if(currentRoom){
   const combat=dungeon.filter(room=>room.kind==='combat'),cleared=combat.filter(room=>room.cleared).length;
-  const activity=currentRoom.kind==='start'?'SAFE · NO ENEMIES':currentRoom.kind==='boss'?(currentRoom.cleared?'CHOOSE A COLOURED DOOR':'BOSS FIGHT'):currentRoom.cleared?'DOORS OPEN':enemies.length+' ENEMIES';
+  const activity=inSandbox()?'TEST ROOM · '+enemies.filter(e=>e.hp>0).length+' ENEMIES':currentRoom.kind==='start'?'SAFE · NO ENEMIES':currentRoom.kind==='boss'?(currentRoom.cleared?'CHOOSE A COLOURED DOOR':'BOSS FIGHT'):currentRoom.cleared?'DOORS OPEN':enemies.length+' ENEMIES';
   const path=BIOME_PATHS.find(path=>path.id===selectedBiome);
   const label='DUNGEON '+dungeonDepth+(path?' · '+path.name:'')+' · '+currentRoom.name+' · '+activity+' · '+cleared+'/'+combat.length+' CLEARED';
   const status=document.querySelector('#room-status');if(status.textContent!==label)status.textContent=label;
  }
- updateBossHud();
+ updateBossHud();updateSandboxMenu();
 }
-function reset(){shieldType=null;shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];hp=100;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);hud()}
+function reset(){sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType=null;shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];hp=100;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);hud()}
 function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*viewW/r.width,y:(e.clientY-r.top)*H/r.height}}
 function setStick(s,v){let dx=v.x-s.x,dy=v.y-s.y,d=Math.hypot(dx,dy),radius=R*controls.size/100,k=d?Math.min(d,radius)/d/radius:0;s.dx=dx*k;s.dy=dy*k}
 c.addEventListener('pointerdown',e=>{e.preventDefault();let v=pt(e),i=v.x<viewW/2?0:1,s=sticks[i];if(editingControls){if(editPointer)return;let nearest=sticks.map((st,j)=>({j,d:Math.hypot(st.x-v.x,st.y-v.y)})).filter(o=>o.d<R*controls.size/100+22).sort((a,b)=>a.d-b.d)[0];if(!nearest)return;editPointer={id:e.pointerId,i:nearest.j};c.setPointerCapture(e.pointerId);return}if(s.id!==null)return;if(controls.floating)moveStick(i,v);s.id=e.pointerId;c.setPointerCapture(e.pointerId);setStick(s,v)});
 c.addEventListener('pointermove',e=>{if(editPointer&&editPointer.id===e.pointerId){e.preventDefault();moveStick(editPointer.i,pt(e));return}let s=sticks.find(s=>s.id===e.pointerId);if(s){e.preventDefault();setStick(s,pt(e))}});
-function up(e){if(editPointer&&editPointer.id===e.pointerId){editPointer=null;saveControls();return}let s=sticks.find(s=>s.id===e.pointerId);if(s){s.id=null;s.dx=s.dy=0}}c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);document.querySelector('#restart').onclick=reset;
+function up(e){if(editPointer&&editPointer.id===e.pointerId){editPointer=null;saveControls();return}let s=sticks.find(s=>s.id===e.pointerId);if(s){s.id=null;s.dx=s.dy=0}}c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);document.querySelector('#restart').onclick=()=>{if(inSandbox())resetSandbox();else reset()};
 const settings=document.querySelector('#settings-panel'),sub=document.querySelector('#controls-settings');function closeSettings(){settings.hidden=true;sub.hidden=true}
-document.querySelector('#settings-toggle').onclick=()=>{settings.hidden=!settings.hidden;sub.hidden=true};
+document.querySelector('#settings-toggle').onclick=()=>{document.querySelector('#sandbox-panel').hidden=true;settings.hidden=!settings.hidden;sub.hidden=true};
 document.querySelector('#settings-close').onclick=closeSettings;
 document.querySelector('#controls-open').onclick=()=>{sub.hidden=false};
 document.querySelector('#controls-back').onclick=()=>{sub.hidden=true};
@@ -712,7 +848,7 @@ document.querySelector('#control-size').oninput=e=>{controls.size=Number(e.targe
 document.querySelector('#control-opacity').oninput=e=>{controls.opacity=Number(e.target.value);syncControls();saveControls()};
 document.querySelector('#floating-controls').onchange=e=>{controls.floating=e.target.checked;saveControls()};
 document.querySelector('#controls-reset').onclick=()=>{controls={...defaultControls,positions:defaultControls.positions.map(a=>[...a])};syncControls();saveControls()};async function goFullscreen(){try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock)await screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}document.querySelector('#fullscreen-toggle').onclick=goFullscreen;document.querySelector('#rotate-fullscreen').onclick=goFullscreen;
-function frame(t){pendingSplits=[];let dt=Math.min((t-last)/1000||0,.035);last=t;if(shieldPaused){requestAnimationFrame(frame);return}
+function frame(t){const protectedPracticeHp=inSandbox()&&!sandbox.attacks?hp:null;pendingSplits=[];let dt=Math.min((t-last)/1000||0,.035);last=t;if(shieldPaused){requestAnimationFrame(frame);return}
 arenaTime+=dt;if(!over){shieldUpdate(dt);rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=Math.max(0,hp-damage)}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&(regenWhileBleeding||playerBleed.length===0)){let gained=Math.min(100-hp,PLAYER_REGEN*dt);hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){hp=0;over=true}}
 healFx=healFx.filter(f=>(f.life-=dt)>0);wallFx=wallFx.filter(f=>{f.life-=dt;if(f.type==='particle'){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.exp(-5*dt);f.vy*=Math.exp(-5*dt)}return f.life>0});elementFx=elementFx.filter(f=>(f.life-=dt)>0);puddles=puddles.filter(q=>(q.life-=dt)>0);poisonPuddles=poisonPuddles.filter(q=>(q.life-=dt)>0);
 if(!over&&!p.falling){let l=sticks[0],r=sticks[1],ox=p.x,oy=p.y;
@@ -730,7 +866,7 @@ let diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a)),force=Math.si
 let previousBatAngle=p.a;p.vel=clamp(p.vel+(force*23-p.vel*3.1)*dt,-7.4,7.4);if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
 updateBossFight(dt,previousBatAngle);
 // Magnetic force is distance-limited and capped to keep the arena playable.
-for(let m of enemies){if(m.shape!=='magnet'||m.hp<=0)continue;
+for(let m of enemies){if(!enemyAttacksEnabled()||m.shape!=='magnet'||m.hp<=0)continue;
 let radius=m.elite?115:88,strength=m.elite?185:135,mode=m.magnetMode||1;
 for(let e of enemies){if(e===m||e.hp<=0)continue;
 let dx=m.x-e.x,dy=m.y-e.y,d=Math.hypot(dx,dy)||1;
@@ -739,8 +875,18 @@ let dx=m.x-p.x,dy=m.y-p.y,d=Math.hypot(dx,dy)||1;
 if(d<radius&&d>m.r+5){let f=90*(1-d/radius)*dt;p.kvx=(p.kvx||0)+dx/d*f*mode;p.kvy=(p.kvy||0)+dy/d*f*mode}
 }
 for(let e of enemies){if((e.bleedStacks||0)>0&&e.hp>0){e.bleedTick=(e.bleedTick||0)+dt;e.bleedGlow=Math.max(0,(e.bleedGlow||0)-dt);if(e.bleedTick>=.5){e.hp-=Math.min(3,.12*e.bleedStacks)*e.bleedTick;e.bleedTick=0;e.bleedGlow=.25}}if(e.shape==='regenerator'&&e.hp>0&&e.hp<e.maxHp){e.hp=Math.min(e.maxHp,e.hp+1.1*dt);e.regenPulse=.35}e.regenPulse=Math.max(0,(e.regenPulse||0)-dt);e.phaseIn=Math.max(0,(e.phaseIn||0)-dt);e.fusionCooldown=Math.max(0,(e.fusionCooldown||0)-dt);e.splitCooldown=Math.max(0,(e.splitCooldown||0)-dt);e.specialCooldown=Math.max(0,(e.specialCooldown||0)-dt);if(e.bombTimer>0){e.bombTimer-=dt;if(e.bombTimer<=0){shockwave(e,e.elite?440:310,e.elite?145:105);e.hp=0}}e.magnetCooldown=Math.max(0,(e.magnetCooldown||0)-dt);e.poisonGlow=Math.max(0,(e.poisonGlow||0)-dt);if(e.shape!=='poison'&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r))e.poisonGlow=.24;e.poisonTimer=Math.max(0,(e.poisonTimer||0)-dt);if(e.shape!=='poison'&&e.poisonTimer<=0&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r)){if(canDamage(e,115)){e.hp-=1;e.cool=Math.max(e.cool,.12)}e.poisonTimer=.7}e.elementCooldown=Math.max(0,(e.elementCooldown||0)-dt);e.cool=Math.max(0,e.cool-dt);e.impactCooldown=Math.max(0,e.impactCooldown-dt);e.playerHealCooldown=Math.max(0,e.playerHealCooldown-dt);e.healGlow=Math.max(0,e.healGlow-dt);let target=e.bossMinion&&bossFight?bossFight.units.filter(u=>u.hp>0).sort((a,b)=>Math.hypot(a.x-e.x,a.y-e.y)-Math.hypot(b.x-e.x,b.y-e.y))[0]||p:p;let dx=target.x-e.x,dy=target.y-e.y,d=Math.hypot(dx,dy)||1;
-// Mild chase force, with velocity retained after impacts.
-if(e.shape==='laser'){let ideal=145,dir=d<ideal-22?-1:d>ideal+25?1:0;if(e.laserState==='charge'||e.laserState==='fire'){e.vx*=Math.exp(-8*dt);e.vy*=Math.exp(-8*dt)}else{e.vx+=dx/d*dir*45*dt;e.vy+=dy/d*dir*45*dt}}else if(RANGED.includes(e.shape)){let threat=projectiles.find(q=>q.reflected&&Math.hypot(q.x-e.x,q.y-e.y)<95&&((q.x-e.x)*q.vx+(q.y-e.y)*q.vy)>0)||artillery.find(a=>a.life<.7&&Math.hypot(a.x-e.x,a.y-e.y)<a.r+35)||enemies.find(t=>t!==e&&t.mass>e.mass*2.1&&Math.hypot(t.x-e.x,t.y-e.y)<55);if(threat){let ax=e.x-threat.x,ay=e.y-threat.y,ad=Math.hypot(ax,ay)||1;e.vx+=ax/ad*260*dt;e.vy+=ay/ad*260*dt;e.panicTime=.45}else e.panicTime=Math.max(0,(e.panicTime||0)-dt);let ideal=e.shape==='cannon'?175:e.shape==='bloodcaster'?155:125,dir=d<ideal-18?-1:d>ideal+20?1:0;if(e.panicTime>0){e.vx+=-dy/d*e.strafe*55*dt;e.vy+=dx/d*e.strafe*55*dt}else if(dir){e.vx+=dx/d*dir*65*dt;e.vy+=dy/d*dir*65*dt}else{e.vx+=-dy/d*e.strafe*17*dt;e.vy+=dx/d*e.strafe*17*dt}e.shootClock-=dt;if(e.shootClock<=0&&d<265&&e.phaseIn<=0){fireRanged(e);e.shootClock=(e.shape==='cannon'?3.9:e.shape==='scatter'?2.7:e.shape==='seeker'?3.2:2.35)*(e.elite?.8:1)}}else if(d>21){e.vx+=dx/d*43*dt;e.vy+=dy/d*43*dt}
+// Movement and attacks can be tested independently in the sandbox.
+if(e.shape==='laser'){
+ if(enemyMovementEnabled()){let ideal=145,dir=d<ideal-22?-1:d>ideal+25?1:0;if(e.laserState==='charge'||e.laserState==='fire'){e.vx*=Math.exp(-8*dt);e.vy*=Math.exp(-8*dt)}else{e.vx+=dx/d*dir*45*dt;e.vy+=dy/d*dir*45*dt}}
+}else if(RANGED.includes(e.shape)){
+ if(enemyMovementEnabled()){
+  let threat=projectiles.find(q=>q.reflected&&Math.hypot(q.x-e.x,q.y-e.y)<95&&((q.x-e.x)*q.vx+(q.y-e.y)*q.vy)>0)||artillery.find(a=>a.life<.7&&Math.hypot(a.x-e.x,a.y-e.y)<a.r+35)||enemies.find(t=>t!==e&&t.mass>e.mass*2.1&&Math.hypot(t.x-e.x,t.y-e.y)<55);
+  if(threat){let ax=e.x-threat.x,ay=e.y-threat.y,ad=Math.hypot(ax,ay)||1;e.vx+=ax/ad*260*dt;e.vy+=ay/ad*260*dt;e.panicTime=.45}else e.panicTime=Math.max(0,(e.panicTime||0)-dt);
+  let ideal=e.shape==='cannon'?175:e.shape==='bloodcaster'?155:125,dir=d<ideal-18?-1:d>ideal+20?1:0;
+  if(e.panicTime>0){e.vx+=-dy/d*e.strafe*55*dt;e.vy+=dx/d*e.strafe*55*dt}else if(dir){e.vx+=dx/d*dir*65*dt;e.vy+=dy/d*dir*65*dt}else{e.vx+=-dy/d*e.strafe*17*dt;e.vy+=dx/d*e.strafe*17*dt}
+ }
+ if(enemyAttacksEnabled()){e.shootClock-=dt;if(e.shootClock<=0&&d<265&&e.phaseIn<=0){fireRanged(e);e.shootClock=(e.shape==='cannon'?3.9:e.shape==='scatter'?2.7:e.shape==='seeker'?3.2:2.35)*(e.elite?.8:1)}}
+}else if(enemyMovementEnabled()&&d>21){e.vx+=dx/d*43*dt;e.vy+=dy/d*43*dt}
 let puddleBoost=puddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r)?1.55:1;
 let damp=Math.exp(-.38*dt);e.vx*=damp;e.vy*=damp;let speed=Math.hypot(e.vx,e.vy);if(speed>270){e.vx*=270/speed;e.vy*=270/speed}
 let oldEX=e.x,oldEY=e.y;e.x+=e.vx*dt*puddleBoost;e.y+=e.vy*dt*puddleBoost;
@@ -748,7 +894,7 @@ if(e.x<18+e.r){e.x=18+e.r;e.vx=Math.abs(e.vx)*.85}if(e.x>W-18-e.r){e.x=W-18-e.r;
 if(e.y<18+e.r){e.y=18+e.r;e.vy=Math.abs(e.vy)*.85}if(e.y>F-18-e.r){e.y=F-18-e.r;e.vy=-Math.abs(e.vy)*.85}
 for(let w of walls)collideWall(e,w,dt);
 if(collideHole(e,oldEX,oldEY,Math.hypot(e.vx,e.vy)))continue;teleportBody(e,dt);
-let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(e.shape!=='healer'&&!RANGED.includes(e.shape)){let push=Math.min(240,Math.max(65,Math.hypot(e.vx-p.vx,e.vy-p.vy)*.8));p.kvx-=nx*push;p.kvy-=ny*push;}if(e.shape==='healer'){let speed=Math.hypot(e.vx-p.vx,e.vy-p.vy);if(PLAYER_HEALING_ENABLED&&speed>50&&e.playerHealCooldown<=0){let oldHp=hp;hp=Math.min(100,hp+Math.min(18,Math.floor((speed-35)/13)));if(hp>oldHp)showHeal(p.x,p.y);e.playerHealCooldown=.65}}else if(!RANGED.includes(e.shape)&&inv===0){if(e.shape==='bloodletter'){playerBleed.push({remaining:12,rate:2});inv=1.1}else{hp=Math.max(0,hp-8);inv=1.1;if(hp<=0)over=true}}}
+let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(e.shape!=='healer'&&!RANGED.includes(e.shape)){let push=Math.min(240,Math.max(65,Math.hypot(e.vx-p.vx,e.vy-p.vy)*.8));p.kvx-=nx*push;p.kvy-=ny*push;}if(e.shape==='healer'){let speed=Math.hypot(e.vx-p.vx,e.vy-p.vy);if(PLAYER_HEALING_ENABLED&&speed>50&&e.playerHealCooldown<=0){let oldHp=hp;hp=Math.min(100,hp+Math.min(18,Math.floor((speed-35)/13)));if(hp>oldHp)showHeal(p.x,p.y);e.playerHealCooldown=.65}}else if(enemyAttacksEnabled()&&!RANGED.includes(e.shape)&&inv===0){if(e.shape==='bloodletter'){playerBleed.push({remaining:12,rate:2});inv=1.1}else{hp=Math.max(0,hp-8);inv=1.1;if(hp<=0)over=true}}}
 // Solid bat: sweep its full arc so fast swings cannot tunnel through enemies.
 let sweep=p.a-previousBatAngle,steps=Math.max(1,Math.ceil(Math.abs(sweep)/.055)),hit=false;
 for(let k=0;k<=steps;k++){
@@ -814,7 +960,8 @@ a.impactCooldown=.3;b.impactCooldown=.3;a.cool=Math.max(a.cool,.15);b.cool=Math.
 let restitution=Math.max(enemyStats(a).elasticity,enemyStats(b).elasticity);let jimp=-(1+restitution)*rel/tot;a.vx-=jimp*nx*invA;a.vy-=jimp*ny*invA;b.vx+=jimp*nx*invB;b.vy+=jimp*ny*invB;
 }}
 shards=shards.filter(q=>{q.life-=dt;if(q.life<=0)return false;q.x+=q.vx*dt;q.y+=q.vy*dt;if(q.x<17||q.x>W-17||q.y<17||q.y>F-17||blocked(q.x,q.y,2))return false;for(let e of enemies){if(e===q.owner||e.hp<=0||q.hit.has(e))continue;if(Math.hypot(e.x-q.x,e.y-q.y)<e.r+3){q.hit.add(e);if(canDamage(e,130))e.hp-=1;e.vx+=q.vx*.35/e.mass;e.vy+=q.vy*.35/e.mass;return false}}if(Math.hypot(p.x-q.x,p.y-q.y)<11){if(inv<=0){hp=Math.max(0,hp-3);inv=.45;if(hp<=0)over=true}return false}return true});
-let defeated=enemies.filter(e=>e.hp<=0&&e.hp!==-999&&!e.fellInHole);for(let e of defeated)if(e.shape==='gravity')gravityWells.push({x:e.x,y:e.y,life:2.4,maxLife:2.4,range:e.elite?105:85,elite:e.elite});let newborn=[];for(let e of defeated){if(e.shape!=='splitter')continue;for(let n=0;n<3;n++){let a=n*Math.PI*2/3+Math.random()*.35,ux=Math.cos(a),uy=Math.sin(a),x=clamp(e.x+ux*15,26,W-26),y=clamp(e.y+uy*15,26,F-26);let child={x,y,vx:e.vx*.4+ux*125,vy:e.vy*.4+uy*125,r:7,shape:'mini',mass:.55,hp:2,maxHp:2,healGlow:0,cool:0,impactCooldown:.35,playerHealCooldown:0};for(let w of walls)collideWall(child,w);newborn.push(child)}}enemies=enemies.filter(e=>e.hp>0);enemies.push(...newborn,...pendingSplits);let previousKills=kills;kills+=defeated.length;if(!shieldType&&previousKills<10&&kills>=10)showShieldChoice();updateRoomProgress();hud();updateStatsPanel()}
+let defeated=enemies.filter(e=>e.hp<=0&&e.hp!==-999&&!e.fellInHole);for(let e of defeated)if(e.shape==='gravity'&&enemyAttacksEnabled())gravityWells.push({x:e.x,y:e.y,life:2.4,maxLife:2.4,range:e.elite?105:85,elite:e.elite});let newborn=[];for(let e of defeated){if(e.shape!=='splitter')continue;for(let n=0;n<3;n++){let a=n*Math.PI*2/3+Math.random()*.35,ux=Math.cos(a),uy=Math.sin(a),x=clamp(e.x+ux*15,26,W-26),y=clamp(e.y+uy*15,26,F-26);let child={x,y,vx:e.vx*.4+ux*125,vy:e.vy*.4+uy*125,r:7,shape:'mini',mass:.55,hp:2,maxHp:2,healGlow:0,cool:0,impactCooldown:.35,playerHealCooldown:0};for(let w of walls)collideWall(child,w);newborn.push(child)}}enemies=enemies.filter(e=>e.hp>0);enemies.push(...newborn,...pendingSplits);let previousKills=kills;if(!inSandbox())kills+=defeated.length;if(!inSandbox()&&!shieldType&&previousKills<10&&kills>=10)showShieldChoice();updateRoomProgress();hud();updateStatsPanel()}
+if(protectedPracticeHp!==null){hp=Math.max(hp,protectedPracticeHp);if(hp>0)over=false;playerBleed=[];hud()}
 checkRoomDoors(dt);
 // Keep the camera centered on the player; clip the world above the fixed controls.
 g.fillStyle='#080812';g.fillRect(0,0,viewW,H);
@@ -892,5 +1039,5 @@ drawDungeonMap();drawRoomMap();
 g.fillStyle='#11101c';g.fillRect(0,VIEW_F,viewW,H-VIEW_F);g.save();g.globalAlpha=controls.opacity/100;for(let i=0;i<2;i++){let s=sticks[i],radius=R*controls.size/100;g.beginPath();g.arc(s.x,s.y,radius,0,Math.PI*2);g.fillStyle='#28263c';g.fill();g.strokeStyle=editingControls?'#ffe17e':i?'#b8a6ed':'#7e90ad';g.lineWidth=editingControls?4:2;g.stroke();g.beginPath();g.arc(s.x+s.dx*radius,s.y+s.dy*radius,19*controls.size/100,0,Math.PI*2);g.fillStyle=i?'#a38bd2':'#7486a7';g.fill()}g.restore()
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));g.fillText('BAT',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('GAME OVER',viewW/2,130);g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,155);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,176);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,194);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,212);g.fillText('Bleed stacks '+bleedStacks,viewW/2,230)}
-requestAnimationFrame(frame)}reset();requestAnimationFrame(frame)})();
+requestAnimationFrame(frame)}setupSandboxMenu();reset();requestAnimationFrame(frame)})();
 </script></body></html>
