@@ -4,6 +4,7 @@
 const PLAYER_HEALING_ENABLED=true;
 const sticks=[{x:89,y:345,dx:0,dy:0,id:null},{x:271,y:345,dx:0,dy:0,id:null}];
 const walls=[{x:67,y:67,w:69,h:13,type:'bounce'},{x:224,y:66,w:70,h:13,type:'spike'},{x:156,y:123,w:13,h:70,type:'sticky'},{x:66,y:213,w:69,h:13,type:'spike'},{x:226,y:212,w:69,h:13,type:'bounce'},{x:105,y:101,w:12,h:45,type:'bounce',moving:true,baseX:105,baseY:101,axis:'y',range:32,speed:1.25,phase:0},{x:251,y:139,w:12,h:44,type:'spike',moving:true,baseX:251,baseY:139,axis:'y',range:28,speed:1.05,phase:1.8}];
+const holes=[{x:182,y:223,r:20}];let fallingFx=[];
 const portals=[{x:39,y:132,type:'linked',pair:1},{x:321,y:132,type:'linked',pair:0},{x:180,y:39,type:'random'},{x:42,y:247,type:'random'},{x:319,y:247,type:'random'}];
 let arenaTime=0;
 let p,enemies,hp,kills,inv,over,last=0,spawnClock=0,healFx=[],wallFx=[],elementFx=[],puddles=[],poisonPuddles=[],poisonPlayerTimer=0,playerPoisonGlow=0,shards=[],portalFx=[];
@@ -75,6 +76,7 @@ function steamBurst(x,y){elementFx.push({type:'steam',x,y,life:.9,maxLife:.9})}
 // Armor and elite protection use actual impact speed, not mere contact.
 function canDamage(e,speed){return speed>=(e.elite?145:e.shape==='armored'?115:0)}
 const WALL_HIT_COOLDOWN=.085;
+function tryHole(body,speed,isPlayer=false){if(body.hp<=0||body.falling)return false;for(let h of holes){if(body.r>=h.r-2||speed<135||Math.hypot(body.x-h.x,body.y-h.y)>h.r-body.r*.2)continue;fallingFx.push({x:body.x,y:body.y,tx:h.x,ty:h.y,r:body.r,life:.58,maxLife:.58,color:isPlayer?'#ffffff':body.shape==='merge'?'#b388fa':'#ffbb78'});if(isPlayer){p.falling=.58;p.kvx=0;p.kvy=0}else{body.hp=0;body.fellInHole=true}return true}return false}
 function teleportBody(body,dt){
 body.portalCooldown=Math.max(0,(body.portalCooldown||0)-dt);
 if(body.portalCooldown>0)return;
@@ -140,16 +142,16 @@ g.drawImage(layer,0,0);
 }
 function spawn(){for(let n=0;n<80;n++){let x=26+Math.random()*308,y=26+Math.random()*229;if(Math.hypot(x-p.x,y-p.y)<85||blocked(x,y,12)||enemies.some(e=>Math.hypot(e.x-x,e.y-y)<25))continue;let roll=Math.random(),shape=roll<.11?'square':roll<.21?'round':roll<.29?'healer':roll<.37?'merge':roll<.45?'splitter':roll<.52?'armored':roll<.58?'fire':roll<.64?'water':roll<.70?'electric':roll<.76?'rubber':roll<.82?'poison':roll<.88?'magnet':roll<.91?'crystal':roll<.94?'bomb':roll<.97?'mirror':'sponge',elite=Math.random()<.17,maxHp=shape==='square'?4:shape==='merge'?5:shape==='splitter'?9:shape==='armored'?7:shape==='fire'||shape==='water'||shape==='electric'||shape==='rubber'||shape==='poison'||shape==='magnet'||shape==='crystal'||shape==='bomb'||shape==='mirror'||shape==='sponge'?4:3,r=(shape==='splitter'?17:shape==='armored'?12:10)*(elite?1.4:1),mass=(shape==='splitter'?2.5:shape==='armored'?2:shape==='rubber'?.8:shape==='sponge'?2.2:shape==='mirror'?1.7:shape==='square'?1.45:1)*(elite?2:1);if(blocked(x,y,r+2)||enemies.some(e=>Math.hypot(e.x-x,e.y-y)<e.r+r+3))continue;maxHp=Math.ceil(maxHp*(elite?2:1));enemies.push({x,y,vx:0,vy:0,r,shape,elite,mass,hp:maxHp,maxHp,healGlow:0,cool:0,impactCooldown:0,playerHealCooldown:0,elementCooldown:0,poisonTimer:0,magnetMode:1,magnetCooldown:0,bombTimer:0,spongeEnergy:0,specialCooldown:0});break}}
 function hud(){document.querySelector('#hp-fill').style.width=(Math.max(0,hp))+'%';document.querySelector('#hp-fill').style.background=hp<=30?'#f06470':hp<=60?'#e7bb62':'#69d58a';document.querySelector('#hp-label').textContent=Math.round(Math.max(0,hp))+'%';document.querySelector('#kills').textContent='KILLS '+kills}
-function reset(){p={x:180,y:35,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];hp=100;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];arenaTime=0;for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});for(let i=0;i<7;i++)spawn();hud()}
+function reset(){p={x:180,y:35,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];hp=100;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});for(let i=0;i<7;i++)spawn();hud()}
 function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}}
 function setStick(s,v){let dx=v.x-s.x,dy=v.y-s.y,d=Math.hypot(dx,dy),k=d?Math.min(d,R)/d/R:0;s.dx=dx*k;s.dy=dy*k}
 c.addEventListener('pointerdown',e=>{e.preventDefault();let v=pt(e),s=sticks[v.x<W/2?0:1];if(s.id!==null)return;s.id=e.pointerId;c.setPointerCapture(e.pointerId);setStick(s,v)});
 c.addEventListener('pointermove',e=>{let s=sticks.find(s=>s.id===e.pointerId);if(s){e.preventDefault();setStick(s,pt(e))}});
 function up(e){let s=sticks.find(s=>s.id===e.pointerId);if(s){s.id=null;s.dx=s.dy=0}}c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);document.querySelector('#restart').onclick=reset;
 function frame(t){let dt=Math.min((t-last)/1000||0,.035);last=t;
-arenaTime+=dt;for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);
+arenaTime+=dt;for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){hp=0;over=true}}
 healFx=healFx.filter(f=>(f.life-=dt)>0);wallFx=wallFx.filter(f=>{f.life-=dt;if(f.type==='particle'){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.exp(-5*dt);f.vy*=Math.exp(-5*dt)}return f.life>0});elementFx=elementFx.filter(f=>(f.life-=dt)>0);puddles=puddles.filter(q=>(q.life-=dt)>0);poisonPuddles=poisonPuddles.filter(q=>(q.life-=dt)>0);
-if(!over){let l=sticks[0],r=sticks[1],ox=p.x,oy=p.y;
+if(!over&&!p.falling){let l=sticks[0],r=sticks[1],ox=p.x,oy=p.y;
 poisonPlayerTimer=Math.max(0,poisonPlayerTimer-dt);playerPoisonGlow=Math.max(0,playerPoisonGlow-dt);
 if(poisonPuddles.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<q.r+7))playerPoisonGlow=.24;
 if(poisonPlayerTimer<=0&&poisonPuddles.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<q.r+7)){hp=Math.max(0,hp-3);poisonPlayerTimer=.65;if(hp<=0)over=true}
@@ -158,7 +160,7 @@ p.kvx=(p.kvx||0)*Math.exp(-6*dt);p.kvy=(p.kvy||0)*Math.exp(-6*dt);
 p.x=clamp(p.x+(l.dx*118*slideBoost+p.kvx)*dt,23,W-23);p.y=clamp(p.y+(l.dy*118*slideBoost+p.kvy)*dt,23,F-23);
 let playerBody={x:p.x,y:p.y,vx:l.dx*118*slideBoost+p.kvx,vy:l.dy*118*slideBoost+p.kvy,r:9,isPlayer:true,knockbackSpeed:Math.hypot(p.kvx,p.kvy),sticky:p.sticky||null,wallCooldowns:p.wallCooldowns||new Map(),wallContacts:p.wallContacts||new Set(),portalCooldown:p.portalCooldown||0};
 for(let w of walls){let impact=collideWall(playerBody,w,dt);if(w.type==='spike'&&impact>90&&Math.hypot(p.kvx,p.kvy)>95&&inv<=0){let damage=impact>180?16:impact>130?10:5;hp=Math.max(0,hp-damage);inv=.7;if(hp<=0)over=true}}
-teleportBody(playerBody,dt);p.portalCooldown=playerBody.portalCooldown;p.x=playerBody.x;p.y=playerBody.y;p.sticky=playerBody.sticky;p.wallCooldowns=playerBody.wallCooldowns;p.wallContacts=playerBody.wallContacts;p.vx=(p.x-ox)/Math.max(dt,.001);p.vy=(p.y-oy)/Math.max(dt,.001);
+teleportBody(playerBody,dt);tryHole(playerBody,Math.hypot(playerBody.vx,playerBody.vy),true);p.portalCooldown=playerBody.portalCooldown;p.x=playerBody.x;p.y=playerBody.y;p.sticky=playerBody.sticky;p.wallCooldowns=playerBody.wallCooldowns;p.wallContacts=playerBody.wallContacts;p.vx=(p.x-ox)/Math.max(dt,.001);p.vy=(p.y-oy)/Math.max(dt,.001);
 if(Math.hypot(r.dx,r.dy)>.15)p.target=Math.atan2(r.dy,r.dx);
 let diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a)),force=Math.sign(diff)*Math.min(1,Math.abs(diff)*1.6);
 let previousBatAngle=p.a;p.vel=clamp(p.vel+(force*23-p.vel*3.1)*dt,-7.4,7.4);if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
@@ -180,7 +182,7 @@ e.x+=e.vx*dt*puddleBoost;e.y+=e.vy*dt*puddleBoost;
 if(e.x<18+e.r){e.x=18+e.r;e.vx=Math.abs(e.vx)*.85}if(e.x>W-18-e.r){e.x=W-18-e.r;e.vx=-Math.abs(e.vx)*.85}
 if(e.y<18+e.r){e.y=18+e.r;e.vy=Math.abs(e.vy)*.85}if(e.y>F-18-e.r){e.y=F-18-e.r;e.vy=-Math.abs(e.vy)*.85}
 for(let w of walls)collideWall(e,w,dt);
-teleportBody(e,dt);
+teleportBody(e,dt);if(tryHole(e,Math.hypot(e.vx,e.vy)))continue;
 let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(e.shape!=='healer'){let push=Math.min(240,Math.max(65,Math.hypot(e.vx-p.vx,e.vy-p.vy)*.8));p.kvx-=nx*push;p.kvy-=ny*push;}if(e.shape==='healer'){let speed=Math.hypot(e.vx-p.vx,e.vy-p.vy);if(PLAYER_HEALING_ENABLED&&speed>50&&e.playerHealCooldown<=0){let oldHp=hp;hp=Math.min(100,hp+Math.min(18,Math.floor((speed-35)/13)));if(hp>oldHp)showHeal(p.x,p.y);e.playerHealCooldown=.65}}else if(inv===0){hp=Math.max(0,hp-8);inv=1.1;if(hp<=0)over=true}}
 // Solid bat: sweep its full arc so fast swings cannot tunnel through enemies.
 let sweep=p.a-previousBatAngle,steps=Math.max(1,Math.ceil(Math.abs(sweep)/.055)),hit=false;
@@ -247,10 +249,12 @@ a.impactCooldown=.3;b.impactCooldown=.3;a.cool=Math.max(a.cool,.15);b.cool=Math.
 let restitution=(a.shape==='rubber'||b.shape==='rubber')?1.55:.92;let jimp=-(1+restitution)*rel/tot;a.vx-=jimp*nx*invA;a.vy-=jimp*ny*invA;b.vx+=jimp*nx*invB;b.vy+=jimp*ny*invB;
 }}
 shards=shards.filter(q=>{q.life-=dt;if(q.life<=0)return false;q.x+=q.vx*dt;q.y+=q.vy*dt;if(q.x<17||q.x>W-17||q.y<17||q.y>F-17||blocked(q.x,q.y,2))return false;for(let e of enemies){if(e===q.owner||e.hp<=0||q.hit.has(e))continue;if(Math.hypot(e.x-q.x,e.y-q.y)<e.r+3){q.hit.add(e);if(canDamage(e,130))e.hp-=1;e.vx+=q.vx*.35/e.mass;e.vy+=q.vy*.35/e.mass;return false}}if(Math.hypot(p.x-q.x,p.y-q.y)<11){if(inv<=0){hp=Math.max(0,hp-3);inv=.45;if(hp<=0)over=true}return false}return true});
-let defeated=enemies.filter(e=>e.hp<=0&&e.hp!==-999);let newborn=[];for(let e of defeated){if(e.shape!=='splitter')continue;for(let n=0;n<3;n++){let a=n*Math.PI*2/3+Math.random()*.35,ux=Math.cos(a),uy=Math.sin(a),x=clamp(e.x+ux*15,26,W-26),y=clamp(e.y+uy*15,26,F-26);let child={x,y,vx:e.vx*.4+ux*125,vy:e.vy*.4+uy*125,r:7,shape:'mini',mass:.55,hp:2,maxHp:2,healGlow:0,cool:0,impactCooldown:.35,playerHealCooldown:0};for(let w of walls)collideWall(child,w);newborn.push(child)}}enemies=enemies.filter(e=>e.hp>0);enemies.push(...newborn);kills+=defeated.length;spawnClock+=dt;if(enemies.length<7&&spawnClock>.6){spawn();spawnClock=0}hud()}
+let defeated=enemies.filter(e=>e.hp<=0&&e.hp!==-999&&!e.fellInHole);let newborn=[];for(let e of defeated){if(e.shape!=='splitter')continue;for(let n=0;n<3;n++){let a=n*Math.PI*2/3+Math.random()*.35,ux=Math.cos(a),uy=Math.sin(a),x=clamp(e.x+ux*15,26,W-26),y=clamp(e.y+uy*15,26,F-26);let child={x,y,vx:e.vx*.4+ux*125,vy:e.vy*.4+uy*125,r:7,shape:'mini',mass:.55,hp:2,maxHp:2,healGlow:0,cool:0,impactCooldown:.35,playerHealCooldown:0};for(let w of walls)collideWall(child,w);newborn.push(child)}}enemies=enemies.filter(e=>e.hp>0);enemies.push(...newborn);kills+=defeated.length;spawnClock+=dt;if(enemies.length<7&&spawnClock>.6){spawn();spawnClock=0}hud()}
 g.fillStyle='#191724';g.fillRect(0,0,W,H);
 for(let y=14;y<F-10;y+=25)for(let x=12;x<W-10;x+=25){g.fillStyle=((x+y)/25|0)%2?'#272438':'#2d293e';g.fillRect(x,y,24,24)}
 g.strokeStyle='#746383';g.lineWidth=9;g.strokeRect(8,8,W-16,F-16);
+for(let h of holes){g.save();g.fillStyle='#08070d';g.shadowColor='#000';g.shadowBlur=14;g.beginPath();g.ellipse(h.x,h.y,h.r,h.r*.82,0,0,Math.PI*2);g.fill();g.shadowBlur=0;g.strokeStyle='#74617b';g.lineWidth=4;g.beginPath();g.ellipse(h.x,h.y,h.r,h.r*.82,0,0,Math.PI*2);g.stroke();g.restore()}
+for(let f of fallingFx){let t=1-f.life/f.maxLife,scale=(1-t)*(1-t);g.save();g.globalAlpha=1-t*.85;g.fillStyle=f.color;g.beginPath();g.arc(f.x+(f.tx-f.x)*t,f.y+(f.ty-f.y)*t+t*5,Math.max(.3,f.r*scale),0,Math.PI*2);g.fill();g.strokeStyle='#d3b6ed';g.lineWidth=2*(1-t);g.beginPath();g.arc(f.tx,f.ty,7+t*14,0,Math.PI*2);g.stroke();g.restore()}
 for(let q of poisonPuddles){g.save();g.globalAlpha=Math.min(.7,q.life/.65*.62);g.fillStyle='#65c831';g.beginPath();g.ellipse(q.x,q.y,q.r,q.r*.73,0,0,Math.PI*2);g.fill();g.strokeStyle='#c4ff70';g.lineWidth=2;g.stroke();for(let i=0;i<3;i++){let a=i*2.4+q.life;g.fillStyle='#c4ff70';g.beginPath();g.arc(q.x+Math.cos(a)*q.r*.48,q.y+Math.sin(a)*q.r*.3,2.5,0,Math.PI*2);g.fill()}g.restore()}
 for(let q of puddles){g.save();g.globalAlpha=Math.min(.65,q.life/.6*.55);g.fillStyle='#2c96ed';g.beginPath();g.ellipse(q.x,q.y,q.r,q.r*.68,0,0,Math.PI*2);g.fill();g.strokeStyle='#a0e9ff';g.lineWidth=2;g.stroke();g.restore()}
 for(let q of portals){g.save();let linked=q.type==='linked';g.strokeStyle=linked?'#5cf6fa':'#c48aff';g.fillStyle=linked?'#1c6b7b':'#69368e';g.globalAlpha=.8;g.beginPath();g.arc(q.x,q.y,13,0,Math.PI*2);g.fill();g.lineWidth=3;g.beginPath();g.arc(q.x,q.y,10,0,Math.PI*2);g.stroke();g.globalAlpha=.9;g.font='bold 12px monospace';g.textAlign='center';g.fillStyle='#ffffff';g.fillText(linked?'↔':'?',q.x,q.y+4);g.restore()}
@@ -292,8 +296,8 @@ if(e.shape==='splitter'){g.strokeStyle='#ffe0a5';g.lineWidth=2;g.beginPath();g.m
 if(e.shape==='merge'){g.strokeStyle='#e3caff';g.lineWidth=1.5;g.beginPath();g.arc(e.x,e.y,e.r-3,0,Math.PI*2);g.stroke()}
 }
 for(let f of healFx){let progress=1-f.life/.85,alpha=Math.min(1,f.life/.25);g.save();g.globalAlpha=alpha;g.fillStyle='#70ff90';let x=f.x+12+progress*7,y=f.y-14-progress*21;g.fillRect(x-2,y-8,4,16);g.fillRect(x-8,y-2,16,4);g.restore()}
-if(inv===0||Math.floor(t/110)%2===0){g.fillStyle=playerPoisonGlow>0?'#8dff45':'#fff';g.beginPath();g.arc(p.x,p.y,9,0,Math.PI*2);g.fill()}
-g.save();g.translate(p.x,p.y);g.rotate(p.a);g.fillStyle='#fff';g.fillRect(17,-3,31,6);g.fillStyle='#bdb7d5';g.fillRect(19,2,27,2);g.restore();
+if(!p.falling&&(inv===0||Math.floor(t/110)%2===0)){g.fillStyle=playerPoisonGlow>0?'#8dff45':'#fff';g.beginPath();g.arc(p.x,p.y,9,0,Math.PI*2);g.fill()}
+if(!p.falling){g.save();g.translate(p.x,p.y);g.rotate(p.a);g.fillStyle='#fff';g.fillRect(17,-3,31,6);g.fillStyle='#bdb7d5';g.fillRect(19,2,27,2);g.restore();}
 if(FOG_OF_WAR_ENABLED)drawFog();
 g.fillStyle='#11101c';g.fillRect(0,F,W,H-F);for(let i=0;i<2;i++){let s=sticks[i];g.beginPath();g.arc(s.x,s.y,R,0,Math.PI*2);g.fillStyle='#28263c';g.fill();g.strokeStyle=i?'#b8a6ed':'#7e90ad';g.lineWidth=2;g.stroke();g.beginPath();g.arc(s.x+s.dx*R,s.y+s.dy*R,19,0,Math.PI*2);g.fillStyle=i?'#a38bd2':'#7486a7';g.fill()}
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',89,402);g.fillText('BAT',271,402);
