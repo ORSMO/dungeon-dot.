@@ -19,6 +19,11 @@ wallFx.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:.28+Math.random()*.2,max
 }
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 // Elemental powers trigger only on distinct, sufficiently hard impacts.
+function flipMagnet(e,speed){
+if(e.shape!=='magnet'||e.hp<=0||speed<125||(e.magnetCooldown||0)>0)return;
+e.magnetMode=-(e.magnetMode||1);e.magnetCooldown=.7;
+elementFx.push({type:'magnet',x:e.x,y:e.y,mode:e.magnetMode,life:.4,maxLife:.4});
+}
 function elementalHit(e,speed){
 if(e.hp<=0||speed<105||e.elementCooldown>0)return;
 if(e.shape==='fire'){
@@ -64,18 +69,18 @@ e.wallContacts.add(w);
 let nx,ny,depth;if(d>.0001){nx=dx/d;ny=dy/d;depth=e.r-d}else{let edges=[e.x-w.x,w.x+w.w-e.x,e.y-w.y,w.y+w.h-e.y],i=edges.indexOf(Math.min(...edges));nx=i===0?-1:i===1?1:0;ny=i===2?-1:i===3?1:0;depth=e.r+edges[i]}
 let vn=e.vx*nx+e.vy*ny,impact=Math.max(0,-vn);
 if(w.type==='sticky'){
-if(!e.sticky||e.sticky.wall!==w){e.sticky={wall:w,allow:newContact&&!remaining?Math.min(e.r*.72,impact*.065):0,age:0};if(newContact&&!remaining){e.wallCooldowns.set(w,WALL_HIT_COOLDOWN);if(!e.isPlayer||e.knockbackSpeed>90)showWallHit(w,cx,cy,nx,ny,impact);if(!e.isPlayer)elementalHit(e,impact)}}
+if(!e.sticky||e.sticky.wall!==w){e.sticky={wall:w,allow:newContact&&!remaining?Math.min(e.r*.72,impact*.065):0,age:0};if(newContact&&!remaining){e.wallCooldowns.set(w,WALL_HIT_COOLDOWN);if(!e.isPlayer||e.knockbackSpeed>90)showWallHit(w,cx,cy,nx,ny,impact);if(!e.isPlayer){elementalHit(e,impact);flipMagnet(e,impact)}}}
 e.sticky.age+=dt;e.sticky.allow=Math.max(0,e.sticky.allow-7*dt);
 let allowed=e.sticky.allow;
 if(depth>allowed){e.x+=nx*(depth-allowed);e.y+=ny*(depth-allowed)}
 if(vn<0){e.vx-=vn*nx;e.vy-=vn*ny}
 e.vx*=Math.exp(-5*dt);e.vy*=Math.exp(-5*dt);
-if(newContact&&!remaining&&!e.isPlayer)elementalHit(e,impact);
+if(newContact&&!remaining&&!e.isPlayer){elementalHit(e,impact);flipMagnet(e,impact)}
 return remaining||!newContact?0:impact
 }
 // Always resolve penetration, but only apply a new bounce impulse once per pair cooldown.
 e.x+=nx*depth;e.y+=ny*depth;
-if(vn<0){if(newContact&&!remaining){let restitution=(w.type==='bounce'?2.45:w.type==='spike'?.65:.78)*(e.shape==='rubber'?1.65:1);e.vx-=(1+restitution)*vn*nx;e.vy-=(1+restitution)*vn*ny;e.wallCooldowns.set(w,WALL_HIT_COOLDOWN);if(!e.isPlayer||e.knockbackSpeed>90)showWallHit(w,cx,cy,nx,ny,impact);if(!e.isPlayer)elementalHit(e,impact)}
+if(vn<0){if(newContact&&!remaining){let restitution=(w.type==='bounce'?2.45:w.type==='spike'?.65:.78)*(e.shape==='rubber'?1.65:1);e.vx-=(1+restitution)*vn*nx;e.vy-=(1+restitution)*vn*ny;e.wallCooldowns.set(w,WALL_HIT_COOLDOWN);if(!e.isPlayer||e.knockbackSpeed>90)showWallHit(w,cx,cy,nx,ny,impact);if(!e.isPlayer){elementalHit(e,impact);flipMagnet(e,impact)}}
 else{e.vx-=vn*nx;e.vy-=vn*ny}}
 return remaining||!newContact?0:impact
 }
@@ -101,7 +106,7 @@ for(let h of hits)fg.lineTo(h.x,h.y);
 fg.closePath();fg.fillStyle='#000';fg.fill();fg.globalCompositeOperation='source-over';
 g.drawImage(layer,0,0);
 }
-function spawn(){for(let n=0;n<80;n++){let x=26+Math.random()*308,y=26+Math.random()*229;if(Math.hypot(x-p.x,y-p.y)<85||blocked(x,y,12)||enemies.some(e=>Math.hypot(e.x-x,e.y-y)<25))continue;let roll=Math.random(),shape=roll<.15?'square':roll<.29?'round':roll<.39?'healer':roll<.49?'merge':roll<.58?'splitter':roll<.66?'armored':roll<.73?'fire':roll<.80?'water':roll<.87?'electric':roll<.94?'rubber':'poison',elite=Math.random()<.17,maxHp=shape==='square'?4:shape==='merge'?5:shape==='splitter'?9:shape==='armored'?7:shape==='fire'||shape==='water'||shape==='electric'||shape==='rubber'||shape==='poison'?4:3,r=(shape==='splitter'?17:shape==='armored'?12:10)*(elite?1.4:1),mass=(shape==='splitter'?2.5:shape==='armored'?2:shape==='rubber'?.8:shape==='square'?1.45:1)*(elite?2:1);if(blocked(x,y,r+2)||enemies.some(e=>Math.hypot(e.x-x,e.y-y)<e.r+r+3))continue;maxHp=Math.ceil(maxHp*(elite?2:1));enemies.push({x,y,vx:0,vy:0,r,shape,elite,mass,hp:maxHp,maxHp,healGlow:0,cool:0,impactCooldown:0,playerHealCooldown:0,elementCooldown:0,poisonTimer:0});break}}
+function spawn(){for(let n=0;n<80;n++){let x=26+Math.random()*308,y=26+Math.random()*229;if(Math.hypot(x-p.x,y-p.y)<85||blocked(x,y,12)||enemies.some(e=>Math.hypot(e.x-x,e.y-y)<25))continue;let roll=Math.random(),shape=roll<.14?'square':roll<.27?'round':roll<.36?'healer':roll<.45?'merge':roll<.54?'splitter':roll<.62?'armored':roll<.69?'fire':roll<.76?'water':roll<.83?'electric':roll<.89?'rubber':roll<.95?'poison':'magnet',elite=Math.random()<.17,maxHp=shape==='square'?4:shape==='merge'?5:shape==='splitter'?9:shape==='armored'?7:shape==='fire'||shape==='water'||shape==='electric'||shape==='rubber'||shape==='poison'||shape==='magnet'?4:3,r=(shape==='splitter'?17:shape==='armored'?12:10)*(elite?1.4:1),mass=(shape==='splitter'?2.5:shape==='armored'?2:shape==='rubber'?.8:shape==='square'?1.45:1)*(elite?2:1);if(blocked(x,y,r+2)||enemies.some(e=>Math.hypot(e.x-x,e.y-y)<e.r+r+3))continue;maxHp=Math.ceil(maxHp*(elite?2:1));enemies.push({x,y,vx:0,vy:0,r,shape,elite,mass,hp:maxHp,maxHp,healGlow:0,cool:0,impactCooldown:0,playerHealCooldown:0,elementCooldown:0,poisonTimer:0,magnetMode:1,magnetCooldown:0});break}}
 function hud(){document.querySelector('#hp-fill').style.width=(Math.max(0,hp))+'%';document.querySelector('#hp-fill').style.background=hp<=30?'#f06470':hp<=60?'#e7bb62':'#69d58a';document.querySelector('#hp-label').textContent=Math.round(Math.max(0,hp))+'%';document.querySelector('#kills').textContent='KILLS '+kills}
 function reset(){p={x:180,y:35,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];hp=100;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});for(let i=0;i<7;i++)spawn();hud()}
 function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}}
@@ -124,7 +129,16 @@ p.x=playerBody.x;p.y=playerBody.y;p.sticky=playerBody.sticky;p.wallCooldowns=pla
 if(Math.hypot(r.dx,r.dy)>.15)p.target=Math.atan2(r.dy,r.dx);
 let diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a)),force=Math.sign(diff)*Math.min(1,Math.abs(diff)*1.6);
 let previousBatAngle=p.a;p.vel=clamp(p.vel+(force*23-p.vel*3.1)*dt,-7.4,7.4);if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
-for(let e of enemies){e.poisonGlow=Math.max(0,(e.poisonGlow||0)-dt);if(e.shape!=='poison'&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r))e.poisonGlow=.24;e.poisonTimer=Math.max(0,(e.poisonTimer||0)-dt);if(e.shape!=='poison'&&e.poisonTimer<=0&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r)){if(canDamage(e,115)){e.hp-=1;e.cool=Math.max(e.cool,.12)}e.poisonTimer=.7}e.elementCooldown=Math.max(0,(e.elementCooldown||0)-dt);e.cool=Math.max(0,e.cool-dt);e.impactCooldown=Math.max(0,e.impactCooldown-dt);e.playerHealCooldown=Math.max(0,e.playerHealCooldown-dt);e.healGlow=Math.max(0,e.healGlow-dt);let dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy)||1;
+// Magnetic force is distance-limited and capped to keep the arena playable.
+for(let m of enemies){if(m.shape!=='magnet'||m.hp<=0)continue;
+let radius=m.elite?115:88,strength=m.elite?185:135,mode=m.magnetMode||1;
+for(let e of enemies){if(e===m||e.hp<=0)continue;
+let dx=m.x-e.x,dy=m.y-e.y,d=Math.hypot(dx,dy)||1;
+if(d<radius&&d>e.r+m.r*.5){let f=strength*(1-d/radius)*dt/Math.sqrt(e.mass);e.vx+=dx/d*f*mode;e.vy+=dy/d*f*mode}}
+let dx=m.x-p.x,dy=m.y-p.y,d=Math.hypot(dx,dy)||1;
+if(d<radius&&d>m.r+5){let f=90*(1-d/radius)*dt;p.kvx=(p.kvx||0)+dx/d*f*mode;p.kvy=(p.kvy||0)+dy/d*f*mode}
+}
+for(let e of enemies){e.magnetCooldown=Math.max(0,(e.magnetCooldown||0)-dt);e.poisonGlow=Math.max(0,(e.poisonGlow||0)-dt);if(e.shape!=='poison'&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r))e.poisonGlow=.24;e.poisonTimer=Math.max(0,(e.poisonTimer||0)-dt);if(e.shape!=='poison'&&e.poisonTimer<=0&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r)){if(canDamage(e,115)){e.hp-=1;e.cool=Math.max(e.cool,.12)}e.poisonTimer=.7}e.elementCooldown=Math.max(0,(e.elementCooldown||0)-dt);e.cool=Math.max(0,e.cool-dt);e.impactCooldown=Math.max(0,e.impactCooldown-dt);e.playerHealCooldown=Math.max(0,e.playerHealCooldown-dt);e.healGlow=Math.max(0,e.healGlow-dt);let dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy)||1;
 // Mild chase force, with velocity retained after impacts.
 if(d>21){e.vx+=dx/d*43*dt;e.vy+=dy/d*43*dt}
 let puddleBoost=puddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r)?1.55:1;
@@ -150,6 +164,7 @@ if(kick>0){let impulse=kick*(1.5/e.mass);e.vx+=tx*impulse;e.vy+=ty*impulse}
 e.vx+=nx*24/e.mass;e.vy+=ny*24/e.mass;
 for(let w of walls)collideWall(e,w,dt);
 e.x=clamp(e.x,18+e.r,W-18-e.r);e.y=clamp(e.y,18+e.r,F-18-e.r);
+flipMagnet(e,kick);
 if(e.cool===0&&Math.abs(p.vel)>1.1){if(canDamage(e,kick)){e.hp-=Math.abs(p.vel)>4.4?2:1;e.cool=.28}else if(e.elite||e.shape==='armored'){e.cool=.12}}
 hit=true;break;
 }
@@ -170,6 +185,7 @@ let rel=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
 if(rel<0){
 let impactSpeed=-rel,ready=a.impactCooldown<=0&&b.impactCooldown<=0;
 if(ready&&impactSpeed>105){elementalHit(a,impactSpeed);elementalHit(b,impactSpeed)}
+if(ready){flipMagnet(a,impactSpeed);flipMagnet(b,impactSpeed)}
 
 if(ready&&impactSpeed>100&&a.shape==='merge'&&b.shape==='merge'){
 // Area adds, so the resulting circle grows without jumping to an impossible diameter.
@@ -209,7 +225,8 @@ if(w.type==='bounce'){g.fillStyle='#a4ebff';if(w.w>w.h){for(let x=w.x+9;x<w.x+w.
 if(w.type==='spike'){g.fillStyle='#ffc0ba';if(w.w>w.h){for(let x=w.x+7;x<w.x+w.w-4;x+=12){g.beginPath();g.moveTo(x,w.y+4);g.lineTo(x+4,w.y+10);g.lineTo(x+8,w.y+4);g.fill()}}else for(let y=w.y+7;y<w.y+w.h-4;y+=12){g.beginPath();g.moveTo(w.x+4,y);g.lineTo(w.x+10,y+4);g.lineTo(w.x+4,y+8);g.fill()}}
 }
 for(let f of elementFx){let progress=1-f.life/f.maxLife;g.save();g.globalAlpha=Math.max(0,f.life/f.maxLife);
-if(f.type==='lightning'){g.strokeStyle='#fff07d';g.lineWidth=3;g.shadowColor='#f5d72b';g.shadowBlur=12;g.beginPath();g.moveTo(f.x,f.y);for(let i=1;i<5;i++){let t=i/5;g.lineTo(f.x+(f.x2-f.x)*t+Math.sin(i*14+f.x)*5,f.y+(f.y2-f.y)*t+Math.cos(i*12+f.y)*5)}g.lineTo(f.x2,f.y2);g.stroke()}
+if(f.type==='magnet'){g.strokeStyle=f.mode===-1?'#ff6079':'#5cbcff';g.lineWidth=3;g.beginPath();g.arc(f.x,f.y,10+progress*36,0,Math.PI*2);g.stroke()}
+else if(f.type==='lightning'){g.strokeStyle='#fff07d';g.lineWidth=3;g.shadowColor='#f5d72b';g.shadowBlur=12;g.beginPath();g.moveTo(f.x,f.y);for(let i=1;i<5;i++){let t=i/5;g.lineTo(f.x+(f.x2-f.x)*t+Math.sin(i*14+f.x)*5,f.y+(f.y2-f.y)*t+Math.cos(i*12+f.y)*5)}g.lineTo(f.x2,f.y2);g.stroke()}
 else if(f.type==='fire'){g.strokeStyle='#ff8736';g.lineWidth=5*(1-progress)+1;g.shadowColor='#ff4e20';g.shadowBlur=12;g.beginPath();g.arc(f.x,f.y,8+progress*40,0,Math.PI*2);g.stroke();g.strokeStyle='#ffdf65';g.lineWidth=2;g.beginPath();g.arc(f.x,f.y,8+progress*40,0,Math.PI*2);g.stroke()}
 else{for(let i=0;i<7;i++){let a=i*Math.PI*2/7;g.fillStyle='#d8e8ed';g.beginPath();g.arc(f.x+Math.cos(a)*(5+progress*23),f.y-12*progress+Math.sin(a)*(4+progress*12),5+progress*5,0,Math.PI*2);g.fill()}}
 g.restore()}
@@ -220,8 +237,9 @@ if(f.type==='sticky'){g.globalAlpha=a*.5;g.beginPath();g.arc(f.x,f.y,(1-a)*10+3,
 g.restore()}
 for(let e of enemies){
 if(e.healGlow>0){g.save();g.globalAlpha=.36*e.healGlow/.75;g.fillStyle='#5eff83';g.beginPath();g.arc(e.x,e.y,e.r+10,0,Math.PI*2);g.fill();g.restore()}
-g.fillStyle=e.poisonGlow>0?'#8dff45':e.cool>0?'#ffb2a9':e.shape==='square'?'#ec5274':e.shape==='round'?'#55c9ce':e.shape==='healer'?'#60df79':e.shape==='splitter'?'#ff9e48':e.shape==='mini'?'#ffca73':e.shape==='armored'?'#d9ad50':e.shape==='fire'?'#ff6b2f':e.shape==='water'?'#4aabff':e.shape==='electric'?'#ffe75c':e.shape==='rubber'?'#7ce77c':e.shape==='poison'?'#9bdc38':'#b388fa';
+g.fillStyle=e.poisonGlow>0?'#8dff45':e.cool>0?'#ffb2a9':e.shape==='square'?'#ec5274':e.shape==='round'?'#55c9ce':e.shape==='healer'?'#60df79':e.shape==='splitter'?'#ff9e48':e.shape==='mini'?'#ffca73':e.shape==='armored'?'#d9ad50':e.shape==='fire'?'#ff6b2f':e.shape==='water'?'#4aabff':e.shape==='electric'?'#ffe75c':e.shape==='rubber'?'#7ce77c':e.shape==='poison'?'#9bdc38':e.shape==='magnet'?(e.magnetMode===-1?'#ff6079':'#5cbcff'):'#b388fa';
 g.beginPath();if(e.shape==='square')g.rect(e.x-e.r,e.y-e.r,e.r*2,e.r*2);else g.arc(e.x,e.y,e.r,0,Math.PI*2);g.fill();
+if(e.shape==='magnet'){g.save();g.strokeStyle=e.magnetMode===-1?'#ff6079':'#5cbcff';g.globalAlpha=.35;g.lineWidth=1.5;g.setLineDash([4,5]);g.beginPath();g.arc(e.x,e.y,e.elite?32:26,0,Math.PI*2);g.stroke();g.setLineDash([]);g.fillStyle='#132239';g.font='bold 13px monospace';g.textAlign='center';g.fillText(e.magnetMode===-1?'-':'+',e.x,e.y+4);g.restore()}
 if(e.elite||e.shape==='armored'){g.save();g.strokeStyle=e.elite?'#f6d66f':'#fff0a6';g.lineWidth=e.elite?3:2.5;g.shadowColor=e.elite?'#f8c954':'#ffdf8a';g.shadowBlur=e.elite?10:5;g.beginPath();g.arc(e.x,e.y,e.r+4,0,Math.PI*2);g.stroke();g.restore()}
 if(e.shape==='healer'){g.fillStyle='#174e29';g.fillRect(e.x-2,e.y-7,4,14);g.fillRect(e.x-7,e.y-2,14,4)}
 else{g.fillStyle='#231c32';g.fillRect(e.x-5,e.y-3,3,3);g.fillRect(e.x+3,e.y-3,3,3)}
