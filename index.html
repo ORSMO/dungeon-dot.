@@ -5,7 +5,8 @@ const PLAYER_HEALING_ENABLED=true;
 const PLAYER_REGEN=1.2;
 let runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};
 const statsPanel=document.querySelector("#stats-panel");document.querySelector("#stats-toggle").onclick=()=>{statsPanel.hidden=!statsPanel.hidden;updateStatsPanel()};
-function updateStatsPanel(){if(statsPanel.hidden)return;let t=Math.floor(arenaTime),maxMass=Math.max(0,...enemies.map(e=>e.mass));statsPanel.textContent=`TIME ${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}  |  KILLS ${kills}  |  BIGGEST HIT ${Math.round(runStats.biggestImpact)}  |  BAT HITS ${runStats.swingsHit}  |  SPLITS ${runStats.splits}  |  FUSIONS ${runStats.fusions}  |  HEALED ${Math.round(runStats.healed)} HP  |  LARGEST MASS ${maxMass.toFixed(1)}  |  PLAYER REGEN ${PLAYER_REGEN} HP/s  |  ENEMIES ${enemies.length}`}
+function enemyStats(e){return {mass:e.mass,elasticity:e.shape==='rubber'?1.55:.92,toughness:e.elite?145:e.shape==='armored'?115:0,stability:e.shape==='square'?100:e.shape==='armored'?95:e.shape==='rubber'?75:60,regen:e.shape==='regenerator'?1.1:0}}
+function updateStatsPanel(){if(statsPanel.hidden)return;let t=Math.floor(arenaTime),maxMass=Math.max(0,...enemies.map(e=>e.mass));let nearest=enemies.filter(e=>e.hp>0).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0],es=nearest?enemyStats(nearest):null;statsPanel.textContent=`TIME ${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}  |  KILLS ${kills}  |  BIGGEST HIT ${Math.round(runStats.biggestImpact)}  |  BAT HITS ${runStats.swingsHit}  |  SPLITS ${runStats.splits}  |  FUSIONS ${runStats.fusions}  |  HEALED ${Math.round(runStats.healed)} HP  |  LARGEST MASS ${maxMass.toFixed(1)}  |  PLAYER REGEN ${PLAYER_REGEN} HP/s  |  ENEMIES ${enemies.length}${es?'  |  NEAREST '+nearest.shape.toUpperCase()+' — HP '+Math.ceil(nearest.hp)+'/'+nearest.maxHp+'  MASS '+es.mass.toFixed(1)+'  BOUNCE '+es.elasticity.toFixed(2)+'  TOUGHNESS '+es.toughness+'  STABILITY '+es.stability+'%  REGEN '+es.regen+'/s':''}`}
 
 const sticks=[{x:89,y:345,dx:0,dy:0,id:null},{x:271,y:345,dx:0,dy:0,id:null}];
 const walls=[{x:67,y:67,w:69,h:13,type:'bounce'},{x:224,y:66,w:70,h:13,type:'spike'},{x:156,y:123,w:13,h:70,type:'sticky'},{x:66,y:213,w:69,h:13,type:'spike'},{x:226,y:212,w:69,h:13,type:'bounce'},{x:105,y:101,w:12,h:45,type:'bounce',moving:true,baseX:105,baseY:101,axis:'y',range:32,speed:1.25,phase:0},{x:251,y:139,w:12,h:44,type:'spike',moving:true,baseX:251,baseY:139,axis:'y',range:28,speed:1.05,phase:1.8}];
@@ -180,7 +181,7 @@ function originPair(a,b){let aa=a.origins||[a.shape],bb=b.origins||[b.shape];ret
 
 let pendingSplits=[];
 function splitOnImpact(e,kick){
-if(e.shape==='square'||kick<115||e.r<8||e.hp<=0||e.fusionCooldown>0||enemies.length+pendingSplits.length>=MAX_BODIES||Math.random()>=SPLIT_CHANCE)return;
+if(e.shape==='square'||kick<115||e.r<8||e.hp<=0||e.fusionCooldown>0||enemies.length+pendingSplits.length>=MAX_BODIES||Math.random()>=SPLIT_CHANCE*(100-enemyStats(e).stability)/40)return;
 let r=e.r/Math.sqrt(2),mass=e.mass/2,angle=Math.atan2(e.vy,e.vx)+Math.PI/2,ux=Math.cos(angle),uy=Math.sin(angle),speed=60;
 let oldHp=e.hp,oldMax=e.maxHp,oldX=e.x,oldY=e.y,oldVX=e.vx,oldVY=e.vy;
 e.r=r;e.mass=mass;e.maxHp=Math.max(1,Math.ceil(oldMax/2));e.hp=Math.max(1,Math.ceil(oldHp/2));e.x=clamp(oldX+ux*(r+2),19+r,W-19-r);e.y=clamp(oldY+uy*(r+2),19+r,F-19-r);e.vx=oldVX+ux*speed;e.vy=oldVY+uy*speed;e.fusionCooldown=.9;e.splitCooldown=1.5;
@@ -294,7 +295,7 @@ if(a.shape!=='healer'&&canDamage(a,impactSpeed))a.hp-=damage;
 if(b.shape!=='healer'&&canDamage(b,impactSpeed))b.hp-=damage;
 a.impactCooldown=.3;b.impactCooldown=.3;a.cool=Math.max(a.cool,.15);b.cool=Math.max(b.cool,.15);
 }
-let restitution=(a.shape==='rubber'||b.shape==='rubber')?1.55:.92;let jimp=-(1+restitution)*rel/tot;a.vx-=jimp*nx*invA;a.vy-=jimp*ny*invA;b.vx+=jimp*nx*invB;b.vy+=jimp*ny*invB;
+let restitution=Math.max(enemyStats(a).elasticity,enemyStats(b).elasticity);let jimp=-(1+restitution)*rel/tot;a.vx-=jimp*nx*invA;a.vy-=jimp*ny*invA;b.vx+=jimp*nx*invB;b.vy+=jimp*ny*invB;
 }}
 shards=shards.filter(q=>{q.life-=dt;if(q.life<=0)return false;q.x+=q.vx*dt;q.y+=q.vy*dt;if(q.x<17||q.x>W-17||q.y<17||q.y>F-17||blocked(q.x,q.y,2))return false;for(let e of enemies){if(e===q.owner||e.hp<=0||q.hit.has(e))continue;if(Math.hypot(e.x-q.x,e.y-q.y)<e.r+3){q.hit.add(e);if(canDamage(e,130))e.hp-=1;e.vx+=q.vx*.35/e.mass;e.vy+=q.vy*.35/e.mass;return false}}if(Math.hypot(p.x-q.x,p.y-q.y)<11){if(inv<=0){hp=Math.max(0,hp-3);inv=.45;if(hp<=0)over=true}return false}return true});
 let defeated=enemies.filter(e=>e.hp<=0&&e.hp!==-999&&!e.fellInHole);let newborn=[];for(let e of defeated){if(e.shape!=='splitter')continue;for(let n=0;n<3;n++){let a=n*Math.PI*2/3+Math.random()*.35,ux=Math.cos(a),uy=Math.sin(a),x=clamp(e.x+ux*15,26,W-26),y=clamp(e.y+uy*15,26,F-26);let child={x,y,vx:e.vx*.4+ux*125,vy:e.vy*.4+uy*125,r:7,shape:'mini',mass:.55,hp:2,maxHp:2,healGlow:0,cool:0,impactCooldown:.35,playerHealCooldown:0};for(let w of walls)collideWall(child,w);newborn.push(child)}}enemies=enemies.filter(e=>e.hp>0);enemies.push(...newborn,...pendingSplits);kills+=defeated.length;spawnClock+=dt;if(enemies.length<7&&spawnClock>.6){spawn();spawnClock=0}hud();updateStatsPanel()}
