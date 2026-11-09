@@ -750,7 +750,7 @@ function readProfile(){
   profile.lastSlot=raw.lastSlot===1||raw.lastSlot===2?raw.lastSlot:null;
   const valid=new Set(bestiaryCatalog().map(entry=>entry.id));
   if(raw.bestiary&&typeof raw.bestiary==='object')for(const [id,record] of Object.entries(raw.bestiary))if(valid.has(id)&&record&&typeof record==='object'){
-   profile.bestiary[id]={encounters:Math.floor(safeNumber(record.encounters)),kills:Math.floor(safeNumber(record.kills)),firstSeen:safeNumber(record.firstSeen),lastSeen:safeNumber(record.lastSeen)};
+   profile.bestiary[id]={encounters:Math.floor(safeNumber(record.encounters)),kills:Math.floor(safeNumber(record.kills)),firstSeen:safeNumber(record.firstSeen,0,0,8.64e15),lastSeen:safeNumber(record.lastSeen,0,0,8.64e15)};
   }
  }catch(error){saveError='Some stored preferences could not be read.'}
 }
@@ -790,7 +790,7 @@ function normalizeSavedRun(raw){
  raw.bleedStacks=Math.floor(safeNumber(raw.bleedStacks));raw.temporaryBleed=Array.isArray(raw.temporaryBleed)?raw.temporaryBleed.filter(Number.isFinite).slice(0,500):[];
  raw.playerBleed=Array.isArray(raw.playerBleed)?raw.playerBleed.filter(b=>b&&Number.isFinite(b.remaining)&&Number.isFinite(b.rate)&&b.remaining>0&&b.rate>0).map(b=>({remaining:safeNumber(b.remaining,0,0,1000),rate:safeNumber(b.rate,0,0,100)})).slice(0,100):[];
  const stats={};for(const key of ['biggestImpact','swingsHit','splits','fusions','healed'])stats[key]=safeNumber(raw.runStats?.[key]);
- raw.runStats=stats;raw.savedAt=safeNumber(raw.savedAt);
+ raw.runStats=stats;raw.savedAt=safeNumber(raw.savedAt,0,0,8.64e15);
  return raw;
 }
 function readSlot(slot){
