@@ -15,7 +15,28 @@
 #item-notice{position:absolute;z-index:14;top:74px;left:50%;transform:translateX(-50%);max-width:58vw;padding:8px 11px;border:1px solid #c9a96c;border-radius:8px;background:#241b2bf2;color:#f2ddb4;font:10px system-ui;pointer-events:none}
 #loot-panel.practice-with-menu{left:40%;width:min(300px,48vw)}
 @media(max-height:420px){#character-panel{font-size:11px;padding:9px}#character-stats>div{padding:4px;font-size:9px}.inventory-row{padding:4px 0}#loot-panel{bottom:63px;padding:7px 9px}}
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V6.1</small><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks to reposition them. Each stays on its own half.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
+#start-screen[hidden],#bestiary-panel[hidden],#sound-panel[hidden],#resume-current[hidden],#save-indicator[hidden]{display:none!important}
+footer #restart{display:none}
+#start-screen{position:fixed;inset:0;z-index:80;background:radial-gradient(ellipse at 18% 38%,#443153 0,#171528 48%,#0a101b 100%);color:#f1e9f8;overflow:auto}
+#start-screen:before{content:"";position:absolute;inset:0;opacity:.12;background-image:linear-gradient(#b297ca 1px,transparent 1px),linear-gradient(90deg,#b297ca 1px,transparent 1px);background-size:42px 42px;pointer-events:none}
+.start-layout{position:relative;min-height:100dvh;max-width:1150px;margin:auto;display:grid;grid-template-columns:.85fr 1.4fr;gap:6vw;align-items:center;padding:24px 5vw}
+.start-brand>small{font:800 10px monospace;letter-spacing:2px;color:#c2accf}.start-brand h1{font:800 clamp(24px,4.5vw,54px)/1.04 system-ui;margin:12px 0 10px;letter-spacing:-1px}.start-brand p{max-width:300px;color:#bfb3cd;font-size:12px;line-height:1.5}
+.start-emblem{position:relative;height:50px;width:120px;margin-bottom:16px}.start-emblem i{position:absolute;left:5px;top:6px;width:34px;height:34px;border-radius:50%;background:#fff6dd;box-shadow:0 0 35px #e9c18444}.start-emblem b{position:absolute;left:55px;top:19px;width:60px;height:9px;background:#dddae7;border-radius:2px;box-shadow:0 3px #7d748f}
+.start-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}.start-actions button{font-size:11px;padding:9px 12px;background:#4c3b61;border:1px solid #8d759e}.start-actions #resume-current{background:#80643a;border-color:#d0af6b}
+.save-area>h2{font-size:16px;margin:0 0 12px;color:#ead7b0}#save-slots{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.save-slot{padding:17px 15px;border:1px solid #746184;border-radius:13px;background:#211e32e8;display:flex;flex-direction:column;min-height:230px;box-shadow:0 12px 30px #0003}.save-slot h2{font:800 11px monospace;letter-spacing:1px;color:#e3c98e;margin:0 0 17px}.save-slot p{color:#e0d3eb;font-size:12px;line-height:1.55;flex:1;margin:0 0 12px}.save-slot small{font-size:9px;color:#b6a6c2;margin-bottom:12px}.save-slot button{font-size:11px;padding:9px 10px;background:#6b5941;border:1px solid #b59b66;margin-top:6px}.save-slot .secondary{background:#373049;border-color:#665675}
+#start-message{font:10px/1.45 system-ui;color:#b1a1bd;margin-top:12px;min-height:28px}
+#save-indicator{position:absolute;z-index:5;left:12px;top:70px;font:8px monospace;color:#b5c9b9;pointer-events:none;max-width:240px}
+#bestiary-panel{position:fixed;z-index:95;inset:12px;background:#171625f5;border:1px solid #806e91;border-radius:14px;padding:14px;color:#eae1ef;display:flex;flex-direction:column;box-shadow:0 12px 60px #0008}
+.index-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.index-heading small{font:8px monospace;letter-spacing:2px;color:#be9c76}.index-heading h1{font-size:23px;margin:2px 0}.index-heading p{font-size:10px;color:#b7a6c5;margin:3px 0 8px}.index-heading>button{padding:6px 12px;font-size:18px;background:#493c5b}
+.index-toolbar{display:flex;gap:6px;align-items:center;margin-bottom:10px}.index-toolbar button{font-size:10px;padding:7px 13px;background:#30283e;border:1px solid #685574}.index-toolbar button[aria-pressed=true]{background:#655033;border-color:#c2a36d}.index-toolbar input{min-width:0;flex:1;padding:7px 10px;border:1px solid #645271;border-radius:6px;background:#221e30;color:#f0e8f3;font-size:11px}
+.index-layout{display:grid;grid-template-columns:1fr minmax(190px,30%);gap:14px;min-height:0;flex:1}
+#bestiary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));align-content:start;gap:8px;overflow:auto;padding-right:5px}
+.index-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:114px;padding:9px 6px;gap:5px;background:#2d283b;border:1px solid #6a587a;border-radius:9px}.index-tile svg{width:53px;height:53px}.index-tile strong{font:700 10px system-ui;text-align:center}.index-tile small{font-size:9px;color:#dbc294}.index-tile.locked{background:#211f2d;border-color:#40384c}.index-tile.locked strong,.index-tile.locked small{color:#82768f}.unknown-icon{display:grid;place-items:center;width:53px;height:53px;color:#776b83;font:bold 34px monospace}
+#bestiary-detail{background:#232033;border:1px solid #504258;border-radius:10px;overflow:auto;padding:14px;text-align:center}#bestiary-detail h2{font-size:16px;margin:8px 0 5px}#bestiary-detail>small{font-size:10px;color:#c2a4cf}#bestiary-detail p{font-size:11px;color:#c8bbd2;line-height:1.55;text-align:left}.index-portrait svg{width:90px;height:90px}.unknown-portrait{font:bold 70px monospace;color:#7c6e8b}.index-records{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;font-size:11px;color:#e1c889;margin:13px 0}.index-placeholder{color:#a391b0;font-size:12px;line-height:1.5;margin-top:40px}.index-footnote{font-size:9px;color:#998aa6;padding-top:9px}
+#sound-panel{position:fixed;z-index:96;left:50%;top:50%;transform:translate(-50%,-50%);width:min(360px,80vw);max-height:calc(100dvh - 24px);overflow:auto;border:1px solid #8e769f;border-radius:12px;background:#211a30f8;color:#eee6f3;padding:17px;box-shadow:0 0 0 100vmax #070810ac}.sound-heading{display:flex;align-items:center;justify-content:space-between}.sound-heading h2{font-size:18px;margin:0}.sound-heading button{padding:4px 10px;font-size:17px}#sound-panel p{font-size:11px;line-height:1.45;color:#bcb0ca}#sound-panel label{display:grid;grid-template-columns:1fr auto;gap:6px;font-size:12px;margin:14px 0}#sound-panel input[type=range]{grid-column:1/-1;width:100%;accent-color:#be9fe6}#sound-panel .mute-label{display:flex;align-items:center}
+@media(max-height:430px){.start-layout{padding:16px 4vw;gap:4vw}.start-emblem{height:35px;margin-bottom:7px;transform:scale(.8);transform-origin:left center}.start-brand h1{font-size:31px;margin-top:7px}.start-brand p{font-size:10px}.start-actions{margin-top:10px}.start-actions button{font-size:10px;padding:7px 9px}.save-slot{padding:12px 11px;min-height:215px}.save-slot h2{margin-bottom:12px}.save-slot p{font-size:11px}#bestiary-panel{inset:7px;padding:10px}.index-heading h1{font-size:19px}.index-layout{gap:9px;grid-template-columns:1fr 28%}#bestiary-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px}.index-tile{min-height:105px;padding:6px}.index-portrait svg{width:65px;height:65px}#bestiary-detail{padding:9px}#bestiary-detail h2{font-size:13px}#bestiary-detail p{font-size:10px}.index-footnote{font-size:8px}}
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V7.0</small><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks to reposition them. Each stays on its own half.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
  <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
  <small id="character-coins"></small>
  <div id="character-stats"></div>
@@ -28,6 +49,27 @@
  <div><span id="loot-price"></span><button id="loot-take">Take item</button></div>
 </section>
 <div id="item-notice" hidden role="status"></div>
+<section id="start-screen" hidden aria-label="Dungeon Dot start screen">
+ <div class="start-layout">
+  <div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V7.0</small><h1>Every room.<br>A new fight.</h1><p>Explore the dungeon, collect your build, and face its guardians.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
+  <div class="save-area"><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
+ </div>
+</section>
+<section id="bestiary-panel" hidden aria-label="Enemy index">
+ <div class="index-heading"><div><small>FIELD JOURNAL</small><h1>Enemy Index</h1><p id="index-summary"></p></div><button id="index-close" aria-label="Close enemy index">×</button></div>
+ <div class="index-toolbar"><button id="index-all" aria-pressed="true">All</button><button id="index-enemies" aria-pressed="false">Enemies</button><button id="index-bosses" aria-pressed="false">Bosses</button><input id="index-search" type="search" placeholder="Search discovered enemies" aria-label="Search enemy index"></div>
+ <div class="index-layout"><div id="bestiary-grid"></div><aside id="bestiary-detail"></aside></div>
+ <small class="index-footnote">Shared across both save slots. Dungeon encounters only; practice does not change these records.</small>
+</section>
+<section id="sound-panel" hidden aria-label="Sound settings">
+ <div class="sound-heading"><h2>Sound settings</h2><button id="sound-close" aria-label="Close sound settings">×</button></div>
+ <p>Audio has not been added yet. These settings are saved for future music and effects.</p>
+ <label class="mute-label"><input id="sound-muted" type="checkbox"> Mute all audio</label>
+ <label>Master volume <output id="sound-master-value">80%</output><input id="sound-master" type="range" min="0" max="100" value="80"></label>
+ <label>Music <output id="sound-music-value">60%</output><input id="sound-music" type="range" min="0" max="100" value="60"></label>
+ <label>Sound effects <output id="sound-effects-value">80%</output><input id="sound-effects" type="range" min="0" max="100" value="80"></label>
+</section>
+<small id="save-indicator" hidden></small>
 <div id="edit-hint" hidden>DRAG JOYSTICKS <button id="edit-done">DONE ✓</button></div></main><script>
 (()=>{const c=document.querySelector('#game'),g=c.getContext('2d');let viewW=640,W=480,F=480;const H=360,VIEW_F=304,R=35;const arena=document.querySelector('#arena');function resizeArena(){const r=arena.getBoundingClientRect();if(!r.width||!r.height)return;const oldW=viewW;viewW=Math.max(360,Math.round(H*r.width/r.height));c.width=viewW;c.height=H;try{if(oldW!==viewW&&typeof controls!=='undefined'){controls.positions=controls.positions.map(p=>[p[0]*viewW/oldW,p[1]]);sticks.forEach((s,i)=>{s.x=controls.positions[i][0];s.y=controls.positions[i][1]})}}catch(err){}}resizeArena();window.addEventListener('resize',resizeArena);window.visualViewport?.addEventListener('resize',resizeArena);
 // Hidden gameplay switch: set to false to disable player healing from green Plus enemies.
@@ -42,7 +84,7 @@ function shieldHit(x,y,r=4){return shieldSegments().some(seg=>laserDistance(x,y,
 function shieldBlocksLaser(lines){let shields=shieldSegments();for(let l of lines)for(let sh of shields){let ax=l.x2-l.x1,ay=l.y2-l.y1,bx=sh.x2-sh.x1,by=sh.y2-sh.y1,cross=ax*by-ay*bx;if(Math.abs(cross)<.00001)continue;let dx=sh.x1-l.x1,dy=sh.y1-l.y1,t=(dx*by-dy*bx)/cross,u=(dx*ay-dy*ax)/cross;if(t>=0&&t<=1&&u>=0&&u<=1){let ix=l.x1+ax*t,iy=l.y1+ay*t;return {x:ix,y:iy,angle:Math.atan2(ay,ax),shieldAngle:Math.atan2(by,bx)}}}return null}
 function shieldLaserLines(lines){let hit=shieldBlocksLaser(lines);if(!hit)return lines;let out=[];for(let seg of lines){let d=laserDistance(hit.x,hit.y,seg);if(d<.5){out.push({x1:seg.x1,y1:seg.y1,x2:hit.x,y2:hit.y});break}out.push(seg)}let dx=Math.cos(hit.angle),dy=Math.sin(hit.angle),nx=-Math.sin(hit.shieldAngle),ny=Math.cos(hit.shieldAngle),dot=dx*nx+dy*ny,rx=dx-2*dot*nx,ry=dy-2*dot*ny;out.push({x1:hit.x+rx*.5,y1:hit.y+ry*.5,x2:hit.x+rx*210,y2:hit.y+ry*210});return out}
 function showShieldChoice(){shieldPaused=true;document.querySelector('#shield-choice').style.display='flex'}
-function pickShield(type){shieldType=type;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldPaused=false;document.querySelector('#shield-choice').style.display='none'}
+function pickShield(type){shieldType=type;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldPaused=false;document.querySelector('#shield-choice').style.display='none';queueCheckpoint()}
 document.querySelector('#choose-flat').onclick=()=>pickShield('flat');document.querySelector('#choose-curved').onclick=()=>pickShield('curved');
 const RANGED=['laser','shooter','scatter','frostcaster','spitter','cannon','seeker','bloodcaster','emberling','thornling','icewisp'];
 const RANGED_COLOR={emberling:'#ff974b',thornling:'#a5c65a',icewisp:'#adf1ff',emberbolt:'#ff974b',laser:'#ff3f9a',shooter:'#ff6969',scatter:'#c18aff',frostcaster:'#86dfff',spitter:'#a4ed4d',cannon:'#d6b277',seeker:'#f4e76b',bloodcaster:'#e44e7a'};
@@ -497,7 +539,7 @@ function drawDamageNumbers(){
  g.restore();
 }
 function rewardEnemy(enemy){
- if(enemy.rewarded)return;enemy.rewarded=true;
+ if(enemy.rewarded)return;enemy.rewarded=true;recordEnemyKill(enemy);
  const amount=(enemy.elite?3:1)+itemCount('luckyPenny')+(Math.random()<Math.min(.5,playerStats().luck*.08)?1:0);
  if(!enemy.bossMinion&&!enemy.bossSummon)coinDrops.push({x:enemy.x,y:enemy.y,amount});
  if(itemCount('leechFang'))healPlayer(2*itemCount('leechFang'));
@@ -521,6 +563,7 @@ function rewardRoom(){
   currentRoom.loot.push({id:'room-stat',kind:'stat',key:keys[Math.floor(Math.random()*keys.length)],price:0,x:W/2,y:F/2,claimed:false});
  }
  if(shieldType&&itemCount('shieldBloom'))shieldHp=Math.min(100,shieldHp+20*itemCount('shieldBloom'));
+ queueCheckpoint();
 }
 function rewardBoss(){
  if(inSandbox()||currentRoom.rewardGenerated)return;
@@ -549,7 +592,7 @@ function prepareRoomLoot(room){
 }
 function lootDefinition(loot){return loot.kind==='item'?ITEM_DEFS[loot.key]:loot.kind==='stat'?UPGRADE_DEFS[loot.key]:{name:'Healing Flask',desc:'Restore 35 health.',glyph:'✚',color:'#f3a5b1'}}
 function updateEconomy(dt){
- for(const coin of coinDrops)if(Math.hypot(coin.x-p.x,coin.y-p.y)<playerStats().pickup){progress.coins+=coin.amount;coin.collected=true}
+ for(const coin of coinDrops)if(Math.hypot(coin.x-p.x,coin.y-p.y)<playerStats().pickup){progress.coins+=coin.amount;coin.collected=true;queueCheckpoint()}
  coinDrops=coinDrops.filter(coin=>!coin.collected);
  nearestLoot=(currentRoom.loot||[]).filter(loot=>!loot.claimed&&Math.hypot(loot.x-p.x,loot.y-p.y)<58).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0]||null;
  const panel=document.querySelector('#loot-panel');panel.hidden=!nearestLoot||over;
@@ -570,7 +613,7 @@ function takeNearbyLoot(){
  if(nearestLoot.kind==='heal'&&hp>=playerStats().maxHealth)return false;
  const loot=nearestLoot;progress.coins-=loot.price;loot.claimed=true;
  if(loot.kind==='item')giveItem(loot.key);else if(loot.kind==='stat')giveUpgrade(loot.key);else{healPlayer(35);showItemNotice('Healing Flask · Restored health')}
- nearestLoot=null;updateEconomy(0);hud();return true;
+ nearestLoot=null;updateEconomy(0);hud();queueCheckpoint();flushCheckpoint();return true;
 }
 function drawLoot(){
  g.save();g.textAlign='center';
@@ -684,6 +727,252 @@ function setupSandboxEconomyUI(){
  document.querySelector('#sandbox-coins').onclick=addPracticeCoins;
  document.querySelector('#sandbox-restock').onclick=restockPracticePedestals;
  document.querySelector('#sandbox-reset-build').onclick=resetPracticeBuild;
+}
+
+// Two browser-local cleared-room checkpoints, shared audio preferences and bestiary.
+const SAVE_VERSION=1,PROFILE_KEY='dd-profile-v1';
+let activeSlot=null,loadingRun=false,savePending=false,profileDirty=false,saveError='',pendingReplacement=null;
+let profile={version:1,lastSlot:null,audio:{master:80,music:60,effects:80,muted:false},bestiary:{}};
+let bestiaryFilter='all',selectedBestiary=null;
+function slotKey(slot){return 'dd-save-slot-'+slot}
+function safeNumber(value,fallback=0,min=0,max=1e8){return Number.isFinite(value)?Math.max(min,Math.min(max,value)):fallback}
+function knownDictionary(value,definitions){
+ const result={};if(!value||typeof value!=='object')return result;
+ for(const key of Object.keys(definitions))if(Number.isFinite(value[key])&&value[key]>0)result[key]=Math.floor(safeNumber(value[key],0,0,10000));
+ return result;
+}
+function readProfile(){
+ try{
+  const raw=JSON.parse(localStorage.getItem(PROFILE_KEY)||'null');
+  if(!raw||raw.version!==1)return;
+  const audio=raw.audio||{};
+  profile.audio={master:safeNumber(audio.master,80,0,100),music:safeNumber(audio.music,60,0,100),effects:safeNumber(audio.effects,80,0,100),muted:!!audio.muted};
+  profile.lastSlot=raw.lastSlot===1||raw.lastSlot===2?raw.lastSlot:null;
+  const valid=new Set(bestiaryCatalog().map(entry=>entry.id));
+  if(raw.bestiary&&typeof raw.bestiary==='object')for(const [id,record] of Object.entries(raw.bestiary))if(valid.has(id)&&record&&typeof record==='object'){
+   profile.bestiary[id]={encounters:Math.floor(safeNumber(record.encounters)),kills:Math.floor(safeNumber(record.kills)),firstSeen:safeNumber(record.firstSeen),lastSeen:safeNumber(record.lastSeen)};
+  }
+ }catch(error){saveError='Some stored preferences could not be read.'}
+}
+function flushProfile(){
+ if(!profileDirty)return true;
+ try{localStorage.setItem(PROFILE_KEY,JSON.stringify(profile));profileDirty=false;return true}
+ catch(error){profileDirty=false;saveError='Browser storage is unavailable or full. Records could not be saved.';updateSaveIndicator();return false}
+}
+function normalizeSavedRun(raw){
+ if(!raw||raw.version!==SAVE_VERSION||!Array.isArray(raw.dungeon)||raw.dungeon.length!==12||!raw.progress||typeof raw.progress!=='object')throw Error('Unsupported save');
+ const rooms=raw.dungeon;
+ if(!Number.isInteger(raw.roomId)||raw.roomId<0||raw.roomId>=rooms.length)throw Error('Invalid checkpoint');
+ const kinds=new Set(['start','combat','boss','treasure','shop']);
+ for(let i=0;i<rooms.length;i++){
+  const room=rooms[i];
+  if(!room||room.id!==i||!kinds.has(room.kind)||!Number.isFinite(room.w)||!Number.isFinite(room.h)||room.w<250||room.w>1600||room.h<250||room.h>1600||!Array.isArray(room.doors)||room.doors.length>4||!Number.isInteger(room.col)||!Number.isInteger(room.row))throw Error('Invalid dungeon');
+  if(room.doors.some(door=>!DIRECTIONS[door.side]||!Number.isInteger(door.to)||door.to<0||door.to>=rooms.length))throw Error('Invalid door');
+  if(room.kind==='boss'&&(!Object.hasOwn(BOSS_BLUEPRINTS,room.bossKind)||room.cleared&&!room.bossDefeated))throw Error('Unknown boss');
+  if(room.loot!==undefined&&!Array.isArray(room.loot))throw Error('Invalid pickups');
+  if(Array.isArray(room.loot))room.loot=room.loot.filter(loot=>loot&&Number.isFinite(loot.x)&&Number.isFinite(loot.y)&&Number.isFinite(loot.price)&&loot.price>=0&&(loot.kind==='item'&&Object.hasOwn(ITEM_DEFS,loot.key)||loot.kind==='stat'&&Object.hasOwn(UPGRADE_DEFS,loot.key)||loot.kind==='heal')).map(loot=>({...loot,claimed:!!loot.claimed})).slice(0,40);
+  room.coinDrops=Array.isArray(room.coinDrops)?room.coinDrops.filter(coin=>coin&&Number.isFinite(coin.x)&&Number.isFinite(coin.y)&&Number.isFinite(coin.amount)&&coin.amount>0).map(coin=>({x:coin.x,y:coin.y,amount:Math.floor(safeNumber(coin.amount,1,1,1000))})).slice(0,500):[];
+ }
+ if(rooms[0].kind!=='start'||rooms.filter(room=>room.kind==='boss').length!==1||!rooms[raw.roomId].cleared)throw Error('Unsafe checkpoint');
+ const seen=new Set([0]),queue=[0];
+ for(let i=0;i<queue.length;i++)for(const door of rooms[queue[i]].doors){
+  if(!rooms[door.to].doors.some(back=>back.to===queue[i]&&back.side===DIRECTIONS[door.side].opposite))throw Error('Disconnected door');
+  if(!seen.has(door.to)){seen.add(door.to);queue.push(door.to)}
+ }
+ if(seen.size!==rooms.length)throw Error('Disconnected dungeon');
+ raw.progress={coins:Math.floor(safeNumber(raw.progress.coins)),items:knownDictionary(raw.progress.items,ITEM_DEFS),upgrades:knownDictionary(raw.progress.upgrades,UPGRADE_DEFS),roomsCleared:Math.floor(safeNumber(raw.progress.roomsCleared))};
+ raw.biome=BIOME_DEFS[raw.biome]?raw.biome:null;if(raw.biome==='basic')raw.biome=null;
+ raw.depth=Math.floor(safeNumber(raw.depth,1,1,10000));raw.hp=safeNumber(raw.hp,100,1,1e6);raw.kills=Math.floor(safeNumber(raw.kills));raw.arenaTime=safeNumber(raw.arenaTime);
+ raw.player=raw.player&&typeof raw.player==='object'?raw.player:{};
+ raw.player={x:safeNumber(raw.player.x,rooms[raw.roomId].w/2,23,rooms[raw.roomId].w-23),y:safeNumber(raw.player.y,rooms[raw.roomId].h/2,23,rooms[raw.roomId].h-23),a:safeNumber(raw.player.a,0,-1e7,1e7),target:safeNumber(raw.player.target,0,-1e7,1e7)};
+ raw.shieldType=['flat','curved'].includes(raw.shieldType)?raw.shieldType:null;
+ raw.shieldHp=safeNumber(raw.shieldHp,100,0,100);raw.shieldCooldown=safeNumber(raw.shieldCooldown,0,0,10);raw.shieldLastHit=safeNumber(raw.shieldLastHit,-99,-100,1e8);
+ raw.bleedStacks=Math.floor(safeNumber(raw.bleedStacks));raw.temporaryBleed=Array.isArray(raw.temporaryBleed)?raw.temporaryBleed.filter(Number.isFinite).slice(0,500):[];
+ raw.playerBleed=Array.isArray(raw.playerBleed)?raw.playerBleed.filter(b=>b&&Number.isFinite(b.remaining)&&Number.isFinite(b.rate)&&b.remaining>0&&b.rate>0).map(b=>({remaining:safeNumber(b.remaining,0,0,1000),rate:safeNumber(b.rate,0,0,100)})).slice(0,100):[];
+ const stats={};for(const key of ['biggestImpact','swingsHit','splits','fusions','healed'])stats[key]=safeNumber(raw.runStats?.[key]);
+ raw.runStats=stats;raw.savedAt=safeNumber(raw.savedAt);
+ return raw;
+}
+function readSlot(slot){
+ try{const stored=localStorage.getItem(slotKey(slot));return stored?{data:normalizeSavedRun(JSON.parse(stored)),exists:true}:{data:null,exists:false}}
+ catch(error){return {data:null,exists:true,error:'This save could not be read. Start a new game to replace it.'}}
+}
+function queueCheckpoint(){if(!loadingRun&&activeSlot&&!inSandbox()&&currentRoom?.cleared)savePending=true}
+function snapshotRun(){
+ currentRoom.coinDrops=coinDrops;
+ return {version:SAVE_VERSION,savedAt:Date.now(),depth:dungeonDepth,biome:selectedBiome,roomId:currentRoom.id,dungeon:JSON.parse(JSON.stringify(dungeon)),progress:JSON.parse(JSON.stringify(progress)),hp,kills,arenaTime,player:{x:p.x,y:p.y,a:p.a,target:p.target},shieldType,shieldHp,shieldBroken,shieldCooldown,shieldLastHit,shieldLaserTick,shieldPending:shieldPaused,bleedStacks,temporaryBleed:[...temporaryBleed],playerBleed:playerBleed.map(b=>({...b})),runStats:{...runStats},itemHitCounter,mantleCooldown,regenWhileBleeding};
+}
+function flushCheckpoint(){
+ if(!savePending)return true;
+ if(loadingRun||!activeSlot||inSandbox()||!currentRoom?.cleared||over)return false;
+ try{
+  localStorage.setItem(slotKey(activeSlot),JSON.stringify(snapshotRun()));savePending=false;saveError='';
+  document.querySelector('#save-indicator').textContent='SLOT '+activeSlot+' · SAVED';
+  return true;
+ }catch(error){savePending=false;saveError='Could not save. Browser storage is unavailable or full.';updateSaveIndicator();return false}
+}
+function updateSaveIndicator(){
+ const label=document.querySelector('#save-indicator');label.hidden=!activeSlot;
+ if(saveError)label.textContent=saveError;else if(activeSlot&&!label.textContent)label.textContent='SLOT '+activeSlot+' · AUTOSAVE READY';
+ document.querySelector('#start-message').textContent=saveError||'Autosaves after cleared rooms. Saves and records stay in this browser.';
+}
+function stopMenuControls(){sticks.forEach(stick=>{stick.id=null;stick.dx=stick.dy=0});if(editingControls)endEditing()}
+function closeGamePanels(){
+ closeSettings();document.querySelector('#character-panel').hidden=true;document.querySelector('#sandbox-panel').hidden=true;document.querySelector('#sound-panel').hidden=true;document.querySelector('#bestiary-panel').hidden=true;
+}
+function persistencePaused(){return !document.querySelector('#start-screen').hidden||!document.querySelector('#sound-panel').hidden||!document.querySelector('#bestiary-panel').hidden}
+function showStartScreen(){
+ stopMenuControls();closeGamePanels();queueCheckpoint();flushCheckpoint();flushProfile();pendingReplacement=null;
+ document.querySelector('#start-screen').hidden=false;renderSaveSlots();updateSaveIndicator();
+}
+function renderSaveSlots(){
+ const container=document.querySelector('#save-slots');container.innerHTML='';
+ for(const slot of [1,2]){
+  const saved=readSlot(slot),card=document.createElement('article');card.className='save-slot';
+  const title=document.createElement('h2');title.textContent='SAVE SLOT '+slot;card.appendChild(title);
+  const detail=document.createElement('p');
+  if(saved.data){const data=saved.data,biome=BIOME_DEFS[data.biome]||BIOME_DEFS.basic;detail.textContent=biome.name+' · Dungeon '+data.depth+' · '+data.dungeon[data.roomId].name+' · '+data.progress.coins+' coins'}
+  else detail.textContent=saved.error||'Empty slot · begin a new adventure';
+  card.appendChild(detail);
+  if(saved.data){
+   const time=document.createElement('small');time.textContent='Saved '+new Date(saved.data.savedAt).toLocaleString();card.appendChild(time);
+   const button=document.createElement('button');button.type='button';button.textContent='Continue';button.setAttribute('aria-label','Continue slot '+slot);button.onclick=()=>continueSlot(slot);card.appendChild(button);
+  }
+  const start=document.createElement('button');start.type='button';start.className='secondary';
+  start.textContent=pendingReplacement===slot?'Confirm new game · replace save':saved.exists?'New game · replace save':'New game';
+  start.setAttribute('aria-label',pendingReplacement===slot?'Confirm replace slot '+slot:'New game slot '+slot);
+  start.onclick=()=>{if(saved.exists&&pendingReplacement!==slot){pendingReplacement=slot;renderSaveSlots()}else beginNewSlot(slot,true)};
+  card.appendChild(start);container.appendChild(card);
+ }
+ const resume=document.querySelector('#resume-current');resume.hidden=!activeSlot;resume.textContent=over?'Return to last checkpoint':inSandbox()?'Resume practice':'Resume current game';
+}
+function prepareSlotSwitch(){
+ if(inSandbox())leaveSandbox();
+ queueCheckpoint();flushCheckpoint();flushProfile();closeGamePanels();document.querySelector('#shield-choice').style.display='none';shieldPaused=false;
+}
+function beginNewSlot(slot,confirmed=false){
+ if(slot!==1&&slot!==2)return false;
+ if(readSlot(slot).exists&&!confirmed){pendingReplacement=slot;renderSaveSlots();return false}
+ prepareSlotSwitch();loadingRun=true;activeSlot=slot;
+ try{reset()}finally{loadingRun=false}
+ profile.lastSlot=slot;profileDirty=true;flushProfile();saveError='';document.querySelector('#start-screen').hidden=true;
+ queueCheckpoint();flushCheckpoint();updateSaveIndicator();return true;
+}
+function restoreSafePosition(saved){
+ p.x=saved.x;p.y=saved.y;p.a=saved.a;p.target=saved.target;p.vel=0;p.portalCooldown=1.5;
+ if(!blocked(p.x,p.y,11)&&!holes.some(h=>Math.hypot(h.x-p.x,h.y-p.y)<h.r+14))return;
+ for(let y=45;y<F-35;y+=40)for(let x=45;x<W-35;x+=40)if(!blocked(x,y,12)&&!holes.some(h=>Math.hypot(h.x-x,h.y-y)<h.r+18)){p.x=x;p.y=y;return}
+}
+function continueSlot(slot){
+ if(slot!==1&&slot!==2)return false;
+ const saved=readSlot(slot);if(!saved.data){saveError=saved.error||'This slot is empty.';updateSaveIndicator();return false}
+ prepareSlotSwitch();const data=readSlot(slot).data;if(!data)return false;loadingRun=true;activeSlot=slot;
+ try{
+  progress=data.progress;dungeon=data.dungeon;dungeonDepth=data.depth;selectedBiome=data.biome;lastDungeonSignature=dungeonSignature(dungeon);arenaTime=data.arenaTime;
+  hp=data.hp;kills=data.kills;shieldType=data.shieldType;shieldHp=data.shieldHp;shieldBroken=!!data.shieldBroken;shieldCooldown=data.shieldCooldown;shieldLastHit=data.shieldLastHit;shieldLaserTick=safeNumber(data.shieldLaserTick);
+  bleedStacks=data.bleedStacks;temporaryBleed=data.temporaryBleed;playerBleed=data.playerBleed;runStats=data.runStats;itemHitCounter=Math.floor(safeNumber(data.itemHitCounter));mantleCooldown=safeNumber(data.mantleCooldown,0,0,3);regenWhileBleeding=!!data.regenWhileBleeding;
+  over=false;inv=1.2;sandboxSavedRun=null;sandboxRoom=null;currentRoom=null;
+  enterRoom(data.roomId);restoreSafePosition(data.player);hp=Math.min(playerStats().maxHealth,data.hp);arenaTime=data.arenaTime;
+  // enterRoom clears transient damage effects; restore the saved run's bleeding state afterwards.
+  playerBleed=data.playerBleed;shieldPaused=false;
+  document.querySelector('#regen-toggle').textContent='Regen while bleeding: '+(regenWhileBleeding?'ON':'OFF');
+  document.querySelector('#shield-durability').style.display=shieldType?'flex':'none';
+ }finally{loadingRun=false}
+ profile.lastSlot=slot;profileDirty=true;flushProfile();savePending=false;saveError='';document.querySelector('#start-screen').hidden=true;
+ if(data.shieldPending&&!shieldType)showShieldChoice();
+ hud();updateSaveIndicator();document.querySelector('#save-indicator').textContent='SLOT '+slot+' · CHECKPOINT LOADED';return true;
+}
+function resumeCurrentGame(){
+ if(over){if(activeSlot)continueSlot(activeSlot);return}
+ document.querySelector('#start-screen').hidden=true;pendingReplacement=null;stopMenuControls();
+}
+function bestiaryCatalog(){
+ const entries=SANDBOX_CATALOG.map(item=>({...item,boss:item.id.startsWith('boss:'),biome:item.id.startsWith('boss:')?BOSS_BLUEPRINTS[item.id.slice(5)]?.biome:BIOME_ENEMIES[item.id]?.biome||'basic'}));
+ entries.push({id:'royalSlime',name:'Royal Slime',color:'#8ce68b',boss:false,biome:'basic'});return entries;
+}
+function indexEnemyKey(enemy){return enemy.bossMinion?'royalSlime':enemy.shape}
+function encounterRecord(id){
+ if(!bestiaryCatalog().some(entry=>entry.id===id))return null;
+ if(!profile.bestiary[id])profile.bestiary[id]={encounters:0,kills:0,firstSeen:Date.now(),lastSeen:Date.now()};
+ return profile.bestiary[id];
+}
+function recordEnemyEncounter(enemy){
+ if(inSandbox()||enemy._indexSeen)return;
+ const record=encounterRecord(indexEnemyKey(enemy));if(!record)return;enemy._indexSeen=true;record.encounters++;record.lastSeen=Date.now();profileDirty=true;
+}
+function recordEnemyKill(enemy){
+ if(inSandbox()||enemy._indexKilled)return;
+ recordEnemyEncounter(enemy);const record=encounterRecord(indexEnemyKey(enemy));if(!record)return;enemy._indexKilled=true;record.kills++;profileDirty=true;
+}
+function recordBossEncounter(fight){
+ if(inSandbox()||fight._indexSeen)return;
+ const record=encounterRecord('boss:'+fight.variant);if(!record)return;fight._indexSeen=true;record.encounters++;record.lastSeen=Date.now();profileDirty=true;
+}
+function recordBossKill(fight){
+ if(inSandbox()||fight._indexKilled)return;
+ recordBossEncounter(fight);const record=encounterRecord('boss:'+fight.variant);if(!record)return;fight._indexKilled=true;record.kills++;profileDirty=true;
+}
+function recordVisibleEncounters(){
+ if(inSandbox()||persistencePaused())return;
+ const visible=e=>Math.abs(e.x-p.x)<=viewW/2+e.r&&Math.abs(e.y-p.y)<=VIEW_F/2+e.r;
+ for(const enemy of enemies)if(enemy.hp>0&&visible(enemy))recordEnemyEncounter(enemy);
+ if(bossFight&&!bossFight.done&&bossFight.units.some(unit=>unit.hp>0&&visible(unit)))recordBossEncounter(bossFight);
+}
+function enemyDescription(entry){
+ if(entry.boss)return BOSS_BLUEPRINTS[entry.id.slice(5)].hint||({gatekeeper:'Dodge its charge into a wall, then strike while it is stunned. Return its cannonballs.',crystal:'Return its crystals to break the armour and expose its core.',slime:'Avoid marked landings. Knock its small slimes back at it; defeat both halves after it splits.'}[entry.id.slice(5)]);
+ const descriptions={square:'A heavy square that resists weak impacts.',round:'A fast, elastic body that can be knocked into other enemies.',healer:'Collisions can restore health. Its green plus is the clue.',merge:'Fast collisions can merge bodies into a larger enemy.',splitter:'Breaks into three smaller enemies when defeated.',mini:'A small, light fragment from a splitter.',armored:'Armour resists weak hits; build up a strong bat impact.',fire:'Hard impacts release a nearby fire burst.',water:'Impacts create slippery water puddles.',electric:'Hard impacts can chain electricity to nearby targets.',rubber:'Very bouncy. Use walls and other bodies.',poison:'Creates dangerous poison pools on impact.',magnet:'Alternates attraction and repulsion after strong hits.',crystal:'Breaks off dangerous crystal shards.',bomb:'Hard hits start a fuse before an explosive shockwave.',mirror:'Strong bat hits recoil back toward the player.',sponge:'Stores impact energy and releases a shockwave.',regenerator:'Recovers health over time.',bloodletter:'Contact causes bleeding.',gravity:'Leaves a pulling gravity well when defeated.',laser:'Charges a beam before firing; walls redirect its path.',shooter:'Keeps its distance and fires aimed projectiles.',scatter:'Fires a spread of three projectiles.',frostcaster:'Frost shots slow movement.',spitter:'Spits poison that leaves harmful puddles.',cannon:'Marks the floor before an artillery impact.',seeker:'Fires slow homing shots.',bloodcaster:'Its projectiles cause bleeding.',emberling:'An Ember Crucible ranged enemy that launches burning bolts.',cinderknight:'A heavy Ember Crucible knight with a marked short charge.',thornling:'A Verdant Hollow spitter that fires poisonous seeds.',rootguard:'A tough Verdant guardian that marks slowing root patches.',icewisp:'A light Frostbound enemy that fires freezing shots.',frostguard:'An icy guard that retaliates with shards after hard impacts.',royalSlime:'Returns to the Slime King to heal it. Knock it into the king to interrupt it.'};
+ return descriptions[entry.id]||'A dungeon enemy. Watch its movement and use the bat to control the fight.';
+}
+function bestiaryPortrait(entry){
+ if(entry.id==='royalSlime')return sandboxEnemyIcon({id:'round',color:entry.color,name:entry.name});
+ return sandboxEnemyIcon(entry);
+}
+function renderBestiaryDetail(){
+ const panel=document.querySelector('#bestiary-detail');panel.innerHTML='';
+ const entry=bestiaryCatalog().find(item=>item.id===selectedBestiary);
+ if(!entry){panel.innerHTML='<div class="index-placeholder">Select an entry to inspect its picture and records.</div>';return}
+ const record=profile.bestiary[entry.id];
+ if(!record||record.encounters+record.kills===0){panel.innerHTML='<div class="unknown-portrait">?</div><h2>UNDISCOVERED</h2><p>Encounter this enemy in a dungeon to reveal its image and records.</p>';return}
+ panel.innerHTML='<div class="index-portrait">'+bestiaryPortrait(entry)+'</div><h2>'+entry.name+'</h2><small>'+BIOME_DEFS[entry.biome].name+(entry.boss?' · BOSS':'')+'</small><div class="index-records"><strong>'+record.encounters+' encounters</strong><strong>'+record.kills+' defeats</strong></div><p>'+enemyDescription(entry)+'</p>';
+}
+function renderBestiary(){
+ const entries=bestiaryCatalog(),query=document.querySelector('#index-search').value.trim().toLowerCase(),grid=document.querySelector('#bestiary-grid');grid.innerHTML='';
+ const discovered=entries.filter(entry=>profile.bestiary[entry.id]&&profile.bestiary[entry.id].encounters+profile.bestiary[entry.id].kills>0).length;
+ const total=Object.values(profile.bestiary).reduce((sum,record)=>sum+record.kills,0);
+ document.querySelector('#index-summary').textContent=discovered+' / '+entries.length+' discovered · '+total+' total defeats';
+ for(const entry of entries){
+  if(bestiaryFilter==='bosses'&&!entry.boss||bestiaryFilter==='enemies'&&entry.boss)continue;
+  const record=profile.bestiary[entry.id],known=!!record&&(record.encounters+record.kills>0),name=known?entry.name:entry.boss?'Unknown boss':'Unknown enemy';
+  if(query&&!name.toLowerCase().includes(query))continue;
+  const button=document.createElement('button');button.type='button';button.className='index-tile'+(known?' discovered':' locked');
+  button.setAttribute('aria-label',name+(known?' · '+record.kills+' defeats':''));
+  button.innerHTML=(known?bestiaryPortrait(entry):'<span class="unknown-icon">?</span>')+'<strong>'+name+'</strong><small>'+(known?'Seen '+record.encounters+' · Defeated '+record.kills:'Not encountered')+'</small>';
+  button.onclick=()=>{selectedBestiary=entry.id;renderBestiaryDetail()};grid.appendChild(button);
+ }
+ for(const filter of ['all','enemies','bosses'])document.querySelector('#index-'+filter).setAttribute('aria-pressed',String(filter===bestiaryFilter));
+ renderBestiaryDetail();
+}
+function showBestiary(){
+ stopMenuControls();document.querySelector('#sound-panel').hidden=true;document.querySelector('#character-panel').hidden=true;
+ document.querySelector('#bestiary-panel').hidden=false;selectedBestiary=null;document.querySelector('#index-search').value='';renderBestiary();
+}
+function showSoundSettings(){
+ stopMenuControls();document.querySelector('#bestiary-panel').hidden=true;document.querySelector('#character-panel').hidden=true;document.querySelector('#sound-panel').hidden=false;
+ for(const key of ['master','music','effects']){document.querySelector('#sound-'+key).value=profile.audio[key];document.querySelector('#sound-'+key+'-value').textContent=profile.audio[key]+'%'}
+ document.querySelector('#sound-muted').checked=profile.audio.muted;
+}
+function initializePersistence(){
+ readProfile();
+ document.querySelector('#main-menu-toggle').onclick=showStartScreen;document.querySelector('#resume-current').onclick=resumeCurrentGame;
+ document.querySelector('#start-index').onclick=showBestiary;document.querySelector('#settings-index').onclick=showBestiary;
+ document.querySelector('#start-sound').onclick=showSoundSettings;document.querySelector('#settings-sound').onclick=showSoundSettings;
+ document.querySelector('#index-close').onclick=()=>{document.querySelector('#bestiary-panel').hidden=true};
+ document.querySelector('#sound-close').onclick=()=>{document.querySelector('#sound-panel').hidden=true};
+ document.querySelector('#index-search').oninput=renderBestiary;
+ for(const filter of ['all','enemies','bosses'])document.querySelector('#index-'+filter).onclick=()=>{bestiaryFilter=filter;renderBestiary()};
+ for(const key of ['master','music','effects'])document.querySelector('#sound-'+key).oninput=event=>{profile.audio[key]=Math.round(safeNumber(Number(event.target.value),80,0,100));document.querySelector('#sound-'+key+'-value').textContent=profile.audio[key]+'%';profileDirty=true;flushProfile()};
+ document.querySelector('#sound-muted').onchange=event=>{profile.audio.muted=!!event.target.checked;profileDirty=true;flushProfile()};
+ const flush=()=>{flushCheckpoint();flushProfile()};window.addEventListener('pagehide',flush);document.addEventListener('visibilitychange',()=>{if(document.hidden)flush()});
 }
 
 const walls=[],holes=[],portals=[];let fallingFx=[];
@@ -883,7 +1172,7 @@ function updateBossShots(dt,previousAngle){
 }
 function finishBossFight(){
  if(inSandbox()){bossFight.done=true;bossFight.shots=[];bossFight.hazards=[];coinDrops.push({x:p.x+45,y:p.y,amount:20});if(itemCount('leechFang'))healPlayer(8*itemCount('leechFang'));enemies=enemies.filter(e=>!e.bossMinion&&!e.bossSummon);sandbox.notice='Test boss defeated. Choose another enemy.';return}
- bossFight.done=true;currentRoom.bossDefeated=true;currentRoom.cleared=true;rewardBoss();
+ bossFight.done=true;currentRoom.bossDefeated=true;currentRoom.cleared=true;rewardBoss();recordBossKill(bossFight);queueCheckpoint();
  bossFight.shots=[];bossFight.hazards=[];enemies=[];pendingSplits=[];
  projectiles=[];artillery=[];gravityWells=[];reactionZones=[];shards=[];poisonPuddles=[];
  const oldKills=kills;kills++;if(!shieldType&&oldKills<10&&kills>=10)showShieldChoice();
@@ -1162,7 +1451,7 @@ function enterRoom(id,entry=null){
  sticks.forEach(stick=>{stick.dx=stick.dy=0});
  if(currentRoom.kind==='start')playerBleed=[];
  if(!currentRoom.cleared){if(currentRoom.kind==='boss')startBossFight(currentRoom.bossKind);else for(let i=0;i<currentRoom.count;i++)spawn(selectedBiome&&i<2?currentBiome().enemies[i]:null);}
- hud();
+ hud();queueCheckpoint();
 }
 function nextDungeon(biome){
  if(currentRoom?.kind!=='boss'||!currentRoom.bossDefeated||!BIOME_PATHS.some(path=>path.id===biome))return;
@@ -1352,7 +1641,7 @@ let centerDistance=Math.hypot(cx-h.x,cy-h.y);
 let toward=(dx*(h.x-oldX)+dy*(h.y-oldY))>0;
 if(sizeFits&&speed>=135&&toward&&centerDistance<reach){
 fallingFx.push({x:body.x,y:body.y,tx:h.x,ty:h.y,r:body.r,life:.58,maxLife:.58,color:isPlayer?'#ffffff':body.shape==='merge'?'#b388fa':'#ffbb78'});
-if(isPlayer){p.falling=.58;p.kvx=0;p.kvy=0}else{body.hp=0;body.fellInHole=true}
+if(isPlayer){p.falling=.58;p.kvx=0;p.kvy=0}else{body.hp=0;body.fellInHole=true;recordEnemyKill(body)}
 return true;
 }
 // Solid rim: stop at the edge, never allow slow walking or oversized bodies across.
@@ -1476,8 +1765,8 @@ document.querySelector('#control-size').oninput=e=>{controls.size=Number(e.targe
 document.querySelector('#control-opacity').oninput=e=>{controls.opacity=Number(e.target.value);syncControls();saveControls()};
 document.querySelector('#floating-controls').onchange=e=>{controls.floating=e.target.checked;saveControls()};
 document.querySelector('#controls-reset').onclick=()=>{controls={...defaultControls,positions:defaultControls.positions.map(a=>[...a])};syncControls();saveControls()};async function goFullscreen(){try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock)await screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}document.querySelector('#fullscreen-toggle').onclick=goFullscreen;document.querySelector('#rotate-fullscreen').onclick=goFullscreen;
-function frame(t){const damageBefore=captureDamage(),oldPlayerHp=hp;const protectedPracticeHp=inSandbox()&&!sandbox.attacks?hp:null;pendingSplits=[];let dt=Math.min((t-last)/1000||0,.035);last=t;if(shieldPaused||!document.querySelector('#character-panel').hidden){requestAnimationFrame(frame);return}
-arenaTime+=dt;if(!over){updateItemEffects(dt);updateBiomeWorld(dt)}if(!over){shieldUpdate(dt);rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage)}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&(regenWhileBleeding||playerBleed.length===0)){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){hp=0;over=true}}
+function frame(t){const damageBefore=captureDamage(),oldPlayerHp=hp;const protectedPracticeHp=inSandbox()&&!sandbox.attacks?hp:null;pendingSplits=[];let dt=Math.min((t-last)/1000||0,.035);last=t;if(shieldPaused||!document.querySelector('#character-panel').hidden||persistencePaused()){requestAnimationFrame(frame);return}
+recordVisibleEncounters();arenaTime+=dt;if(!over){updateItemEffects(dt);updateBiomeWorld(dt)}if(!over){shieldUpdate(dt);rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage)}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&(regenWhileBleeding||playerBleed.length===0)){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){hp=0;over=true}}
 healFx=healFx.filter(f=>(f.life-=dt)>0);wallFx=wallFx.filter(f=>{f.life-=dt;if(f.type==='particle'){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.exp(-5*dt);f.vy*=Math.exp(-5*dt)}return f.life>0});elementFx=elementFx.filter(f=>(f.life-=dt)>0);puddles=puddles.filter(q=>(q.life-=dt)>0);poisonPuddles=poisonPuddles.filter(q=>(q.life-=dt)>0);
 if(!over&&!p.falling){let l=sticks[0],r=sticks[1],ox=p.x,oy=p.y;
 poisonPlayerTimer=Math.max(0,poisonPlayerTimer-dt);playerPoisonGlow=Math.max(0,playerPoisonGlow-dt);
@@ -1590,7 +1879,7 @@ let restitution=Math.max(enemyStats(a).elasticity,enemyStats(b).elasticity);let 
 shards=shards.filter(q=>{q.life-=dt;if(q.life<=0)return false;q.x+=q.vx*dt;q.y+=q.vy*dt;if(q.x<17||q.x>W-17||q.y<17||q.y>F-17||blocked(q.x,q.y,2))return false;for(let e of enemies){if(e===q.owner||e.hp<=0||q.hit.has(e))continue;if(Math.hypot(e.x-q.x,e.y-q.y)<e.r+3){q.hit.add(e);if(canDamage(e,130))e.hp-=1;e.vx+=q.vx*.35/e.mass;e.vy+=q.vy*.35/e.mass;return false}}if(Math.hypot(p.x-q.x,p.y-q.y)<11){if(inv<=0){hp=damagedHealth(3);inv=.45;if(hp<=0)over=true}return false}return true});
 let defeated=collectDefeatedEnemies();for(let e of defeated)if(e.shape==='gravity'&&enemyAttacksEnabled())gravityWells.push({x:e.x,y:e.y,life:2.4,maxLife:2.4,range:e.elite?105:85,elite:e.elite});let newborn=[];for(let e of defeated){if(e.shape!=='splitter')continue;for(let n=0;n<3;n++){let a=n*Math.PI*2/3+Math.random()*.35,ux=Math.cos(a),uy=Math.sin(a),x=clamp(e.x+ux*15,26,W-26),y=clamp(e.y+uy*15,26,F-26);let child={x,y,vx:e.vx*.4+ux*125,vy:e.vy*.4+uy*125,r:7,shape:'mini',mass:.55,hp:2,maxHp:2,healGlow:0,cool:0,impactCooldown:.35,playerHealCooldown:0};for(let w of walls)collideWall(child,w);newborn.push(child)}}enemies=enemies.filter(e=>e.hp>0);enemies.push(...newborn,...pendingSplits);let previousKills=kills;if(!inSandbox())kills+=defeated.length;if(!inSandbox()&&!shieldType&&previousKills<10&&kills>=10)showShieldChoice();updateRoomProgress();hud();updateStatsPanel()}
 if(protectedPracticeHp!==null){hp=Math.max(hp,protectedPracticeHp);if(hp>0)over=false;playerBleed=[];hud()}
-finishDamageCapture(damageBefore,oldPlayerHp,dt);updateEconomy(dt);
+finishDamageCapture(damageBefore,oldPlayerHp,dt);updateEconomy(dt);flushCheckpoint();flushProfile();
 checkRoomDoors(dt);
 // Keep the camera centered on the player; clip the world above the fixed controls.
 g.fillStyle='#080812';g.fillRect(0,0,viewW,H);
@@ -1669,5 +1958,5 @@ drawDungeonMap();drawRoomMap();
 g.fillStyle='#11101c';g.fillRect(0,VIEW_F,viewW,H-VIEW_F);g.save();g.globalAlpha=controls.opacity/100;for(let i=0;i<2;i++){let s=sticks[i],radius=R*controls.size/100;g.beginPath();g.arc(s.x,s.y,radius,0,Math.PI*2);g.fillStyle='#28263c';g.fill();g.strokeStyle=editingControls?'#ffe17e':i?'#b8a6ed':'#7e90ad';g.lineWidth=editingControls?4:2;g.stroke();g.beginPath();g.arc(s.x+s.dx*radius,s.y+s.dy*radius,19*controls.size/100,0,Math.PI*2);g.fillStyle=i?'#a38bd2':'#7486a7';g.fill()}g.restore()
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));g.fillText('BAT',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('GAME OVER',viewW/2,130);g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,155);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,176);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,194);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,212);g.fillText('Bleed stacks '+bleedStacks,viewW/2,230)}
-requestAnimationFrame(frame)}setupExpansionUI();setupSandboxMenu();reset();requestAnimationFrame(frame)})();
+requestAnimationFrame(frame)}setupExpansionUI();setupSandboxMenu();initializePersistence();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
