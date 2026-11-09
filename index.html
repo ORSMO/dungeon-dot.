@@ -41,12 +41,13 @@ footer #restart{display:none}
 #dash-button.cooling{background:#242c3c;border-color:#62758c;color:#b6c7da;box-shadow:none}
 #dash-button.editing{border-style:dashed;border-color:#ffe17e;background:#493b3c;color:#ffe9ab;z-index:16;cursor:move}
 #synergy-list{display:grid;gap:7px}.synergy-row{display:flex;gap:10px;border:1px solid #4d415c;border-radius:8px;padding:9px;background:#211d2d}.synergy-row.active{border-color:#a48b56;background:#352c32}.synergy-row strong{font-size:12px;color:#c3afcf}.synergy-row.active strong{color:#f3d391}.synergy-row small{display:block;font-size:10px;color:#a69ab3;margin:3px 0}.synergy-row p{font-size:10px;line-height:1.45;color:#c7bacf;margin:3px 0 0}.synergy-icons{display:flex;align-items:center;gap:4px;min-width:62px;font-size:22px}.synergy-icons b{font-size:12px;color:#82708e}#synergy-count{color:#ebcc87;font-size:11px}
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V7.1</small><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V7.2</small><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
  <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
  <small id="character-coins"></small>
  <div id="character-stats"></div>
  <h3>Collected items</h3><div id="item-inventory"></div>
  <h3>Stat upgrades</h3><small id="run-upgrades"></small>
+ <p class="character-note">CURVED SHIELD: a compact guard attached to your character, facing your bat. Starts every room at 100 durability. No regeneration or repairs within a room; a broken guard returns on the next room entry.</p>
  <h3>Item synergies <small id="synergy-count"></small></h3><div id="synergy-list"></div>
  <p class="character-note">DASH: move + tap Dash for a short protected burst. With no movement input, dash toward your bat. Cooldown: 1.8 seconds. Drag its button in Settings → Controls → Edit positions. Keyboard: Space.</p>
  <p class="character-note">Items and upgrades last for this run and carry into every biome. The game pauses while this menu is open.</p>
@@ -58,7 +59,7 @@ footer #restart{display:none}
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
-  <div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V7.1</small><h1>Every room.<br>A new fight.</h1><p>Explore the dungeon, collect your build, and face its guardians.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
+  <div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V7.2</small><h1>Every room.<br>A new fight.</h1><p>Explore the dungeon, collect your build, and face its guardians.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
   <div class="save-area"><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
@@ -82,16 +83,37 @@ footer #restart{display:none}
 // Hidden gameplay switch: set to false to disable player healing from green Plus enemies.
 const PLAYER_HEALING_ENABLED=true;
 const PLAYER_REGEN=1.2;
-let shieldType=null,shieldPaused=false,shieldHp=100,shieldBroken=false,shieldCooldown=0,shieldLastHit=-99,shieldLaserTick=0;
-function shieldDamage(amount){if(!shieldType||shieldBroken||shieldHp<=0)return;shieldHp=Math.max(0,shieldHp-amount);shieldLastHit=arenaTime;if(shieldHp<=0){shieldBroken=true;shieldCooldown=3}}
-function shieldUpdate(dt){if(!shieldType)return;if(shieldBroken){if(shieldCooldown>0){shieldCooldown=Math.max(0,shieldCooldown-dt)}else{shieldHp=Math.min(100,shieldHp+playerStats().shieldRegen*5/3*dt);if(shieldHp>=50)shieldBroken=false}}else if(arenaTime-shieldLastHit>2){shieldHp=Math.min(100,shieldHp+playerStats().shieldRegen*dt)}let bar=document.querySelector('#shield-durability'),fill=document.querySelector('#shield-durability-fill'),label=document.querySelector('#shield-durability-label');bar.style.display='flex';fill.style.width=shieldHp+'%';fill.style.background=shieldBroken?'#77708a':shieldHp<30?'#ff627f':'#8ceaff';label.textContent=shieldBroken?(shieldCooldown>0?'BROKEN '+shieldCooldown.toFixed(1)+'s':'REBUILD '+Math.round(shieldHp)+'%'):'SHIELD '+Math.round(shieldHp)+'%'}
-function shieldLength(){return 7+Math.max(0,Math.floor((kills-10)/5))*5}
-function shieldSegments(){if(!shieldType||shieldBroken)return [];let a=p.a,len=shieldLength(),ux=Math.cos(a),uy=Math.sin(a);if(shieldType==='flat'){let cx=p.x+ux*24,cy=p.y+uy*24,tx=-uy,ty=ux;return [{x1:cx-tx*len/2,y1:cy-ty*len/2,x2:cx+tx*len/2,y2:cy+ty*len/2}]}let radius=21,half=Math.min(1.65,len/(2*radius)),segments=[];for(let i=0;i<Math.max(2,Math.ceil(half*14));i++){let n=Math.max(2,Math.ceil(half*14)),a1=a-half+i*half*2/n,a2=a-half+(i+1)*half*2/n;segments.push({x1:p.x+Math.cos(a1)*radius,y1:p.y+Math.sin(a1)*radius,x2:p.x+Math.cos(a2)*radius,y2:p.y+Math.sin(a2)*radius})}return segments}
+let shieldType='curved',shieldPaused=false,shieldHp=100,shieldBroken=false,shieldCooldown=0,shieldLastHit=-99,shieldLaserTick=0;
+// A compact body-mounted guard. Durability only refills on a genuine room entry.
+function shieldDamage(amount){
+ if(shieldBroken||shieldHp<=0)return;
+ shieldType='curved';shieldHp=Math.max(0,shieldHp-Math.max(0,amount)*(1-playerStats().shieldProtection));
+ shieldLastHit=arenaTime;shieldBroken=shieldHp<=0;shieldCooldown=0;shieldUpdate(0);queueCheckpoint();
+}
+function shieldUpdate(dt){
+ const bar=document.querySelector('#shield-durability'),fill=document.querySelector('#shield-durability-fill'),label=document.querySelector('#shield-durability-label');
+ bar.style.display='flex';fill.style.width=shieldHp+'%';fill.style.background=shieldBroken?'#77708a':shieldHp<30?'#ff627f':'#8ceaff';
+ label.textContent=shieldBroken?'SHIELD BROKEN · NEXT ROOM':'SHIELD '+Math.round(shieldHp)+'%';
+}
+function refillRoomShield(){
+ shieldType='curved';shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;shieldUpdate(0);
+}
+function shieldLength(){return 14*2*Math.PI/3}
+function shieldSegments(includeBroken=false){
+ if(!p||!includeBroken&&(shieldBroken||shieldHp<=0))return [];
+ const radius=14,half=Math.PI/3,segments=[],count=10;
+ for(let i=0;i<count;i++){
+  const a1=p.a-half+i*half*2/count,a2=p.a-half+(i+1)*half*2/count;
+  segments.push({x1:p.x+Math.cos(a1)*radius,y1:p.y+Math.sin(a1)*radius,x2:p.x+Math.cos(a2)*radius,y2:p.y+Math.sin(a2)*radius});
+ }
+ return segments;
+}
+
 function shieldHit(x,y,r=4){return shieldSegments().some(seg=>laserDistance(x,y,seg)<r+3)}
 function shieldBlocksLaser(lines){let shields=shieldSegments();for(let l of lines)for(let sh of shields){let ax=l.x2-l.x1,ay=l.y2-l.y1,bx=sh.x2-sh.x1,by=sh.y2-sh.y1,cross=ax*by-ay*bx;if(Math.abs(cross)<.00001)continue;let dx=sh.x1-l.x1,dy=sh.y1-l.y1,t=(dx*by-dy*bx)/cross,u=(dx*ay-dy*ax)/cross;if(t>=0&&t<=1&&u>=0&&u<=1){let ix=l.x1+ax*t,iy=l.y1+ay*t;return {x:ix,y:iy,angle:Math.atan2(ay,ax),shieldAngle:Math.atan2(by,bx)}}}return null}
 function shieldLaserLines(lines){let hit=shieldBlocksLaser(lines);if(!hit)return lines;let out=[];for(let seg of lines){let d=laserDistance(hit.x,hit.y,seg);if(d<.5){out.push({x1:seg.x1,y1:seg.y1,x2:hit.x,y2:hit.y});break}out.push(seg)}let dx=Math.cos(hit.angle),dy=Math.sin(hit.angle),nx=-Math.sin(hit.shieldAngle),ny=Math.cos(hit.shieldAngle),dot=dx*nx+dy*ny,rx=dx-2*dot*nx,ry=dy-2*dot*ny;out.push({x1:hit.x+rx*.5,y1:hit.y+ry*.5,x2:hit.x+rx*210,y2:hit.y+ry*210});return out}
-function showShieldChoice(){shieldPaused=true;document.querySelector('#shield-choice').style.display='flex'}
-function pickShield(type){shieldType=type;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldPaused=false;document.querySelector('#shield-choice').style.display='none';queueCheckpoint()}
+function showShieldChoice(){shieldType='curved';shieldPaused=false;document.querySelector('#shield-choice').style.display='none'}
+function pickShield(){showShieldChoice()}
 document.querySelector('#choose-flat').onclick=()=>pickShield('flat');document.querySelector('#choose-curved').onclick=()=>pickShield('curved');
 const RANGED=['laser','shooter','scatter','frostcaster','spitter','cannon','seeker','bloodcaster','emberling','thornling','icewisp'];
 const RANGED_COLOR={emberling:'#ff974b',thornling:'#a5c65a',icewisp:'#adf1ff',emberbolt:'#ff974b',laser:'#ff3f9a',shooter:'#ff6969',scatter:'#c18aff',frostcaster:'#86dfff',spitter:'#a4ed4d',cannon:'#d6b277',seeker:'#f4e76b',bloodcaster:'#e44e7a'};
@@ -434,7 +456,7 @@ const ITEM_DEFS = {
  leechFang:{name:'Leech Fang',glyph:'⌁',color:'#e391b2',desc:'Enemy kills restore 2 health; boss kills restore 8.'},
  sporeSatchel:{name:'Spore Satchel',glyph:'✿',color:'#a4dc8a',biome:'green',desc:'Defeated enemies leave a friendly damaging spore cloud.'},
  mirrorLens:{name:'Mirror Lens',glyph:'◇',color:'#d4c5ff',desc:'Reflected projectiles deal 50% more damage.'},
- shieldBloom:{name:'Shield Bloom',glyph:'⬡',color:'#8beac7',biome:'green',desc:'Clearing a room restores 20 shield durability. Shield recovery +25%.'},
+ shieldBloom:{name:'Shield Bloom',glyph:'⬡',color:'#8beac7',biome:'green',desc:'Shield takes 15% less damage. Shield refills only on room entry.'},
  luckyPenny:{name:'Lucky Penny',glyph:'●',color:'#f0cb76',desc:'+1 luck. Defeated enemies drop one extra coin.'},
  magnetRing:{name:'Magnet Ring',glyph:'⊙',color:'#87bdff',desc:'Collect coins from much farther away.'},
  thornMantle:{name:'Thorn Mantle',glyph:'✦',color:'#a7bf82',biome:'green',desc:'Take 10% less damage. When hurt, retaliate against nearby enemies.'},
@@ -451,7 +473,7 @@ const UPGRADE_DEFS = {
  swing:{name:'Bat Balance',glyph:'↻',color:'#b6b2f1',desc:'+15% swing speed.'},
  knockback:{name:'Firm Grip',glyph:'➜',color:'#e4c494',desc:'+20% knockback.'},
  regen:{name:'Recovery',glyph:'✚',color:'#9ddaa6',desc:'+0.3 health regeneration per second.'},
- shield:{name:'Shield Oil',glyph:'⬡',color:'#9ee3ed',desc:'+25% shield recovery speed.'},
+ shield:{name:'Shield Oil',glyph:'⬡',color:'#9ee3ed',desc:'Shield takes 10% less damage. Total shield damage reduction is capped at 60%.'},
  focus:{name:'Focus',glyph:'◎',color:'#d0c0f1',desc:'+5% critical-hit chance.'},
  luck:{name:'Good Fortune',glyph:'★',color:'#edce7e',desc:'+1 luck; occasionally find extra coins.'}
 };
@@ -468,7 +490,7 @@ function playerStats(){
   swing:Math.max(.55,1+.15*upgradeCount('swing')-.1*itemCount('counterweight')),
   knockback:1+.2*upgradeCount('knockback')+.4*itemCount('counterweight'),
   regen:1.2+.3*upgradeCount('regen')+.6*itemCount('mossCharm')+(hasSynergy('livingArmour')?.4:0),
-  shieldRegen:12*(1+.25*upgradeCount('shield')+.25*itemCount('shieldBloom')),
+  shieldProtection:Math.min(.6,.1*upgradeCount('shield')+.15*itemCount('shieldBloom')),
   crit:Math.min(.6,.05*upgradeCount('focus')),
   luck:upgradeCount('luck')+itemCount('luckyPenny'),
   armour:Math.min(.4,.1*itemCount('thornMantle')+(hasSynergy('livingArmour')?.1:0)),
@@ -572,7 +594,6 @@ function rewardRoom(){
   const keys=Object.keys(UPGRADE_DEFS);
   currentRoom.loot.push({id:'room-stat',kind:'stat',key:keys[Math.floor(Math.random()*keys.length)],price:0,x:W/2,y:F/2,claimed:false});
  }
- if(shieldType&&itemCount('shieldBloom'))shieldHp=Math.min(100,shieldHp+20*itemCount('shieldBloom'));
  synergyRoomClear();
  queueCheckpoint();
 }
@@ -664,7 +685,7 @@ function updateCharacterMenu(){
  const panel=document.querySelector('#character-panel');if(panel.hidden)return;
  const st=playerStats(),values=[
   ['Maximum health',st.maxHealth],['Bat damage',st.damage.toFixed(2)+'×'],['Move speed',Math.round(st.moveSpeed)],['Swing speed',Math.round(st.swing*100)+'%'],['Knockback',Math.round(st.knockback*100)+'%'],
-  ['Health regen',st.regen.toFixed(1)+'/s'],['Shield recovery',st.shieldRegen.toFixed(1)+'%/s'],['Critical chance',Math.round(st.crit*100)+'%'],['Luck',st.luck],['Damage reduction',Math.round(st.armour*100)+'%'],['Enemy shot speed',Math.round(st.bulletSpeed*100)+'%'],['Coin pickup range',st.pickup]
+  ['Health regen',st.regen.toFixed(1)+'/s'],['Shield damage reduction',Math.round(st.shieldProtection*100)+'%'],['Critical chance',Math.round(st.crit*100)+'%'],['Luck',st.luck],['Damage reduction',Math.round(st.armour*100)+'%'],['Enemy shot speed',Math.round(st.bulletSpeed*100)+'%'],['Coin pickup range',st.pickup]
  ];
  document.querySelector('#character-stats').innerHTML=values.map(([name,value])=>'<div><span>'+name+'</span><strong>'+value+'</strong></div>').join('');
  document.querySelector('#character-coins').textContent=progress.coins+' coins · '+kills+' kills · Dungeon '+dungeonDepth;
@@ -798,8 +819,10 @@ function normalizeSavedRun(raw){
  raw.depth=Math.floor(safeNumber(raw.depth,1,1,10000));raw.hp=safeNumber(raw.hp,100,1,1e6);raw.kills=Math.floor(safeNumber(raw.kills));raw.arenaTime=safeNumber(raw.arenaTime);
  raw.player=raw.player&&typeof raw.player==='object'?raw.player:{};
  raw.player={x:safeNumber(raw.player.x,rooms[raw.roomId].w/2,23,rooms[raw.roomId].w-23),y:safeNumber(raw.player.y,rooms[raw.roomId].h/2,23,rooms[raw.roomId].h-23),a:safeNumber(raw.player.a,0,-1e7,1e7),target:safeNumber(raw.player.target,0,-1e7,1e7)};
- raw.shieldType=['flat','curved'].includes(raw.shieldType)?raw.shieldType:null;
+ const hadShield=['flat','curved'].includes(raw.shieldType);raw.shieldType='curved';raw.shieldPending=false;
  raw.shieldHp=safeNumber(raw.shieldHp,100,0,100);raw.shieldCooldown=safeNumber(raw.shieldCooldown,0,0,10);raw.shieldLastHit=safeNumber(raw.shieldLastHit,-99,-100,1e8);
+ if(!hadShield){raw.shieldHp=100;raw.shieldBroken=false}
+ else raw.shieldBroken=raw.shieldHp<=0;
  raw.bleedStacks=Math.floor(safeNumber(raw.bleedStacks));raw.temporaryBleed=Array.isArray(raw.temporaryBleed)?raw.temporaryBleed.filter(Number.isFinite).slice(0,500):[];
  raw.playerBleed=Array.isArray(raw.playerBleed)?raw.playerBleed.filter(b=>b&&Number.isFinite(b.remaining)&&Number.isFinite(b.rate)&&b.remaining>0&&b.rate>0).map(b=>({remaining:safeNumber(b.remaining,0,0,1000),rate:safeNumber(b.rate,0,0,100)})).slice(0,100):[];
  const stats={};for(const key of ['biggestImpact','swingsHit','splits','fusions','healed'])stats[key]=safeNumber(raw.runStats?.[key]);
@@ -995,11 +1018,11 @@ const SYNERGY_DEFS={
  vampiricSpores:{name:'Vampiric Spores',items:['sporeSatchel','leechFang'],color:'#d49caf',desc:'Kills inside an existing friendly spore cloud restore 3 extra health.'},
  cinderheart:{name:'Cinderheart',items:['emberHeart','cinderSigil'],color:'#ffad6e',desc:'Your kill bursts also burn nearby enemies for 3 seconds.'},
  frostclock:{name:'Frostclock',items:['frostNail','hourglass'],color:'#a1dcff',desc:'Bat hits leave a 2 second frost field that halves hostile projectile speed. 1 second cooldown.'},
- thornBloom:{name:'Thorn Bloom',items:['thornMantle','shieldBloom'],color:'#a6e7bd',desc:'Thorn retaliation repairs 8 shield durability, once per second. Requires a shield.'},
+ thornBloom:{name:'Thorn Bloom',items:['thornMantle','shieldBloom'],color:'#a6e7bd',desc:'Thorn retaliation also slows nearby enemies by 40% for 1.5 seconds. Once per second.'},
  livingArmour:{name:'Living Armour',items:['mossCharm','thornMantle'],color:'#b0d58f',desc:'Gain 10% extra damage reduction and 0.4 extra health regeneration per second.'},
  goldenOrbit:{name:'Golden Orbit',items:['luckyPenny','magnetRing'],color:'#f1d78a',desc:'Every 10 coins collected from the floor restore 3 health. Purchases do not advance this counter.'},
  shatterStrike:{name:'Shatter Strike',items:['glassEye','counterweight'],color:'#ead5bb',desc:'Every third bat hit releases a shockwave: 4 bonus damage and knockback within 65 range.'},
- secondSpring:{name:'Second Spring',items:['mossCharm','shieldBloom'],color:'#9ce7cd',desc:'Clearing a combat or boss room restores 8 health and 10 extra shield durability.'}
+ secondSpring:{name:'Second Spring',items:['mossCharm','shieldBloom'],color:'#9ce7cd',desc:'Clearing a combat or boss room restores 12 health. Does not repair the shield.'}
 };
 let synergyFx=[],synergyFields=[],synergyClocks={};
 function hasSynergy(id){return SYNERGY_DEFS[id].items.every(item=>itemCount(item)>0)}
@@ -1043,13 +1066,13 @@ function synergyEnemyDeath(enemy){
  }
 }
 function synergyRetaliation(){
- if(!hasSynergy('thornBloom')||!shieldType)return;
- shieldHp=Math.min(100,shieldHp+8);if(shieldHp>=50)shieldBroken=false;
+ if(!hasSynergy('thornBloom'))return;
+ for(const target of synergyTargets())if(Math.hypot(target.x-p.x,target.y-p.y)<75+target.r)target.slowUntil=Math.max(target.slowUntil||0,arenaTime+1.5);
  synergyRing(p.x,p.y,36,'#a6e7bd');
 }
 function synergyRoomClear(){
  if(!hasSynergy('secondSpring'))return;
- healPlayer(8);if(shieldType){shieldHp=Math.min(100,shieldHp+10);if(shieldHp>=50)shieldBroken=false}
+ healPlayer(12);
  synergyRing(p.x,p.y,48,'#9ce7cd');
 }
 function synergyCollectCoins(amount){
@@ -1501,7 +1524,7 @@ function clearSandbox(){
 }
 function healSandbox(){
  if(!inSandbox())return;
- hp=playerStats().maxHealth;over=false;inv=1;playerBleed=[];p.falling=0;p.slowUntil=0;p.kvx=p.kvy=0;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldPaused=false;document.querySelector('#shield-choice').style.display='none';hud();
+ hp=playerStats().maxHealth;over=false;inv=1;playerBleed=[];p.falling=0;p.slowUntil=0;p.kvx=p.kvy=0;shieldPaused=false;document.querySelector('#shield-choice').style.display='none';hud();
 }
 function resetSandbox(){clearSandbox();setSandboxMovement(false);setSandboxAttacks(false);healSandbox()}
 function setSandboxMovement(value){
@@ -1609,6 +1632,7 @@ function makeRoomLayout(room){
  portals.push({x:W*.18,y:F*.5,type:'linked',pair:1},{x:W*.82,y:F*.5,type:'linked',pair:0});
 }
 function enterRoom(id,entry=null){
+ const changedRoom=currentRoom?.id!==id;
  if(currentRoom&&!inSandbox())currentRoom.coinDrops=coinDrops;
  currentRoom=id==='sandbox'?sandboxRoom:dungeon[id];currentRoom.visited=currentRoom.discovered=true;W=currentRoom.w;F=currentRoom.h;
  for(const door of currentRoom.doors)dungeon[door.to].discovered=true;
@@ -1622,7 +1646,7 @@ function enterRoom(id,entry=null){
  sticks.forEach(stick=>{stick.dx=stick.dy=0});
  if(currentRoom.kind==='start')playerBleed=[];
  if(!currentRoom.cleared){if(currentRoom.kind==='boss')startBossFight(currentRoom.bossKind);else for(let i=0;i<currentRoom.count;i++)spawn(selectedBiome&&i<2?currentBiome().enemies[i]:null);}
- hud();clearRoomDash();resetRoomSynergies();queueCheckpoint();
+ if(!loadingRun&&changedRoom)refillRoomShield();hud();clearRoomDash();resetRoomSynergies();queueCheckpoint();
 }
 function nextDungeon(biome){
  if(currentRoom?.kind!=='boss'||!currentRoom.bossDefeated||!BIOME_PATHS.some(path=>path.id===biome))return;
@@ -1916,9 +1940,9 @@ function hud(){
   const label='DUNGEON '+dungeonDepth+' · '+currentBiome().short+' · '+currentRoom.name+' · '+activity+' · '+cleared+'/'+combat.length+' CLEARED';
   const status=document.querySelector('#room-status');if(status.textContent!==label)status.textContent=label;
  }
- updateBossHud();updateSandboxMenu();updateCharacterMenu();updateDashButton();document.querySelector('#coin-count').textContent='● '+(progress?.coins||0);
+ updateBossHud();updateSandboxMenu();updateCharacterMenu();updateDashButton();shieldUpdate(0);document.querySelector('#coin-count').textContent='● '+(progress?.coins||0);
 }
-function reset(){resetRoomSynergies();progress=freshProgress();coinDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType=null;shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);hud()}
+function reset(){resetRoomSynergies();progress=freshProgress();coinDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);hud()}
 function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*viewW/r.width,y:(e.clientY-r.top)*H/r.height}}
 function setStick(s,v){let dx=v.x-s.x,dy=v.y-s.y,d=Math.hypot(dx,dy),radius=R*controls.size/100,k=d?Math.min(d,radius)/d/radius:0;s.dx=dx*k;s.dy=dy*k}
 c.addEventListener('pointerdown',e=>{e.preventDefault();let v=pt(e),i=v.x<viewW/2?0:1,s=sticks[i];if(editingControls){if(editPointer)return;let nearest=sticks.map((st,j)=>({j,d:Math.hypot(st.x-v.x,st.y-v.y)})).filter(o=>o.d<R*controls.size/100+22).sort((a,b)=>a.d-b.d)[0];if(!nearest)return;editPointer={id:e.pointerId,i:nearest.j};c.setPointerCapture(e.pointerId);return}if(s.id!==null)return;if(controls.floating)moveStick(i,v);s.id=e.pointerId;c.setPointerCapture(e.pointerId);setStick(s,v)});
@@ -2063,7 +2087,7 @@ drawRoomDecor();drawEconomyRoomDecor();drawSandboxEconomySigns();drawBiomeWorld(
 for(let h of holes){g.save();g.fillStyle='#08070d';g.shadowColor='#000';g.shadowBlur=14;g.beginPath();g.ellipse(h.x,h.y,h.r,h.r*.82,0,0,Math.PI*2);g.fill();g.shadowBlur=0;g.strokeStyle='#74617b';g.lineWidth=4;g.beginPath();g.ellipse(h.x,h.y,h.r,h.r*.82,0,0,Math.PI*2);g.stroke();g.restore()}
 for(let a of artillery){let t=1-a.life/a.maxLife;g.save();g.strokeStyle='#ff7058';g.lineWidth=2+t*2;g.globalAlpha=.45+.5*t;g.beginPath();g.arc(a.x,a.y,a.r*(.6+.4*t),0,Math.PI*2);g.stroke();g.beginPath();g.moveTo(a.x-6,a.y);g.lineTo(a.x+6,a.y);g.moveTo(a.x,a.y-6);g.lineTo(a.x,a.y+6);g.stroke();g.fillStyle='#e8bd8b';g.beginPath();g.arc(a.startX+(a.x-a.startX)*t,a.startY+(a.y-a.startY)*t-55*Math.sin(Math.PI*t),6+3*Math.sin(Math.PI*t),0,Math.PI*2);g.fill();g.restore()}
 for(let e of enemies){if(e.shape!=='laser'||e.hp<=0||(e.laserState!=='charge'&&e.laserState!=='fire'))continue;let firing=e.laserState==='fire';g.save();g.lineCap='round';g.strokeStyle=firing?'#ff2879':'#ff8cae';g.lineWidth=firing?6:1.5;g.globalAlpha=firing?.82:.4;g.shadowColor='#ff3580';g.shadowBlur=firing?14:0;for(let seg of shieldLaserLines(laserPath(e.x,e.y,e.laserAngle))){g.beginPath();g.moveTo(seg.x1,seg.y1);g.lineTo(seg.x2,seg.y2);g.stroke()}if(firing){g.shadowBlur=0;g.strokeStyle='#fff4fb';g.lineWidth=2;for(let seg of laserPath(e.x,e.y,e.laserAngle)){g.beginPath();g.moveTo(seg.x1,seg.y1);g.lineTo(seg.x2,seg.y2);g.stroke()}}g.restore()}
-for(let sh of shieldSegments()){g.save();g.lineCap='round';g.lineWidth=5;g.strokeStyle=shieldType==='flat'?'#d2a0ff':'#74eaff';g.shadowColor=g.strokeStyle;g.shadowBlur=11;g.beginPath();g.moveTo(sh.x1,sh.y1);g.lineTo(sh.x2,sh.y2);g.stroke();g.restore()}
+for(let sh of shieldSegments(true)){g.save();g.globalAlpha=shieldBroken?.2:1;g.lineCap='round';g.lineWidth=3;g.strokeStyle='#74eaff';g.shadowColor=g.strokeStyle;g.shadowBlur=shieldBroken?0:5;g.beginPath();g.moveTo(sh.x1,sh.y1);g.lineTo(sh.x2,sh.y2);g.stroke();g.restore()}
 for(let q of projectiles){g.save();g.fillStyle=q.reflected?'#f7fff5':RANGED_COLOR[q.kind];g.shadowColor=g.fillStyle;g.shadowBlur=8;g.beginPath();g.arc(q.x,q.y,q.r,0,Math.PI*2);g.fill();g.restore()}
 for(let f of fallingFx){let t=1-f.life/f.maxLife,scale=(1-t)*(1-t);g.save();g.globalAlpha=1-t*.85;g.fillStyle=f.color;g.beginPath();g.arc(f.x+(f.tx-f.x)*t,f.y+(f.ty-f.y)*t+t*5,Math.max(.3,f.r*scale),0,Math.PI*2);g.fill();g.strokeStyle='#d3b6ed';g.lineWidth=2*(1-t);g.beginPath();g.arc(f.tx,f.ty,7+t*14,0,Math.PI*2);g.stroke();g.restore()}
 for(let w of gravityWells){let t=1-w.life/w.maxLife;g.save();g.globalAlpha=.7;g.strokeStyle='#bb8aff';g.lineWidth=2.5;g.setLineDash([5,5]);g.beginPath();g.arc(w.x,w.y,w.range,0,Math.PI*2);g.stroke();g.setLineDash([]);g.fillStyle='#211139';g.shadowColor='#ad6bff';g.shadowBlur=18;g.beginPath();g.arc(w.x,w.y,10+10*t,0,Math.PI*2);g.fill();g.strokeStyle='#e6bbff';g.beginPath();g.arc(w.x,w.y,15+12*t,0,Math.PI*2);g.stroke();g.restore()}
