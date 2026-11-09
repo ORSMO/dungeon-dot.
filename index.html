@@ -223,15 +223,16 @@ function spawn(forcedShape=null){
  return null;
 }
 function addSpecialRooms(rooms){
- for(const kind of ['treasure','shop']){
+ for(const kind of ['treasure','shop','cursed']){
   const options=[];
   for(const room of rooms.filter(r=>r.kind==='combat'))for(const [side,dir] of Object.entries(DIRECTIONS)){
    const col=room.col+dir.dx,row=room.row+dir.dy;
    if(Math.abs(col)<=3&&Math.abs(row)<=3&&!rooms.some(r=>r.col===col&&r.row===row))options.push({room,side,col,row});
   }
   const spot=options[Math.floor(Math.random()*options.length)];
-  if(!spot)throw Error('No place for a reward room');
-  const room={id:rooms.length,col:spot.col,row:spot.row,shape:kind,kind,...ROOM_SHAPES[kind],cleared:true,visited:false,discovered:false,doors:[{side:DIRECTIONS[spot.side].opposite,to:spot.room.id}]};
+  if(!spot){if(kind==='cursed')continue;throw Error('No place for a reward room')}
+  const room={id:rooms.length,col:spot.col,row:spot.row,shape:kind,kind,...ROOM_SHAPES[kind],cleared:kind!=='cursed',visited:false,discovered:false,doors:[{side:DIRECTIONS[spot.side].opposite,to:spot.room.id}]};
+  if(kind==='cursed'){const pool=Object.keys(CURSE_TYPES);for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}room.curses=pool.slice(0,Math.random()<.3?2:1)}
   rooms.push(room);spot.room.doors.push({side:spot.side,to:room.id});
  }
  for(const room of rooms){
@@ -247,7 +248,7 @@ function addSpecialRooms(rooms){
 }
 function makeBiomeTerrain(room){
  terrainPatches=[];hostileZones=[];friendlyZones=[];
- if(room.kind!=='combat'||!selectedBiome)return;
+ if(!['combat','cursed'].includes(room.kind)||!selectedBiome)return;
  const points=[[.36,.36],[.65,.64],[.35,.66],[.67,.34]];
  for(let i=0;i<points.length;i++){
   const [x,y]=points[i],type=selectedBiome==='red'?'vent':selectedBiome==='green'?(i%2?'spore':'roots'):(i%2?'frostVent':'ice');
@@ -255,7 +256,7 @@ function makeBiomeTerrain(room){
  }
 }
 function decorateBiomeLayout(room){
- if(room.kind!=='combat'||!selectedBiome)return;
+ if(!['combat','cursed'].includes(room.kind)||!selectedBiome)return;
  if(selectedBiome==='red'){
   for(const y of [.2,.76])walls.push({x:W*.5-9,y:F*y,w:18,h:44,type:room.id%2?'spike':'bounce'});
  }else if(selectedBiome==='green'){
@@ -572,7 +573,7 @@ function drawDamageNumbers(){
 }
 function rewardEnemy(enemy){
  if(enemy.rewarded)return;enemy.rewarded=true;recordEnemyKill(enemy);synergyEnemyDeath(enemy);
- const amount=(enemy.elite?3:1)+itemCount('luckyPenny')+(Math.random()<Math.min(.5,playerStats().luck*.08)?1:0);
+ const amount=((enemy.elite?3:1)+itemCount('luckyPenny')+(Math.random()<Math.min(.5,playerStats().luck*.08)?1:0))*(currentRoom?.kind==='cursed'?2:1);
  if(!enemy.bossMinion&&!enemy.bossSummon)coinDrops.push({x:enemy.x,y:enemy.y,amount});
  if(itemCount('leechFang'))healPlayer(2*itemCount('leechFang'));
  if(itemCount('sporeSatchel'))friendlyZones.push({x:enemy.x,y:enemy.y,r:35,life:3,tick:0,power:itemCount('sporeSatchel')});
@@ -587,8 +588,13 @@ function collectDefeatedEnemies(){
  return defeated;
 }
 function rewardRoom(){
- if(inSandbox()||currentRoom.clearRewarded||currentRoom.kind!=='combat')return;
- currentRoom.clearRewarded=true;coinDrops.push({x:W/2,y:F/2,amount:3});
+ if(inSandbox()||currentRoom.clearRewarded||!['combat','cursed'].includes(currentRoom.kind))return;
+ currentRoom.clearRewarded=true;coinDrops.push({x:W/2,y:F/2,amount:currentRoom.kind==='cursed'?6:3});
+ if(currentRoom.kind==='cursed'&&Math.random()<.55){
+  const rares=['stormCoil','leechFang','glassEye','cinderSigil','shieldBloom','thornMantle'];
+  const unowned=rares.filter(id=>!itemCount(id)),pool=unowned.length?unowned:rares;
+  currentRoom.loot.push({id:'curse-reward',kind:'item',key:pool[Math.floor(Math.random()*pool.length)],price:0,x:W/2+85,y:F/2,claimed:false,rare:true});
+ }
  progress.roomsCleared++;
  if(progress.roomsCleared%3===0){
   const keys=Object.keys(UPGRADE_DEFS);
@@ -624,7 +630,7 @@ function prepareRoomLoot(room){
  }
 }
 function lootDefinition(loot){return loot.kind==='item'?ITEM_DEFS[loot.key]:loot.kind==='stat'?UPGRADE_DEFS[loot.key]:{name:'Healing Flask',desc:'Restore 35 health.',glyph:'✚',color:'#f3a5b1'}}
-function roomCoinsHome(){return !!currentRoom?.cleared&&['combat','boss'].includes(currentRoom.kind)&&!inSandbox()&&!over&&!p.falling}
+function roomCoinsHome(){return !!currentRoom?.cleared&&['combat','boss','cursed'].includes(currentRoom.kind)&&!inSandbox()&&!over&&!p.falling}
 function collectCoin(coin){
  if(coin.collected)return false;
  coin.collected=true;progress.coins+=coin.amount;synergyCollectCoins(coin.amount);queueCheckpoint();return true;
@@ -1200,8 +1206,41 @@ const ROOM_SHAPES={
  big:{name:'BIG SQUARE',w:720,h:720,count:10},
  wide:{name:'RECTANGLE',w:760,h:440,count:8},
  tall:{name:'RECTANGLE',w:440,h:760,count:8},
- boss:{name:'BOSS CHAMBER',w:720,h:640,count:0},treasure:{name:'TREASURE ROOM',w:360,h:360,count:0},shop:{name:'SHOP',w:520,h:360,count:0}
+ boss:{name:'BOSS CHAMBER',w:720,h:640,count:0},treasure:{name:'TREASURE ROOM',w:360,h:360,count:0},shop:{name:'SHOP',w:520,h:360,count:0},
+ cursed:{name:'CURSED CHAMBER',w:680,h:500,count:11}
 };
+const CURSE_TYPES={
+ float:{name:'ZERO GRAVITY',hint:'Bodies drift and keep momentum'},
+ pinball:{name:'PINBALL MADNESS',hint:'Walls send enemies ricocheting'},
+ double:{name:'DOUBLE TROUBLE',hint:'Living enemies periodically split'},
+ lava:{name:'FLOOR IS LAVA',hint:'Warning circles erupt into fire'}
+};
+let curseTimers={};
+function curseActive(type){return currentRoom?.kind==='cursed'&&!currentRoom.cleared&&currentRoom.curses?.includes(type)}
+function updateCurses(dt){
+ if(currentRoom?.kind!=='cursed'||currentRoom.cleared||!enemyAttacksEnabled())return;
+ if(curseActive('lava')){
+  curseTimers.lava=(curseTimers.lava??2.5)-dt;
+  if(curseTimers.lava<=0){
+   curseTimers.lava=3.5+Math.random();
+   for(let i=0;i<2;i++){
+    let angle=Math.random()*Math.PI*2,dist=55+Math.random()*115;
+    addHostileZone(p.x+Math.cos(angle)*dist,p.y+Math.sin(angle)*dist,'fire',30+Math.random()*8,1.15,2.3);
+   }
+  }
+ }
+ if(curseActive('double')){
+  curseTimers.double=(curseTimers.double??4.5)-dt;
+  if(curseTimers.double<=0){
+   curseTimers.double=5;
+   const candidates=enemies.filter(e=>e.hp>0&&!e.bossMinion&&e.shape!=='square'&&e.r>=9&&!(e.fusionCooldown>0)&&enemies.length+pendingSplits.length<MAX_BODIES);
+   if(candidates.length)splitOnImpact(candidates[Math.floor(Math.random()*candidates.length)],150,true);
+  }
+ }
+ if(curseActive('float')){
+  for(const e of enemies)if(e.hp>0){e.vx+=Math.sin(arenaTime*1.9+e.y*.013)*20*dt;e.vy+=Math.cos(arenaTime*1.7+e.x*.012)*20*dt}
+ }
+}
 const BIOME_PATHS=[
  {id:'red',name:'EMBER',color:'#ff746e',dark:'#4c222c'},
  {id:'green',name:'VERDANT',color:'#78eea4',dark:'#1e4437'},
@@ -1648,7 +1687,7 @@ function roomDoors(){
 }
 function makeRoomLayout(room){
  walls.length=holes.length=portals.length=0;
- if(room.kind!=='combat')return;
+ if(!['combat','cursed'].includes(room.kind))return;
  const points=[[.25,.25,'bounce'],[.70,.25,'spike'],[.25,.73,'spike'],[.70,.73,'bounce']];
  walls.push(...points.map(([x,y,type])=>({x:W*x-35,y:F*y-7,w:70,h:14,type})));
  if(room.shape==='big')walls.push({x:W*.50-7,y:F*.30,w:14,h:66,type:'sticky',moving:true,baseX:W*.50-7,baseY:F*.30,axis:'x',range:34,speed:1.1,phase:0});
@@ -1660,7 +1699,7 @@ function enterRoom(id,entry=null){
  if(currentRoom&&!inSandbox())currentRoom.coinDrops=coinDrops;
  currentRoom=id==='sandbox'?sandboxRoom:dungeon[id];currentRoom.visited=currentRoom.discovered=true;W=currentRoom.w;F=currentRoom.h;
  for(const door of currentRoom.doors)dungeon[door.to].discovered=true;
- makeRoomLayout(currentRoom);decorateBiomeLayout(currentRoom);makeBiomeTerrain(currentRoom);prepareRoomLoot(currentRoom);coinDrops=currentRoom.coinDrops||[];damageNumbers=[];nearestLoot=null;document.querySelector('#loot-panel').hidden=true;
+ makeRoomLayout(currentRoom);decorateBiomeLayout(currentRoom);makeBiomeTerrain(currentRoom);curseTimers={};prepareRoomLoot(currentRoom);coinDrops=currentRoom.coinDrops||[];damageNumbers=[];nearestLoot=null;document.querySelector('#loot-panel').hidden=true;
  const x=entry==='west'?62:entry==='east'?W-62:W/2;
  const y=entry==='north'?62:entry==='south'?F-62:F/2;
  p={...p,x,y,vx:0,vy:0,kvx:0,kvy:0,sticky:null,wallContacts:new Set(),wallCooldowns:new Map(),portalCooldown:0,falling:0,slowUntil:0};
@@ -1913,7 +1952,7 @@ return remaining||!newContact?0:impact
 }
 // Always resolve penetration, but only apply a new bounce impulse once per pair cooldown.
 e.x+=nx*depth;e.y+=ny*depth;
-if(vn<0){if(newContact&&!remaining){let restitution=(w.type==='bounce'?2.45:w.type==='spike'?.65:.78)*(e.shape==='rubber'?1.65:1);e.vx-=(1+restitution)*vn*nx;e.vy-=(1+restitution)*vn*ny;e.wallCooldowns.set(w,WALL_HIT_COOLDOWN);if(!e.isPlayer||e.knockbackSpeed>90)showWallHit(w,cx,cy,nx,ny,impact);if(!e.isPlayer){elementalHit(e,impact);flipMagnet(e,impact)}}
+if(vn<0){if(newContact&&!remaining){let restitution=(curseActive('pinball')?(w.type==='bounce'?3.1:w.type==='spike'?1.5:1.85):w.type==='bounce'?2.45:w.type==='spike'?.65:.78)*(e.shape==='rubber'?1.65:1);e.vx-=(1+restitution)*vn*nx;e.vy-=(1+restitution)*vn*ny;e.wallCooldowns.set(w,WALL_HIT_COOLDOWN);if(!e.isPlayer||e.knockbackSpeed>90)showWallHit(w,cx,cy,nx,ny,impact);if(!e.isPlayer){elementalHit(e,impact);flipMagnet(e,impact)}}
 else{e.vx-=vn*nx;e.vy-=vn*ny}}
 return remaining||!newContact?0:impact
 }
@@ -1945,8 +1984,8 @@ const HYBRID_ORIGINS=Object.keys(HYBRID_COLORS).filter(id=>id!=='emberbolt'&&!BI
 function originPair(a,b){let aa=a.origins||[a.shape],bb=b.origins||[b.shape];return [aa[0],bb[bb.length-1]]}
 
 let pendingSplits=[];
-function splitOnImpact(e,kick){
-if(e.bossMinion||e.shape==='square'||kick<115||e.r<8||e.hp<=0||e.fusionCooldown>0||enemies.length+pendingSplits.length>=MAX_BODIES||Math.random()>=SPLIT_CHANCE*(100-enemyStats(e).stability)/40)return;
+function splitOnImpact(e,kick,forced=false){
+if(e.bossMinion||e.shape==='square'||kick<115||e.r<8||e.hp<=0||e.fusionCooldown>0||enemies.length+pendingSplits.length>=MAX_BODIES||(!forced&&Math.random()>=SPLIT_CHANCE*(100-enemyStats(e).stability)/40))return;
 let r=e.r/Math.sqrt(2),mass=e.mass/2,angle=Math.atan2(e.vy,e.vx)+Math.PI/2,ux=Math.cos(angle),uy=Math.sin(angle),speed=60;
 let oldHp=e.hp,oldMax=e.maxHp,oldX=e.x,oldY=e.y,oldVX=e.vx,oldVY=e.vy;
 e.r=r;e.mass=mass;e.maxHp=Math.max(1,Math.ceil(oldMax/2));e.hp=Math.max(1,Math.ceil(oldHp/2));e.x=clamp(oldX+ux*(r+2),19+r,W-19-r);e.y=clamp(oldY+uy*(r+2),19+r,F-19-r);e.vx=oldVX+ux*speed;e.vy=oldVY+uy*speed;e.fusionCooldown=.9;e.splitCooldown=1.5;
@@ -1985,14 +2024,14 @@ document.querySelector('#control-opacity').oninput=e=>{controls.opacity=Number(e
 document.querySelector('#floating-controls').onchange=e=>{controls.floating=e.target.checked;saveControls()};
 document.querySelector('#controls-reset').onclick=()=>{controls={...defaultControls,positions:defaultControls.positions.map(a=>[...a])};dashControl={x:.78,y:.76};syncControls();saveDashControl();saveControls()};async function goFullscreen(){try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock)await screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}document.querySelector('#fullscreen-toggle').onclick=goFullscreen;document.querySelector('#rotate-fullscreen').onclick=goFullscreen;
 function frame(t){const damageBefore=captureDamage(),oldPlayerHp=hp;const protectedPracticeHp=inSandbox()&&!sandbox.attacks?hp:null;pendingSplits=[];let dt=Math.min((t-last)/1000||0,.035);last=t;if(shieldPaused||!document.querySelector('#character-panel').hidden||persistencePaused()){requestAnimationFrame(frame);return}
-recordVisibleEncounters();arenaTime+=dt;updateSynergies(dt);if(!over){updateItemEffects(dt);updateBiomeWorld(dt)}if(!over){shieldUpdate(dt);rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage)}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&(regenWhileBleeding||playerBleed.length===0)){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){hp=0;over=true}}
+recordVisibleEncounters();arenaTime+=dt;updateSynergies(dt);if(!over){updateItemEffects(dt);updateBiomeWorld(dt);updateCurses(dt)}if(!over){shieldUpdate(dt);rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage)}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&(regenWhileBleeding||playerBleed.length===0)){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){hp=0;over=true}}
 healFx=healFx.filter(f=>(f.life-=dt)>0);wallFx=wallFx.filter(f=>{f.life-=dt;if(f.type==='particle'){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.exp(-5*dt);f.vy*=Math.exp(-5*dt)}return f.life>0});elementFx=elementFx.filter(f=>(f.life-=dt)>0);puddles=puddles.filter(q=>(q.life-=dt)>0);poisonPuddles=poisonPuddles.filter(q=>(q.life-=dt)>0);
 if(!over&&!p.falling){let l=sticks[0],r=sticks[1],ox=p.x,oy=p.y;
 poisonPlayerTimer=Math.max(0,poisonPlayerTimer-dt);playerPoisonGlow=Math.max(0,playerPoisonGlow-dt);
 if(poisonPuddles.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<q.r+7))playerPoisonGlow=.24;
 if(poisonPlayerTimer<=0&&poisonPuddles.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<q.r+7)){hp=damagedHealth(3);poisonPlayerTimer=.65;if(hp<=0)over=true}
 let onPuddle=puddles.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<q.r+7);let slideBoost=(onPuddle?1.65:1)*groundSlideFactor();
-p.kvx=(p.kvx||0)*Math.exp(-(groundSlideFactor()>1?3:6)*dt);p.kvy=(p.kvy||0)*Math.exp(-(groundSlideFactor()>1?3:6)*dt);
+p.kvx=(p.kvx||0)*Math.exp(-(curseActive('float')?2:groundSlideFactor()>1?3:6)*dt);p.kvy=(p.kvy||0)*Math.exp(-(curseActive('float')?2:groundSlideFactor()>1?3:6)*dt);
 if(!moveDash(dt)){p.x=clamp(p.x+(l.dx*playerStats().moveSpeed*(arenaTime<(p.slowUntil||0)?.58:1)*slideBoost+p.kvx)*dt,23,W-23);p.y=clamp(p.y+(l.dy*playerStats().moveSpeed*(arenaTime<(p.slowUntil||0)?.58:1)*slideBoost+p.kvy)*dt,23,F-23);}
 let playerBody={x:p.x,y:p.y,vx:l.dx*playerStats().moveSpeed*slideBoost+p.kvx,vy:l.dy*playerStats().moveSpeed*slideBoost+p.kvy,r:9,isPlayer:true,knockbackSpeed:Math.hypot(p.kvx,p.kvy),sticky:p.sticky||null,wallCooldowns:p.wallCooldowns||new Map(),wallContacts:p.wallContacts||new Set(),portalCooldown:p.portalCooldown||0};
 for(let w of walls){let impact=collideWall(playerBody,w,dt);if(w.type==='spike'&&impact>90&&Math.hypot(p.kvx,p.kvy)>95&&inv<=0){let damage=impact>180?16:impact>130?10:5;hp=damagedHealth(damage);inv=.7;if(hp<=0)over=true}}
@@ -2024,7 +2063,7 @@ if(e.shape==='laser'){
  if(enemyAttacksEnabled()){e.shootClock-=dt;if(e.shootClock<=0&&d<265&&e.phaseIn<=0){fireRanged(e);e.shootClock=(e.shape==='cannon'?3.9:e.shape==='scatter'?2.7:e.shape==='seeker'?3.2:2.35)*(e.elite?.8:1)}}
 }else if(enemyMovementEnabled()&&d>21){e.vx+=dx/d*43*dt;e.vy+=dy/d*43*dt}
 let puddleBoost=puddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r)?1.55:1;
-let damp=Math.exp(-.38*dt);e.vx*=damp;e.vy*=damp;let speed=Math.hypot(e.vx,e.vy);if(speed>270){e.vx*=270/speed;e.vy*=270/speed}
+let damp=Math.exp((curseActive('float')?-.09:-.38)*dt);e.vx*=damp;e.vy*=damp;let speed=Math.hypot(e.vx,e.vy);if(speed>270){e.vx*=270/speed;e.vy*=270/speed}
 let oldEX=e.x,oldEY=e.y;e.x+=e.vx*dt*puddleBoost*((e.slowUntil||0)>arenaTime?.6:1);e.y+=e.vy*dt*puddleBoost*((e.slowUntil||0)>arenaTime?.6:1);
 if(e.x<18+e.r){e.x=18+e.r;e.vx=Math.abs(e.vx)*.85}if(e.x>W-18-e.r){e.x=W-18-e.r;e.vx=-Math.abs(e.vx)*.85}
 if(e.y<18+e.r){e.y=18+e.r;e.vy=Math.abs(e.vy)*.85}if(e.y>F-18-e.r){e.y=F-18-e.r;e.vy=-Math.abs(e.vy)*.85}
@@ -2043,7 +2082,7 @@ let nx=dist>.001?dx/dist:tx,ny=dist>.001?dy/dist:ty;
 let penetration=limit-dist+.8;e.x+=nx*penetration;e.y+=ny*penetration;
 let batSpeed=Math.abs(p.vel)*at,relative=e.vx*tx+e.vy*ty;
 let kick=Math.max(0,batSpeed-relative);if(e.bossMinion&&kick>25)e.batKnockedUntil=arenaTime+1.5;if(kick>25){runStats.biggestImpact=Math.max(runStats.biggestImpact,kick);runStats.swingsHit++}
-if(kick>0){let impulse=kick*(1.5*playerStats().knockback/e.mass);e.vx+=tx*impulse;e.vy+=ty*impulse}
+if(kick>0){let impulse=kick*(1.5*playerStats().knockback/e.mass)*(curseActive('float')?1.4:1);e.vx+=tx*impulse;e.vy+=ty*impulse}
 e.vx+=nx*24/e.mass;e.vy+=ny*24/e.mass;
 for(let w of walls)collideWall(e,w,dt);
 e.x=clamp(e.x,18+e.r,W-18-e.r);e.y=clamp(e.y,18+e.r,F-18-e.r);
@@ -2093,7 +2132,7 @@ if(a.shape!=='healer'&&canDamage(a,impactSpeed))a.hp-=damage;
 if(b.shape!=='healer'&&canDamage(b,impactSpeed))b.hp-=damage;
 a.impactCooldown=.3;b.impactCooldown=.3;a.cool=Math.max(a.cool,.15);b.cool=Math.max(b.cool,.15);
 }
-let restitution=Math.max(enemyStats(a).elasticity,enemyStats(b).elasticity);let jimp=-(1+restitution)*rel/tot;a.vx-=jimp*nx*invA;a.vy-=jimp*ny*invA;b.vx+=jimp*nx*invB;b.vy+=jimp*ny*invB;
+let restitution=Math.max(enemyStats(a).elasticity,enemyStats(b).elasticity,curseActive('pinball')?1.65:0);let jimp=-(1+restitution)*rel/tot;a.vx-=jimp*nx*invA;a.vy-=jimp*ny*invA;b.vx+=jimp*nx*invB;b.vy+=jimp*ny*invB;
 }}
 shards=shards.filter(q=>{q.life-=dt;if(q.life<=0)return false;q.x+=q.vx*dt;q.y+=q.vy*dt;if(q.x<17||q.x>W-17||q.y<17||q.y>F-17||blocked(q.x,q.y,2))return false;for(let e of enemies){if(e===q.owner||e.hp<=0||q.hit.has(e))continue;if(Math.hypot(e.x-q.x,e.y-q.y)<e.r+3){q.hit.add(e);if(canDamage(e,130))e.hp-=1;e.vx+=q.vx*.35/e.mass;e.vy+=q.vy*.35/e.mass;return false}}if(Math.hypot(p.x-q.x,p.y-q.y)<11){if(inv<=0){hp=damagedHealth(3);inv=.45;if(hp<=0)over=true}return false}return true});
 let defeated=collectDefeatedEnemies();for(let e of defeated)if(e.shape==='gravity'&&enemyAttacksEnabled())gravityWells.push({x:e.x,y:e.y,life:2.4,maxLife:2.4,range:e.elite?105:85,elite:e.elite});let newborn=[];for(let e of defeated){if(e.shape!=='splitter')continue;for(let n=0;n<3;n++){let a=n*Math.PI*2/3+Math.random()*.35,ux=Math.cos(a),uy=Math.sin(a),x=clamp(e.x+ux*15,26,W-26),y=clamp(e.y+uy*15,26,F-26);let child={x,y,vx:e.vx*.4+ux*125,vy:e.vy*.4+uy*125,r:7,shape:'mini',mass:.55,hp:2,maxHp:2,healGlow:0,cool:0,impactCooldown:.35,playerHealCooldown:0};for(let w of walls)collideWall(child,w);newborn.push(child)}}enemies=enemies.filter(e=>e.hp>0);enemies.push(...newborn,...pendingSplits);let previousKills=kills;if(!inSandbox())kills+=defeated.length;if(!inSandbox()&&!shieldType&&previousKills<10&&kills>=10)showShieldChoice();updateRoomProgress();hud();updateStatsPanel()}
