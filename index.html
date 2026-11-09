@@ -59,7 +59,7 @@ footer #restart{display:none}
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
-  <div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V7.3</small><h1>Every room.<br>A new fight.</h1><p>Explore the dungeon, collect your build, and face its guardians.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
+  <div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V7.4</small><h1>Every room.<br>A new fight.</h1><p>Explore the dungeon, collect your build, and face its guardians.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
   <div class="save-area"><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
@@ -824,19 +824,21 @@ function flushProfile(){
  catch(error){profileDirty=false;saveError='Browser storage is unavailable or full. Records could not be saved.';updateSaveIndicator();return false}
 }
 function normalizeSavedRun(raw){
- if(!raw||raw.version!==SAVE_VERSION||!Array.isArray(raw.dungeon)||raw.dungeon.length!==12||!raw.progress||typeof raw.progress!=='object')throw Error('Unsupported save');
+ if(!raw||raw.version!==SAVE_VERSION||!Array.isArray(raw.dungeon)||![12,13].includes(raw.dungeon.length)||!raw.progress||typeof raw.progress!=='object')throw Error('Unsupported save');
  const rooms=raw.dungeon;
  if(!Number.isInteger(raw.roomId)||raw.roomId<0||raw.roomId>=rooms.length)throw Error('Invalid checkpoint');
- const kinds=new Set(['start','combat','boss','treasure','shop']);
+ const kinds=new Set(['start','combat','boss','treasure','shop','cursed']);
  for(let i=0;i<rooms.length;i++){
   const room=rooms[i];
   if(!room||room.id!==i||!kinds.has(room.kind)||!Number.isFinite(room.w)||!Number.isFinite(room.h)||room.w<250||room.w>1600||room.h<250||room.h>1600||!Array.isArray(room.doors)||room.doors.length>4||!Number.isInteger(room.col)||!Number.isInteger(room.row))throw Error('Invalid dungeon');
   if(room.doors.some(door=>!DIRECTIONS[door.side]||!Number.isInteger(door.to)||door.to<0||door.to>=rooms.length))throw Error('Invalid door');
   if(room.kind==='boss'&&(!Object.hasOwn(BOSS_BLUEPRINTS,room.bossKind)||room.cleared&&!room.bossDefeated))throw Error('Unknown boss');
+  if(room.kind==='cursed'&&(!Array.isArray(room.curses)||!room.curses.length||room.curses.length>2||room.curses.some(id=>!Object.hasOwn(CURSE_TYPES,id))))throw Error('Unknown curse');
   if(room.loot!==undefined&&!Array.isArray(room.loot))throw Error('Invalid pickups');
   if(Array.isArray(room.loot))room.loot=room.loot.filter(loot=>loot&&Number.isFinite(loot.x)&&Number.isFinite(loot.y)&&Number.isFinite(loot.price)&&loot.price>=0&&(loot.kind==='item'&&Object.hasOwn(ITEM_DEFS,loot.key)||loot.kind==='stat'&&Object.hasOwn(UPGRADE_DEFS,loot.key)||loot.kind==='heal')).map(loot=>({...loot,claimed:!!loot.claimed})).slice(0,40);
   room.coinDrops=Array.isArray(room.coinDrops)?room.coinDrops.filter(coin=>coin&&Number.isFinite(coin.x)&&Number.isFinite(coin.y)&&Number.isFinite(coin.amount)&&coin.amount>0).map(coin=>({x:coin.x,y:coin.y,amount:Math.floor(safeNumber(coin.amount,1,1,1000))})).slice(0,500):[];
  }
+ if(rooms.filter(room=>room.kind==='cursed').length!==rooms.length-12)throw Error('Invalid cursed layout');
  if(rooms[0].kind!=='start'||rooms.filter(room=>room.kind==='boss').length!==1||!rooms[raw.roomId].cleared)throw Error('Unsafe checkpoint');
  const seen=new Set([0]),queue=[0];
  for(let i=0;i<queue.length;i++)for(const door of rooms[queue[i]].doors){
