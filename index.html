@@ -2223,7 +2223,7 @@ function collideGap(body,oldX,oldY,isPlayer=false){
  if(!floorGaps.length)return false;
  const distance=Math.hypot(body.x-oldX,body.y-oldY),steps=Math.max(1,Math.min(120,Math.ceil(distance/5)));
  for(let i=0;i<=steps;i++){const x=oldX+(body.x-oldX)*i/steps,y=oldY+(body.y-oldY)*i/steps;if(floorVoid(x,y)){
-   if(!isPlayer&&Math.hypot(body.vx||0,body.vy||0)<165){
+   if(!isPlayer&&Math.hypot(body.vx||0,body.vy||0)<225){
     const vx=body.vx||0,vy=body.vy||0,turn=body.strafe||1;
     body.x=oldX;body.y=oldY;body.vx=-vy*turn*.85;body.vy=vx*turn*.85;
     return false;
@@ -2257,7 +2257,7 @@ if(Math.hypot(cx-h.x,cy-h.y)>=reach)continue;
 let sizeFits=body.r<h.r-2;
 let centerDistance=Math.hypot(cx-h.x,cy-h.y);
 let toward=(dx*(h.x-oldX)+dy*(h.y-oldY))>0;
-if(sizeFits&&speed>=135&&toward&&centerDistance<reach){
+if(sizeFits&&speed>=(isPlayer?135:225)&&toward&&centerDistance<reach){
 return fallIntoPit(body,h.x,h.y,isPlayer);
 }
 // Solid rim: stop at the edge, never allow slow walking or oversized bodies across.
