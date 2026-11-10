@@ -1890,7 +1890,7 @@ function enterRoom(id,entry=null){
  if(currentRoom&&!inSandbox())currentRoom.coinDrops=coinDrops;
  currentRoom=id==='sandbox'?sandboxRoom:dungeon[id];currentRoom.visited=currentRoom.discovered=true;W=currentRoom.w;F=currentRoom.h;
  for(const door of currentRoom.doors)dungeon[door.to].discovered=true;
- makeRoomLayout(currentRoom);decorateBiomeLayout(currentRoom);makeBiomeTerrain(currentRoom);curseTimers={};initRoomProps(currentRoom);prepareRoomLoot(currentRoom);coinDrops=currentRoom.coinDrops||[];damageNumbers=[];nearestLoot=null;document.querySelector('#loot-panel').hidden=true;
+ makeRoomLayout(currentRoom);decorateBiomeLayout(currentRoom);makeBiomeTerrain(currentRoom);curseTimers={};initRoomProps(currentRoom);resetEnemyNavigation();prepareRoomLoot(currentRoom);coinDrops=currentRoom.coinDrops||[];damageNumbers=[];nearestLoot=null;document.querySelector('#loot-panel').hidden=true;
  const x=entry==='west'?62:entry==='east'?W-62:W/2;
  const y=entry==='north'?62:entry==='south'?F-62:F/2;
  p={...p,x,y,safeX:x,safeY:y,fallReturn:null,vx:0,vy:0,kvx:0,kvy:0,sticky:null,wallContacts:new Set(),wallCooldowns:new Map(),portalCooldown:0,falling:0,slowUntil:0};
@@ -2330,7 +2330,94 @@ for(let h of hits)fg.lineTo(h.x,h.y);
 fg.closePath();fg.fillStyle='#000';fg.fill();fg.globalCompositeOperation='source-over';
 g.drawImage(layer,0,0);
 }
-const SPLIT_CHANCE=.025,MAX_BODIES=14;
+
+const NAV_CELL=20;
+let enemyNav=null;
+function resetEnemyNavigation(){enemyNav=null}
+function navigationClear(x,y,r=11){
+ if(!safeFloor(x,y,r))return false;
+ return !breakables.some(o=>!o.broken&&Math.hypot(x-o.x,y-o.y)<r+PROP_DEFS[o.kind].r+3);
+}
+function navigationSight(ax,ay,bx,by,r=11){
+ const dist=Math.hypot(bx-ax,by-ay),steps=Math.ceil(dist/14);
+ for(let i=1;i<=steps;i++){const k=i/Math.max(1,steps);if(!navigationClear(ax+(bx-ax)*k,ay+(by-ay)*k,r))return false}
+ return true;
+}
+function rebuildEnemyNavigation(){
+ const step=NAV_CELL,nx=Math.ceil(W/step),ny=Math.ceil(F/step),n=nx*ny;
+ const walkable=new Uint8Array(n),cost=new Float32Array(n),heap=[];
+ cost.fill(Infinity);
+ const index=(x,y)=>y*nx+x;
+ for(let y=0;y<ny;y++)for(let x=0;x<nx;x++)walkable[index(x,y)]=navigationClear((x+.5)*step,(y+.5)*step,11)?1:0;
+ const tx=clamp(Math.floor(p.x/step),0,nx-1),ty=clamp(Math.floor(p.y/step),0,ny-1);
+ let gx=tx,gy=ty,best=Infinity;
+ for(let y=Math.max(0,ty-5);y<=Math.min(ny-1,ty+5);y++)for(let x=Math.max(0,tx-5);x<=Math.min(nx-1,tx+5);x++){
+  if(!walkable[index(x,y)])continue;
+  const d=(x-tx)**2+(y-ty)**2;
+  if(d<best){best=d;gx=x;gy=y}
+ }
+ function push(id,value){let i=heap.length;heap.push({id,value});while(i){let j=(i-1)>>1;if(heap[j].value<=value)break;heap[i]=heap[j];i=j}heap[i]={id,value}}
+ function pop(){const top=heap[0],tail=heap.pop();if(heap.length){let i=0;while(true){let j=i*2+1;if(j>=heap.length)break;if(j+1<heap.length&&heap[j+1].value<heap[j].value)j++;if(heap[j].value>=tail.value)break;heap[i]=heap[j];i=j}heap[i]=tail}return top}
+ if(best<Infinity){const source=index(gx,gy);cost[source]=0;push(source,0)}
+ const dirs=[[1,0,1],[-1,0,1],[0,1,1],[0,-1,1],[1,1,Math.SQRT2],[-1,1,Math.SQRT2],[1,-1,Math.SQRT2],[-1,-1,Math.SQRT2]];
+ while(heap.length){const curr=pop(),id=curr.id;if(curr.value>cost[id]+.001)continue;const x=id%nx,y=Math.floor(id/nx);
+  for(const [dx,dy,weight] of dirs){const xx=x+dx,yy=y+dy;if(xx<0||xx>=nx||yy<0||yy>=ny)continue;const to=index(xx,yy);if(!walkable[to])continue;
+   if(dx&&dy&&(!walkable[index(x+dx,y)]||!walkable[index(x,y+dy)]))continue;
+   const next=curr.value+weight;
+   if(next+1e-5<cost[to]){cost[to]=next;push(to,next)}
+  }
+ }
+ enemyNav={nx,ny,cost,walkable,step,tx,ty,px:p.x,py:p.y,w:W,h:F,expire:arenaTime+.43};
+}
+function navigationVector(e,target=p){
+ const dx=target.x-e.x,dy=target.y-e.y,d=Math.hypot(dx,dy)||1;
+ if(target!==p||!enemyMovementEnabled())return{x:dx/d,y:dy/d};
+ const radius=Math.min(17,Math.max(9,e.r+1));
+ if(navigationSight(e.x,e.y,target.x,target.y,radius))return{x:dx/d,y:dy/d};
+ if(!enemyNav||enemyNav.w!==W||enemyNav.h!==F||enemyNav.expire<=arenaTime||Math.hypot(p.x-enemyNav.px,p.y-enemyNav.py)>22)rebuildEnemyNavigation();
+ const nav=enemyNav,nx=nav.nx,ny=nav.ny,cx=clamp(Math.floor(e.x/nav.step),0,nx-1),cy=clamp(Math.floor(e.y/nav.step),0,ny-1);
+ const dirs=[[0,-1],[-1,0],[1,0],[0,1],[-1,-1],[1,-1],[-1,1],[1,1]];
+ const origin=cy*nx+cx,base=nav.cost[origin];let best=Infinity,chosen=null;
+ for(const [sx,sy] of dirs){
+  const xx=cx+sx,yy=cy+sy;if(xx<0||yy<0||xx>=nx||yy>=ny)continue;
+  const id=yy*nx+xx;if(!nav.walkable[id]||!Number.isFinite(nav.cost[id]))continue;
+  if(sx&&sy&&(!nav.walkable[cy*nx+xx]||!nav.walkable[yy*nx+cx]))continue;
+  const px=(xx+.5)*nav.step,py=(yy+.5)*nav.step,dirX=px-e.x,dirY=py-e.y,dist=Math.hypot(dirX,dirY)||1;
+  const score=nav.cost[id]+dist/nav.step*.09;
+  if((!Number.isFinite(base)||nav.cost[id]<base-.05)&&score<best){best=score;chosen={x:dirX/dist,y:dirY/dist}}
+ }
+ if(chosen)return chosen;
+ // A displaced enemy may temporarily be in a blocked cell: steer back to the nearest open tile.
+ for(let ring=1;ring<=4;ring++){
+  let nearest=null,dMin=Infinity;
+  for(let y=Math.max(0,cy-ring);y<=Math.min(ny-1,cy+ring);y++)for(let x=Math.max(0,cx-ring);x<=Math.min(nx-1,cx+ring);x++){
+   const id=y*nx+x;if(!nav.walkable[id]||!Number.isFinite(nav.cost[id]))continue;
+   const a=(x+.5)*nav.step-e.x,b=(y+.5)*nav.step-e.y,dist=Math.hypot(a,b);
+   const score=dist+nav.cost[id]*3;
+   if(score<dMin){dMin=score;nearest={x:a/(dist||1),y:b/(dist||1)}}
+  }
+  if(nearest)return nearest;
+ }
+ return{x:dx/d,y:dy/d};
+}
+function navigationAvoid(e,vx,vy){
+ const norm=Math.hypot(vx,vy)||1,dx=vx/norm,dy=vy/norm,look=clamp(e.r+23,28,45),radius=Math.min(18,Math.max(9,e.r+1));
+ if(navigationClear(e.x+dx*look,e.y+dy*look,radius))return{x:dx,y:dy};
+ const angles=[.55,-.55,1.05,-1.05,1.57,-1.57,2.15,-2.15,Math.PI],turn=e.strafe||1;
+ for(const a of angles){const theta=a*turn,x=dx*Math.cos(theta)-dy*Math.sin(theta),y=dx*Math.sin(theta)+dy*Math.cos(theta);
+  if(navigationClear(e.x+x*look,e.y+y*look,radius)&&navigationClear(e.x+x*look*.5,e.y+y*look*.5,radius))return{x,y}
+ }
+ return{x:-dx,y:-dy};
+}
+function navigationSeparation(e,dt){
+ if(!enemyMovementEnabled())return;
+ for(const other of enemies){
+  if(other===e||other.hp<=0)continue;
+  const dx=e.x-other.x,dy=e.y-other.y,d=Math.hypot(dx,dy)||1,min=e.r+other.r+16;
+  if(d<min){const force=29*(1-d/min)*dt;e.vx+=dx/d*force;e.vy+=dy/d*force}
+ }
+}
+const SPLIT_CHANCE=.025,MAX_BODIES=42;
 const HYBRID_COLORS={gravity:'#a36bff',...RANGED_COLOR,bloodletter:'#b5284b',regenerator:'#ff82c4',square:'#ec5274',round:'#55c9ce',healer:'#60df79',merge:'#b388fa',splitter:'#ff9e48',armored:'#d9ad50',fire:'#ff6b2f',water:'#4aabff',electric:'#ffe75c',rubber:'#7ce77c',poison:'#9bdc38',magnet:'#5cbcff',crystal:'#86f5f7',bomb:'#ef6646',mirror:'#d9e5f4',sponge:'#e2d469'};
 const HYBRID_ORIGINS=Object.keys(HYBRID_COLORS).filter(id=>id!=='emberbolt'&&!BIOME_ENEMIES[id]);
 function originPair(a,b){let aa=a.origins||[a.shape],bb=b.origins||[b.shape];return [aa[0],bb[bb.length-1]]}
