@@ -2104,7 +2104,14 @@ function fallIntoPit(body,x,y,isPlayer=false){
 function collideGap(body,oldX,oldY,isPlayer=false){
  if(!floorGaps.length)return false;
  const distance=Math.hypot(body.x-oldX,body.y-oldY),steps=Math.max(1,Math.min(120,Math.ceil(distance/5)));
- for(let i=0;i<=steps;i++){const x=oldX+(body.x-oldX)*i/steps,y=oldY+(body.y-oldY)*i/steps;if(floorVoid(x,y))return fallIntoPit(body,x,y,isPlayer)}
+ for(let i=0;i<=steps;i++){const x=oldX+(body.x-oldX)*i/steps,y=oldY+(body.y-oldY)*i/steps;if(floorVoid(x,y)){
+   if(!isPlayer&&Math.hypot(body.vx||0,body.vy||0)<165){
+    const vx=body.vx||0,vy=body.vy||0,turn=body.strafe||1;
+    body.x=oldX;body.y=oldY;body.vx=-vy*turn*.85;body.vy=vx*turn*.85;
+    return false;
+   }
+   return fallIntoPit(body,x,y,isPlayer);
+  }}
  return false;
 }
 function updateFloorTraps(){
