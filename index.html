@@ -41,7 +41,7 @@ footer #restart{display:none}
 #dash-button.cooling{background:#242c3c;border-color:#62758c;color:#b6c7da;box-shadow:none}
 #dash-button.editing{border-style:dashed;border-color:#ffe17e;background:#493b3c;color:#ffe9ab;z-index:16;cursor:move}
 #synergy-list{display:grid;gap:7px}.synergy-row{display:flex;gap:10px;border:1px solid #4d415c;border-radius:8px;padding:9px;background:#211d2d}.synergy-row.active{border-color:#a48b56;background:#352c32}.synergy-row strong{font-size:12px;color:#c3afcf}.synergy-row.active strong{color:#f3d391}.synergy-row small{display:block;font-size:10px;color:#a69ab3;margin:3px 0}.synergy-row p{font-size:10px;line-height:1.45;color:#c7bacf;margin:3px 0 0}.synergy-icons{display:flex;align-items:center;gap:4px;min-width:62px;font-size:22px}.synergy-icons b{font-size:12px;color:#82708e}#synergy-count{color:#ebcc87;font-size:11px}
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V7.6</small><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V7.7</small><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
  <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
  <small id="character-coins"></small>
  <div id="character-stats"></div>
@@ -59,7 +59,7 @@ footer #restart{display:none}
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
-  <div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V7.6</small><h1>Every room.<br>A new fight.</h1><p>Explore the dungeon, collect your build, and face its guardians.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
+  <div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V7.7</small><h1>Every room.<br>A new fight.</h1><p>Explore the dungeon, collect your build, and face its guardians.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
   <div class="save-area"><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
@@ -207,17 +207,23 @@ function makeEnemy(shape,x,y,elite=false,practice=false){
  return {x,y,vx:0,vy:0,r:def.r*(elite?1.4:1),shape,origins:null,elite,mass:def.mass*(elite?2:1),hp:maxHp,maxHp,phaseIn:practice?.35:1.15,healGlow:0,cool:0,impactCooldown:0,playerHealCooldown:0,elementCooldown:0,poisonTimer:0,magnetMode:1,magnetCooldown:0,bombTimer:0,spongeEnergy:0,specialCooldown:0,regenPulse:0,shootClock:1+Math.random(),laserClock:2+Math.random(),laserState:'cooldown',laserTime:0,laserAngle:0,strafe:Math.random()<.5?-1:1,biomeClock:2+Math.random()*2};
 }
 function spawn(forcedShape=null){
- for(let n=0;n<100;n++){
+ for(let n=0;n<230;n++){
   const x=26+Math.random()*(W-52),y=26+Math.random()*(F-52);
   if(Math.hypot(x-p.x,y-p.y)<100||blocked(x,y,16)||breakables.some(o=>!o.broken&&Math.hypot(o.x-x,o.y-y)<PROP_DEFS[o.kind].r+18))continue;
   let shape=forcedShape;
   if(!shape){
-   if(selectedBiome&&Math.random()<.78){const pool=currentBiome().enemies;shape=pool[Math.floor(Math.random()*pool.length)]}
-   else{const pool=['square','round','healer','merge','splitter','armored','fire','water','electric','rubber','poison','magnet','crystal','bomb','mirror','sponge','regenerator','bloodletter','gravity',...RANGED.filter(id=>!BIOME_ENEMIES[id])];shape=pool[Math.floor(Math.random()*pool.length)]}
+   // Most dungeon inhabitants are ordinary melee fodder. Keep rare abilities meaningful.
+   if(Math.random()<.81)shape=Math.random()<.58?'square':'round';
+   else if(selectedBiome){
+    const pool=currentBiome().enemies.filter(id=>id!=='square'&&id!=='round');shape=pool[Math.floor(Math.random()*pool.length)]||'round';
+   }else{
+    const pool=['healer','merge','splitter','armored','fire','water','electric','rubber','poison','magnet','crystal','bomb','mirror','sponge','regenerator','bloodletter','gravity',...RANGED.filter(id=>!BIOME_ENEMIES[id])];
+    shape=pool[Math.floor(Math.random()*pool.length)];
+   }
   }
-  const e=makeEnemy(shape,x,y,Math.random()<.17);
+  const e=makeEnemy(shape,x,y,Math.random()<.07);
   if(blocked(x,y,e.r+2)||holes.some(h=>Math.hypot(h.x-x,h.y-y)<h.r+e.r+8)||portals.some(q=>Math.hypot(q.x-x,q.y-y)<e.r+20)||enemies.some(other=>Math.hypot(other.x-x,other.y-y)<other.r+e.r+6))continue;
-  if(shape!=='square'&&!BIOME_ENEMIES[shape]&&Math.random()<.2){const choices=HYBRID_ORIGINS.filter(id=>id!=='square'&&id!==shape);e.origins=[shape,choices[Math.floor(Math.random()*choices.length)]]}
+  if(shape!=='square'&&!BIOME_ENEMIES[shape]&&Math.random()<.07){const choices=HYBRID_ORIGINS.filter(id=>id!=='square'&&id!==shape);e.origins=[shape,choices[Math.floor(Math.random()*choices.length)]]}
   enemies.push(e);return e;
  }
  return null;
@@ -1309,12 +1315,12 @@ function setupDashUI(){
 const walls=[],holes=[],portals=[];let fallingFx=[];
 const ROOM_SHAPES={
  start:{name:'START ROOM',w:320,h:320,count:0},
- square:{name:'SQUARE',w:480,h:480,count:6},
- big:{name:'BIG SQUARE',w:720,h:720,count:10},
- wide:{name:'RECTANGLE',w:760,h:440,count:8},
- tall:{name:'RECTANGLE',w:440,h:760,count:8},
+ square:{name:'SQUARE',w:480,h:480,count:12},
+ big:{name:'BIG SQUARE',w:720,h:720,count:20},
+ wide:{name:'RECTANGLE',w:760,h:440,count:16},
+ tall:{name:'RECTANGLE',w:440,h:760,count:16},
  boss:{name:'BOSS CHAMBER',w:720,h:640,count:0},treasure:{name:'TREASURE ROOM',w:360,h:360,count:0},shop:{name:'SHOP',w:520,h:360,count:0},
- cursed:{name:'CURSED CHAMBER',w:680,h:500,count:11}
+ cursed:{name:'CURSED CHAMBER',w:680,h:500,count:22}
 };
 const CURSE_TYPES={
  float:{name:'ZERO GRAVITY',hint:'Bodies drift and keep momentum'},
@@ -1899,7 +1905,7 @@ function enterRoom(id,entry=null){
  doorCooldown=.7;inv=Math.max(inv||0,.9);
  sticks.forEach(stick=>{stick.dx=stick.dy=0});
  if(currentRoom.kind==='start')playerBleed=[];
- if(!currentRoom.cleared){if(currentRoom.kind==='boss')startBossFight(currentRoom.bossKind);else for(let i=0;i<currentRoom.count;i++)spawn(selectedBiome&&i<2?currentBiome().enemies[i]:null);}
+ if(!currentRoom.cleared){if(currentRoom.kind==='boss')startBossFight(currentRoom.bossKind);else{const wanted=Math.max(currentRoom.count,ROOM_SHAPES[currentRoom.shape]?.count||0);currentRoom.count=wanted;for(let i=0;i<wanted;i++)spawn(selectedBiome&&i===0?currentBiome().enemies[0]:null)}}
  if(!loadingRun&&changedRoom)refillRoomShield();hud();clearRoomDash();resetRoomSynergies();queueCheckpoint();
 }
 function nextDungeon(biome){
@@ -2491,16 +2497,30 @@ if(d<radius&&d>m.r+5){let f=90*(1-d/radius)*dt;p.kvx=(p.kvx||0)+dx/d*f*mode;p.kv
 for(let e of enemies){if(e.hp<=0)continue;updateBiomeEnemy(e,dt);if((e.bleedStacks||0)>0&&e.hp>0){e.bleedTick=(e.bleedTick||0)+dt;e.bleedGlow=Math.max(0,(e.bleedGlow||0)-dt);if(e.bleedTick>=.5){e.hp-=Math.min(3,.12*e.bleedStacks)*e.bleedTick;e.bleedTick=0;e.bleedGlow=.25}}if(e.shape==='regenerator'&&e.hp>0&&e.hp<e.maxHp){e.hp=Math.min(e.maxHp,e.hp+1.1*dt);e.regenPulse=.35}e.regenPulse=Math.max(0,(e.regenPulse||0)-dt);e.phaseIn=Math.max(0,(e.phaseIn||0)-dt);e.fusionCooldown=Math.max(0,(e.fusionCooldown||0)-dt);e.splitCooldown=Math.max(0,(e.splitCooldown||0)-dt);e.specialCooldown=Math.max(0,(e.specialCooldown||0)-dt);if(e.bombTimer>0){e.bombTimer-=dt;if(e.bombTimer<=0){shockwave(e,e.elite?440:310,e.elite?145:105);e.hp=0}}e.magnetCooldown=Math.max(0,(e.magnetCooldown||0)-dt);e.poisonGlow=Math.max(0,(e.poisonGlow||0)-dt);if(e.shape!=='poison'&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r))e.poisonGlow=.24;e.poisonTimer=Math.max(0,(e.poisonTimer||0)-dt);if(e.shape!=='poison'&&e.poisonTimer<=0&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r)){if(canDamage(e,115)){e.hp-=1;e.cool=Math.max(e.cool,.12)}e.poisonTimer=.7}e.elementCooldown=Math.max(0,(e.elementCooldown||0)-dt);e.cool=Math.max(0,e.cool-dt);e.impactCooldown=Math.max(0,e.impactCooldown-dt);e.playerHealCooldown=Math.max(0,e.playerHealCooldown-dt);e.healGlow=Math.max(0,e.healGlow-dt);let target=e.bossMinion&&bossFight?bossFight.units.filter(u=>u.hp>0).sort((a,b)=>Math.hypot(a.x-e.x,a.y-e.y)-Math.hypot(b.x-e.x,b.y-e.y))[0]||p:p;let dx=target.x-e.x,dy=target.y-e.y,d=Math.hypot(dx,dy)||1;
 // Movement and attacks can be tested independently in the sandbox.
 if(e.shape==='laser'){
- if(enemyMovementEnabled()){let ideal=145,dir=d<ideal-22?-1:d>ideal+25?1:0;if(e.laserState==='charge'||e.laserState==='fire'){e.vx*=Math.exp(-8*dt);e.vy*=Math.exp(-8*dt)}else{e.vx+=dx/d*dir*45*dt;e.vy+=dy/d*dir*45*dt}}
+ if(enemyMovementEnabled()){
+  const ideal=145,hasSight=navigationSight(e.x,e.y,target.x,target.y,12),dir=d<ideal-22?-1:d>ideal+25||!hasSight?1:0;
+  if(e.laserState==='charge'||e.laserState==='fire'){e.vx*=Math.exp(-8*dt);e.vy*=Math.exp(-8*dt)}
+  else if(dir){const steer=dir>0?navigationVector(e,target):navigationAvoid(e,-dx/d,-dy/d);e.vx+=steer.x*60*dt;e.vy+=steer.y*60*dt}
+ }
 }else if(RANGED.includes(e.shape)){
  if(enemyMovementEnabled()){
-  let threat=projectiles.find(q=>q.reflected&&Math.hypot(q.x-e.x,q.y-e.y)<95&&((q.x-e.x)*q.vx+(q.y-e.y)*q.vy)>0)||artillery.find(a=>a.life<.7&&Math.hypot(a.x-e.x,a.y-e.y)<a.r+35)||enemies.find(t=>t!==e&&t.mass>e.mass*2.1&&Math.hypot(t.x-e.x,t.y-e.y)<55);
-  if(threat){let ax=e.x-threat.x,ay=e.y-threat.y,ad=Math.hypot(ax,ay)||1;e.vx+=ax/ad*260*dt;e.vy+=ay/ad*260*dt;e.panicTime=.45}else e.panicTime=Math.max(0,(e.panicTime||0)-dt);
-  let ideal=e.shape==='cannon'?175:e.shape==='bloodcaster'?155:125,dir=d<ideal-18?-1:d>ideal+20?1:0;
-  if(e.panicTime>0){e.vx+=-dy/d*e.strafe*55*dt;e.vy+=dx/d*e.strafe*55*dt}else if(dir){e.vx+=dx/d*dir*65*dt;e.vy+=dy/d*dir*65*dt}else{e.vx+=-dy/d*e.strafe*17*dt;e.vy+=dx/d*e.strafe*17*dt}
+  const threat=projectiles.find(q=>q.reflected&&Math.hypot(q.x-e.x,q.y-e.y)<95&&((q.x-e.x)*q.vx+(q.y-e.y)*q.vy)>0)||artillery.find(a=>a.life<.7&&Math.hypot(a.x-e.x,a.y-e.y)<a.r+35)||enemies.find(t=>t!==e&&t.mass>e.mass*2.1&&Math.hypot(t.x-e.x,t.y-e.y)<55);
+  if(threat){const ax=e.x-threat.x,ay=e.y-threat.y,ad=Math.hypot(ax,ay)||1,steer=navigationAvoid(e,ax/ad,ay/ad);e.vx+=steer.x*260*dt;e.vy+=steer.y*260*dt;e.panicTime=.45}
+  else e.panicTime=Math.max(0,(e.panicTime||0)-dt);
+  const ideal=e.shape==='cannon'?175:e.shape==='bloodcaster'?155:125,hasSight=navigationSight(e.x,e.y,target.x,target.y,11),dir=d<ideal-18?-1:d>ideal+20||!hasSight?1:0;
+  let steer;
+  if(e.panicTime>0)steer=navigationAvoid(e,-dy/d*e.strafe,dx/d*e.strafe);
+  else if(dir)steer=dir>0?navigationVector(e,target):navigationAvoid(e,-dx/d,-dy/d);
+  else steer=navigationAvoid(e,-dy/d*e.strafe,dx/d*e.strafe);
+  const force=e.panicTime>0?55:dir?70:22;
+  e.vx+=steer.x*force*dt;e.vy+=steer.y*force*dt;
  }
  if(enemyAttacksEnabled()){e.shootClock-=dt;if(e.shootClock<=0&&d<265&&e.phaseIn<=0){fireRanged(e);e.shootClock=(e.shape==='cannon'?3.9:e.shape==='scatter'?2.7:e.shape==='seeker'?3.2:2.35)*(e.elite?.8:1)}}
-}else if(enemyMovementEnabled()&&d>21){e.vx+=dx/d*43*dt;e.vy+=dy/d*43*dt}
+}else if(enemyMovementEnabled()&&d>21){
+ const steer=navigationVector(e,target),avoid=navigationAvoid(e,steer.x,steer.y);
+ e.vx+=avoid.x*62*dt;e.vy+=avoid.y*62*dt;
+}
+navigationSeparation(e,dt);
 let puddleBoost=puddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r)?1.55:1;
 let damp=Math.exp((curseActive('float')?-.09:-.38)*dt);e.vx*=damp;e.vy*=damp;let speed=Math.hypot(e.vx,e.vy);if(speed>270){e.vx*=270/speed;e.vy*=270/speed}
 let oldEX=e.x,oldEY=e.y;e.x+=e.vx*dt*puddleBoost*((e.slowUntil||0)>arenaTime?.6:1);e.y+=e.vy*dt*puddleBoost*((e.slowUntil||0)>arenaTime?.6:1);
