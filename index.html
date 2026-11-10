@@ -1781,7 +1781,7 @@ function enterRoom(id,entry=null){
  makeRoomLayout(currentRoom);decorateBiomeLayout(currentRoom);makeBiomeTerrain(currentRoom);curseTimers={};prepareRoomLoot(currentRoom);coinDrops=currentRoom.coinDrops||[];damageNumbers=[];nearestLoot=null;document.querySelector('#loot-panel').hidden=true;
  const x=entry==='west'?62:entry==='east'?W-62:W/2;
  const y=entry==='north'?62:entry==='south'?F-62:F/2;
- p={...p,x,y,vx:0,vy:0,kvx:0,kvy:0,sticky:null,wallContacts:new Set(),wallCooldowns:new Map(),portalCooldown:0,falling:0,slowUntil:0};
+ p={...p,x,y,safeX:x,safeY:y,fallReturn:null,vx:0,vy:0,kvx:0,kvy:0,sticky:null,wallContacts:new Set(),wallCooldowns:new Map(),portalCooldown:0,falling:0,slowUntil:0};
  enemies=[];pendingSplits=[];projectiles=[];artillery=[];gravityWells=[];reactionZones=[];bossFight=null;
  healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];shards=[];portalFx=[];fallingFx=[];poisonPlayerTimer=0;playerPoisonGlow=0;
  doorCooldown=.7;inv=Math.max(inv||0,.9);
@@ -1891,7 +1891,7 @@ function drawRoomMap(){
  const x=viewW-116,y=186,boxW=104,boxH=82,scale=Math.min((boxW-14)/W,(boxH-14)/F);
  const ox=x+(boxW-W*scale)/2,oy=y+(boxH-F*scale)/2;
  g.save();g.fillStyle='#100e1de8';g.fillRect(x,y,boxW,boxH);
- g.fillStyle=currentRoom.kind==='boss'?'#492536':'#312b43';g.fillRect(ox,oy,W*scale,F*scale);g.strokeStyle='#88779d';g.lineWidth=1;g.strokeRect(ox,oy,W*scale,F*scale);
+ g.fillStyle=currentRoom.kind==='boss'?'#492536':'#312b43';g.fillRect(ox,oy,W*scale,F*scale);g.strokeStyle='#88779d';g.lineWidth=1;g.strokeRect(ox,oy,W*scale,F*scale);g.fillStyle='#08070f';for(const a of floorGaps)g.fillRect(ox+a.x*scale,oy+a.y*scale,a.w*scale,a.h*scale);g.fillStyle='#9d9298';for(const a of floorBridges)g.fillRect(ox+a.x*scale,oy+a.y*scale,a.w*scale,a.h*scale);
  for(const door of roomDoors()){const biome=BIOME_PATHS.find(path=>path.id===door.biome);g.fillStyle=door.kind==='sandbox'||door.kind==='sandboxExit'?'#79ddff':biome?biome.color:currentRoom.cleared?'#75f2bd':'#f58b99';g.fillRect(ox+door.x*scale-3,oy+door.y*scale-3,6,6)}
  g.fillStyle='#ed7a98';for(const enemy of enemies){if(enemy.hp>0){g.beginPath();g.arc(ox+enemy.x*scale,oy+enemy.y*scale,1.5,0,Math.PI*2);g.fill()}}
  if(bossFight&&!bossFight.done){g.fillStyle='#ffbc70';for(const unit of bossFight.units)if(unit.hp>0){g.beginPath();g.arc(ox+unit.x*scale,oy+unit.y*scale,3,0,Math.PI*2);g.fill()}}
@@ -1974,6 +1974,41 @@ function steamBurst(x,y){elementFx.push({type:'steam',x,y,life:.9,maxLife:.9})}
 function canDamage(e,speed){return speed>=(e.elite?145:enemyDefinition(e.shape).armour||0)}
 const WALL_HIT_COOLDOWN=.085;
 // Pits behave like solid circular obstacles. Only a sufficiently fast, small body can break through.
+
+function nearRect(x,y,r,a){let px=clamp(x,a.x,a.x+a.w),py=clamp(y,a.y,a.y+a.h);return Math.hypot(x-px,y-py)<r}
+function safeRespawn(){
+ const points=[[p.safeX,p.safeY],[W/2,F/2],[62,F/2],[W-62,F/2],[W/2,62],[W/2,F-62]];
+ for(const [x,y] of points)if(Number.isFinite(x)&&Number.isFinite(y)&&safeFloor(x,y,13))return{x,y};
+ for(let radius=24;radius<Math.max(W,F);radius+=20)for(let i=0;i<24;i++){const a=i*Math.PI/12,x=clamp(W/2+Math.cos(a)*radius,32,W-32),y=clamp(F/2+Math.sin(a)*radius,32,F-32);if(safeFloor(x,y,13))return{x,y}}
+ return{x:W/2,y:F/2};
+}
+function fallIntoPit(body,x,y,isPlayer=false){
+ fallingFx.push({x:body.x,y:body.y,tx:x,ty:y,r:body.r,life:.46,maxLife:.46,color:isPlayer?'#fff':body.shape==='merge'?'#b388fa':'#ffbb78'});
+ if(isPlayer){p.falling=.46;p.fallReturn=safeRespawn();p.kvx=p.kvy=0;inv=Math.max(inv,1.2)}
+ else{body.hp=0;body.fellInHole=true;recordEnemyKill(body)}
+ return true;
+}
+function collideGap(body,oldX,oldY,isPlayer=false){
+ if(!floorGaps.length)return false;
+ const distance=Math.hypot(body.x-oldX,body.y-oldY),steps=Math.max(1,Math.min(120,Math.ceil(distance/5)));
+ for(let i=0;i<=steps;i++){const x=oldX+(body.x-oldX)*i/steps,y=oldY+(body.y-oldY)*i/steps;if(floorVoid(x,y))return fallIntoPit(body,x,y,isPlayer)}
+ return false;
+}
+function updateFloorTraps(){
+ if(!floorTraps.length||currentRoom?.cleared||!enemyAttacksEnabled()||over)return;
+ for(const t of floorTraps){
+  const phase=(arenaTime+t.phase)%3.5;if(phase<1.8||phase>=2.65)continue;
+  if(!p.falling&&inv<=0&&nearRect(p.x,p.y,8,t)){hp=damagedHealth(7);inv=.7;if(hp<=0)over=true}
+  for(const e of enemies)if(e.hp>0&&nearRect(e.x,e.y,e.r,t)&&(e.floorHitUntil||0)<=arenaTime){e.hp-=1;e.floorHitUntil=arenaTime+.8}
+ }
+}
+function drawRoomTerrain(){
+ g.save();
+ for(const a of floorGaps){g.fillStyle='#090812';g.fillRect(a.x,a.y,a.w,a.h);g.strokeStyle='#6b586d';g.lineWidth=3;g.strokeRect(a.x,a.y,a.w,a.h)}
+ for(const a of floorBridges){g.fillStyle='#5b5264';g.fillRect(a.x,a.y,a.w,a.h);g.strokeStyle='#c3b6af';g.lineWidth=2;g.strokeRect(a.x,a.y,a.w,a.h)}
+ for(const a of floorTraps){const ph=(arenaTime+a.phase)%3.5,active=!currentRoom.cleared&&ph>=1.8&&ph<2.65,warning=!currentRoom.cleared&&ph>=1.2&&ph<1.8;g.fillStyle=active?'#b24353':warning?'#a37843':'#342839';g.fillRect(a.x,a.y,a.w,a.h);g.strokeStyle=active?'#ffb0a5':'#816478';g.lineWidth=2;g.strokeRect(a.x,a.y,a.w,a.h)}
+ g.restore();
+}
 function collideHole(body,oldX,oldY,speed,isPlayer=false){
 for(let h of holes){
 let dx=body.x-oldX,dy=body.y-oldY,travel=dx*dx+dy*dy;
@@ -1985,9 +2020,7 @@ let sizeFits=body.r<h.r-2;
 let centerDistance=Math.hypot(cx-h.x,cy-h.y);
 let toward=(dx*(h.x-oldX)+dy*(h.y-oldY))>0;
 if(sizeFits&&speed>=135&&toward&&centerDistance<reach){
-fallingFx.push({x:body.x,y:body.y,tx:h.x,ty:h.y,r:body.r,life:.58,maxLife:.58,color:isPlayer?'#ffffff':body.shape==='merge'?'#b388fa':'#ffbb78'});
-if(isPlayer){p.falling=.58;p.kvx=0;p.kvy=0}else{body.hp=0;body.fellInHole=true;recordEnemyKill(body)}
-return true;
+return fallIntoPit(body,h.x,h.y,isPlayer);
 }
 // Solid rim: stop at the edge, never allow slow walking or oversized bodies across.
 let nx=oldX-h.x,ny=oldY-h.y,n=Math.hypot(nx,ny);
@@ -2043,7 +2076,7 @@ if(vn<0){if(newContact&&!remaining){let restitution=(curseActive('pinball')?(w.t
 else{e.vx-=vn*nx;e.vy-=vn*ny}}
 return remaining||!newContact?0:impact
 }
-function blocked(x,y,r){return walls.some(w=>x+r>w.x&&x-r<w.x+w.w&&y+r>w.y&&y-r<w.y+w.h)}
+function blocked(x,y,r){return !safeFloor(x,y,r)}
 // Visibility polygon: rays stop at dungeon walls, never at enemies.
 const FOG_RADIUS=154,FOG_DARKNESS=1;
 // Hidden fog-of-war switch. Set true to re-enable darkness.
@@ -2111,7 +2144,7 @@ document.querySelector('#control-opacity').oninput=e=>{controls.opacity=Number(e
 document.querySelector('#floating-controls').onchange=e=>{controls.floating=e.target.checked;saveControls()};
 document.querySelector('#controls-reset').onclick=()=>{controls={...defaultControls,positions:defaultControls.positions.map(a=>[...a])};dashControl={x:.78,y:.76};syncControls();saveDashControl();saveControls()};async function goFullscreen(){try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock)await screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}document.querySelector('#fullscreen-toggle').onclick=goFullscreen;document.querySelector('#rotate-fullscreen').onclick=goFullscreen;
 function frame(t){const damageBefore=captureDamage(),oldPlayerHp=hp;const protectedPracticeHp=inSandbox()&&!sandbox.attacks?hp:null;pendingSplits=[];let dt=Math.min((t-last)/1000||0,.035);last=t;if(shieldPaused||!document.querySelector('#character-panel').hidden||persistencePaused()){requestAnimationFrame(frame);return}
-if(settings.hidden&&!editingControls&&document.querySelector('#sandbox-panel').hidden){recordVisibleEncounters();arenaTime+=dt;updateSynergies(dt);if(!over){updateItemEffects(dt);updateBiomeWorld(dt);updateCurses(dt)}if(!over){shieldUpdate(dt);rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage)}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&(regenWhileBleeding||playerBleed.length===0)){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){hp=0;over=true}}
+if(settings.hidden&&!editingControls&&document.querySelector('#sandbox-panel').hidden){recordVisibleEncounters();arenaTime+=dt;updateSynergies(dt);if(!over){updateItemEffects(dt);updateBiomeWorld(dt);updateCurses(dt);updateFloorTraps()}if(!over){shieldUpdate(dt);rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage)}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&(regenWhileBleeding||playerBleed.length===0)){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){const where=p.fallReturn||safeRespawn();p.x=where.x;p.y=where.y;p.safeX=p.x;p.safeY=p.y;p.kvx=p.kvy=p.vx=p.vy=0;p.sticky=null;p.wallContacts=new Set();p.wallCooldowns=new Map();p.portalCooldown=1;p.fallReturn=null;hp=Math.max(0,hp-25);inv=Math.max(inv,1.5);if(hp<=0)over=true;showItemNotice('FELL INTO THE ABYSS · -25 HP')}}
 healFx=healFx.filter(f=>(f.life-=dt)>0);wallFx=wallFx.filter(f=>{f.life-=dt;if(f.type==='particle'){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.exp(-5*dt);f.vy*=Math.exp(-5*dt)}return f.life>0});elementFx=elementFx.filter(f=>(f.life-=dt)>0);puddles=puddles.filter(q=>(q.life-=dt)>0);poisonPuddles=poisonPuddles.filter(q=>(q.life-=dt)>0);
 if(!over&&!p.falling){let l=sticks[0],r=sticks[1],ox=p.x,oy=p.y;
 poisonPlayerTimer=Math.max(0,poisonPlayerTimer-dt);playerPoisonGlow=Math.max(0,playerPoisonGlow-dt);
@@ -2122,7 +2155,7 @@ p.kvx=(p.kvx||0)*Math.exp(-(curseActive('float')?2:groundSlideFactor()>1?3:6)*dt
 if(!moveDash(dt)){p.x=clamp(p.x+(l.dx*playerStats().moveSpeed*(arenaTime<(p.slowUntil||0)?.58:1)*slideBoost+p.kvx)*dt,23,W-23);p.y=clamp(p.y+(l.dy*playerStats().moveSpeed*(arenaTime<(p.slowUntil||0)?.58:1)*slideBoost+p.kvy)*dt,23,F-23);}
 let playerBody={x:p.x,y:p.y,vx:l.dx*playerStats().moveSpeed*slideBoost+p.kvx,vy:l.dy*playerStats().moveSpeed*slideBoost+p.kvy,r:9,isPlayer:true,knockbackSpeed:Math.hypot(p.kvx,p.kvy),sticky:p.sticky||null,wallCooldowns:p.wallCooldowns||new Map(),wallContacts:p.wallContacts||new Set(),portalCooldown:p.portalCooldown||0};
 for(let w of walls){let impact=collideWall(playerBody,w,dt);if(w.type==='spike'&&impact>90&&Math.hypot(p.kvx,p.kvy)>95&&inv<=0){let damage=impact>180?16:impact>130?10:5;hp=damagedHealth(damage);inv=.7;if(hp<=0)over=true}}
-collideHole(playerBody,ox,oy,Math.hypot(playerBody.vx,playerBody.vy),true);if(!p.falling)teleportBody(playerBody,dt);p.portalCooldown=playerBody.portalCooldown;p.x=playerBody.x;p.y=playerBody.y;p.sticky=playerBody.sticky;p.wallCooldowns=playerBody.wallCooldowns;p.wallContacts=playerBody.wallContacts;p.vx=(p.x-ox)/Math.max(dt,.001);p.vy=(p.y-oy)/Math.max(dt,.001);
+if(!collideGap(playerBody,ox,oy,true))collideHole(playerBody,ox,oy,Math.hypot(playerBody.vx,playerBody.vy),true);if(!p.falling)teleportBody(playerBody,dt);p.portalCooldown=playerBody.portalCooldown;p.x=playerBody.x;p.y=playerBody.y;p.sticky=playerBody.sticky;p.wallCooldowns=playerBody.wallCooldowns;p.wallContacts=playerBody.wallContacts;p.vx=(p.x-ox)/Math.max(dt,.001);p.vy=(p.y-oy)/Math.max(dt,.001);if(!p.falling&&safeFloor(p.x,p.y,19)){p.safeX=p.x;p.safeY=p.y}
 if(Math.hypot(r.dx,r.dy)>.15)p.target=Math.atan2(r.dy,r.dx);
 let diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a)),force=Math.sign(diff)*Math.min(1,Math.abs(diff)*1.6);
 let previousBatAngle=p.a;p.vel=clamp(p.vel+(force*23*playerStats().swing-p.vel*3.1)*dt,-7.4*playerStats().swing,7.4*playerStats().swing);if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
@@ -2155,7 +2188,7 @@ let oldEX=e.x,oldEY=e.y;e.x+=e.vx*dt*puddleBoost*((e.slowUntil||0)>arenaTime?.6:
 if(e.x<18+e.r){e.x=18+e.r;e.vx=Math.abs(e.vx)*.85}if(e.x>W-18-e.r){e.x=W-18-e.r;e.vx=-Math.abs(e.vx)*.85}
 if(e.y<18+e.r){e.y=18+e.r;e.vy=Math.abs(e.vy)*.85}if(e.y>F-18-e.r){e.y=F-18-e.r;e.vy=-Math.abs(e.vy)*.85}
 for(let w of walls)collideWall(e,w,dt);
-if(collideHole(e,oldEX,oldEY,Math.hypot(e.vx,e.vy)))continue;teleportBody(e,dt);
+if(collideGap(e,oldEX,oldEY)||collideHole(e,oldEX,oldEY,Math.hypot(e.vx,e.vy)))continue;teleportBody(e,dt);
 let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(e.shape!=='healer'&&!RANGED.includes(e.shape)){let push=Math.min(240,Math.max(65,Math.hypot(e.vx-p.vx,e.vy-p.vy)*.8));p.kvx-=nx*push;p.kvy-=ny*push;}if(e.shape==='healer'){let speed=Math.hypot(e.vx-p.vx,e.vy-p.vy);if(PLAYER_HEALING_ENABLED&&speed>50&&e.playerHealCooldown<=0){let oldHp=hp;hp=Math.min(playerStats().maxHealth,hp+Math.min(18,Math.floor((speed-35)/13)));if(hp>oldHp)showHeal(p.x,p.y);e.playerHealCooldown=.65}}else if(enemyAttacksEnabled()&&!RANGED.includes(e.shape)&&inv===0){if(e.shape==='bloodletter'){playerBleed.push({remaining:12,rate:2});inv=1.1}else{hp=damagedHealth(8);inv=1.1;if(hp<=0)over=true}}}
 // Solid bat: sweep its full arc so fast swings cannot tunnel through enemies.
 let sweep=p.a-previousBatAngle,steps=Math.max(1,Math.ceil(Math.abs(sweep)/.055)),hit=false;
@@ -2233,7 +2266,7 @@ g.translate(viewW/2-p.x,VIEW_F/2-p.y);
 g.fillStyle=currentRoom.kind==='boss'?'#21131e':currentRoom.kind==='cursed'?'#1d1129':'#191724';g.fillRect(0,0,W,F);
 for(let y=14;y<F-10;y+=25)for(let x=12;x<W-10;x+=25){const alternate=((x+y)/25|0)%2;g.fillStyle=currentRoom.kind==='boss'?(alternate?currentBiome().floor[0]:currentBiome().floor[1]):currentRoom.kind==='start'?(alternate?'#263b36':'#2c443d'):currentRoom.kind==='cursed'?(alternate?'#2b1b3a':'#352148'):(alternate?currentBiome().floor[0]:currentBiome().floor[1]);g.fillRect(x,y,24,24)}
 g.strokeStyle=currentRoom.kind==='boss'?'#c79460':currentRoom.kind==='start'?'#6c9c88':currentRoom.kind==='cursed'?'#a56bda':currentBiome().edge;g.lineWidth=9;g.strokeRect(8,8,W-16,F-16);
-drawRoomDecor();drawEconomyRoomDecor();drawSandboxEconomySigns();drawBiomeWorld();drawLoot();drawBossHazards();drawRoomDoors();
+drawRoomTerrain();drawRoomDecor();drawEconomyRoomDecor();drawSandboxEconomySigns();drawBiomeWorld();drawLoot();drawBossHazards();drawRoomDoors();
 for(let h of holes){g.save();g.fillStyle='#08070d';g.shadowColor='#000';g.shadowBlur=14;g.beginPath();g.ellipse(h.x,h.y,h.r,h.r*.82,0,0,Math.PI*2);g.fill();g.shadowBlur=0;g.strokeStyle='#74617b';g.lineWidth=4;g.beginPath();g.ellipse(h.x,h.y,h.r,h.r*.82,0,0,Math.PI*2);g.stroke();g.restore()}
 for(let a of artillery){let t=1-a.life/a.maxLife;g.save();g.strokeStyle='#ff7058';g.lineWidth=2+t*2;g.globalAlpha=.45+.5*t;g.beginPath();g.arc(a.x,a.y,a.r*(.6+.4*t),0,Math.PI*2);g.stroke();g.beginPath();g.moveTo(a.x-6,a.y);g.lineTo(a.x+6,a.y);g.moveTo(a.x,a.y-6);g.lineTo(a.x,a.y+6);g.stroke();g.fillStyle='#e8bd8b';g.beginPath();g.arc(a.startX+(a.x-a.startX)*t,a.startY+(a.y-a.startY)*t-55*Math.sin(Math.PI*t),6+3*Math.sin(Math.PI*t),0,Math.PI*2);g.fill();g.restore()}
 for(let e of enemies){if(e.shape!=='laser'||e.hp<=0||(e.laserState!=='charge'&&e.laserState!=='fire'))continue;let firing=e.laserState==='fire';g.save();g.lineCap='round';g.strokeStyle=firing?'#ff2879':'#ff8cae';g.lineWidth=firing?6:1.5;g.globalAlpha=firing?.82:.4;g.shadowColor='#ff3580';g.shadowBlur=firing?14:0;for(let seg of shieldLaserLines(laserPath(e.x,e.y,e.laserAngle))){g.beginPath();g.moveTo(seg.x1,seg.y1);g.lineTo(seg.x2,seg.y2);g.stroke()}if(firing){g.shadowBlur=0;g.strokeStyle='#fff4fb';g.lineWidth=2;for(let seg of laserPath(e.x,e.y,e.laserAngle)){g.beginPath();g.moveTo(seg.x1,seg.y1);g.lineTo(seg.x2,seg.y2);g.stroke()}}g.restore()}
