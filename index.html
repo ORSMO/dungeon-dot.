@@ -134,7 +134,7 @@ let count=kind==='scatter'?3:1;for(let k=0;k<count;k++){let a=angle+(k-(count-1)
 function rangedUpdate(dt){if(!enemyAttacksEnabled())return;for(let a of artillery){a.life-=dt;if(a.life<=0){if(Math.hypot(p.x-a.x,p.y-a.y)<a.r+7&&inv<=0){hp=damagedHealth(13);inv=.55;if(hp<=0)over=true}for(let e of enemies){if(e!==a.owner&&e.hp>0&&Math.hypot(e.x-a.x,e.y-a.y)<a.r+e.r&&canDamage(e,150))e.hp-=2}elementFx.push({type:'fire',x:a.x,y:a.y,r:0,life:.38,maxLife:.38})}}artillery=artillery.filter(a=>a.life>0);
 for(let q of projectiles){q.life-=dt;if(q.life<=0)continue;if(q.kind==='seeker'){let target=q.reflected?enemies.filter(e=>e.hp>0).sort((a,b)=>Math.hypot(a.x-q.x,a.y-q.y)-Math.hypot(b.x-q.x,b.y-q.y))[0]:p;if(target){let a=Math.atan2(target.y-q.y,target.x-q.x),v=Math.hypot(q.vx,q.vy),cur=Math.atan2(q.vy,q.vx),diff=Math.atan2(Math.sin(a-cur),Math.cos(a-cur)),next=cur+Math.max(-1.8*dt,Math.min(1.8*dt,diff));q.vx=Math.cos(next)*v;q.vy=Math.sin(next)*v}}
 let ox=q.x,oy=q.y;const synergySpeed=synergyProjectileFactor(q);q.x+=q.vx*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;q.y+=q.vy*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;
-if(q.x<16||q.x>W-16||q.y<16||q.y>F-16){q.life=0;continue}
+if(q.x<16||q.x>W-16||q.y<16||q.y>F-16){q.life=0;continue}if(projectileHitsProp(q,ox,oy))continue
 let wall=walls.find(w=>q.x+q.r>w.x&&q.x-q.r<w.x+w.w&&q.y+q.r>w.y&&q.y-q.r<w.y+w.h);if(wall){if(q.kind==='spitter')poisonPuddles.push({x:q.x,y:q.y,r:23,life:2,maxLife:2});if(q.kind==='frostcaster'){let water=puddles.find(z=>Math.hypot(z.x-q.x,z.y-q.y)<z.r);if(water){water.life=Math.min(water.life,.3);triggerReaction('ice',water.x,water.y,water.r)}}if(q.kind==='cannon'){q.vx*=-.75;q.vy*=-.75;q.life-=.7}else q.life=0;continue}
 let angle=p.a,ux=Math.cos(angle),uy=Math.sin(angle),along=(q.x-p.x)*ux+(q.y-p.y)*uy,at=Math.max(16,Math.min(49,along)),bx=p.x+ux*at,by=p.y+uy*at;
 if(!q.reflected&&shieldHit(q.x,q.y,q.r)){shieldDamage(q.kind==='scatter'?8:q.kind==='seeker'?20:12);let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.45;q.vy=Math.sin(a)*speed*1.45;q.reflected=true;q.life=2.5;continue}
@@ -209,7 +209,7 @@ function makeEnemy(shape,x,y,elite=false,practice=false){
 function spawn(forcedShape=null){
  for(let n=0;n<100;n++){
   const x=26+Math.random()*(W-52),y=26+Math.random()*(F-52);
-  if(Math.hypot(x-p.x,y-p.y)<100||blocked(x,y,16))continue;
+  if(Math.hypot(x-p.x,y-p.y)<100||blocked(x,y,16)||breakables.some(o=>!o.broken&&Math.hypot(o.x-x,o.y-y)<PROP_DEFS[o.kind].r+18))continue;
   let shape=forcedShape;
   if(!shape){
    if(selectedBiome&&Math.random()<.78){const pool=currentBiome().enemies;shape=pool[Math.floor(Math.random()*pool.length)]}
@@ -1778,7 +1778,7 @@ function enterRoom(id,entry=null){
  if(currentRoom&&!inSandbox())currentRoom.coinDrops=coinDrops;
  currentRoom=id==='sandbox'?sandboxRoom:dungeon[id];currentRoom.visited=currentRoom.discovered=true;W=currentRoom.w;F=currentRoom.h;
  for(const door of currentRoom.doors)dungeon[door.to].discovered=true;
- makeRoomLayout(currentRoom);decorateBiomeLayout(currentRoom);makeBiomeTerrain(currentRoom);curseTimers={};prepareRoomLoot(currentRoom);coinDrops=currentRoom.coinDrops||[];damageNumbers=[];nearestLoot=null;document.querySelector('#loot-panel').hidden=true;
+ makeRoomLayout(currentRoom);decorateBiomeLayout(currentRoom);makeBiomeTerrain(currentRoom);curseTimers={};initRoomProps(currentRoom);prepareRoomLoot(currentRoom);coinDrops=currentRoom.coinDrops||[];damageNumbers=[];nearestLoot=null;document.querySelector('#loot-panel').hidden=true;
  const x=entry==='west'?62:entry==='east'?W-62:W/2;
  const y=entry==='north'?62:entry==='south'?F-62:F/2;
  p={...p,x,y,safeX:x,safeY:y,fallReturn:null,vx:0,vy:0,kvx:0,kvy:0,sticky:null,wallContacts:new Set(),wallCooldowns:new Map(),portalCooldown:0,falling:0,slowUntil:0};
@@ -1975,6 +1975,94 @@ function canDamage(e,speed){return speed>=(e.elite?145:enemyDefinition(e.shape).
 const WALL_HIT_COOLDOWN=.085;
 // Pits behave like solid circular obstacles. Only a sufficiently fast, small body can break through.
 
+
+const PROP_DEFS={pot:{r:12,hp:1,threshold:22,color:'#b78e7f',coins:1},crate:{r:16,hp:2,threshold:55,color:'#9f8053',coins:2},barrel:{r:15,hp:2,threshold:55,color:'#bd7159',coins:2},chest:{r:18,hp:3,threshold:60,color:'#dfbd68',coins:8}};
+function initRoomProps(room){
+ breakables=[];if(room.kind!=='combat')return;
+ if(!Array.isArray(room.props)){
+  room.props=[];let seed=((room.id+19)*912367+(room.layoutId+3)*379721+dungeonDepth*1273)>>>0;
+  const rand=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296};
+  const typeList=room.shape==='big'?['pot','pot','pot','pot','crate','crate','crate','barrel','barrel','chest']:room.shape==='square'?['pot','pot','pot','crate','crate','barrel','chest']:['pot','pot','pot','pot','crate','crate','barrel','barrel','chest'];
+  for(const kind of typeList){
+   const def=PROP_DEFS[kind];
+   for(let attempt=0;attempt<110;attempt++){
+    const x=45+rand()*(W-90),y=45+rand()*(F-90);
+    if(!safeFloor(x,y,def.r+10)||Math.hypot(x-W/2,y-F/2)<76)continue;
+    if(portals.some(q=>Math.hypot(q.x-x,q.y-y)<def.r+36)||floorTraps.some(t=>nearRect(x,y,def.r+10,t)))continue;
+    if([[62,F/2],[W-62,F/2],[W/2,62],[W/2,F-62]].some(([dx,dy])=>Math.hypot(x-dx,y-dy)<76))continue;
+    if(room.props.some(q=>Math.hypot(q.x-x,q.y-y)<def.r+PROP_DEFS[q.kind].r+19))continue;
+    room.props.push({id:'prop-'+room.id+'-'+room.props.length,kind,x,y,hp:def.hp,broken:false});break;
+   }
+  }
+ }
+ room.props=room.props.filter(o=>o&&PROP_DEFS[o.kind]&&Number.isFinite(o.x)&&Number.isFinite(o.y)&&o.x>=18&&o.x<=W-18&&o.y>=18&&o.y<=F-18).slice(0,24);
+ breakables=room.props;
+}
+function hitProp(o,power,source='hit'){
+ if(o.broken||!PROP_DEFS[o.kind]||power<PROP_DEFS[o.kind].threshold||(o.nextHit||0)>arenaTime)return false;
+ o.nextHit=arenaTime+.2;o.hp-=power>=170?2:1;
+ elementFx.push({type:'split',x:o.x,y:o.y,life:.23,maxLife:.23});
+ if(o.hp>0)return true;
+ o.broken=true;
+ const amount=PROP_DEFS[o.kind].coins+(o.kind==='chest'?Math.floor(Math.random()*4):Math.random()<.4?1:0);
+ if(!inSandbox())coinDrops.push({x:o.x,y:o.y,amount});
+ if(o.kind==='chest'&&!inSandbox()&&Math.random()<.35){
+  const items=Object.keys(ITEM_DEFS),unowned=items.filter(id=>!itemCount(id)),pool=unowned.length?unowned:items;
+  currentRoom.loot.push({id:'broken-'+o.id,kind:'item',key:pool[Math.floor(Math.random()*pool.length)],price:0,x:o.x,y:o.y,claimed:false});
+ }
+ if(o.kind==='barrel'){
+  shockwave(o,220,80);
+  for(const e of enemies)if(e.hp>0&&Math.hypot(e.x-o.x,e.y-o.y)<85+e.r)e.hp-=2;
+  if(!p.falling&&inv<=0&&Math.hypot(p.x-o.x,p.y-o.y)<90){hp=damagedHealth(10);inv=.65;if(hp<=0)over=true}
+  for(const other of breakables)if(!other.broken&&Math.hypot(other.x-o.x,other.y-o.y)<72)hitProp(other,210,'explosion');
+ }
+ queueCheckpoint();return true;
+}
+function hitPropsWithBat(start,end){
+ if(!breakables.length||Math.abs(p.vel)<.65)return;
+ const steps=Math.max(1,Math.ceil(Math.abs(end-start)/.05)),power=Math.abs(p.vel)*40;
+ for(const o of breakables){
+  if(o.broken)continue;
+  for(let i=0;i<=steps;i++){
+   const a=start+(end-start)*i/steps,ux=Math.cos(a),uy=Math.sin(a),at=clamp((o.x-p.x)*ux+(o.y-p.y)*uy,17,49);
+   if(Math.hypot(o.x-(p.x+ux*at),o.y-(p.y+uy*at))<PROP_DEFS[o.kind].r+6){hitProp(o,power,'bat');break}
+  }
+ }
+}
+function collideProps(body,isPlayer=false){
+ for(const o of breakables){
+  if(o.broken)continue;
+  const radius=PROP_DEFS[o.kind].r,dx=body.x-o.x,dy=body.y-o.y,d=Math.hypot(dx,dy)||.001,reach=radius+body.r;
+  if(d>=reach)continue;
+  const nx=dx/d,ny=dy/d,speed=Math.hypot(body.vx||0,body.vy||0);
+  if(!isPlayer&&speed>75)hitProp(o,speed,'enemy');
+  if(o.broken)continue;
+  body.x+=nx*(reach-d+.6);body.y+=ny*(reach-d+.6);
+  if(!isPlayer){const vn=body.vx*nx+body.vy*ny;if(vn<0){body.vx-=1.6*vn*nx;body.vy-=1.6*vn*ny}}
+  else{const vn=(p.kvx||0)*nx+(p.kvy||0)*ny;if(vn<0){p.kvx-=vn*nx;p.kvy-=vn*ny}}
+ }
+}
+function projectileHitsProp(q,oldX,oldY){
+ const dist=Math.hypot(q.x-oldX,q.y-oldY),steps=Math.max(1,Math.ceil(dist/6));
+ for(let i=0;i<=steps;i++){
+  const x=oldX+(q.x-oldX)*i/steps,y=oldY+(q.y-oldY)*i/steps;
+  const o=breakables.find(t=>!t.broken&&Math.hypot(t.x-x,t.y-y)<PROP_DEFS[t.kind].r+q.r);
+  if(o){hitProp(o,Math.max(100,Math.hypot(q.vx,q.vy)*.85),'projectile');q.life=0;return true}
+ }
+ return false;
+}
+function drawRoomProps(){
+ g.save();g.textAlign='center';g.textBaseline='middle';g.font='bold 13px monospace';
+ for(const o of breakables){
+  if(o.broken)continue;
+  const d=PROP_DEFS[o.kind];g.fillStyle=d.color;g.strokeStyle='#2a1c29';g.lineWidth=2;
+  if(o.kind==='pot'||o.kind==='barrel'){g.beginPath();g.arc(o.x,o.y,d.r,0,Math.PI*2);g.fill();g.stroke()}
+  else{g.fillRect(o.x-d.r,o.y-d.r,d.r*2,d.r*2);g.strokeRect(o.x-d.r,o.y-d.r,d.r*2,d.r*2)}
+  g.fillStyle='#2e2530';g.fillText(o.kind==='pot'?'P':o.kind==='crate'?'X':o.kind==='barrel'?'!':'$',o.x,o.y+1);
+  if(o.hp<d.hp){g.fillStyle='#f8c9ba';g.fillRect(o.x-d.r,o.y-d.r-5,d.r*2*o.hp/d.hp,2)}
+ }
+ g.restore();
+}
 function nearRect(x,y,r,a){let px=clamp(x,a.x,a.x+a.w),py=clamp(y,a.y,a.y+a.h);return Math.hypot(x-px,y-py)<r}
 function safeRespawn(){
  const points=[[p.safeX,p.safeY],[W/2,F/2],[62,F/2],[W-62,F/2],[W/2,62],[W/2,F-62]];
@@ -2155,11 +2243,11 @@ p.kvx=(p.kvx||0)*Math.exp(-(curseActive('float')?2:groundSlideFactor()>1?3:6)*dt
 if(!moveDash(dt)){p.x=clamp(p.x+(l.dx*playerStats().moveSpeed*(arenaTime<(p.slowUntil||0)?.58:1)*slideBoost+p.kvx)*dt,23,W-23);p.y=clamp(p.y+(l.dy*playerStats().moveSpeed*(arenaTime<(p.slowUntil||0)?.58:1)*slideBoost+p.kvy)*dt,23,F-23);}
 let playerBody={x:p.x,y:p.y,vx:l.dx*playerStats().moveSpeed*slideBoost+p.kvx,vy:l.dy*playerStats().moveSpeed*slideBoost+p.kvy,r:9,isPlayer:true,knockbackSpeed:Math.hypot(p.kvx,p.kvy),sticky:p.sticky||null,wallCooldowns:p.wallCooldowns||new Map(),wallContacts:p.wallContacts||new Set(),portalCooldown:p.portalCooldown||0};
 for(let w of walls){let impact=collideWall(playerBody,w,dt);if(w.type==='spike'&&impact>90&&Math.hypot(p.kvx,p.kvy)>95&&inv<=0){let damage=impact>180?16:impact>130?10:5;hp=damagedHealth(damage);inv=.7;if(hp<=0)over=true}}
-if(!collideGap(playerBody,ox,oy,true))collideHole(playerBody,ox,oy,Math.hypot(playerBody.vx,playerBody.vy),true);if(!p.falling)teleportBody(playerBody,dt);p.portalCooldown=playerBody.portalCooldown;p.x=playerBody.x;p.y=playerBody.y;p.sticky=playerBody.sticky;p.wallCooldowns=playerBody.wallCooldowns;p.wallContacts=playerBody.wallContacts;p.vx=(p.x-ox)/Math.max(dt,.001);p.vy=(p.y-oy)/Math.max(dt,.001);if(!p.falling&&safeFloor(p.x,p.y,19)){p.safeX=p.x;p.safeY=p.y}
+collideProps(playerBody,true);if(!collideGap(playerBody,ox,oy,true))collideHole(playerBody,ox,oy,Math.hypot(playerBody.vx,playerBody.vy),true);if(!p.falling)teleportBody(playerBody,dt);p.portalCooldown=playerBody.portalCooldown;p.x=playerBody.x;p.y=playerBody.y;p.sticky=playerBody.sticky;p.wallCooldowns=playerBody.wallCooldowns;p.wallContacts=playerBody.wallContacts;p.vx=(p.x-ox)/Math.max(dt,.001);p.vy=(p.y-oy)/Math.max(dt,.001);if(!p.falling&&safeFloor(p.x,p.y,19)){p.safeX=p.x;p.safeY=p.y}
 if(Math.hypot(r.dx,r.dy)>.15)p.target=Math.atan2(r.dy,r.dx);
 let diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a)),force=Math.sign(diff)*Math.min(1,Math.abs(diff)*1.6);
 let previousBatAngle=p.a;p.vel=clamp(p.vel+(force*23*playerStats().swing-p.vel*3.1)*dt,-7.4*playerStats().swing,7.4*playerStats().swing);if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
-updateBossFight(dt,previousBatAngle);
+hitPropsWithBat(previousBatAngle,p.a);updateBossFight(dt,previousBatAngle);
 // Magnetic force is distance-limited and capped to keep the arena playable.
 for(let m of enemies){if(!enemyAttacksEnabled()||m.shape!=='magnet'||m.hp<=0)continue;
 let radius=m.elite?115:88,strength=m.elite?185:135,mode=m.magnetMode||1;
@@ -2188,7 +2276,7 @@ let oldEX=e.x,oldEY=e.y;e.x+=e.vx*dt*puddleBoost*((e.slowUntil||0)>arenaTime?.6:
 if(e.x<18+e.r){e.x=18+e.r;e.vx=Math.abs(e.vx)*.85}if(e.x>W-18-e.r){e.x=W-18-e.r;e.vx=-Math.abs(e.vx)*.85}
 if(e.y<18+e.r){e.y=18+e.r;e.vy=Math.abs(e.vy)*.85}if(e.y>F-18-e.r){e.y=F-18-e.r;e.vy=-Math.abs(e.vy)*.85}
 for(let w of walls)collideWall(e,w,dt);
-if(collideGap(e,oldEX,oldEY)||collideHole(e,oldEX,oldEY,Math.hypot(e.vx,e.vy)))continue;teleportBody(e,dt);
+collideProps(e);if(collideGap(e,oldEX,oldEY)||collideHole(e,oldEX,oldEY,Math.hypot(e.vx,e.vy)))continue;teleportBody(e,dt);
 let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(e.shape!=='healer'&&!RANGED.includes(e.shape)){let push=Math.min(240,Math.max(65,Math.hypot(e.vx-p.vx,e.vy-p.vy)*.8));p.kvx-=nx*push;p.kvy-=ny*push;}if(e.shape==='healer'){let speed=Math.hypot(e.vx-p.vx,e.vy-p.vy);if(PLAYER_HEALING_ENABLED&&speed>50&&e.playerHealCooldown<=0){let oldHp=hp;hp=Math.min(playerStats().maxHealth,hp+Math.min(18,Math.floor((speed-35)/13)));if(hp>oldHp)showHeal(p.x,p.y);e.playerHealCooldown=.65}}else if(enemyAttacksEnabled()&&!RANGED.includes(e.shape)&&inv===0){if(e.shape==='bloodletter'){playerBleed.push({remaining:12,rate:2});inv=1.1}else{hp=damagedHealth(8);inv=1.1;if(hp<=0)over=true}}}
 // Solid bat: sweep its full arc so fast swings cannot tunnel through enemies.
 let sweep=p.a-previousBatAngle,steps=Math.max(1,Math.ceil(Math.abs(sweep)/.055)),hit=false;
@@ -2266,7 +2354,7 @@ g.translate(viewW/2-p.x,VIEW_F/2-p.y);
 g.fillStyle=currentRoom.kind==='boss'?'#21131e':currentRoom.kind==='cursed'?'#1d1129':'#191724';g.fillRect(0,0,W,F);
 for(let y=14;y<F-10;y+=25)for(let x=12;x<W-10;x+=25){const alternate=((x+y)/25|0)%2;g.fillStyle=currentRoom.kind==='boss'?(alternate?currentBiome().floor[0]:currentBiome().floor[1]):currentRoom.kind==='start'?(alternate?'#263b36':'#2c443d'):currentRoom.kind==='cursed'?(alternate?'#2b1b3a':'#352148'):(alternate?currentBiome().floor[0]:currentBiome().floor[1]);g.fillRect(x,y,24,24)}
 g.strokeStyle=currentRoom.kind==='boss'?'#c79460':currentRoom.kind==='start'?'#6c9c88':currentRoom.kind==='cursed'?'#a56bda':currentBiome().edge;g.lineWidth=9;g.strokeRect(8,8,W-16,F-16);
-drawRoomTerrain();drawRoomDecor();drawEconomyRoomDecor();drawSandboxEconomySigns();drawBiomeWorld();drawLoot();drawBossHazards();drawRoomDoors();
+drawRoomTerrain();drawRoomDecor();drawRoomProps();drawEconomyRoomDecor();drawSandboxEconomySigns();drawBiomeWorld();drawLoot();drawBossHazards();drawRoomDoors();
 for(let h of holes){g.save();g.fillStyle='#08070d';g.shadowColor='#000';g.shadowBlur=14;g.beginPath();g.ellipse(h.x,h.y,h.r,h.r*.82,0,0,Math.PI*2);g.fill();g.shadowBlur=0;g.strokeStyle='#74617b';g.lineWidth=4;g.beginPath();g.ellipse(h.x,h.y,h.r,h.r*.82,0,0,Math.PI*2);g.stroke();g.restore()}
 for(let a of artillery){let t=1-a.life/a.maxLife;g.save();g.strokeStyle='#ff7058';g.lineWidth=2+t*2;g.globalAlpha=.45+.5*t;g.beginPath();g.arc(a.x,a.y,a.r*(.6+.4*t),0,Math.PI*2);g.stroke();g.beginPath();g.moveTo(a.x-6,a.y);g.lineTo(a.x+6,a.y);g.moveTo(a.x,a.y-6);g.lineTo(a.x,a.y+6);g.stroke();g.fillStyle='#e8bd8b';g.beginPath();g.arc(a.startX+(a.x-a.startX)*t,a.startY+(a.y-a.startY)*t-55*Math.sin(Math.PI*t),6+3*Math.sin(Math.PI*t),0,Math.PI*2);g.fill();g.restore()}
 for(let e of enemies){if(e.shape!=='laser'||e.hp<=0||(e.laserState!=='charge'&&e.laserState!=='fire'))continue;let firing=e.laserState==='fire';g.save();g.lineCap='round';g.strokeStyle=firing?'#ff2879':'#ff8cae';g.lineWidth=firing?6:1.5;g.globalAlpha=firing?.82:.4;g.shadowColor='#ff3580';g.shadowBlur=firing?14:0;for(let seg of shieldLaserLines(laserPath(e.x,e.y,e.laserAngle))){g.beginPath();g.moveTo(seg.x1,seg.y1);g.lineTo(seg.x2,seg.y2);g.stroke()}if(firing){g.shadowBlur=0;g.strokeStyle='#fff4fb';g.lineWidth=2;for(let seg of laserPath(e.x,e.y,e.laserAngle)){g.beginPath();g.moveTo(seg.x1,seg.y1);g.lineTo(seg.x2,seg.y2);g.stroke()}}g.restore()}
