@@ -1811,13 +1811,13 @@ function roomDoors(){
 
 const ROOM_LAYOUTS={
  square:[
-  {name:'Crossroads',g:[[.18,.18,.21,.21],[.61,.18,.21,.21],[.18,.61,.21,.21],[.61,.61,.21,.21]],w:[[.40,.23,.20,.028,'bounce'],[.40,.75,.20,.028,'spike']],t:[[.41,.40,.18,.035],[.41,.57,.18,.035]]},
+  {name:'Crossroads',g:[[.18,.18,.21,.21],[.61,.18,.21,.21],[.18,.61,.21,.21],[.61,.61,.21,.21]],w:[[.455,.23,.09,.028,'bounce'],[.455,.75,.09,.028,'spike']],t:[[.41,.40,.18,.035],[.41,.57,.18,.035]]},
   {name:'Broken Causeway',g:[[.18,.40,.64,.17]],b:[[.43,.39,.14,.19]],w:[[.21,.23,.17,.03,'spike'],[.62,.72,.18,.03,'bounce']],t:[[.22,.29,.15,.045],[.62,.63,.15,.045]]},
   {name:'Three Teeth',g:[[.18,.21,.19,.26],[.63,.53,.19,.26],[.41,.17,.18,.13]],w:[[.12,.59,.25,.027,'sticky'],[.63,.35,.24,.027,'spike']],t:[[.42,.68,.16,.04],[.48,.30,.04,.17]]},
   {name:'Pinwheel',g:[[.18,.20,.18,.27],[.64,.20,.18,.27],[.18,.58,.18,.24],[.64,.58,.18,.24]],w:[[.40,.19,.025,.19,'bounce'],[.58,.61,.025,.18,'spike']],t:[[.46,.30,.07,.11],[.47,.62,.07,.10]]},
   {name:'Two Towers',g:[[.19,.20,.17,.59],[.64,.20,.17,.59]],w:[[.44,.21,.12,.024,'spike'],[.44,.74,.12,.024,'bounce']],t:[[.45,.33,.10,.035],[.45,.61,.10,.035]]},
   {name:'Snakebite',g:[[.16,.23,.37,.15],[.47,.61,.37,.15],[.18,.46,.17,.10],[.65,.42,.17,.12]],w:[[.55,.20,.025,.19,'bounce'],[.37,.63,.025,.19,'sticky']],t:[[.41,.40,.18,.035],[.42,.57,.16,.035]]},
-  {name:'Broken Ring',g:[[.30,.18,.40,.09],[.30,.73,.40,.09],[.18,.31,.10,.38],[.72,.31,.10,.38]],w:[[.38,.33,.24,.027,'bounce'],[.38,.64,.24,.027,'spike']],t:[[.46,.44,.08,.13],[.28,.45,.05,.10]]},
+  {name:'Broken Ring',g:[[.30,.18,.40,.09],[.30,.73,.40,.09],[.18,.31,.10,.38],[.72,.31,.10,.38]],b:[[.46,.17,.08,.12],[.46,.71,.08,.13],[.17,.46,.12,.08],[.71,.46,.12,.08]],w:[[.38,.33,.24,.027,'bounce'],[.38,.64,.24,.027,'spike']],t:[[.46,.44,.08,.13],[.28,.45,.05,.10]]},
   {name:'Jagged Floor',g:[[.17,.24,.19,.17],[.63,.23,.20,.18],[.19,.61,.21,.17],[.61,.61,.18,.18],[.41,.68,.17,.11]],w:[[.40,.23,.18,.03,'sticky']],t:[[.45,.38,.10,.04],[.45,.56,.10,.04]]},
   {name:'Crusher Crossing',g:[[.19,.29,.22,.17],[.59,.54,.22,.17]],w:[[.47,.20,.025,.18,'spike','y'],[.51,.61,.025,.18,'bounce','y']],t:[[.24,.56,.12,.04],[.64,.30,.12,.04]]},
   {name:'Four Gates',g:[[.15,.29,.27,.12],[.58,.29,.27,.12],[.15,.62,.27,.12],[.58,.62,.27,.12]],w:[[.20,.50,.19,.03,'spike'],[.61,.50,.19,.03,'bounce']],t:[[.46,.25,.08,.08],[.46,.70,.08,.08]]}
@@ -1835,7 +1835,7 @@ const ROOM_LAYOUTS={
   {name:'The Quarry',g:[[.16,.16,.30,.24],[.55,.16,.28,.24],[.16,.62,.30,.22],[.55,.62,.28,.22]],w:[[.27,.48,.17,.026,'sticky','x'],[.58,.48,.17,.026,'spike','x']],t:[[.45,.30,.10,.035],[.45,.69,.10,.035]]}
  ],
  rectangle:[
-  {name:'Twin Rails',g:[[.18,.18,.64,.22],[.18,.60,.64,.22]],w:[[.25,.44,.17,.035,'spike'],[.60,.52,.17,.035,'bounce']],t:[[.43,.44,.14,.05]]},
+  {name:'Twin Rails',g:[[.18,.18,.64,.22],[.18,.60,.64,.22]],b:[[.39,.17,.08,.25],[.53,.59,.08,.25]],w:[[.25,.44,.17,.035,'spike'],[.60,.52,.17,.035,'bounce']],t:[[.43,.44,.14,.05]]},
   {name:'The Crossing',g:[[.20,.34,.60,.30]],b:[[.45,.32,.12,.34]],w:[[.21,.19,.15,.035,'sticky'],[.63,.75,.18,.035,'spike']],t:[[.39,.21,.06,.08],[.56,.71,.06,.08]]},
   {name:'Alternating Teeth',g:[[.17,.16,.18,.31],[.43,.56,.16,.20],[.65,.16,.18,.31]],w:[[.39,.23,.025,.22,'spike'],[.59,.57,.025,.22,'bounce']],t:[[.25,.59,.12,.07],[.64,.53,.11,.06]]},
   {name:'Four Chambers',g:[[.16,.19,.24,.23],[.60,.19,.24,.23],[.16,.58,.24,.23],[.60,.58,.24,.23]],w:[[.44,.17,.025,.19,'sticky'],[.55,.63,.025,.18,'spike']],t:[[.45,.46,.10,.07]]},
@@ -2337,12 +2337,12 @@ fg.closePath();fg.fillStyle='#000';fg.fill();fg.globalCompositeOperation='source
 g.drawImage(layer,0,0);
 }
 
-const NAV_CELL=20;
+const NAV_CELL=16;
 let enemyNav=null;
 function resetEnemyNavigation(){enemyNav=null}
 function navigationClear(x,y,r=11){
  if(!safeFloor(x,y,r))return false;
- return !breakables.some(o=>!o.broken&&Math.hypot(x-o.x,y-o.y)<r+PROP_DEFS[o.kind].r+3);
+ return !breakables.some(o=>!o.broken&&Math.hypot(x-o.x,y-o.y)<r+PROP_DEFS[o.kind].r+1);
 }
 function navigationSight(ax,ay,bx,by,r=11){
  const dist=Math.hypot(bx-ax,by-ay),steps=Math.ceil(dist/14);
@@ -2354,7 +2354,7 @@ function rebuildEnemyNavigation(){
  const walkable=new Uint8Array(n),cost=new Float32Array(n),heap=[];
  cost.fill(Infinity);
  const index=(x,y)=>y*nx+x;
- for(let y=0;y<ny;y++)for(let x=0;x<nx;x++)walkable[index(x,y)]=navigationClear((x+.5)*step,(y+.5)*step,11)?1:0;
+ for(let y=0;y<ny;y++)for(let x=0;x<nx;x++)walkable[index(x,y)]=navigationClear((x+.5)*step,(y+.5)*step,9)?1:0;
  const tx=clamp(Math.floor(p.x/step),0,nx-1),ty=clamp(Math.floor(p.y/step),0,ny-1);
  let gx=tx,gy=ty,best=Infinity;
  for(let y=Math.max(0,ty-5);y<=Math.min(ny-1,ty+5);y++)for(let x=Math.max(0,tx-5);x<=Math.min(nx-1,tx+5);x++){
@@ -2407,7 +2407,7 @@ function navigationVector(e,target=p){
  return{x:dx/d,y:dy/d};
 }
 function navigationAvoid(e,vx,vy){
- const norm=Math.hypot(vx,vy)||1,dx=vx/norm,dy=vy/norm,look=clamp(e.r+23,28,45),radius=Math.min(18,Math.max(9,e.r+1));
+ const norm=Math.hypot(vx,vy)||1,dx=vx/norm,dy=vy/norm,look=clamp(e.r+5,14,23),radius=Math.min(18,Math.max(9,e.r+1));
  if(navigationClear(e.x+dx*look,e.y+dy*look,radius))return{x:dx,y:dy};
  const angles=[.55,-.55,1.05,-1.05,1.57,-1.57,2.15,-2.15,Math.PI],turn=e.strafe||1;
  for(const a of angles){const theta=a*turn,x=dx*Math.cos(theta)-dy*Math.sin(theta),y=dx*Math.sin(theta)+dy*Math.cos(theta);
