@@ -383,6 +383,109 @@ function updateBiomeBossUnit(unit,dt){
  }
  return true;
 }
+
+function bossSignatureRing(u,type,n,distance,r=25,warn=.85,life=1.5,offset=0){
+ for(let i=0;i<n;i++){let a=offset+i*2*Math.PI/n;bossZone(u,type,r,life,warn,u.x+Math.cos(a)*distance,u.y+Math.sin(a)*distance)}
+}
+function bossSignatureQuake(u){
+ const a=Math.atan2(p.y-u.y,p.x-u.x)+Math.PI/2;
+ for(let i=-1;i<=1;i++)bossFight.hazards.push({x:clamp(p.x+i*Math.cos(a)*47,40,W-40),y:clamp(p.y+i*Math.sin(a)*47,40,F-40),r:22,warn:.9,life:.35,active:false,hit:false});
+}
+function bossRootCage(u){
+ let exit=Math.atan2(u.y-p.y,u.x-p.x);
+ for(let i=0;i<9;i++){let a=i*2*Math.PI/9;if(Math.abs(Math.atan2(Math.sin(a-exit),Math.cos(a-exit)))<.50)continue;
+  bossZone(u,'roots',24,1.9,1.1,p.x+Math.cos(a)*100,p.y+Math.sin(a)*100)}
+}
+function bossHydraBreath(u){
+ if(bossFight.shots.length>75)return;
+ let target=Math.atan2(p.y-u.y,p.x-u.x);
+ for(let head=-1;head<=1;head++)for(let j=0;j<(u.phase2?4:3);j++){
+  let a=target+head*.32+(j-(u.phase2?1.5:1))*.15,speed=u.phase2?140:116;
+  bossFight.shots.push({x:u.x+head*23,y:u.y+(head?-5:-18),vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r:6,kind:'crystal',owner:u,life:7,reflected:false,element:'fire',bounces:0});
+ }
+}
+function bossSpiralShot(u,n=8,offset=0){
+ if(bossFight.shots.length>75)return;
+ for(let i=0;i<n;i++){let a=offset+i*Math.PI*2/n,speed=u.phase2?127:100;
+ bossFight.shots.push({x:u.x+Math.cos(a)*(u.r+14),y:u.y+Math.sin(a)*(u.r+14),vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r:5,kind:'crystal',owner:u,life:7,reflected:false,element:bossElement(u),bounces:u.variant==='oracle'?1:0})}
+}
+function bossSignatureImpact(u,old){
+ if(old==='charge'&&u.state==='stunned'){
+  if(u.variant==='gatekeeper')bossSignatureQuake(u);
+  if(u.variant==='furnace')bossSignatureRing(u,'fire',7,85,24,.75,1.4);
+  if(u.variant==='briar')bossRootCage(u);
+  if(u.variant==='glacier'){
+   bossSignatureRing(u,'frost',7,86,25,.85,1.1);
+   const a=Math.atan2(p.y-u.y,p.x-u.x);for(let i=1;i<=3;i++)bossZone(u,'frost',22,1.2,.9,u.x+Math.cos(a)*i*60,u.y+Math.sin(a)*i*60);
+  }
+ }
+ if(old==='jump'&&u.state==='recover'){
+  if(u.variant==='slime')bossZone(u,'roots',u.r+24,2.8,.4,u.x,u.y);
+  if(u.variant==='phoenix'){bossSignatureRing(u,'fire',u.phase2?7:5,75,25,.7,1.4);bossSpiralShot(u,u.phase2?9:6,u.turn*.37)}
+  if(u.variant==='mire')bossZone(u,'poison',u.r+23,2.6,.35,u.x,u.y);
+  if(u.variant==='avalanche'){
+   const n=u.phase2?6:4;
+   for(let i=0;i<n;i++){let a=i*2*Math.PI/n+u.turn*.4,d=45+(i%2)*40;bossFight.hazards.push({x:clamp(p.x+Math.cos(a)*d,40,W-40),y:clamp(p.y+Math.sin(a)*d,40,F-40),r:25,warn:1.2+i*.08,life:.35,active:false,hit:false})}
+  }
+ }
+}
+function updateBossSignature(u,dt){
+ if(!enemyAttacksEnabled()||u.hp<=0)return;
+ const id=u.variant;
+ if(id==='oracle'){
+  u.prismClock=(u.prismClock??5)-dt;
+  if(!u.prismState&&u.prismClock<=0){u.prismState='warn';u.prismTimer=1.7;u.prismAngle=Math.atan2(p.y-u.y,p.x-u.x);u.prismHit=0;u.prismClock=8}
+  if(u.prismState){
+   u.prismTimer-=dt;const target=Math.atan2(p.y-u.y,p.x-u.x),delta=Math.atan2(Math.sin(target-u.prismAngle),Math.cos(target-u.prismAngle)),speed=u.prismState==='warn'?.24:.13;
+   u.prismAngle+=clamp(delta,-speed*dt,speed*dt);
+   if(u.prismState==='warn'&&u.prismTimer<=0){u.prismState='fire';u.prismTimer=u.phase2?1.7:1.3}
+   else if(u.prismState==='fire'){
+    const raw=laserPath(u.x,u.y,u.prismAngle),shield=shieldBlocksLaser(raw);
+    u.prismHit-=dt;
+    if(u.prismHit<=0){if(shield)shieldDamage(5);else if(raw.some(a=>laserDistance(p.x,p.y,a)<12))hurtBossPlayer(4,u.x,u.y);u.prismHit=.28}
+    if(u.prismTimer<=0)u.prismState=null;
+   }
+  }
+  return;
+ }
+ if(id==='mire'&&bossFight?.split){
+  const twins=bossFight.units.filter(a=>a.hp>0);
+  if(twins.length===2&&laserDistance(p.x,p.y,{x1:twins[0].x,y1:twins[0].y,x2:twins[1].x,y2:twins[1].y})<13){
+   p.slowUntil=Math.max(p.slowUntil||0,arenaTime+.3);
+   if(u===twins[0]){u.tetherTick=(u.tetherTick||0)-dt;if(u.tetherTick<=0){hurtBossPlayer(3,u.x,u.y);u.tetherTick=1.4}}
+  }
+ }
+ u.signatureClock=(u.signatureClock??(id==='crystal'?4.1:5.3))-dt;
+ if(u.signatureClock>0||u.state==='jump'||u.state==='rebirth')return;
+ u.signatureClock=u.phase2?5.7:7;
+ if(id==='crystal')bossSpiralShot(u,u.phase2?11:7,arenaTime*.7);
+ if(id==='matriarch'){
+  const n=u.phase2?5:3,rotation=arenaTime*.9;
+  for(let i=0;i<n;i++){let a=rotation+i*2*Math.PI/n,d=i?72:0;bossZone(u,'poison',32,2.8,1.05,p.x+Math.cos(a)*d,p.y+Math.sin(a)*d)}
+  spawnBiomeSummons(u,'thornling',u.phase2?2:1);
+ }
+}
+function drawBossSignatures(){
+ if(!bossFight||bossFight.done)return;
+ g.save();
+ const id=bossFight.variant;
+ if(id==='oracle')for(const u of bossFight.units)if(u.hp>0&&u.prismState){
+  const lines=u.prismState==='fire'?shieldLaserLines(laserPath(u.x,u.y,u.prismAngle)):laserPath(u.x,u.y,u.prismAngle);
+  g.strokeStyle=u.prismState==='fire'?'#d7a5ff':'#b9ddff';g.lineWidth=u.prismState==='fire'?7:2;g.globalAlpha=u.prismState==='fire'?.83:.40+.18*Math.sin(arenaTime*15);
+  g.beginPath();for(const a of lines){g.moveTo(a.x1,a.y1);g.lineTo(a.x2,a.y2)}g.stroke();
+ }
+ if(id==='hydra')for(const u of bossFight.units)if(u.hp>0&&u.state==='breathWarn'){
+  let angle=Math.atan2(p.y-u.y,p.x-u.x);g.strokeStyle='#ff8c5e';g.globalAlpha=.24+.1*Math.sin(arenaTime*12);g.lineWidth=13;
+  for(let i=-1;i<=1;i++){let a=angle+i*.32;g.beginPath();g.moveTo(u.x+i*23,u.y-8);g.lineTo(u.x+Math.cos(a)*390,u.y+Math.sin(a)*390);g.stroke()}
+ }
+ if(id==='mire'&&bossFight.split){const twins=bossFight.units.filter(u=>u.hp>0);if(twins.length===2){
+  g.strokeStyle='#b2df75';g.globalAlpha=.55;g.lineWidth=7;g.setLineDash([13,9]);g.beginPath();g.moveTo(twins[0].x,twins[0].y);g.lineTo(twins[1].x,twins[1].y);g.stroke();g.setLineDash([]);
+ }}
+ if(id==='phoenix')for(const u of bossFight.units)if(u.hp>0&&u.state==='rebirth'){
+  const progress=1-u.timer/1.65;g.strokeStyle='#ffb46b';g.globalAlpha=.45+.4*progress;g.lineWidth=5;g.beginPath();g.arc(u.x,u.y,u.r+20+progress*65,0,Math.PI*2);g.stroke();
+ }
+ g.restore();
+}
 function handleBiomeBossPhase(){
  if(bossFight?.variant==='phoenix'&&!bossFight.reborn){
   const unit=bossFight.units[0];
