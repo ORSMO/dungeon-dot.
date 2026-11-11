@@ -2,6 +2,14 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.2 Archer Dot
+
+- **Choose a hero:** Start a fresh run as Classic Dot (the original silly bat) or Archer Dot (a bow). Each save slot remembers its own hero; old saves remain Classic Dot. Hero choice does not alter an existing save.
+- **Pull-to-draw attack:** On Archer, the right attack stick aims the bow. The farther the stick is pulled from its center, the more powerful the shot. Release the stick to fire one arrow; tiny movements below 18% draw do not fire. The gold ring and percentage show charge strength.
+- **Arrow scaling:** Draw strength changes arrow speed from about 292 to 620 world units/second, damage from about 1.26 to 3.8 before upgrades and critical hits, knockback from about 110 to 245, and flight duration from 0.91 to 1.4 seconds. A 0.48-second base reload prevents spamming; Bat Balance upgrades also accelerate bow reloading.
+- **Physical arrows:** Arrows hit enemies, bosses, breakable objects, enemy nests, cracked walls, and trap levers. Weapon-hit item synergies work on arrow impacts too. Boss armour and special invulnerability mechanics still require their intended counters; shields remain available.
+- **Classic is untouched:** Classic still uses the heavy physics bat, including its impact interactions and projectile reflections. Both heroes keep the hardcore 50-HP/three-life survival rules. Mage Dot is reserved for a later update.
+
 ## V8.1 safer and more varied teleporters
 
 - **No entrance traps:** Portals are placed on safe interior floor, at least 125 units away from all four door spawn points (and clear of the center spawn), rather than directly beside the west/east entrances.

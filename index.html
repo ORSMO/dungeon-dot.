@@ -41,15 +41,16 @@ footer #restart{display:none}
 #dash-button.cooling{background:#242c3c;border-color:#62758c;color:#b6c7da;box-shadow:none}
 #dash-button.editing{border-style:dashed;border-color:#ffe17e;background:#493b3c;color:#ffe9ab;z-index:16;cursor:move}
 #synergy-list{display:grid;gap:7px}.synergy-row{display:flex;gap:10px;border:1px solid #4d415c;border-radius:8px;padding:9px;background:#211d2d}.synergy-row.active{border-color:#a48b56;background:#352c32}.synergy-row strong{font-size:12px;color:#c3afcf}.synergy-row.active strong{color:#f3d391}.synergy-row small{display:block;font-size:10px;color:#a69ab3;margin:3px 0}.synergy-row p{font-size:10px;line-height:1.45;color:#c7bacf;margin:3px 0 0}.synergy-icons{display:flex;align-items:center;gap:4px;min-width:62px;font-size:22px}.synergy-icons b{font-size:12px;color:#82708e}#synergy-count{color:#ebcc87;font-size:11px}
+#hero-picker{display:flex;gap:8px;margin:9px 0 5px}#hero-picker button{flex:1;padding:10px 8px;border:1px solid #796886;background:#2b2539;color:#e4dbea;font:700 11px monospace;line-height:1.4}#hero-picker button[aria-pressed=true]{border-color:#bff9d9;background:#294b3c;color:#e5fff0;box-shadow:0 0 10px #92e6b43b}#hero-choice-hint{display:block;margin:4px 2px 12px;color:#c0e3cc;font:10px system-ui;line-height:1.4}
 </style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.1</small><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
  <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
  <small id="character-coins"></small>
  <div id="character-stats"></div>
  <h3>Collected items</h3><div id="item-inventory"></div>
  <h3>Stat upgrades</h3><small id="run-upgrades"></small>
- <p class="character-note">CURVED SHIELD: a compact guard attached to your character, facing your bat. Starts every room at 100 durability. No regeneration or repairs within a room; a broken guard returns on the next room entry.</p>
+ <p class="character-note">CURVED SHIELD: a compact guard attached to your character, facing your weapon aim. Starts every room at 100 durability. No regeneration or repairs within a room; a broken guard returns on the next room entry.</p>
  <h3>Item synergies <small id="synergy-count"></small></h3><div id="synergy-list"></div>
- <p class="character-note">DASH: move + tap Dash for a short protected burst. With no movement input, dash toward your bat. Cooldown: 1.8 seconds. Drag its button in Settings → Controls → Edit positions. Keyboard: Space.</p>
+ <p class="character-note">DASH: move + tap Dash for a short protected burst. With no movement input, dash toward your current aim. Cooldown: 1.8 seconds. Drag its button in Settings → Controls → Edit positions. Keyboard: Space.</p>
  <p class="character-note">Items and upgrades last for this run and carry into every biome. The game pauses while this menu is open.</p>
 </section>
 <section id="loot-panel" hidden aria-label="Nearby item">
@@ -59,8 +60,8 @@ footer #restart{display:none}
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
-<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.1</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
-  <div class="save-area"><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
+<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.2</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
+  <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true">⚪ CLASSIC DOT<br>SWING BAT</button><button id="hero-archer" type="button" aria-pressed="false">🏹 ARCHER DOT<br>DRAW BOW</button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
 <section id="bestiary-panel" hidden aria-label="Enemy index">
@@ -138,7 +139,7 @@ if(q.x<16||q.x>W-16||q.y<16||q.y>F-16){q.life=0;continue}if(projectileHitsProp(q
 let wall=walls.find(w=>q.x+q.r>w.x&&q.x-q.r<w.x+w.w&&q.y+q.r>w.y&&q.y-q.r<w.y+w.h);if(wall){if(q.reflected&&wall.cracked)hitCrackedWall(wall,2);if(q.kind==='spitter')poisonPuddles.push({x:q.x,y:q.y,r:23,life:2,maxLife:2});if(q.kind==='frostcaster'){let water=puddles.find(z=>Math.hypot(z.x-q.x,z.y-q.y)<z.r);if(water){water.life=Math.min(water.life,.3);triggerReaction('ice',water.x,water.y,water.r)}}if(q.kind==='cannon'){q.vx*=-.75;q.vy*=-.75;q.life-=.7}else q.life=0;continue}
 let angle=p.a,ux=Math.cos(angle),uy=Math.sin(angle),along=(q.x-p.x)*ux+(q.y-p.y)*uy,at=Math.max(16,Math.min(49,along)),bx=p.x+ux*at,by=p.y+uy*at;
 if(!q.reflected&&shieldHit(q.x,q.y,q.r)){shieldDamage(q.kind==='scatter'?8:q.kind==='seeker'?20:12);let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.45;q.vy=Math.sin(a)*speed*1.45;q.reflected=true;q.life=2.5;continue}
-if(Math.hypot(q.x-bx,q.y-by)<q.r+5&&!q.reflected){let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.35;q.vy=Math.sin(a)*speed*1.35;q.reflected=true;q.life=2.5;continue}
+if(Math.hypot(q.x-bx,q.y-by)<q.r+5&&!q.reflected&&hero==='classic'){let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.35;q.vy=Math.sin(a)*speed*1.35;q.reflected=true;q.life=2.5;continue}
 if(q.reflected){for(let e of enemies){if(e.hp<=0)continue;if(Math.hypot(q.x-e.x,q.y-e.y)<e.r+q.r){if(canDamage(e,165))friendlyDamage(e,q.kind==='cannon'?3:2,'projectile');if(q.kind==='frostcaster'){let water=puddles.find(z=>Math.hypot(z.x-e.x,z.y-e.y)<z.r);if(water){water.life=.2;triggerReaction('ice',water.x,water.y,water.r)}}q.life=0;break}}}else if(Math.hypot(q.x-p.x,q.y-p.y)<q.r+8&&inv<=0){if(q.kind==='bloodcaster')playerBleed.push({remaining:7,rate:1.4});else if(q.kind==='frostcaster')p.slowUntil=arenaTime+2;else if(q.kind==='spitter')poisonPuddles.push({x:q.x,y:q.y,r:25,life:2.5,maxLife:2.5});else{if(q.kind==='emberbolt')playerBleed.push({remaining:3,rate:1.2});hp=damagedHealth((q.kind==='scatter'?8:11));if(hp<=0)over=true}inv=.4;q.life=0}}
 projectiles=projectiles.filter(q=>q.life>0)}
 
@@ -151,7 +152,7 @@ function applyBleed(e){if(e.hp<=0)return;e.bleedStacks=(e.bleedStacks||0)+Math.m
 let runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};
 const statsPanel=document.querySelector("#stats-panel");document.querySelector("#stats-toggle").onclick=()=>{statsPanel.hidden=!statsPanel.hidden;updateStatsPanel()};
 function enemyStats(e){return {mass:e.mass,elasticity:e.shape==='rubber'?1.55:.92,toughness:e.elite?145:enemyDefinition(e.shape).armour||0,stability:e.shape==='square'?100:e.shape==='armored'?95:e.shape==='rubber'?75:60,regen:e.shape==='regenerator'?1.1:0}}
-function updateStatsPanel(){if(statsPanel.hidden)return;let t=Math.floor(arenaTime),maxMass=Math.max(0,...enemies.map(e=>e.mass));let nearest=enemies.filter(e=>e.hp>0).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0],es=nearest?enemyStats(nearest):null;statsPanel.textContent=`BLEED ${bleedStacks} PERMANENT + ${temporaryBleed.length} TEMP  |  TIME ${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}  |  KILLS ${kills}  |  BIGGEST HIT ${Math.round(runStats.biggestImpact)}  |  BAT HITS ${runStats.swingsHit}  |  SPLITS ${runStats.splits}  |  FUSIONS ${runStats.fusions}  |  HEALED ${Math.round(runStats.healed)} HP  |  LARGEST MASS ${maxMass.toFixed(1)}  |  PLAYER REGEN ${PLAYER_REGEN} HP/s  |  ENEMIES ${enemies.length}${es?'  |  NEAREST '+nearest.shape.toUpperCase()+' — HP '+Math.ceil(nearest.hp)+'/'+nearest.maxHp+'  MASS '+es.mass.toFixed(1)+'  BOUNCE '+es.elasticity.toFixed(2)+'  TOUGHNESS '+es.toughness+'  STABILITY '+es.stability+'%  REGEN '+es.regen+'/s':''}`}
+function updateStatsPanel(){if(statsPanel.hidden)return;let t=Math.floor(arenaTime),maxMass=Math.max(0,...enemies.map(e=>e.mass));let nearest=enemies.filter(e=>e.hp>0).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0],es=nearest?enemyStats(nearest):null;statsPanel.textContent=`BLEED ${bleedStacks} PERMANENT + ${temporaryBleed.length} TEMP  |  TIME ${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}  |  KILLS ${kills}  |  BIGGEST HIT ${Math.round(runStats.biggestImpact)}  |  WEAPON HITS ${runStats.swingsHit}  |  SPLITS ${runStats.splits}  |  FUSIONS ${runStats.fusions}  |  HEALED ${Math.round(runStats.healed)} HP  |  LARGEST MASS ${maxMass.toFixed(1)}  |  PLAYER REGEN ${PLAYER_REGEN} HP/s  |  ENEMIES ${enemies.length}${es?'  |  NEAREST '+nearest.shape.toUpperCase()+' — HP '+Math.ceil(nearest.hp)+'/'+nearest.maxHp+'  MASS '+es.mass.toFixed(1)+'  BOUNCE '+es.elasticity.toFixed(2)+'  TOUGHNESS '+es.toughness+'  STABILITY '+es.stability+'%  REGEN '+es.regen+'/s':''}`}
 
 const sticks=[{x:86,y:326,dx:0,dy:0,id:null},{x:554,y:326,dx:0,dy:0,id:null}];
 const defaultControls={positions:[[viewW*.135,326],[viewW*.865,326]],size:100,opacity:75,floating:false};
@@ -565,9 +566,9 @@ function biomeCatalogIcon(item){
 
 // Original run progression, collectible items, economy and damage numbers.
 const ITEM_DEFS = {
- emberHeart:{name:'Ember Heart',glyph:'♥',color:'#ff875f',biome:'red',desc:'+10 maximum health. Bat hits burn enemies for 3 seconds.'},
- frostNail:{name:'Frost Nail',glyph:'❄',color:'#9cddff',biome:'blue',desc:'Bat hits slow enemies by 40% for 2 seconds.'},
- stormCoil:{name:'Storm Coil',glyph:'ϟ',color:'#f5df77',desc:'Every fourth bat hit chains lightning to nearby enemies.'},
+ emberHeart:{name:'Ember Heart',glyph:'♥',color:'#ff875f',biome:'red',desc:'+10 maximum health. Weapon hits burn enemies for 3 seconds.'},
+ frostNail:{name:'Frost Nail',glyph:'❄',color:'#9cddff',biome:'blue',desc:'Weapon hits slow enemies by 40% for 2 seconds.'},
+ stormCoil:{name:'Storm Coil',glyph:'ϟ',color:'#f5df77',desc:'Every fourth weapon hit chains lightning to nearby enemies.'},
  leechFang:{name:'Leech Fang',glyph:'⌁',color:'#e391b2',desc:'Enemy kills restore 1 health; boss kills restore 4.'},
  sporeSatchel:{name:'Spore Satchel',glyph:'✿',color:'#a4dc8a',biome:'green',desc:'Defeated enemies leave a friendly damaging spore cloud.'},
  mirrorLens:{name:'Mirror Lens',glyph:'◇',color:'#d4c5ff',desc:'Reflected projectiles deal 50% more damage.'},
@@ -577,15 +578,15 @@ const ITEM_DEFS = {
  thornMantle:{name:'Thorn Mantle',glyph:'✦',color:'#a7bf82',biome:'green',desc:'Take 10% less damage. When hurt, retaliate against nearby enemies.'},
  cinderSigil:{name:'Cinder Sigil',glyph:'☀',color:'#ffa46b',biome:'red',desc:'Enemy kills burst for damage to other nearby enemies.'},
  mossCharm:{name:'Moss Charm',glyph:'♣',color:'#9ddd95',biome:'green',desc:'Regenerate 0.3 extra health each second.'},
- glassEye:{name:'Glass Eye',glyph:'◉',color:'#d7e8ff',biome:'blue',desc:'+40% bat damage, but maximum health is reduced by 8.'},
- counterweight:{name:'Counterweight',glyph:'▰',color:'#d5aa86',desc:'+40% knockback, but bat swing speed is reduced by 10%.'},
+ glassEye:{name:'Glass Eye',glyph:'◉',color:'#d7e8ff',biome:'blue',desc:'+40% weapon damage, but maximum health is reduced by 8.'},
+ counterweight:{name:'Counterweight',glyph:'▰',color:'#d5aa86',desc:'+40% knockback, but weapon attack speed is reduced by 10%.'},
  hourglass:{name:'Blue Hourglass',glyph:'⌛',color:'#8dbfff',biome:'blue',desc:'Enemy projectiles travel 20% slower.'}
 };
 const UPGRADE_DEFS = {
  vitality:{name:'Vitality',glyph:'♥',color:'#f19eaa',desc:'+10 maximum health.'},
- power:{name:'Bat Strength',glyph:'✚',color:'#efb47d',desc:'+25% bat and reflected-shot damage.'},
+ power:{name:'Bat Strength',glyph:'✚',color:'#efb47d',desc:'+25% weapon and reflected-shot damage.'},
  speed:{name:'Swift Boots',glyph:'↗',color:'#a9ddbc',desc:'+10% movement speed.'},
- swing:{name:'Bat Balance',glyph:'↻',color:'#b6b2f1',desc:'+15% swing speed.'},
+ swing:{name:'Bat Balance',glyph:'↻',color:'#b6b2f1',desc:'+15% bat swing speed, or faster bow reloading.'},
  knockback:{name:'Firm Grip',glyph:'➜',color:'#e4c494',desc:'+20% knockback.'},
  regen:{name:'Recovery',glyph:'✚',color:'#9ddaa6',desc:'+0.15 health regeneration per second.'},
  shield:{name:'Shield Oil',glyph:'⬡',color:'#9ee3ed',desc:'Shield takes 10% less damage. Total shield damage reduction is capped at 60%.'},
@@ -639,7 +640,7 @@ function playerDamageAmount(base,source){
 function friendlyDamage(target,amount,source='item'){
  if(!target||target.hp<=0)return false;
  if(target.kind&&bossFight?.units.includes(target))return damageBoss(target,amount,source);
- target.hp=Math.max(0,target.hp-playerDamageAmount(amount,source));if(source==='bat')afterPlayerBatHit(target);if(source==='projectile')synergyProjectileHit(target);return true;
+ target.hp=Math.max(0,target.hp-playerDamageAmount(amount,source));if(source==='bat'||source==='arrow')afterPlayerBatHit(target);if(source==='projectile')synergyProjectileHit(target);return true;
 }
 function afterPlayerBatHit(target){
  if(itemCount('emberHeart')){target.burnUntil=arenaTime+3;target.burnPower=.75*itemCount('emberHeart')*playerStats().damage}
@@ -923,6 +924,8 @@ function setupSandboxEconomyUI(){
 
 // Two browser-local cleared-room checkpoints, shared audio preferences and bestiary.
 const SAVE_VERSION=1,PROFILE_KEY='dd-profile-v1';
+const HERO_DEFS={classic:{name:'Classic Dot',hint:'Swing the silly bat with the right stick. All original combat mechanics remain.'},archer:{name:'Archer Dot',hint:'Aim with the right stick, pull farther to draw the bow, then release to shoot. No bat swings.'}};
+let hero='classic',selectedHero='classic';
 let activeSlot=null,loadingRun=false,savePending=false,profileDirty=false,saveError='',pendingReplacement=null;
 let profile={version:1,lastSlot:null,audio:{master:80,music:60,effects:80,muted:false},bestiary:{}};
 let bestiaryFilter='all',selectedBestiary=null;
@@ -977,7 +980,7 @@ function normalizeSavedRun(raw){
  if(seen.size!==rooms.length)throw Error('Disconnected dungeon');
  raw.progress={coins:Math.floor(safeNumber(raw.progress.coins)),items:knownDictionary(raw.progress.items,ITEM_DEFS),upgrades:knownDictionary(raw.progress.upgrades,UPGRADE_DEFS),roomsCleared:Math.floor(safeNumber(raw.progress.roomsCleared)),synergyCoins:Math.floor(safeNumber(raw.progress.synergyCoins,0,0,9))};
  raw.biome=BIOME_DEFS[raw.biome]?raw.biome:null;if(raw.biome==='basic')raw.biome=null;
- raw.depth=Math.floor(safeNumber(raw.depth,1,1,10000));raw.hp=safeNumber(raw.hp,50,1,1e6);raw.lives=Math.floor(safeNumber(raw.lives,3,0,5));raw.kills=Math.floor(safeNumber(raw.kills));raw.arenaTime=safeNumber(raw.arenaTime);
+ raw.depth=Math.floor(safeNumber(raw.depth,1,1,10000));raw.hero=Object.hasOwn(HERO_DEFS,raw.hero)?raw.hero:'classic';raw.hp=safeNumber(raw.hp,50,1,1e6);raw.lives=Math.floor(safeNumber(raw.lives,3,0,5));raw.kills=Math.floor(safeNumber(raw.kills));raw.arenaTime=safeNumber(raw.arenaTime);
  raw.player=raw.player&&typeof raw.player==='object'?raw.player:{};
  raw.player={x:safeNumber(raw.player.x,rooms[raw.roomId].w/2,23,rooms[raw.roomId].w-23),y:safeNumber(raw.player.y,rooms[raw.roomId].h/2,23,rooms[raw.roomId].h-23),a:safeNumber(raw.player.a,0,-1e7,1e7),target:safeNumber(raw.player.target,0,-1e7,1e7)};
  const hadShield=['flat','curved'].includes(raw.shieldType);raw.shieldType='curved';raw.shieldPending=false;
@@ -997,7 +1000,7 @@ function readSlot(slot){
 function queueCheckpoint(){if(!loadingRun&&activeSlot&&!inSandbox()&&currentRoom?.cleared)savePending=true}
 function snapshotRun(){
  currentRoom.coinDrops=coinDrops;currentRoom.heartDrops=heartDrops;currentRoom.lifeDrops=lifeDrops;
- return {version:SAVE_VERSION,savedAt:Date.now(),depth:dungeonDepth,biome:selectedBiome,roomId:currentRoom.id,dungeon:JSON.parse(JSON.stringify(dungeon)),progress:JSON.parse(JSON.stringify(progress)),hp,lives,kills,arenaTime,player:{x:p.x,y:p.y,a:p.a,target:p.target},shieldType,shieldHp,shieldBroken,shieldCooldown,shieldLastHit,shieldLaserTick,shieldPending:shieldPaused,bleedStacks,temporaryBleed:[...temporaryBleed],playerBleed:playerBleed.map(b=>({...b})),runStats:{...runStats},itemHitCounter,mantleCooldown,regenWhileBleeding,dashCooldown:dashCooldown()};
+ return {version:SAVE_VERSION,savedAt:Date.now(),hero,depth:dungeonDepth,biome:selectedBiome,roomId:currentRoom.id,dungeon:JSON.parse(JSON.stringify(dungeon)),progress:JSON.parse(JSON.stringify(progress)),hp,lives,kills,arenaTime,player:{x:p.x,y:p.y,a:p.a,target:p.target},shieldType,shieldHp,shieldBroken,shieldCooldown,shieldLastHit,shieldLaserTick,shieldPending:shieldPaused,bleedStacks,temporaryBleed:[...temporaryBleed],playerBleed:playerBleed.map(b=>({...b})),runStats:{...runStats},itemHitCounter,mantleCooldown,regenWhileBleeding,dashCooldown:dashCooldown()};
 }
 // Lives are committed immediately, even when the current combat room is not a safe checkpoint.
 function persistLifeCount(){
@@ -1033,12 +1036,13 @@ function showStartScreen(){
  document.querySelector('#start-screen').hidden=false;renderSaveSlots();updateSaveIndicator();
 }
 function renderSaveSlots(){
+ renderHeroPicker();
  const container=document.querySelector('#save-slots');container.innerHTML='';
  for(const slot of [1,2]){
   const saved=readSlot(slot),card=document.createElement('article');card.className='save-slot';
   const title=document.createElement('h2');title.textContent='SAVE SLOT '+slot;card.appendChild(title);
   const detail=document.createElement('p');
-  if(saved.data){const data=saved.data,biome=BIOME_DEFS[data.biome]||BIOME_DEFS.basic;detail.textContent=(data.lives===0?'RUN ENDED · ':data.lives+' LIVES · ')+biome.name+' · Dungeon '+data.depth+' · '+data.dungeon[data.roomId].name+' · '+data.progress.coins+' coins'}
+  if(saved.data){const data=saved.data,biome=BIOME_DEFS[data.biome]||BIOME_DEFS.basic;detail.textContent=(data.lives===0?'RUN ENDED · ':data.lives+' LIVES · ')+HERO_DEFS[data.hero].name+' · '+biome.name+' · Dungeon '+data.depth+' · '+data.dungeon[data.roomId].name+' · '+data.progress.coins+' coins'}
   else detail.textContent=saved.error||'Empty slot · begin a new adventure';
   card.appendChild(detail);
   if(saved.data){
@@ -1053,6 +1057,12 @@ function renderSaveSlots(){
  }
  const resume=document.querySelector('#resume-current');resume.hidden=!activeSlot||(over&&lives===0);resume.textContent=over?'Return to last checkpoint':inSandbox()?'Resume practice':'Resume current game';
 }
+function renderHeroPicker(){
+ for(const id of Object.keys(HERO_DEFS))document.querySelector('#hero-'+id).setAttribute('aria-pressed',String(selectedHero===id));
+ document.querySelector('#hero-choice-hint').textContent=HERO_DEFS[selectedHero].hint+' Selection applies to new runs; saved heroes stay the same.';
+}
+function updateHeroHud(){document.querySelector('footer small').textContent=hero==='archer'?'LEFT · MOVE   RIGHT · DRAW & RELEASE':'LEFT · MOVE   RIGHT · HEAVY BAT'}
+for(const id of Object.keys(HERO_DEFS))document.querySelector('#hero-'+id).onclick=()=>{selectedHero=id;renderHeroPicker()};
 function prepareSlotSwitch(){
  if(inSandbox())leaveSandbox();
  queueCheckpoint();flushCheckpoint();flushProfile();closeGamePanels();document.querySelector('#shield-choice').style.display='none';shieldPaused=false;
@@ -1060,7 +1070,7 @@ function prepareSlotSwitch(){
 function beginNewSlot(slot,confirmed=false){
  if(slot!==1&&slot!==2)return false;
  if(readSlot(slot).exists&&!confirmed){pendingReplacement=slot;renderSaveSlots();return false}
- prepareSlotSwitch();loadingRun=true;activeSlot=slot;
+ prepareSlotSwitch();loadingRun=true;activeSlot=slot;hero=selectedHero;
  try{reset()}finally{loadingRun=false}
  profile.lastSlot=slot;profileDirty=true;flushProfile();saveError='';document.querySelector('#start-screen').hidden=true;
  queueCheckpoint();flushCheckpoint();updateSaveIndicator();return true;
@@ -1076,7 +1086,7 @@ function continueSlot(slot){
  prepareSlotSwitch();const data=readSlot(slot).data;if(!data)return false;loadingRun=true;activeSlot=slot;
  try{
   progress=data.progress;dungeon=data.dungeon;dungeonDepth=data.depth;selectedBiome=data.biome;lastDungeonSignature=dungeonSignature(dungeon);arenaTime=data.arenaTime;
-  hp=data.hp;lives=data.lives;kills=data.kills;shieldType=data.shieldType;shieldHp=data.shieldHp;shieldBroken=!!data.shieldBroken;shieldCooldown=data.shieldCooldown;shieldLastHit=data.shieldLastHit;shieldLaserTick=safeNumber(data.shieldLaserTick);
+  hero=data.hero;hp=data.hp;lives=data.lives;kills=data.kills;shieldType=data.shieldType;shieldHp=data.shieldHp;shieldBroken=!!data.shieldBroken;shieldCooldown=data.shieldCooldown;shieldLastHit=data.shieldLastHit;shieldLaserTick=safeNumber(data.shieldLaserTick);
   bleedStacks=data.bleedStacks;temporaryBleed=data.temporaryBleed;playerBleed=data.playerBleed;runStats=data.runStats;itemHitCounter=Math.floor(safeNumber(data.itemHitCounter));mantleCooldown=safeNumber(data.mantleCooldown,0,0,3);regenWhileBleeding=!!data.regenWhileBleeding;
   over=false;inv=1.2;sandboxSavedRun=null;sandboxRoom=null;currentRoom=null;
   enterRoom(data.roomId);restoreSafePosition(data.player);hp=Math.min(playerStats().maxHealth,data.hp);arenaTime=data.arenaTime;restoreDashState(data.dashCooldown);
@@ -1184,15 +1194,15 @@ function initializePersistence(){
 
 // Recipes are derived from inventory so old saves unlock them without migration.
 const SYNERGY_DEFS={
- steamHammer:{name:'Steam Hammer',items:['emberHeart','frostNail'],color:'#d7ecf4',desc:'Bat hits release a steam burst: 2 damage and knockback within 70 range. 1 second cooldown.'},
+ steamHammer:{name:'Steam Hammer',items:['emberHeart','frostNail'],color:'#d7ecf4',desc:'Weapon hits release a steam burst: 2 damage and knockback within 70 range. 1 second cooldown.'},
  prismStorm:{name:'Prism Storm',items:['stormCoil','mirrorLens'],color:'#c7b9ff',desc:'Reflected shots chain 2 lightning damage to up to 3 nearby enemies. 0.45 second cooldown.'},
  vampiricSpores:{name:'Vampiric Spores',items:['sporeSatchel','leechFang'],color:'#d49caf',desc:'Kills inside an existing friendly spore cloud restore 2 extra health.'},
  cinderheart:{name:'Cinderheart',items:['emberHeart','cinderSigil'],color:'#ffad6e',desc:'Your kill bursts also burn nearby enemies for 3 seconds.'},
- frostclock:{name:'Frostclock',items:['frostNail','hourglass'],color:'#a1dcff',desc:'Bat hits leave a 2 second frost field that halves hostile projectile speed. 1 second cooldown.'},
+ frostclock:{name:'Frostclock',items:['frostNail','hourglass'],color:'#a1dcff',desc:'Weapon hits leave a 2 second frost field that halves hostile projectile speed. 1 second cooldown.'},
  thornBloom:{name:'Thorn Bloom',items:['thornMantle','shieldBloom'],color:'#a6e7bd',desc:'Thorn retaliation also slows nearby enemies by 40% for 1.5 seconds. Once per second.'},
  livingArmour:{name:'Living Armour',items:['mossCharm','thornMantle'],color:'#b0d58f',desc:'Gain 10% extra damage reduction and 0.2 extra health regeneration per second.'},
  goldenOrbit:{name:'Golden Orbit',items:['luckyPenny','magnetRing'],color:'#f1d78a',desc:'Every 10 coins collected from the floor restore 3 health. Purchases do not advance this counter.'},
- shatterStrike:{name:'Shatter Strike',items:['glassEye','counterweight'],color:'#ead5bb',desc:'Every third bat hit releases a shockwave: 4 bonus damage and knockback within 65 range.'},
+ shatterStrike:{name:'Shatter Strike',items:['glassEye','counterweight'],color:'#ead5bb',desc:'Every third weapon hit releases a shockwave: 4 bonus damage and knockback within 65 range.'},
  secondSpring:{name:'Second Spring',items:['mossCharm','shieldBloom'],color:'#9ce7cd',desc:'Clearing a combat or boss room restores 6 health. Does not repair the shield.'}
 };
 let synergyFx=[],synergyFields=[],synergyClocks={};
@@ -1459,13 +1469,13 @@ function hurtBossPlayer(amount,x,y,blockable=false,radius=0){
 }
 function damageBoss(unit,amount,source='bat'){
  if(!bossFight||bossFight.done||unit.hp<=0||unit.state==='rebirth')return false;
- if(unit.kind==='gatekeeper'&&source==='bat'&&unit.state!=='stunned'){bossSpark(unit.x,unit.y);return false}
+ if(unit.kind==='gatekeeper'&&(source==='bat'||source==='arrow')&&unit.state!=='stunned'){bossSpark(unit.x,unit.y);return false}
  if(unit.kind==='crystal'&&unit.armour>0){
   if(source==='projectile'){unit.armour--;synergyProjectileHit(unit);bossSpark(unit.x,unit.y,'#a5efff');if(unit.armour===0){unit.vulnerable=6;unit.state='recover';unit.timer=1;elementFx.push({type:'split',x:unit.x,y:unit.y,life:.5,maxLife:.5})}}
   else bossSpark(unit.x,unit.y,'#8eb4f5');
   return false;
  }
- unit.hp=Math.max(0,unit.hp-playerDamageAmount(amount,source));unit.flash=.16;if(source==='bat')afterPlayerBatHit(unit);if(source==='projectile')synergyProjectileHit(unit);
+ unit.hp=Math.max(0,unit.hp-playerDamageAmount(amount,source));unit.flash=.16;if(source==='bat'||source==='arrow')afterPlayerBatHit(unit);if(source==='projectile')synergyProjectileHit(unit);
  if(unit.kind==='gatekeeper'&&source==='projectile'){unit.state='stunned';unit.timer=1.5;unit.chargesLeft=0}
  if(unit.kind==='slime'&&source==='minion'){unit.state='stunned';unit.timer=1.3}
  return true;
@@ -1563,7 +1573,7 @@ function updateBossShots(dt,previousAngle){
   if(shot.x<16||shot.x>W-16||shot.y<16||shot.y>F-16){bounceBossProjectile(shot);if(shot.life<=0)continue}
   if(!shot.reflected){
    const swing=p.a-previousAngle,steps=Math.max(1,Math.ceil(Math.abs(swing)/.055));
-   let bat=false;for(let k=0;k<=steps&&!bat;k++)bat=sweptBossShotHits(shot,ox,oy,bossBatSegment(previousAngle+swing*k/steps),shot.r+4);
+   let bat=false;if(hero==='classic')for(let k=0;k<=steps&&!bat;k++)bat=sweptBossShotHits(shot,ox,oy,bossBatSegment(previousAngle+swing*k/steps),shot.r+4);
    const shield=!bat&&shieldSegments().some(seg=>sweptBossShotHits(shot,ox,oy,seg,shot.r+3));
    if(bat||shield){
     if(shield)shieldDamage(shot.kind==='cannonball'?18:10);
@@ -1745,7 +1755,7 @@ function leaveSandbox(){
 function clearSandbox(){
  if(!inSandbox())return;
  hostileZones=[];friendlyZones=[];damageNumbers=[];
- enemies=[];pendingSplits=[];projectiles=[];artillery=[];gravityWells=[];reactionZones=[];shards=[];puddles=[];poisonPuddles=[];elementFx=[];healFx=[];wallFx=[];fallingFx=[];bossFight=null;
+ enemies=[];pendingSplits=[];projectiles=[];artillery=[];gravityWells=[];reactionZones=[];shards=[];puddles=[];poisonPuddles=[];elementFx=[];healFx=[];wallFx=[];fallingFx=[];bossFight=null;arrows=[];bowShotCooldown=0;
  sandbox.notice='Room cleared. Choose another enemy.';hud();
 }
 function healSandbox(){
@@ -1973,13 +1983,13 @@ function enterRoom(id,entry=null){
  const x=entry==='west'?62:entry==='east'?W-62:W/2;
  const y=entry==='north'?62:entry==='south'?F-62:F/2;
  p={...p,x,y,safeX:x,safeY:y,fallReturn:null,vx:0,vy:0,kvx:0,kvy:0,sticky:null,wallContacts:new Set(),wallCooldowns:new Map(),portalCooldown:0,portalReady:false,falling:0,slowUntil:0};
- enemies=[];pendingSplits=[];projectiles=[];artillery=[];gravityWells=[];reactionZones=[];bossFight=null;
+ enemies=[];pendingSplits=[];projectiles=[];artillery=[];gravityWells=[];reactionZones=[];bossFight=null;arrows=[];bowShotCooldown=0;
  healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];shards=[];portalFx=[];fallingFx=[];poisonPlayerTimer=0;playerPoisonGlow=0;
  doorCooldown=.7;inv=Math.max(inv||0,.9);
  sticks.forEach(stick=>{stick.dx=stick.dy=0});
  if(currentRoom.kind==='start')playerBleed=[];
  if(!currentRoom.cleared){if(currentRoom.kind==='boss')startBossFight(currentRoom.bossKind);else{const wanted=Math.max(currentRoom.count,roomEnemyTarget(currentRoom));currentRoom.count=wanted;for(let i=0;i<wanted;i++)spawn(selectedBiome&&i===0?currentBiome().enemies[0]:null)}}
- if(!loadingRun&&changedRoom)refillRoomShield();hud();clearRoomDash();resetRoomSynergies();queueCheckpoint();
+ if(!loadingRun&&changedRoom)refillRoomShield();updateHeroHud();hud();clearRoomDash();resetRoomSynergies();queueCheckpoint();
 }
 function nextDungeon(biome){
  if(currentRoom?.kind!=='boss'||!currentRoom.bossDefeated||!BIOME_PATHS.some(path=>path.id===biome))return;
@@ -2094,6 +2104,7 @@ function drawRoomMap(){
 
 let arenaTime=0;
 let p,enemies,hp,lives=3,kills,inv,over,roomEntrySide=null,last=0,spawnClock=0,healFx=[],wallFx=[],elementFx=[],puddles=[],poisonPuddles=[],poisonPlayerTimer=0,playerPoisonGlow=0,shards=[],portalFx=[];
+let arrows=[],bowShotCooldown=0;
 function showHeal(x,y){healFx.push({x,y,life:.85})}
 function showWallHit(w,x,y,nx,ny,speed){
 if(speed<22)return;
@@ -2107,6 +2118,58 @@ wallFx.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:.28+Math.random()*.2,max
 }
 }
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+function bowPower(){return clamp(Math.hypot(sticks[1].dx,sticks[1].dy),0,1)}
+function fireArrow(power=bowPower(),angle=p?.target||0){
+ if(hero!=='archer'||!activeSlot||over||!p||p.falling||editingControls||persistencePaused()||shieldPaused||!settings.hidden||!document.querySelector('#character-panel').hidden||!document.querySelector('#sandbox-panel').hidden||bowShotCooldown>0)return false;
+ power=clamp(power,0,1);if(power<.18)return false;
+ const ux=Math.cos(angle),uy=Math.sin(angle),speed=220+400*power;
+ arrows.push({x:p.x+ux*23,y:p.y+uy*23,vx:ux*speed,vy:uy*speed,r:2.5+power*1.6,life:.8+.6*power,power,damage:.7+3.1*power,impact:80+165*power,reflected:true});
+ bowShotCooldown=Math.max(.26,.48/(1+.15*upgradeCount('swing')))*(1+.1*itemCount('counterweight'));
+ p.a=angle;p.target=angle;p.vel=0;return true;
+}
+function updateArrows(dt){
+ bowShotCooldown=Math.max(0,bowShotCooldown-dt);
+ for(const arrow of arrows){
+  arrow.life-=dt;if(arrow.life<=0)continue;
+  const ox=arrow.x,oy=arrow.y;arrow.x+=arrow.vx*dt;arrow.y+=arrow.vy*dt;
+  if(arrow.x<17||arrow.x>W-17||arrow.y<17||arrow.y>F-17){arrow.life=0;continue}
+  if(projectileHitsProp(arrow,ox,oy)||projectileHitsNest(arrow,ox,oy))continue;
+  const segment={x1:ox,y1:oy,x2:arrow.x,y2:arrow.y};
+  for(const sw of trapControls)if(sw.kind==='lever'&&laserDistance(sw.x,sw.y,segment)<sw.r+arrow.r){triggerTrapControl(sw);arrow.life=0;break}
+  if(arrow.life<=0)continue;
+  const steps=Math.max(1,Math.ceil(Math.hypot(arrow.x-ox,arrow.y-oy)/5));
+  for(let i=0;i<=steps&&arrow.life>0;i++){
+   const x=ox+(arrow.x-ox)*i/steps,y=oy+(arrow.y-oy)*i/steps;
+   const wall=walls.find(w=>nearRect(x,y,arrow.r,w));
+   if(wall){if(wall.cracked)hitCrackedWall(wall,arrow.power>.7?2:1);arrow.life=0}
+  }
+  if(arrow.life<=0)continue;
+  const enemy=enemies.find(e=>e.hp>0&&laserDistance(e.x,e.y,segment)<e.r+arrow.r);
+  if(enemy){
+   if(canDamage(enemy,arrow.impact)){
+    friendlyDamage(enemy,arrow.damage,'arrow');
+    runStats.swingsHit++;runStats.biggestImpact=Math.max(runStats.biggestImpact,arrow.impact);
+    const d=Math.hypot(arrow.vx,arrow.vy)||1;enemy.vx+=arrow.vx/d*arrow.impact*playerStats().knockback/Math.max(.5,enemy.mass);enemy.vy+=arrow.vy/d*arrow.impact*playerStats().knockback/Math.max(.5,enemy.mass);
+    if(enemy.bossMinion&&arrow.power>.65)enemy.batKnockedUntil=arenaTime+1.5;
+    elementalHit(enemy,arrow.impact);
+   }else bossSpark(enemy.x,enemy.y,'#f5dd9c');
+   arrow.life=0;continue;
+  }
+  if(bossFight&&!bossFight.done){
+   const unit=bossFight.units.find(u=>u.hp>0&&u.state!=='jump'&&laserDistance(u.x,u.y,segment)<u.r+arrow.r);
+   if(unit){if(damageBoss(unit,arrow.damage,'arrow')){runStats.swingsHit++;runStats.biggestImpact=Math.max(runStats.biggestImpact,arrow.impact)}arrow.life=0}
+  }
+ }
+ arrows=arrows.filter(a=>a.life>0);
+}
+function drawArrows(){
+ g.save();g.lineCap='round';
+ for(const arrow of arrows){const a=Math.atan2(arrow.vy,arrow.vx),ux=Math.cos(a),uy=Math.sin(a);
+  g.strokeStyle='#ffe3a0';g.lineWidth=2+arrow.power*1.2;g.beginPath();g.moveTo(arrow.x-ux*13,arrow.y-uy*13);g.lineTo(arrow.x+ux*6,arrow.y+uy*6);g.stroke();
+  g.fillStyle='#fff9d8';g.beginPath();g.moveTo(arrow.x+ux*11,arrow.y+uy*11);g.lineTo(arrow.x+uy*4,arrow.y-ux*4);g.lineTo(arrow.x-uy*4,arrow.y+ux*4);g.closePath();g.fill();
+ }
+ g.restore();
+}
 // Elemental powers trigger only on distinct, sufficiently hard impacts.
 function shockwave(e,power,radius){
 if(!enemyAttacksEnabled())return;
@@ -2115,7 +2178,7 @@ for(let t of enemies){if(t===e||t.hp<=0)continue;let dx=t.x-e.x,dy=t.y-e.y,d=Mat
 let dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy)||1;if(d<radius+9){let f=power*.7*(1-Math.min(1,d/(radius+9)));p.kvx=(p.kvx||0)+dx/d*f;p.kvy=(p.kvy||0)+dy/d*f}
 }
 // Windup -> execution -> recovery is shared by melee and elemental specialists.
-// A good bat hit can cancel a windup; only a few enemies may telegraph at once.
+// A good weapon impact can cancel a windup; only a few enemies may telegraph at once.
 const ENEMY_CASTS={
  charge:[.68,4.8,125,24],feint:[.48,4.3,140,22],slam:[.9,5.3,125,48],
  heal:[.8,6.2,190,85],rally:[.7,5.4,180,88],brood:[.75,6.5,155,32],
@@ -2836,12 +2899,12 @@ function resolvePlayerDeath(){
  enterRoom(currentRoom.id,roomEntrySide);refillRoomShield();inv=2;
  showItemNotice('LIFE LOST · '+lives+' REMAIN · ROOM RESET');hud();
 }
-function reset(){resetRoomSynergies();progress=freshProgress();lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);hud()}
+function reset(){resetRoomSynergies();progress=freshProgress();lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
 function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*viewW/r.width,y:(e.clientY-r.top)*H/r.height}}
 function setStick(s,v){let dx=v.x-s.x,dy=v.y-s.y,d=Math.hypot(dx,dy),radius=R*controls.size/100,k=d?Math.min(d,radius)/d/radius:0;s.dx=dx*k;s.dy=dy*k}
 c.addEventListener('pointerdown',e=>{e.preventDefault();let v=pt(e),i=v.x<viewW/2?0:1,s=sticks[i];if(editingControls){if(editPointer)return;let nearest=sticks.map((st,j)=>({j,d:Math.hypot(st.x-v.x,st.y-v.y)})).filter(o=>o.d<R*controls.size/100+22).sort((a,b)=>a.d-b.d)[0];if(!nearest)return;editPointer={id:e.pointerId,i:nearest.j};c.setPointerCapture(e.pointerId);return}if(s.id!==null)return;if(controls.floating)moveStick(i,v);s.id=e.pointerId;c.setPointerCapture(e.pointerId);setStick(s,v)});
 c.addEventListener('pointermove',e=>{if(editPointer&&editPointer.id===e.pointerId){e.preventDefault();moveStick(editPointer.i,pt(e));return}let s=sticks.find(s=>s.id===e.pointerId);if(s){e.preventDefault();setStick(s,pt(e))}});
-function up(e){if(editPointer&&editPointer.id===e.pointerId){editPointer=null;saveControls();return}let s=sticks.find(s=>s.id===e.pointerId);if(s){s.id=null;s.dx=s.dy=0}}c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);document.querySelector('#restart').onclick=()=>{if(inSandbox())resetSandbox();else reset()};
+function up(e){if(editPointer&&editPointer.id===e.pointerId){editPointer=null;saveControls();return}let s=sticks.find(s=>s.id===e.pointerId);if(s){if(hero==='archer'&&s===sticks[1]&&e.type==='pointerup'){const power=bowPower();if(power>.15)p.target=Math.atan2(s.dy,s.dx);fireArrow(power,p.target)}s.id=null;s.dx=s.dy=0}}c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);document.querySelector('#restart').onclick=()=>{if(inSandbox())resetSandbox();else reset()};
 const settings=document.querySelector('#settings-panel'),sub=document.querySelector('#controls-settings');function closeSettings(){settings.hidden=true;sub.hidden=true}
 document.querySelector('#settings-toggle').onclick=()=>{document.querySelector('#character-panel').hidden=true;document.querySelector('#sandbox-panel').hidden=true;settings.hidden=!settings.hidden;sub.hidden=true};
 document.querySelector('#settings-close').onclick=closeSettings;
@@ -2867,10 +2930,15 @@ if(!moveDash(dt)){p.x=clamp(p.x+(l.dx*playerStats().moveSpeed*(arenaTime<(p.slow
 let playerBody={x:p.x,y:p.y,vx:l.dx*playerStats().moveSpeed*slideBoost+p.kvx,vy:l.dy*playerStats().moveSpeed*slideBoost+p.kvy,r:9,isPlayer:true,knockbackSpeed:Math.hypot(p.kvx,p.kvy),sticky:p.sticky||null,wallCooldowns:p.wallCooldowns||new Map(),wallContacts:p.wallContacts||new Set(),portalCooldown:p.portalCooldown||0,portalReady:!!p.portalReady};
 for(let w of walls){let impact=collideWall(playerBody,w,dt);if(w.type==='spike'&&impact>90&&Math.hypot(p.kvx,p.kvy)>95&&inv<=0){let damage=impact>180?16:impact>130?10:5;hp=damagedHealth(damage);inv=.7;if(hp<=0)over=true}}
 collideProps(playerBody,true);if(!collideGap(playerBody,ox,oy,true))collideHole(playerBody,ox,oy,Math.hypot(playerBody.vx,playerBody.vy),true);if(!p.falling)teleportBody(playerBody,dt);p.portalCooldown=playerBody.portalCooldown;p.portalReady=playerBody.portalReady;p.x=playerBody.x;p.y=playerBody.y;p.sticky=playerBody.sticky;p.wallCooldowns=playerBody.wallCooldowns;p.wallContacts=playerBody.wallContacts;p.vx=(p.x-ox)/Math.max(dt,.001);p.vy=(p.y-oy)/Math.max(dt,.001);if(!p.falling&&safeFloor(p.x,p.y,19)){p.safeX=p.x;p.safeY=p.y}
-if(Math.hypot(r.dx,r.dy)>.15)p.target=Math.atan2(r.dy,r.dx);
-let diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a)),force=Math.sign(diff)*Math.min(1,Math.abs(diff)*1.6);
-let previousBatAngle=p.a;p.vel=clamp(p.vel+(force*23*playerStats().swing-p.vel*3.1)*dt,-7.4*playerStats().swing,7.4*playerStats().swing);if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
-hitPropsWithBat(previousBatAngle,p.a);hitNestsWithBat(previousBatAngle,p.a);hitTrapLevers(previousBatAngle,p.a);hitCrackedWallsWithBat(previousBatAngle,p.a);updateBossFight(dt,previousBatAngle);
+if(Math.hypot(r.dx,r.dy)>(hero==='archer'?.07:.15))p.target=Math.atan2(r.dy,r.dx);
+let previousBatAngle=p.a;
+if(hero==='archer'){p.a=p.target;p.vel=0;inv=Math.max(0,inv-dt)}
+else{
+ let diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a)),force=Math.sign(diff)*Math.min(1,Math.abs(diff)*1.6);
+ p.vel=clamp(p.vel+(force*23*playerStats().swing-p.vel*3.1)*dt,-7.4*playerStats().swing,7.4*playerStats().swing);if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
+ hitPropsWithBat(previousBatAngle,p.a);hitNestsWithBat(previousBatAngle,p.a);hitTrapLevers(previousBatAngle,p.a);hitCrackedWallsWithBat(previousBatAngle,p.a);
+}
+updateBossFight(dt,previousBatAngle);updateArrows(dt);
 // Magnetic force is distance-limited and capped to keep the arena playable.
 for(let m of enemies){if(!enemyAttacksEnabled()||m.shape!=='magnet'||m.hp<=0)continue;
 let radius=m.elite?115:88,strength=m.elite?185:135,mode=m.magnetMode||1;
@@ -3009,6 +3077,7 @@ for(let a of artillery){let t=1-a.life/a.maxLife;g.save();g.strokeStyle='#ff7058
 for(let e of enemies){if(e.shape!=='laser'||e.hp<=0||(e.laserState!=='charge'&&e.laserState!=='fire'))continue;let firing=e.laserState==='fire';g.save();g.lineCap='round';g.strokeStyle=firing?'#ff2879':'#ff8cae';g.lineWidth=firing?6:1.5;g.globalAlpha=firing?.82:.4;g.shadowColor='#ff3580';g.shadowBlur=firing?14:0;for(let seg of shieldLaserLines(laserPath(e.x,e.y,e.laserAngle))){g.beginPath();g.moveTo(seg.x1,seg.y1);g.lineTo(seg.x2,seg.y2);g.stroke()}if(firing){g.shadowBlur=0;g.strokeStyle='#fff4fb';g.lineWidth=2;for(let seg of laserPath(e.x,e.y,e.laserAngle)){g.beginPath();g.moveTo(seg.x1,seg.y1);g.lineTo(seg.x2,seg.y2);g.stroke()}}g.restore()}
 for(let sh of shieldSegments(true)){g.save();g.globalAlpha=shieldBroken?.2:1;g.lineCap='round';g.lineWidth=3;g.strokeStyle='#74eaff';g.shadowColor=g.strokeStyle;g.shadowBlur=shieldBroken?0:5;g.beginPath();g.moveTo(sh.x1,sh.y1);g.lineTo(sh.x2,sh.y2);g.stroke();g.restore()}
 for(let q of projectiles){g.save();g.fillStyle=q.reflected?'#f7fff5':RANGED_COLOR[q.kind];g.shadowColor=g.fillStyle;g.shadowBlur=8;g.beginPath();g.arc(q.x,q.y,q.r,0,Math.PI*2);g.fill();g.restore()}
+drawArrows();
 for(let f of fallingFx){let t=1-f.life/f.maxLife,scale=(1-t)*(1-t);g.save();g.globalAlpha=1-t*.85;g.fillStyle=f.color;g.beginPath();g.arc(f.x+(f.tx-f.x)*t,f.y+(f.ty-f.y)*t+t*5,Math.max(.3,f.r*scale),0,Math.PI*2);g.fill();g.strokeStyle='#d3b6ed';g.lineWidth=2*(1-t);g.beginPath();g.arc(f.tx,f.ty,7+t*14,0,Math.PI*2);g.stroke();g.restore()}
 for(let w of gravityWells){let t=1-w.life/w.maxLife;g.save();g.globalAlpha=.7;g.strokeStyle='#bb8aff';g.lineWidth=2.5;g.setLineDash([5,5]);g.beginPath();g.arc(w.x,w.y,w.range,0,Math.PI*2);g.stroke();g.setLineDash([]);g.fillStyle='#211139';g.shadowColor='#ad6bff';g.shadowBlur=18;g.beginPath();g.arc(w.x,w.y,10+10*t,0,Math.PI*2);g.fill();g.strokeStyle='#e6bbff';g.beginPath();g.arc(w.x,w.y,15+12*t,0,Math.PI*2);g.stroke();g.restore()}
 for(let z of reactionZones){g.save();g.globalAlpha=Math.min(.5,z.life);g.fillStyle=z.type==='fire'?'#fa6a29':z.type==='electric'?'#d9e95b':'#9be7ff';g.beginPath();g.arc(z.x,z.y,z.r,0,Math.PI*2);g.fill();g.restore()}
@@ -3066,13 +3135,18 @@ if(phasing)g.restore();
 for(const enemy of enemies)drawBiomeEnemyDetails(enemy);
 for(let f of healFx){let progress=1-f.life/.85,alpha=Math.min(1,f.life/.25);g.save();g.globalAlpha=alpha;g.fillStyle='#70ff90';let x=f.x+12+progress*7,y=f.y-14-progress*21;g.fillRect(x-2,y-8,4,16);g.fillRect(x-8,y-2,16,4);g.restore()}
 drawBossFight();drawSynergies();drawDashTrail();drawDamageNumbers();
-if(!p.falling&&(inv===0||Math.floor(t/110)%2===0)){g.fillStyle=playerPoisonGlow>0?'#8dff45':'#fff';g.beginPath();g.arc(p.x,p.y,9,0,Math.PI*2);g.fill()}
-if(!p.falling){g.save();g.translate(p.x,p.y);g.rotate(p.a);g.fillStyle='#fff';g.fillRect(17,-3,31,6);g.fillStyle='#bdb7d5';g.fillRect(19,2,27,2);g.restore();}
+if(!p.falling&&(inv===0||Math.floor(t/110)%2===0)){g.fillStyle=playerPoisonGlow>0?'#8dff45':hero==='archer'?'#b9f4c8':'#fff';g.beginPath();g.arc(p.x,p.y,9,0,Math.PI*2);g.fill()}
+if(!p.falling){g.save();g.translate(p.x,p.y);g.rotate(p.a);if(hero==='archer'){
+ const charge=bowPower();g.strokeStyle='#deb87a';g.lineWidth=3;g.beginPath();g.moveTo(14,-18);g.quadraticCurveTo(32,0,14,18);g.stroke();
+ g.strokeStyle='#f9ead0';g.lineWidth=1.5;g.beginPath();g.moveTo(14,-18);g.lineTo(14-12*charge,0);g.lineTo(14,18);g.stroke();
+ if(charge>.15){g.strokeStyle='#ffe89f';g.lineWidth=2;g.beginPath();g.moveTo(14-12*charge,0);g.lineTo(37,0);g.stroke();g.fillStyle='#fff8ca';g.beginPath();g.moveTo(41,0);g.lineTo(33,-4);g.lineTo(33,4);g.fill()}
+ }else{g.fillStyle='#fff';g.fillRect(17,-3,31,6);g.fillStyle='#bdb7d5';g.fillRect(19,2,27,2)}g.restore();}
 if(FOG_OF_WAR_ENABLED)drawFog();
 g.restore(); // Joysticks, minimap and game-over text stay in screen coordinates.
 drawDungeonMap();drawRoomMap();
 g.fillStyle='#11101c';g.fillRect(0,VIEW_F,viewW,H-VIEW_F);g.save();g.globalAlpha=controls.opacity/100;for(let i=0;i<2;i++){let s=sticks[i],radius=R*controls.size/100;g.beginPath();g.arc(s.x,s.y,radius,0,Math.PI*2);g.fillStyle='#28263c';g.fill();g.strokeStyle=editingControls?'#ffe17e':i?'#b8a6ed':'#7e90ad';g.lineWidth=editingControls?4:2;g.stroke();g.beginPath();g.arc(s.x+s.dx*radius,s.y+s.dy*radius,19*controls.size/100,0,Math.PI*2);g.fillStyle=i?'#a38bd2':'#7486a7';g.fill()}g.restore()
-g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));g.fillText('BAT',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));
+if(hero==='archer'){const s=sticks[1],radius=R*controls.size/100,power=bowPower();g.save();g.strokeStyle=bowShotCooldown>0?'#a08b6b':'#f4c56b';g.lineWidth=4;g.beginPath();g.arc(s.x,s.y,radius+6,-Math.PI/2,-Math.PI/2+Math.PI*2*power);g.stroke();if(power>.15){g.textAlign='center';g.fillStyle='#ffe9a7';g.font='bold 10px monospace';g.fillText(Math.round(power*100)+'%',s.x,s.y-radius-15)}g.restore()}
+g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));g.fillText(hero==='archer'?'DRAW':'BAT',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Bleed stacks '+bleedStacks,viewW/2,237)}
-requestAnimationFrame(frame)}setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.2';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
