@@ -2,6 +2,17 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.1 safer and more varied teleporters
+
+- **No entrance traps:** Portals are placed on safe interior floor, at least 125 units away from all four door spawn points (and clear of the center spawn), rather than directly beside the west/east entrances.
+- **Actual random portals:** About 32% of regular combat layouts attempt a three-way purple random network, while most other combat rooms have two linked cyan portals. Some rooms deliberately have none. Cursed rooms favor random networks.
+- **Safe placement:** Portal locations avoid pits, walls, moving-wall sweep paths, floor traps, narrow bridges, and other portals. A crowded layout can omit portals if there are not enough safe locations.
+- **No ping-pong teleporting:** On arrival a body must leave the destination portal before teleportation rearms, even after the cooldown expires. This applies to players and enemies.
+- **Stable layouts:** Portal placement is deterministic for each dungeon room, so revisiting a room or loading a cleared-room save does not reshuffle the portals.
+- **Clearer visual distinction:** Linked portals are cyan and labeled LINK; random portals are violet, marked `?`, and labeled RANDOM.
+
+The hardcore survival rules and V8.0 enemy combat overhaul are unchanged.
+
 ## V8.0 enemy overhaul
 
 - **Distinct melee moves:** Veteran squares charge, rounds feint, armored foes telegraph devastating slams, splitters summon minions, and mergers rally nearby attackers. Healers and regenerators periodically heal nearby allies.
