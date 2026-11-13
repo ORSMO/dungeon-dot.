@@ -42,7 +42,8 @@ footer #restart{display:none}
 #dash-button.editing{border-style:dashed;border-color:#ffe17e;background:#493b3c;color:#ffe9ab;z-index:16;cursor:move}
 #synergy-list{display:grid;gap:7px}.synergy-row{display:flex;gap:10px;border:1px solid #4d415c;border-radius:8px;padding:9px;background:#211d2d}.synergy-row.active{border-color:#a48b56;background:#352c32}.synergy-row strong{font-size:12px;color:#c3afcf}.synergy-row.active strong{color:#f3d391}.synergy-row small{display:block;font-size:10px;color:#a69ab3;margin:3px 0}.synergy-row p{font-size:10px;line-height:1.45;color:#c7bacf;margin:3px 0 0}.synergy-icons{display:flex;align-items:center;gap:4px;min-width:62px;font-size:22px}.synergy-icons b{font-size:12px;color:#82708e}#synergy-count{color:#ebcc87;font-size:11px}
 #hero-picker{display:flex;gap:8px;margin:9px 0 5px}#hero-picker button{flex:1;padding:10px 8px;border:1px solid #796886;background:#2b2539;color:#e4dbea;font:700 11px monospace;line-height:1.4}#hero-picker button[aria-pressed=true]{border-color:#bff9d9;background:#294b3c;color:#e5fff0;box-shadow:0 0 10px #92e6b43b}#hero-choice-hint{display:block;margin:4px 2px 12px;color:#c0e3cc;font:10px system-ui;line-height:1.4}
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.3</small><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
+#level-hud{color:#e7c9ff;font:700 10px monospace;white-space:nowrap}#element-choice[hidden]{display:none!important}#element-choice{position:fixed;inset:0;z-index:75;background:#0c0b17e8;display:flex;align-items:center;justify-content:center;padding:20px;color:white}#element-choice .element-dialog{width:min(560px,94vw);max-height:90dvh;overflow:auto;background:#252036;border:2px solid #ae8de0;border-radius:13px;padding:15px;text-align:center}#element-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}#element-options button{background:#382d50;color:#fff;border:1px solid #a38cbe;padding:11px;border-radius:9px;text-align:left;min-height:75px}#element-options strong{display:block;font-size:15px}#element-options small{display:block;font-size:11px;line-height:1.3;margin-top:4px;color:#d1c2df}@media(max-height:380px){#element-choice .element-dialog{padding:9px}#element-options button{min-height:55px;padding:6px}}
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.3</small><small id="level-hud">LV 1 · XP 0/24</small><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
  <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
  <small id="character-coins"></small>
  <div id="character-stats"></div>
@@ -78,6 +79,7 @@ footer #restart{display:none}
  <label>Music <output id="sound-music-value">60%</output><input id="sound-music" type="range" min="0" max="100" value="60"></label>
  <label>Sound effects <output id="sound-effects-value">80%</output><input id="sound-effects" type="range" min="0" max="100" value="80"></label>
 </section>
+<section id="element-choice" hidden aria-label="Choose an element"><div class="element-dialog"><strong id="element-title">ELEMENT UNLOCKED</strong><p id="element-explain">Choose your first elemental power.</p><div id="element-options"></div></div></section>
 <small id="save-indicator" hidden></small>
 <div id="edit-hint" hidden>DRAG JOYSTICKS + DASH <button id="edit-done">DONE ✓</button></div></main><script>
 (()=>{const c=document.querySelector('#game'),g=c.getContext('2d');let viewW=640,W=480,F=480;const H=360,VIEW_F=304,R=35;const arena=document.querySelector('#arena');function resizeArena(){const r=arena.getBoundingClientRect();if(!r.width||!r.height)return;const oldW=viewW;viewW=Math.max(360,Math.round(H*r.width/r.height));c.width=viewW;c.height=H;try{if(oldW!==viewW&&typeof controls!=='undefined'){controls.positions=controls.positions.map(p=>[p[0]*viewW/oldW,p[1]]);sticks.forEach((s,i)=>{s.x=controls.positions[i][0];s.y=controls.positions[i][1]})}}catch(err){}}resizeArena();window.addEventListener('resize',resizeArena);window.visualViewport?.addEventListener('resize',resizeArena);
@@ -596,13 +598,86 @@ const UPGRADE_DEFS = {
 };
 let progress=null,coinDrops=[],heartDrops=[],lifeDrops=[],damageNumbers=[],friendlyZones=[],hostileZones=[],terrainPatches=[],nearestLoot=null;
 let itemHitCounter=0,mantleCooldown=0,itemNoticeTime=0;
-function freshProgress(){return {coins:0,items:{},upgrades:{},roomsCleared:0,synergyCoins:0}}
+
+const ELEMENTS={
+ fire:{name:'Fire',color:'#ffa46b',desc:'Weapon hits burn enemies.'},
+ ice:{name:'Ice',color:'#9cddff',desc:'Weapon hits slow enemies.'},
+ storm:{name:'Lightning',color:'#f4e77d',desc:'Every few hits chain lightning.'},
+ poison:{name:'Poison',color:'#a1dc88',desc:'Weapon hits apply toxic damage over time.'}
+};
+let elementHitCounter=0,elementComboClock=0;
+function xpRequirement(level){const n=Math.max(1,level)-1;return 24+12*n+2*n*n}
+function levelChoicePending(){
+ return progress&&((progress.level>=3&&!progress.elementPrimary)||(progress.level>=8&&!progress.elementSecondary));
+}
+function refreshElementHud(){
+ const el=document.querySelector('#level-hud');
+ if(!el||!progress)return;
+ const first=progress.elementPrimary,second=progress.elementSecondary;
+ el.textContent='LV '+progress.level+' · '+Math.floor(progress.xp)+'/'+xpRequirement(progress.level)+' XP'+(first?' · '+ELEMENTS[first].name:'')+(second?' + '+ELEMENTS[second].name:'');
+}
+function openElementChoice(){
+ const panel=document.querySelector('#element-choice');
+ if(!panel||!levelChoicePending()||inSandbox())return;
+ const second=!!progress.elementPrimary;
+ document.querySelector('#element-title').textContent=second?'LEVEL 8 · COMBINE ELEMENTS':'LEVEL 3 · CHOOSE AN ELEMENT';
+ document.querySelector('#element-explain').textContent=second?'Choose a second element. Both powers apply, and together they unlock an extra combo effect.':'One choice now. Your weapon gains this element for the rest of the run.';
+ const wrap=document.querySelector('#element-options');wrap.innerHTML='';
+ for(const [id,def] of Object.entries(ELEMENTS)){
+  if(second&&id===progress.elementPrimary)continue;
+  const b=document.createElement('button');b.type='button';b.innerHTML='<strong style="color:'+def.color+'">'+def.name+'</strong><small>'+def.desc+'</small>';
+  b.onclick=()=>selectElement(id);wrap.appendChild(b);
+ }
+ panel.hidden=false;sticks.forEach(stick=>{stick.id=null;stick.dx=stick.dy=0});
+}
+function selectElement(id){
+ if(!ELEMENTS[id]||!levelChoicePending()||progress.elementPrimary===id)return false;
+ if(!progress.elementPrimary)progress.elementPrimary=id;
+ else progress.elementSecondary=id;
+ document.querySelector('#element-choice').hidden=true;
+ showItemNotice('ELEMENT ACQUIRED · '+ELEMENTS[id].name+(progress.elementSecondary?' · COMBINATION ACTIVE':''));
+ refreshElementHud();queueCheckpoint();flushCheckpoint();hud();return true;
+}
+function earnXp(amount){
+ if(!progress||inSandbox()||over||amount<=0)return;
+ progress.xp+=amount;
+ let gained=0;
+ while(progress.level<30&&progress.xp>=xpRequirement(progress.level)){progress.xp-=xpRequirement(progress.level);progress.level++;gained++}
+ if(gained){showItemNotice('LEVEL '+progress.level+' · +'+(gained*2)+'% WEAPON DAMAGE');}
+ refreshElementHud();if(levelChoicePending())openElementChoice();
+ queueCheckpoint();
+}
+function elementChain(target,damage=1.5,count=2){
+ const nearby=[...enemies,...(bossFight&&!bossFight.done?bossFight.units:[])].filter(e=>e!==target&&e.hp>0&&Math.hypot(e.x-target.x,e.y-target.y)<145).slice(0,count);
+ for(const e of nearby){friendlyDamage(e,damage,'item');elementFx.push({type:'lightning',x:target.x,y:target.y,x2:e.x,y2:e.y,life:.22,maxLife:.22})}
+}
+function applyWeaponElement(target){
+ if(!progress?.elementPrimary||!target||target.hp<=0)return;
+ elementHitCounter++;
+ const elements=[progress.elementPrimary,progress.elementSecondary].filter(Boolean);
+ for(const id of elements){
+  if(id==='fire'){target.burnUntil=Math.max(target.burnUntil||0,arenaTime+2.5);target.burnPower=Math.max(target.burnPower||0,.85*playerStats().damage)}
+  if(id==='ice')target.slowUntil=Math.max(target.slowUntil||0,arenaTime+1.8);
+  if(id==='poison'){target.toxicUntil=Math.max(target.toxicUntil||0,arenaTime+3);target.toxicPower=Math.max(target.toxicPower||0,.65*playerStats().damage)}
+  if(id==='storm'&&elementHitCounter%3===0)elementChain(target,1.5,2);
+ }
+ if(elements.length<2||arenaTime<elementComboClock)return;
+ elementComboClock=arenaTime+2;
+ const pair=elements.slice().sort().join('+');
+ const styles={
+  'fire+ice':['#e5e7ea',2.2,65],'fire+storm':['#ffc97b',2.7,65],'fire+poison':['#d8b06a',3.0,60],
+  'ice+storm':['#c1ebff',2.3,78],'ice+poison':['#afedc6',2.3,68],'poison+storm':['#d3ff87',2.7,70]
+ };
+ const effect=styles[pair];if(effect){synergyArea(target.x,target.y,effect[2],effect[1],40,effect[0],target)}
+}
+
+function freshProgress(){return {coins:0,items:{},upgrades:{},roomsCleared:0,synergyCoins:0,level:1,xp:0,elementPrimary:null,elementSecondary:null}}
 function itemCount(id){return progress?.items[id]||0}
 function upgradeCount(id){return progress?.upgrades[id]||0}
 function playerStats(){
  return {
   maxHealth:Math.max(25,50+10*upgradeCount('vitality')+10*itemCount('emberHeart')-8*itemCount('glassEye')),
-  damage:1+.25*upgradeCount('power')+.4*itemCount('glassEye'),
+  damage:1+.25*upgradeCount('power')+.4*itemCount('glassEye')+.02*Math.max(0,(progress?.level||1)-1),
   moveSpeed:118*(1+Math.min(.8,.1*upgradeCount('speed'))),
   swing:Math.max(.55,1+.15*upgradeCount('swing')-.1*itemCount('counterweight')),
   knockback:1+.2*upgradeCount('knockback')+.4*itemCount('counterweight'),
@@ -658,6 +733,7 @@ function friendlyDamage(target,amount,source='item'){
  target.hp=Math.max(0,target.hp-playerDamageAmount(amount,source));if(source==='bat'||source==='arrow')afterPlayerBatHit(target);if(source==='projectile')synergyProjectileHit(target);return true;
 }
 function afterPlayerBatHit(target){
+ applyWeaponElement(target);
  if(itemCount('emberHeart')){target.burnUntil=arenaTime+3;target.burnPower=.75*itemCount('emberHeart')*playerStats().damage}
  if(itemCount('frostNail'))target.slowUntil=arenaTime+2;
  itemHitCounter++;
@@ -671,6 +747,7 @@ function updateItemEffects(dt){
  mantleCooldown=Math.max(0,mantleCooldown-dt);
  for(const target of [...enemies,...(bossFight&&!bossFight.done?bossFight.units:[])]){
   if(target.hp>0&&(target.burnUntil||0)>arenaTime)target.hp=Math.max(0,target.hp-(target.burnPower||.75)*dt);
+  if(target.hp>0&&(target.toxicUntil||0)>arenaTime)target.hp=Math.max(0,target.hp-(target.toxicPower||.6)*dt);
  }
  for(const zone of friendlyZones){
   zone.life-=dt;zone.tick=(zone.tick||0)+dt;
@@ -703,6 +780,7 @@ function drawDamageNumbers(){
 }
 function rewardEnemy(enemy){
  if(enemy.rewarded)return;enemy.rewarded=true;recordEnemyKill(enemy);synergyEnemyDeath(enemy);
+ earnXp(enemy.bossMinion||enemy.bossSummon?1:enemy.elite?5:['square','round'].includes(enemy.shape)?2:3);
  const amount=((enemy.elite?3:1)+itemCount('luckyPenny')+(Math.random()<Math.min(.5,playerStats().luck*.08)?1:0))*(currentRoom?.kind==='cursed'?2:1);
  if(!enemy.bossMinion&&!enemy.bossSummon)coinDrops.push({x:enemy.x,y:enemy.y,amount});
  if(!inSandbox()&&!enemy.bossMinion&&!enemy.bossSummon){
@@ -740,7 +818,7 @@ function rewardRoom(){
 }
 function rewardBoss(){
  if(inSandbox()||currentRoom.rewardGenerated)return;
- currentRoom.rewardGenerated=true;coinDrops.push({x:W/2-42,y:F/2,amount:20});
+ currentRoom.rewardGenerated=true;coinDrops.push({x:W/2-42,y:F/2,amount:20});earnXp(32);
  const fallen=bossFight?.units.find(unit=>unit.hp<=0);if(fallen)synergyEnemyDeath(fallen);synergyRoomClear();
  currentRoom.loot=[{id:'boss-reward',kind:'item',key:rollItem(),price:0,x:W/2+45,y:F/2,claimed:false}];
  if(itemCount('leechFang'))healPlayer(4*itemCount('leechFang'));
@@ -862,7 +940,7 @@ function updateCharacterMenu(){
   ['Health regen',st.regen.toFixed(1)+'/s'],[hero==='archer'?'Bonus bow reload':'Shield damage reduction',hero==='archer'?Math.round(Math.min(.5,upgradeCount('shield')*.1)*100)+'%':Math.round(st.shieldProtection*100)+'%'],['Critical chance',Math.round(st.crit*100)+'%'],['Luck',st.luck],['Damage reduction',Math.round(st.armour*100)+'%'],['Enemy shot speed',Math.round(st.bulletSpeed*100)+'%'],['Coin pickup range',st.pickup]
  ];
  document.querySelector('#character-stats').innerHTML=values.map(([name,value])=>'<div><span>'+name+'</span><strong>'+value+'</strong></div>').join('');
- document.querySelector('#character-coins').textContent=progress.coins+' coins · '+kills+' kills · Dungeon '+dungeonDepth;
+ document.querySelector('#character-coins').textContent=progress.coins+' coins · '+kills+' kills · Dungeon '+dungeonDepth+' · Level '+progress.level+' ('+progress.xp+'/'+xpRequirement(progress.level)+' XP)'+(progress.elementPrimary?' · '+ELEMENTS[progress.elementPrimary].name:'')+(progress.elementSecondary?' + '+ELEMENTS[progress.elementSecondary].name:'');
  const inventory=document.querySelector('#item-inventory');inventory.innerHTML='';
  for(const [id,count] of Object.entries(progress.items)){
   const def=heroItemDefinition(id),row=document.createElement('div');row.className='inventory-row';row.innerHTML=inventoryIcon(def)+'<div><strong>'+def.name+(count>1?' ×'+count:'')+'</strong><small>'+def.desc+'</small></div>';inventory.appendChild(row);
@@ -993,7 +1071,7 @@ function normalizeSavedRun(raw){
   if(!seen.has(door.to)){seen.add(door.to);queue.push(door.to)}
  }
  if(seen.size!==rooms.length)throw Error('Disconnected dungeon');
- raw.progress={coins:Math.floor(safeNumber(raw.progress.coins)),items:knownDictionary(raw.progress.items,ITEM_DEFS),upgrades:knownDictionary(raw.progress.upgrades,UPGRADE_DEFS),roomsCleared:Math.floor(safeNumber(raw.progress.roomsCleared)),synergyCoins:Math.floor(safeNumber(raw.progress.synergyCoins,0,0,9))};
+ raw.progress={coins:Math.floor(safeNumber(raw.progress.coins)),items:knownDictionary(raw.progress.items,ITEM_DEFS),upgrades:knownDictionary(raw.progress.upgrades,UPGRADE_DEFS),roomsCleared:Math.floor(safeNumber(raw.progress.roomsCleared)),synergyCoins:Math.floor(safeNumber(raw.progress.synergyCoins,0,0,9)),level:Math.floor(safeNumber(raw.progress.level,1,1,30)),xp:Math.floor(safeNumber(raw.progress.xp,0,0,100000)),elementPrimary:ELEMENTS[raw.progress.elementPrimary]?raw.progress.elementPrimary:null,elementSecondary:ELEMENTS[raw.progress.elementSecondary]&&raw.progress.elementSecondary!==raw.progress.elementPrimary?raw.progress.elementSecondary:null};
  raw.biome=BIOME_DEFS[raw.biome]?raw.biome:null;if(raw.biome==='basic')raw.biome=null;
  raw.depth=Math.floor(safeNumber(raw.depth,1,1,10000));raw.hero=Object.hasOwn(HERO_DEFS,raw.hero)?raw.hero:'classic';raw.hp=safeNumber(raw.hp,50,1,1e6);raw.lives=Math.floor(safeNumber(raw.lives,3,0,5));raw.kills=Math.floor(safeNumber(raw.kills));raw.arenaTime=safeNumber(raw.arenaTime);
  raw.player=raw.player&&typeof raw.player==='object'?raw.player:{};
@@ -1045,7 +1123,7 @@ function stopMenuControls(){clearRoomDash();sticks.forEach(stick=>{stick.id=null
 function closeGamePanels(){
  closeSettings();document.querySelector('#character-panel').hidden=true;document.querySelector('#sandbox-panel').hidden=true;document.querySelector('#sound-panel').hidden=true;document.querySelector('#bestiary-panel').hidden=true;
 }
-function persistencePaused(){return !document.querySelector('#start-screen').hidden||!document.querySelector('#sound-panel').hidden||!document.querySelector('#bestiary-panel').hidden}
+function persistencePaused(){return !document.querySelector('#start-screen').hidden||!document.querySelector('#sound-panel').hidden||!document.querySelector('#bestiary-panel').hidden||!document.querySelector('#element-choice').hidden}
 function showStartScreen(){
  stopMenuControls();closeGamePanels();queueCheckpoint();flushCheckpoint();flushProfile();pendingReplacement=null;
  document.querySelector('#start-screen').hidden=false;renderSaveSlots();updateSaveIndicator();
@@ -2004,7 +2082,7 @@ function enterRoom(id,entry=null){
  sticks.forEach(stick=>{stick.dx=stick.dy=0});
  if(currentRoom.kind==='start')playerBleed=[];
  if(!currentRoom.cleared){if(currentRoom.kind==='boss')startBossFight(currentRoom.bossKind);else{const base=Math.max(currentRoom.count,roomEnemyTarget(currentRoom));const easing=hero==='archer'?[.65,.8,.9,.95,1][Math.min(4,Math.max(0,dungeonDepth-1))]:1;const wanted=Math.max(4,Math.round(base*easing));currentRoom.count=wanted;for(let i=0;i<wanted;i++)spawn(selectedBiome&&i===0?currentBiome().enemies[0]:null)}}
- if(!loadingRun&&changedRoom)refillRoomShield();updateHeroHud();hud();clearRoomDash();resetRoomSynergies();queueCheckpoint();
+ if(!loadingRun&&changedRoom)refillRoomShield();updateHeroHud();hud();if(!loadingRun&&levelChoicePending())openElementChoice();clearRoomDash();resetRoomSynergies();queueCheckpoint();
 }
 function nextDungeon(biome){
  if(currentRoom?.kind!=='boss'||!currentRoom.bossDefeated||!BIOME_PATHS.some(path=>path.id===biome))return;
@@ -2905,6 +2983,7 @@ elementFx.push({type:'split',x:oldX,y:oldY,life:.38,maxLife:.38});
 }
 const lifeDisplay=document.createElement('span');lifeDisplay.id='lives-count';lifeDisplay.style.cssText='font:700 10px monospace;color:#ffb2bc;white-space:nowrap';document.querySelector('header .health').appendChild(lifeDisplay);
 function hud(){
+ refreshElementHud();
  document.querySelector('#hp-fill').style.width=(Math.max(0,hp)/playerStats().maxHealth*100)+'%';document.querySelector('#hp-bleed').style.width=(Math.min(Math.max(0,hp),pendingBleed())/playerStats().maxHealth*100)+'%';
  document.querySelector('#hp-fill').style.background=hp/playerStats().maxHealth<=.3?'#f06470':hp/playerStats().maxHealth<=.6?'#e7bb62':'#69d58a';document.querySelector('#hp-label').textContent=Math.round(Math.max(0,hp))+'/'+playerStats().maxHealth;lifeDisplay.textContent='LIVES '+lives+'/5';document.querySelector('#kills').textContent='KILLS '+kills;
  if(currentRoom){
