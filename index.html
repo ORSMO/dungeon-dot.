@@ -62,7 +62,7 @@ footer #restart{display:none}
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
 <div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.4</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
-  <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true">⚪ CLASSIC DOT<br>SWING BAT</button><button id="hero-archer" type="button" aria-pressed="false">🏹 ARCHER DOT<br>DRAW BOW</button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
+  <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true">⚪ CLASSIC DOT<br>SWING BAT</button><button id="hero-archer" type="button" aria-pressed="false">🏹 ARCHER DOT<br>DRAW BOW</button><button id="hero-mage" type="button" aria-pressed="false">🔮 MAGE DOT<br>DRAW RUNES</button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
 <section id="bestiary-panel" hidden aria-label="Enemy index">
@@ -89,13 +89,13 @@ const PLAYER_REGEN=.6;
 let shieldType='curved',shieldPaused=false,shieldHp=100,shieldBroken=false,shieldCooldown=0,shieldLastHit=-99,shieldLaserTick=0;
 // A compact body-mounted guard. Durability only refills on a genuine room entry.
 function shieldDamage(amount){
- if(hero==='archer'||shieldBroken||shieldHp<=0)return;
+ if(hero!=='classic'||shieldBroken||shieldHp<=0)return;
  shieldType='curved';shieldHp=Math.max(0,shieldHp-Math.max(0,amount)*(1-playerStats().shieldProtection));
  shieldLastHit=arenaTime;shieldBroken=shieldHp<=0;shieldCooldown=0;shieldUpdate(0);queueCheckpoint();
 }
 function shieldUpdate(dt){
  const bar=document.querySelector('#shield-durability'),fill=document.querySelector('#shield-durability-fill'),label=document.querySelector('#shield-durability-label');
- bar.style.display=hero==='archer'?'none':'flex';fill.style.width=shieldHp+'%';fill.style.background=shieldBroken?'#77708a':shieldHp<30?'#ff627f':'#8ceaff';
+ bar.style.display=hero==='classic'?'flex':'none';fill.style.width=shieldHp+'%';fill.style.background=shieldBroken?'#77708a':shieldHp<30?'#ff627f':'#8ceaff';
  label.textContent=shieldBroken?'SHIELD BROKEN · NEXT ROOM':'SHIELD '+Math.round(shieldHp)+'%';
 }
 function refillRoomShield(){
@@ -103,7 +103,7 @@ function refillRoomShield(){
 }
 function shieldLength(){return 14*2*Math.PI/3}
 function shieldSegments(includeBroken=false){
- if(hero==='archer'||!p||!includeBroken&&(shieldBroken||shieldHp<=0))return [];
+ if(hero!=='classic'||!p||!includeBroken&&(shieldBroken||shieldHp<=0))return [];
  const radius=14,half=Math.PI/3,segments=[],count=10;
  for(let i=0;i<count;i++){
   const a1=p.a-half+i*half*2/count,a2=p.a-half+(i+1)*half*2/count;
@@ -678,11 +678,11 @@ function playerStats(){
  return {
   maxHealth:Math.max(25,50+10*upgradeCount('vitality')+10*itemCount('emberHeart')-8*itemCount('glassEye')),
   damage:1+.25*upgradeCount('power')+(hero==='archer'?.2:.4)*itemCount('glassEye')+.02*Math.max(0,(progress?.level||1)-1),
-  moveSpeed:118*(1+Math.min(.8,.1*upgradeCount('speed')+(hero==='archer'?.05*itemCount('thornMantle'):0))),
+  moveSpeed:(hero==='mage'?112:118)*(1+Math.min(.8,.1*upgradeCount('speed')+(hero==='archer'?.05*itemCount('thornMantle'):0))),
   swing:Math.max(.55,1+.15*upgradeCount('swing')-.1*itemCount('counterweight')),
   knockback:1+.2*upgradeCount('knockback')+(hero==='archer'?.12:.4)*itemCount('counterweight'),
-  regen:PLAYER_REGEN+.15*upgradeCount('regen')+(hero==='archer'?.12:.3)*itemCount('mossCharm')+(hasSynergy('livingArmour')?.2:0),
-  shieldProtection:hero==='archer'?0:Math.min(.6,.1*upgradeCount('shield')+.15*itemCount('shieldBloom')),
+  regen:(hero==='mage'?.5:PLAYER_REGEN)+.15*upgradeCount('regen')+(hero==='mage'?.18:hero==='archer'?.12:.3)*itemCount('mossCharm')+(hasSynergy('livingArmour')?.2:0),
+  shieldProtection:hero!=='classic'?0:Math.min(.6,.1*upgradeCount('shield')+.15*itemCount('shieldBloom')),
   crit:Math.min(.6,.05*upgradeCount('focus')+(hero==='archer'?.12*itemCount('glassEye'):0)),
   luck:upgradeCount('luck')+itemCount('luckyPenny'),
   armour:Math.min(.4,(hero==='archer'?.04:.1)*itemCount('thornMantle')+(hasSynergy('livingArmour')?.1:0)),
@@ -725,7 +725,7 @@ function heroItemDefinition(id){
  return {...def,...(rule?.[hero]||rule?.classic||{})};
 }
 function heroUpgradeDefinition(id){
- const def=UPGRADE_DEFS[id];if(!def||hero!=='archer')return def;
+ const def=UPGRADE_DEFS[id];if(!def)return def;if(hero==='mage'){if(id==='shield')return {...def,name:'Rune Oil',desc:'Reduce spell cooldowns by 10%.'};if(id==='power')return {...def,name:'Spell Power',desc:'+25% spell damage.'};if(id==='swing')return {...def,name:'Quick Incantation',desc:'Cast spells sooner.'};if(id==='knockback')return {...def,name:'Force Mastery',desc:'Stronger spell push and pull.'};return def;}if(hero!=='archer')return def;
  if(id==='shield')return {...def,name:'Bowstring Oil',desc:'Bow reloads 10% faster, stacking up to 50%.'};
  if(id==='power')return {...def,name:'Arrow Strength',desc:'+25% arrow and reflected-shot damage.'};
  if(id==='swing')return {...def,name:'Quick Draw',desc:'+15% bow reload speed.'};
@@ -974,11 +974,11 @@ function inventoryIcon(def){
 function updateCharacterMenu(){
  const panel=document.querySelector('#character-panel');if(panel.hidden)return;
  const st=playerStats(),values=[
-  ['Maximum health',st.maxHealth],[hero==='archer'?'Arrow damage':'Bat damage',st.damage.toFixed(2)+'×'],['Move speed',Math.round(st.moveSpeed)],[hero==='archer'?'Bow reload speed':'Swing speed',Math.round(st.swing*100)+'%'],['Knockback',Math.round(st.knockback*100)+'%'],
-  ['Health regen',st.regen.toFixed(1)+'/s'],[hero==='archer'?'Bonus bow reload':'Shield damage reduction',hero==='archer'?Math.round(Math.min(.5,upgradeCount('shield')*.1)*100)+'%':Math.round(st.shieldProtection*100)+'%'],['Critical chance',Math.round(st.crit*100)+'%'],['Luck',st.luck],['Damage reduction',Math.round(st.armour*100)+'%'],[hero==='archer'?'Arrow slow zone':'Enemy shot speed',hero==='archer'?(itemCount('hourglass')?'ON':'OFF'):Math.round(st.bulletSpeed*100)+'%'],[hero==='archer'?'Coin pickup (arrows collect)':'Coin pickup range',st.pickup]
+  ['Maximum health',st.maxHealth],[hero==='mage'?'Spell damage':hero==='archer'?'Arrow damage':'Bat damage',st.damage.toFixed(2)+'×'],['Move speed',Math.round(st.moveSpeed)],[hero==='mage'?'Cast speed':hero==='archer'?'Bow reload speed':'Swing speed',Math.round(st.swing*100)+'%'],['Knockback',Math.round(st.knockback*100)+'%'],
+  ['Health regen',st.regen.toFixed(1)+'/s'],[hero==='mage'?'Magic recovery':hero==='archer'?'Bonus bow reload':'Shield damage reduction',hero==='mage'?Math.round(Math.min(.45,upgradeCount('shield')*.1+itemCount('shieldBloom')*.12)*100)+'%':hero==='archer'?Math.round(Math.min(.5,upgradeCount('shield')*.1)*100)+'%':Math.round(st.shieldProtection*100)+'%'],['Critical chance',Math.round(st.crit*100)+'%'],['Luck',st.luck],['Damage reduction',Math.round(st.armour*100)+'%'],[hero==='archer'?'Arrow slow zone':'Enemy shot speed',hero==='archer'?(itemCount('hourglass')?'ON':'OFF'):Math.round(st.bulletSpeed*100)+'%'],[hero==='archer'?'Coin pickup (arrows collect)':'Coin pickup range',st.pickup]
  ];
  document.querySelector('#character-stats').innerHTML=values.map(([name,value])=>'<div><span>'+name+'</span><strong>'+value+'</strong></div>').join('');
- document.querySelector('#character-panel .character-note').textContent=hero==='archer'?'ARCHER: Draw and release arrows. No shield. Items transform into bow-related upgrades. Reach level 3 for your first element and level 8 to combine two.':'CLASSIC: Your curved shield blocks projectiles and reflects lasers; it refills on room entry. Bat strikes and charged knockback are your main strength.';
+ document.querySelector('#character-panel .character-note').textContent=hero==='mage'?'MAGE: Draw 1, 2 or 3 rune patterns to cast 15 spells. No shield. Auto-aimed casts. Level 3 and 8 elements apply to your magic.':hero==='archer'?'ARCHER: Draw and release arrows. No shield. Items transform into bow-related upgrades. Reach level 3 for your first element and level 8 to combine two.':'CLASSIC: Your curved shield blocks projectiles and reflects lasers; it refills on room entry. Bat strikes and charged knockback are your main strength.';
  document.querySelector('#character-coins').textContent=progress.coins+' coins · '+kills+' kills · Dungeon '+dungeonDepth+' · Level '+progress.level+' ('+progress.xp+'/'+xpRequirement(progress.level)+' XP)'+(progress.elementPrimary?' · '+ELEMENTS[progress.elementPrimary].name:'')+(progress.elementSecondary?' + '+ELEMENTS[progress.elementSecondary].name:'');
  const inventory=document.querySelector('#item-inventory');inventory.innerHTML='';
  for(const [id,count] of Object.entries(progress.items)){
@@ -1056,7 +1056,7 @@ function setupSandboxEconomyUI(){
 
 // Two browser-local cleared-room checkpoints, shared audio preferences and bestiary.
 const SAVE_VERSION=1,PROFILE_KEY='dd-profile-v1';
-const HERO_DEFS={classic:{name:'Classic Dot',hint:'Swing the silly bat with the right stick. All original combat mechanics remain.'},archer:{name:'Archer Dot',hint:'Aim with the right stick, pull farther to draw the bow, then release to shoot. No bat swings.'}};
+const HERO_DEFS={classic:{name:'Classic Dot',hint:'Swing the silly bat with the right stick. All original combat mechanics remain.'},archer:{name:'Archer Dot',hint:'Aim with the right stick, pull farther to draw the bow, then release to shoot. No bat swings.'},mage:{name:'Mage Dot',hint:'Trace A, B and C runes in any order on the right. Release to cast one of 15 spells. No shield.'}};
 let hero='classic',selectedHero='classic';
 let activeSlot=null,loadingRun=false,savePending=false,profileDirty=false,saveError='',pendingReplacement=null;
 let profile={version:1,lastSlot:null,audio:{master:80,music:60,effects:80,muted:false},bestiary:{}};
@@ -1193,7 +1193,7 @@ function renderHeroPicker(){
  for(const id of Object.keys(HERO_DEFS))document.querySelector('#hero-'+id).setAttribute('aria-pressed',String(selectedHero===id));
  document.querySelector('#hero-choice-hint').textContent=HERO_DEFS[selectedHero].hint+' Selection applies to new runs; saved heroes stay the same.';
 }
-function updateHeroHud(){document.querySelector('footer small').textContent=hero==='archer'?'LEFT · MOVE   RIGHT · DRAW & RELEASE':'LEFT · MOVE   RIGHT · HEAVY BAT'}
+function updateHeroHud(){document.querySelector('footer small').textContent=hero==='mage'?'LEFT · MOVE   RIGHT · TRACE RUNES':hero==='archer'?'LEFT · MOVE   RIGHT · DRAW & RELEASE':'LEFT · MOVE   RIGHT · HEAVY BAT'}
 for(const id of Object.keys(HERO_DEFS))document.querySelector('#hero-'+id).onclick=()=>{selectedHero=id;renderHeroPicker()};
 function prepareSlotSwitch(){
  if(inSandbox())leaveSandbox();
@@ -2213,7 +2213,7 @@ function enterRoom(id,entry=null){
  doorCooldown=.7;inv=Math.max(inv||0,.9);
  sticks.forEach(stick=>{stick.dx=stick.dy=0});
  if(currentRoom.kind==='start')playerBleed=[];
- if(!currentRoom.cleared){if(currentRoom.kind==='boss')startBossFight(currentRoom.bossKind);else{const base=Math.max(currentRoom.count,roomEnemyTarget(currentRoom));const easing=hero==='archer'?[.65,.8,.9,.95,1][Math.min(4,Math.max(0,dungeonDepth-1))]:1;const wanted=Math.max(4,Math.round(base*easing));currentRoom.count=wanted;for(let i=0;i<wanted;i++)spawn(selectedBiome&&i===0?currentBiome().enemies[0]:null)}}
+ if(!currentRoom.cleared){if(currentRoom.kind==='boss')startBossFight(currentRoom.bossKind);else{const base=Math.max(currentRoom.count,roomEnemyTarget(currentRoom));const easing=hero!=='classic'?[.65,.8,.9,.95,1][Math.min(4,Math.max(0,dungeonDepth-1))]:1;const wanted=Math.max(4,Math.round(base*easing));currentRoom.count=wanted;for(let i=0;i<wanted;i++)spawn(selectedBiome&&i===0?currentBiome().enemies[0]:null)}}
  if(!loadingRun&&changedRoom)refillRoomShield();updateHeroHud();hud();if(!loadingRun&&levelChoicePending())openElementChoice();clearRoomDash();resetRoomSynergies();queueCheckpoint();
 }
 function nextDungeon(biome){
@@ -2703,8 +2703,8 @@ function setupDungeonMechanics(room){
   trapControls.push({...pos,kind:i===0?'plate':'lever',trap:t,ready:0,r:14});
  }
  // Nests are optional, destructible room objectives, not additional enemy types.
- if(Math.random()<(hero==='archer'&&dungeonDepth===1?.25:.58)){
-  const count=hero==='archer'&&dungeonDepth===1?1:room.shape==='big'&&Math.random()<.65?2:1;
+ if(Math.random()<(hero!=='classic'&&dungeonDepth===1?.25:.58)){
+  const count=hero!=='classic'&&dungeonDepth===1?1:room.shape==='big'&&Math.random()<.65?2:1;
   for(let i=0;i<count;i++)for(let attempt=0;attempt<100;attempt++){
    const x=64+Math.random()*(W-128),y=64+Math.random()*(F-128),r=19;
    const reachable=room.doors.some(door=>{const a=door.side==='west'?62:door.side==='east'?W-62:W/2,b=door.side==='north'?62:door.side==='south'?F-62:F/2;return navigationSight(x,y,a,b,9)});
@@ -2713,7 +2713,7 @@ function setupDungeonMechanics(room){
    dungeonNests.push({x,y,r,hp,maxHp:hp,clock:5+Math.random()*2,spawned:0});break;
   }
  }
- if(Math.random()<(hero==='archer'&&dungeonDepth===1?.2:.4)){const types=['ambush','earthquake','treasure','invasion'];dungeonEvent={kind:types[Math.floor(Math.random()*types.length)],timer:6+Math.random()*4,done:false,message:'',messageUntil:0}}
+ if(Math.random()<(hero!=='classic'&&dungeonDepth===1?.2:.4)){const types=['ambush','earthquake','treasure','invasion'];dungeonEvent={kind:types[Math.floor(Math.random()*types.length)],timer:6+Math.random()*4,done:false,message:'',messageUntil:0}}
 }
 function triggerTrapControl(sw){
  if(arenaTime<sw.ready||currentRoom.cleared)return false;
@@ -3175,7 +3175,7 @@ for(let w of walls){let impact=collideWall(playerBody,w,dt);if(w.type==='spike'&
 collideProps(playerBody,true);if(!collideGap(playerBody,ox,oy,true))collideHole(playerBody,ox,oy,Math.hypot(playerBody.vx,playerBody.vy),true);if(!p.falling)teleportBody(playerBody,dt);p.portalCooldown=playerBody.portalCooldown;p.portalReady=playerBody.portalReady;p.x=playerBody.x;p.y=playerBody.y;p.sticky=playerBody.sticky;p.wallCooldowns=playerBody.wallCooldowns;p.wallContacts=playerBody.wallContacts;p.vx=(p.x-ox)/Math.max(dt,.001);p.vy=(p.y-oy)/Math.max(dt,.001);if(!p.falling&&safeFloor(p.x,p.y,19)){p.safeX=p.x;p.safeY=p.y}
 if(Math.hypot(r.dx,r.dy)>(hero==='archer'?.07:.15))p.target=Math.atan2(r.dy,r.dx);
 let previousBatAngle=p.a;
-if(hero==='archer'){p.a=p.target;p.vel=0;inv=Math.max(0,inv-dt)}
+if(hero!=='classic'){p.a=p.target;p.vel=0;inv=Math.max(0,inv-dt)}
 else{
  let diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a)),force=Math.sign(diff)*Math.min(1,Math.abs(diff)*1.6);
  p.vel=clamp(p.vel+(force*23*playerStats().swing-p.vel*3.1)*dt,-7.4*playerStats().swing,7.4*playerStats().swing);if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
