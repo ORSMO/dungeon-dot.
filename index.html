@@ -61,7 +61,7 @@ footer #restart{display:none}
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
-<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.4</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
+<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.5</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
   <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true">⚪ CLASSIC DOT<br>SWING BAT</button><button id="hero-archer" type="button" aria-pressed="false">🏹 ARCHER DOT<br>DRAW BOW</button><button id="hero-mage" type="button" aria-pressed="false">🔮 MAGE DOT<br>DRAW RUNES</button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
@@ -1158,7 +1158,7 @@ function updateSaveIndicator(){
  if(saveError)label.textContent=saveError;else if(activeSlot&&!label.textContent)label.textContent='SLOT '+activeSlot+' · AUTOSAVE READY';
  document.querySelector('#start-message').textContent=saveError||'Autosaves after cleared rooms. Saves and records stay in this browser.';
 }
-function stopMenuControls(){clearRoomDash();sticks.forEach(stick=>{stick.id=null;stick.dx=stick.dy=0});if(editingControls)endEditing()}
+function stopMenuControls(){mageGesture=null;clearRoomDash();sticks.forEach(stick=>{stick.id=null;stick.dx=stick.dy=0});if(editingControls)endEditing()}
 function closeGamePanels(){
  document.querySelector('#element-choice').hidden=true;closeSettings();document.querySelector('#character-panel').hidden=true;document.querySelector('#sandbox-panel').hidden=true;document.querySelector('#sound-panel').hidden=true;document.querySelector('#bestiary-panel').hidden=true;
 }
@@ -2199,6 +2199,7 @@ function makeRoomLayout(room){
  placeRoomPortals(room);
 }
 function enterRoom(id,entry=null){
+ mageBolts=[];mageZones=[];mageGesture=null;mageCooldowns={};mageGlobalReady=0;
  const changedRoom=currentRoom?.id!==id;if(changedRoom&&!loadingRun&&dungeon.includes(currentRoom))bankClearedRoomCoins();
  if(currentRoom&&!inSandbox()){currentRoom.coinDrops=coinDrops;currentRoom.heartDrops=heartDrops;currentRoom.lifeDrops=lifeDrops}
  currentRoom=id==='sandbox'?sandboxRoom:dungeon[id];currentRoom.visited=currentRoom.discovered=true;W=currentRoom.w;F=currentRoom.h;
@@ -2435,7 +2436,7 @@ function mageRunes(){
  return [{id:'A',x:x-52,y,color:'#ffae76'},{id:'B',x:x+52,y,color:'#a5e8ff'},{id:'C',x,y:y+64,color:'#caa9ff'}];
 }
 function mageInputEnabled(){
- return hero==='mage'&&activeSlot&&!over&&!p?.falling&&!editingControls()&&settings.hidden&&document.querySelector('#character-panel').hidden&&document.querySelector('#sandbox-panel').hidden&&!persistencePaused()&&!shieldPaused;
+ return hero==='mage'&&activeSlot&&!over&&!p?.falling&&!editingControls&&settings.hidden&&document.querySelector('#character-panel').hidden&&document.querySelector('#sandbox-panel').hidden&&!persistencePaused()&&!shieldPaused;
 }
 function mageAim(){
  const targets=[...enemies.filter(e=>e.hp>0),...(bossFight&&!bossFight.done?bossFight.units.filter(u=>u.hp>0):[]),...dungeonNests.filter(n=>n.hp>0)];
@@ -2449,8 +2450,8 @@ function mageAvailable(path){
 }
 function mageTargets(){return [...enemies,...(bossFight&&!bossFight.done?bossFight.units:[])].filter(e=>e.hp>0)}
 function mageOnHit(target){
- if(!target||target.hp<=0)return;
- target.lastHitBy='mage';applyWeaponElement(target);mageHitCount++;
+ if(!target)return;
+ target.lastHitBy='mage';if(target.hp<=0)return;applyWeaponElement(target);mageHitCount++;
  if(itemCount('emberHeart')){target.burnUntil=Math.max(target.burnUntil||0,arenaTime+2.5);target.burnPower=.55*itemCount('emberHeart')*playerStats().damage}
  if(itemCount('frostNail'))target.slowUntil=Math.max(target.slowUntil||0,arenaTime+1.5);
  if(itemCount('stormCoil')&&mageHitCount%4===0)elementChain(target,1.8*itemCount('stormCoil'),2);
@@ -2462,9 +2463,9 @@ function mageOnHit(target){
 function mageHurt(target,base,kind='arc'){
  if(!target||target.hp<=0)return false;
  if(!target.kind&& !canDamage(target,160))return false;
- const before=target.hp;
+ const before=target.hp;target.lastHitBy='mage';
  // Boss projectiles can open Gatekeeper defenses and remove Crystal Eye armor.
- const done=friendlyDamage(target,base*(1+itemCount('glassEye')*.25),'projectile');
+ const done=friendlyDamage(target,base*(1+itemCount('glassEye')*.25+itemCount('mirrorLens')*.15),'projectile');
  if(done&&target.hp<before){mageOnHit(target);
   if(kind==='fire'){target.burnUntil=Math.max(target.burnUntil||0,arenaTime+2.4);target.burnPower=Math.max(target.burnPower||0,.6)}
   if(kind==='ice')target.slowUntil=Math.max(target.slowUntil||0,arenaTime+2);
@@ -3368,12 +3369,12 @@ function resolvePlayerDeath(){
  enterRoom(currentRoom.id,roomEntrySide);refillRoomShield();inv=2;
  showItemNotice('LIFE LOST · '+lives+' REMAIN · ROOM RESET');hud();
 }
-function reset(){document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;strongArrowHits=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
+function reset(){mageBolts=[];mageZones=[];mageGesture=null;mageCooldowns={};mageGlobalReady=0;mageLastCast='';mageHitCount=0;mageCastCount=0;document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;strongArrowHits=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
 function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*viewW/r.width,y:(e.clientY-r.top)*H/r.height}}
 function setStick(s,v){let dx=v.x-s.x,dy=v.y-s.y,d=Math.hypot(dx,dy),radius=R*controls.size/100,k=d?Math.min(d,radius)/d/radius:0;s.dx=dx*k;s.dy=dy*k}
-c.addEventListener('pointerdown',e=>{e.preventDefault();let v=pt(e),i=v.x<viewW/2?0:1,s=sticks[i];if(editingControls){if(editPointer)return;let nearest=sticks.map((st,j)=>({j,d:Math.hypot(st.x-v.x,st.y-v.y)})).filter(o=>o.d<R*controls.size/100+22).sort((a,b)=>a.d-b.d)[0];if(!nearest)return;editPointer={id:e.pointerId,i:nearest.j};c.setPointerCapture(e.pointerId);return}if(s.id!==null)return;if(controls.floating)moveStick(i,v);s.id=e.pointerId;c.setPointerCapture(e.pointerId);setStick(s,v)});
-c.addEventListener('pointermove',e=>{if(editPointer&&editPointer.id===e.pointerId){e.preventDefault();moveStick(editPointer.i,pt(e));return}let s=sticks.find(s=>s.id===e.pointerId);if(s){e.preventDefault();setStick(s,pt(e))}});
-function up(e){if(editPointer&&editPointer.id===e.pointerId){editPointer=null;saveControls();return}let s=sticks.find(s=>s.id===e.pointerId);if(s){if(hero==='archer'&&s===sticks[1]&&e.type==='pointerup'){const power=bowPower();if(power>.15)p.target=Math.atan2(s.dy,s.dx);fireArrow(power,p.target)}s.id=null;s.dx=s.dy=0}}c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);document.querySelector('#restart').onclick=()=>{if(inSandbox())resetSandbox();else reset()};
+c.addEventListener('pointerdown',e=>{e.preventDefault();let v=pt(e),i=v.x<viewW/2?0:1,s=sticks[i];if(hero==='mage'&&!editingControls&&i===1){const rune=mageRuneAt(v.x,v.y);if(rune&&mageInputEnabled()&&!mageGesture){mageGesture={id:e.pointerId,path:[rune.id],last:v};c.setPointerCapture(e.pointerId)}return}if(editingControls){if(editPointer)return;let nearest=sticks.map((st,j)=>({j,d:Math.hypot(st.x-v.x,st.y-v.y)})).filter(o=>o.d<R*controls.size/100+22).sort((a,b)=>a.d-b.d)[0];if(!nearest)return;editPointer={id:e.pointerId,i:nearest.j};c.setPointerCapture(e.pointerId);return}if(s.id!==null)return;if(controls.floating)moveStick(i,v);s.id=e.pointerId;c.setPointerCapture(e.pointerId);setStick(s,v)});
+c.addEventListener('pointermove',e=>{if(mageGesture&&mageGesture.id===e.pointerId){e.preventDefault();mageGesturePoint(pt(e));return}if(editPointer&&editPointer.id===e.pointerId){e.preventDefault();moveStick(editPointer.i,pt(e));return}let s=sticks.find(s=>s.id===e.pointerId);if(s){e.preventDefault();setStick(s,pt(e))}});
+function up(e){if(mageGesture&&mageGesture.id===e.pointerId){e.preventDefault();mageGesturePoint(pt(e));const pattern=mageGesture.path.join('');mageGesture=null;if(e.type==='pointerup')castMageSpell(pattern);return}if(editPointer&&editPointer.id===e.pointerId){editPointer=null;saveControls();return}let s=sticks.find(s=>s.id===e.pointerId);if(s){if(hero==='archer'&&s===sticks[1]&&e.type==='pointerup'){const power=bowPower();if(power>.15)p.target=Math.atan2(s.dy,s.dx);fireArrow(power,p.target)}s.id=null;s.dx=s.dy=0}}c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);document.querySelector('#restart').onclick=()=>{if(inSandbox())resetSandbox();else reset()};
 const settings=document.querySelector('#settings-panel'),sub=document.querySelector('#controls-settings');function closeSettings(){settings.hidden=true;sub.hidden=true}
 document.querySelector('#settings-toggle').onclick=()=>{document.querySelector('#character-panel').hidden=true;document.querySelector('#sandbox-panel').hidden=true;settings.hidden=!settings.hidden;sub.hidden=true};
 document.querySelector('#settings-close').onclick=closeSettings;
@@ -3407,7 +3408,7 @@ else{
  p.vel=clamp(p.vel+(force*23*playerStats().swing-p.vel*3.1)*dt,-7.4*playerStats().swing,7.4*playerStats().swing);if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
  hitPropsWithBat(previousBatAngle,p.a);hitNestsWithBat(previousBatAngle,p.a);hitTrapLevers(previousBatAngle,p.a);hitCrackedWallsWithBat(previousBatAngle,p.a);
 }
-updateBossFight(dt,previousBatAngle);updateArrows(dt);
+updateBossFight(dt,previousBatAngle);updateArrows(dt);updateMage(dt);
 // Magnetic force is distance-limited and capped to keep the arena playable.
 for(let m of enemies){if(!enemyAttacksEnabled()||m.shape!=='magnet'||m.hp<=0)continue;
 let radius=m.elite?115:88,strength=m.elite?185:135,mode=m.magnetMode||1;
@@ -3546,7 +3547,7 @@ for(let a of artillery){let t=1-a.life/a.maxLife;g.save();g.strokeStyle='#ff7058
 for(let e of enemies){if(e.shape!=='laser'||e.hp<=0||(e.laserState!=='charge'&&e.laserState!=='fire'))continue;let firing=e.laserState==='fire';g.save();g.lineCap='round';g.strokeStyle=firing?'#ff2879':'#ff8cae';g.lineWidth=firing?6:1.5;g.globalAlpha=firing?.82:.4;g.shadowColor='#ff3580';g.shadowBlur=firing?14:0;for(let seg of shieldLaserLines(laserPath(e.x,e.y,e.laserAngle))){g.beginPath();g.moveTo(seg.x1,seg.y1);g.lineTo(seg.x2,seg.y2);g.stroke()}if(firing){g.shadowBlur=0;g.strokeStyle='#fff4fb';g.lineWidth=2;for(let seg of laserPath(e.x,e.y,e.laserAngle)){g.beginPath();g.moveTo(seg.x1,seg.y1);g.lineTo(seg.x2,seg.y2);g.stroke()}}g.restore()}
 for(let sh of shieldSegments(true)){g.save();g.globalAlpha=shieldBroken?.2:1;g.lineCap='round';g.lineWidth=3;g.strokeStyle='#74eaff';g.shadowColor=g.strokeStyle;g.shadowBlur=shieldBroken?0:5;g.beginPath();g.moveTo(sh.x1,sh.y1);g.lineTo(sh.x2,sh.y2);g.stroke();g.restore()}
 for(let q of projectiles){g.save();g.fillStyle=q.reflected?'#f7fff5':RANGED_COLOR[q.kind];g.shadowColor=g.fillStyle;g.shadowBlur=8;g.beginPath();g.arc(q.x,q.y,q.r,0,Math.PI*2);g.fill();g.restore()}
-drawArrows();
+drawArrows();drawMageEffects();
 for(let f of fallingFx){let t=1-f.life/f.maxLife,scale=(1-t)*(1-t);g.save();g.globalAlpha=1-t*.85;g.fillStyle=f.color;g.beginPath();g.arc(f.x+(f.tx-f.x)*t,f.y+(f.ty-f.y)*t+t*5,Math.max(.3,f.r*scale),0,Math.PI*2);g.fill();g.strokeStyle='#d3b6ed';g.lineWidth=2*(1-t);g.beginPath();g.arc(f.tx,f.ty,7+t*14,0,Math.PI*2);g.stroke();g.restore()}
 for(let w of gravityWells){let t=1-w.life/w.maxLife;g.save();g.globalAlpha=.7;g.strokeStyle='#bb8aff';g.lineWidth=2.5;g.setLineDash([5,5]);g.beginPath();g.arc(w.x,w.y,w.range,0,Math.PI*2);g.stroke();g.setLineDash([]);g.fillStyle='#211139';g.shadowColor='#ad6bff';g.shadowBlur=18;g.beginPath();g.arc(w.x,w.y,10+10*t,0,Math.PI*2);g.fill();g.strokeStyle='#e6bbff';g.beginPath();g.arc(w.x,w.y,15+12*t,0,Math.PI*2);g.stroke();g.restore()}
 for(let z of reactionZones){g.save();g.globalAlpha=Math.min(.5,z.life);g.fillStyle=z.type==='fire'?'#fa6a29':z.type==='electric'?'#d9e95b':'#9be7ff';g.beginPath();g.arc(z.x,z.y,z.r,0,Math.PI*2);g.fill();g.restore()}
@@ -3613,9 +3614,9 @@ if(!p.falling){g.save();g.translate(p.x,p.y);g.rotate(p.a);if(hero==='archer'){
 if(FOG_OF_WAR_ENABLED)drawFog();
 g.restore(); // Joysticks, minimap and game-over text stay in screen coordinates.
 drawDungeonMap();drawRoomMap();
-g.fillStyle='#11101c';g.fillRect(0,VIEW_F,viewW,H-VIEW_F);g.save();g.globalAlpha=controls.opacity/100;for(let i=0;i<2;i++){let s=sticks[i],radius=R*controls.size/100;g.beginPath();g.arc(s.x,s.y,radius,0,Math.PI*2);g.fillStyle='#28263c';g.fill();g.strokeStyle=editingControls?'#ffe17e':i?'#b8a6ed':'#7e90ad';g.lineWidth=editingControls?4:2;g.stroke();g.beginPath();g.arc(s.x+s.dx*radius,s.y+s.dy*radius,19*controls.size/100,0,Math.PI*2);g.fillStyle=i?'#a38bd2':'#7486a7';g.fill()}g.restore()
+g.fillStyle='#11101c';g.fillRect(0,VIEW_F,viewW,H-VIEW_F);g.save();g.globalAlpha=controls.opacity/100;for(let i=0;i<2;i++){if(hero==='mage'&&i===1&&!editingControls)continue;let s=sticks[i],radius=R*controls.size/100;g.beginPath();g.arc(s.x,s.y,radius,0,Math.PI*2);g.fillStyle='#28263c';g.fill();g.strokeStyle=editingControls?'#ffe17e':i?'#b8a6ed':'#7e90ad';g.lineWidth=editingControls?4:2;g.stroke();g.beginPath();g.arc(s.x+s.dx*radius,s.y+s.dy*radius,19*controls.size/100,0,Math.PI*2);g.fillStyle=i?'#a38bd2':'#7486a7';g.fill()}g.restore()
 if(hero==='archer'){const s=sticks[1],radius=R*controls.size/100,power=bowPower();g.save();g.strokeStyle=bowShotCooldown>0?'#a08b6b':'#f4c56b';g.lineWidth=4;g.beginPath();g.arc(s.x,s.y,radius+6,-Math.PI/2,-Math.PI/2+Math.PI*2*power);g.stroke();if(power>.15){g.textAlign='center';g.fillStyle='#ffe9a7';g.font='bold 10px monospace';g.fillText(Math.round(power*100)+'%',s.x,s.y-radius-15)}g.restore()}
-g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));g.fillText(hero==='archer'?'DRAW':'BAT',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));
+g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'DRAW':'BAT',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Bleed stacks '+bleedStacks,viewW/2,237)}
-requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.4';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.5';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
