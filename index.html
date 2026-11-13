@@ -2330,6 +2330,7 @@ function drawRoomMap(){
 let arenaTime=0;
 let p,enemies,hp,lives=3,kills,inv,over,roomEntrySide=null,last=0,spawnClock=0,healFx=[],wallFx=[],elementFx=[],puddles=[],poisonPuddles=[],poisonPlayerTimer=0,playerPoisonGlow=0,shards=[],portalFx=[];
 let arrows=[],bowShotCooldown=0;
+let mageBolts=[],mageZones=[],mageCooldowns={},mageGlobalReady=0,mageGesture=null,mageLastCast='',mageLastCastUntil=0,mageHitCount=0,mageCastCount=0;
 function showHeal(x,y){healFx.push({x,y,life:.85})}
 function showWallHit(w,x,y,nx,ny,speed){
 if(speed<22)return;
@@ -2411,6 +2412,231 @@ function drawArrows(){
  }
  g.restore();
 }
+
+const MAGE_SPELLS={
+ A:{name:'Ember Bolt',cooldown:.35,tier:1,color:'#ffb078'},
+ B:{name:'Frost Needle',cooldown:.35,tier:1,color:'#a1e4ff'},
+ C:{name:'Arc Pulse',cooldown:.45,tier:1,color:'#c5a4ff'},
+ AB:{name:'Steam Burst',cooldown:1.4,tier:2,color:'#f4d5c0'},
+ BA:{name:'Frostfire Lance',cooldown:1.6,tier:2,color:'#ffd4a1'},
+ AC:{name:'Flame Ring',cooldown:1.8,tier:2,color:'#ff986c'},
+ CA:{name:'Arcane Mine',cooldown:2,tier:2,color:'#d8afff'},
+ BC:{name:'Ice Wall',cooldown:2.4,tier:2,color:'#a6ecff'},
+ CB:{name:'Repulsion Wave',cooldown:1.7,tier:2,color:'#c9a4ff'},
+ ABC:{name:'Meteor Drop',cooldown:4.8,tier:3,color:'#ff996b'},
+ ACB:{name:'Flame Spiral',cooldown:4.4,tier:3,color:'#ffc18e'},
+ BAC:{name:'Crystal Barrage',cooldown:4.2,tier:3,color:'#b8d9ff'},
+ BCA:{name:'Blizzard Zone',cooldown:5,tier:3,color:'#b1e7ff'},
+ CAB:{name:'Arc Nova',cooldown:4.6,tier:3,color:'#e0afff'},
+ CBA:{name:'Gravity Well',cooldown:5.5,tier:3,color:'#c89dff'}
+};
+function mageRunes(){
+ const st=sticks[1],x=clamp(st.x,viewW/2+76,viewW-77),y=clamp(st.y-91,190,236);
+ return [{id:'A',x:x-52,y,color:'#ffae76'},{id:'B',x:x+52,y,color:'#a5e8ff'},{id:'C',x,y:y+64,color:'#caa9ff'}];
+}
+function mageInputEnabled(){
+ return hero==='mage'&&activeSlot&&!over&&!p?.falling&&!editingControls()&&settings.hidden&&document.querySelector('#character-panel').hidden&&document.querySelector('#sandbox-panel').hidden&&!persistencePaused()&&!shieldPaused;
+}
+function mageAim(){
+ const targets=[...enemies.filter(e=>e.hp>0),...(bossFight&&!bossFight.done?bossFight.units.filter(u=>u.hp>0):[]),...dungeonNests.filter(n=>n.hp>0)];
+ let nearest=null,dist=Infinity;
+ for(const e of targets){const d=Math.hypot(e.x-p.x,e.y-p.y);if(d<dist&&d<620){dist=d;nearest=e}}
+ const a=nearest?Math.atan2(nearest.y-p.y,nearest.x-p.x):p.target||0;
+ return {a,tx:nearest?.x??p.x+Math.cos(a)*170,ty:nearest?.y??p.y+Math.sin(a)*170};
+}
+function mageAvailable(path){
+ return !!MAGE_SPELLS[path]&&arenaTime>=mageGlobalReady&&(mageCooldowns[path]||0)<=arenaTime;
+}
+function mageTargets(){return [...enemies,...(bossFight&&!bossFight.done?bossFight.units:[])].filter(e=>e.hp>0)}
+function mageOnHit(target){
+ if(!target||target.hp<=0)return;
+ target.lastHitBy='mage';applyWeaponElement(target);mageHitCount++;
+ if(itemCount('emberHeart')){target.burnUntil=Math.max(target.burnUntil||0,arenaTime+2.5);target.burnPower=.55*itemCount('emberHeart')*playerStats().damage}
+ if(itemCount('frostNail'))target.slowUntil=Math.max(target.slowUntil||0,arenaTime+1.5);
+ if(itemCount('stormCoil')&&mageHitCount%4===0)elementChain(target,1.8*itemCount('stormCoil'),2);
+ if(itemCount('cinderSigil')&&mageHitCount%3===0)synergyArea(target.x,target.y,40,1.4*itemCount('cinderSigil'),20,'#ffa96c',target);
+ if(itemCount('sporeSatchel')&&mageHitCount%4===0)friendlyZones.push({x:target.x,y:target.y,r:33,life:2.4,tick:0,power:itemCount('sporeSatchel')});
+ if(itemCount('magnetRing'))for(const e of enemies)if(e!==target&&e.hp>0){const dx=target.x-e.x,dy=target.y-e.y,d=Math.hypot(dx,dy);if(d<95&&d>8){e.vx+=dx/d*15;e.vy+=dy/d*15}}
+ synergyBatHit(target);
+}
+function mageHurt(target,base,kind='arc'){
+ if(!target||target.hp<=0)return false;
+ if(!target.kind&& !canDamage(target,160))return false;
+ const before=target.hp;
+ // Boss projectiles can open Gatekeeper defenses and remove Crystal Eye armor.
+ const done=friendlyDamage(target,base*(1+itemCount('glassEye')*.25),'projectile');
+ if(done&&target.hp<before){mageOnHit(target);
+  if(kind==='fire'){target.burnUntil=Math.max(target.burnUntil||0,arenaTime+2.4);target.burnPower=Math.max(target.burnPower||0,.6)}
+  if(kind==='ice')target.slowUntil=Math.max(target.slowUntil||0,arenaTime+2);
+  if(kind==='poison'){target.toxicUntil=Math.max(target.toxicUntil||0,arenaTime+3);target.toxicPower=.6}
+ }
+ return done;
+}
+function mageArea(x,y,r,damage,kind='arc',push=0){
+ elementFx.push({type:'shock',x,y,radius:r,life:.38,maxLife:.38});
+ for(const target of mageTargets()){
+  const dx=target.x-x,dy=target.y-y,d=Math.hypot(dx,dy);
+  if(d>=r+(target.r||8))continue;
+  mageHurt(target,damage,kind);
+  if(push&&!target.kind){const f=push*(1-Math.min(1,d/(r+target.r)))*playerStats().knockback;target.vx+=dx/(d||1)*f/Math.max(.6,target.mass||1);target.vy+=dy/(d||1)*f/Math.max(.6,target.mass||1)}
+ }
+ for(const n of dungeonNests)if(n.hp>0&&Math.hypot(n.x-x,n.y-y)<r+n.r)hitNest(n,190);
+ for(const o of breakables)if(!o.broken&&Math.hypot(o.x-x,o.y-y)<r+PROP_DEFS[o.kind].r)hitProp(o,155,'projectile');
+ for(const sw of trapControls)if(sw.kind==='lever'&&Math.hypot(sw.x-x,sw.y-y)<r+sw.r)triggerTrapControl(sw);
+}
+function mageBolt(a,damage,speed=340,kind='arc',options={}){
+ const x=p.x+Math.cos(a)*21,y=p.y+Math.sin(a)*21;
+ mageBolts.push({x,y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r:options.r||5,life:options.life||1.5,damage,kind,pierce:options.pierce||0,hit:new Set(),color:options.color||MAGE_SPELLS[options.spell]?.color||'#d0b8ff'});
+}
+function mageReflect(x,y,r,clear=false){
+ let reflected=0;const bullets=[projectiles,...(bossFight&&!bossFight.done?[bossFight.shots]:[])];
+ for(const pool of bullets)for(const q of pool){
+  if(q.reflected||q.life<=0||Math.hypot(q.x-x,q.y-y)>r+q.r)continue;
+  if(clear){q.life=0;reflected++;continue}
+  const t=mageAim(),d=Math.atan2(t.ty-q.y,t.tx-q.x),speed=Math.max(185,Math.hypot(q.vx,q.vy)*1.4);
+  q.vx=Math.cos(d)*speed;q.vy=Math.sin(d)*speed;q.reflected=true;q.life=pool===projectiles?2.5:5;reflected++;
+ }
+ if(reflected)bossSpark(x,y,'#d9b7ff');
+ return reflected;
+}
+function mageZone(type,x,y,r,life,power,delay=0){
+ mageZones.push({type,x,y,r,life,power,delay,tick:0,angle:0});
+}
+function mageWall(a){
+ const tx=p.x+Math.cos(a)*110,ty=p.y+Math.sin(a)*110;
+ let placed=0;
+ for(const offset of [-20,20]){
+  const xx=Math.floor((tx-Math.sin(a)*offset)/TILE_SIZE)*TILE_SIZE,yy=Math.floor((ty+Math.cos(a)*offset)/TILE_SIZE)*TILE_SIZE;
+  if(!safeFloor(xx+TILE_SIZE/2,yy+TILE_SIZE/2,17)||Math.hypot(xx+20-p.x,yy+20-p.y)<53)continue;
+  walls.push({x:xx,y:yy,w:TILE_SIZE,h:TILE_SIZE,type:'neutral',mageUntil:arenaTime+2.5});placed++;
+ }
+ if(placed)resetEnemyNavigation();
+ else mageArea(tx,ty,36,1.4,'ice',20);
+}
+function castMageSpell(path){
+ if(!mageInputEnabled()||!MAGE_SPELLS[path])return false;
+ const spell=MAGE_SPELLS[path],remaining=Math.max(mageGlobalReady-arenaTime,(mageCooldowns[path]||0)-arenaTime);
+ if(remaining>0){mageLastCast=spell.name+' · '+remaining.toFixed(1)+'s';mageLastCastUntil=arenaTime+.9;return false}
+ const {a,tx,ty}=mageAim(),range=(distance)=>({x:clamp(p.x+Math.cos(a)*distance,38,W-38),y:clamp(p.y+Math.sin(a)*distance,38,F-38)});
+ const point=range(135);
+ const amp=1+Math.min(.7,itemCount('counterweight')*.25);
+ const at=(x,y,r,d,kind,push=0)=>mageArea(x,y,r,d,kind,push*amp);
+ const b=(angle,damage,speed,kind,options={})=>mageBolt(angle,damage,speed,kind,options);
+ switch(path){
+  case 'A':b(a,1.8,390,'fire');break;
+  case 'B':b(a,1.5,450,'ice');break;
+  case 'C':at(p.x+Math.cos(a)*35,p.y+Math.sin(a)*35,55,1.7,'arc',95);mageReflect(p.x,p.y,62+itemCount('reflectArrow')*18);break;
+  case 'AB':at(p.x+Math.cos(a)*55,p.y+Math.sin(a)*55,78,2.5,'fire',130);break;
+  case 'BA':b(a,4.5,510,'ice',{pierce:2,r:6});break;
+  case 'AC':at(p.x,p.y,78,2.4,'fire',65);break;
+  case 'CA':mageZone('mine',point.x,point.y,30,7,4);break;
+  case 'BC':mageWall(a);break;
+  case 'CB':at(p.x+Math.cos(a)*60,p.y+Math.sin(a)*60,100,1.8,'arc',250);mageReflect(p.x,p.y,117+itemCount('reflectArrow')*25);break;
+  case 'ABC':mageZone('meteor',clamp(tx,40,W-40),clamp(ty,40,F-40),70,1.2,8,1.15);break;
+  case 'ACB':for(let i=0;i<9;i++)b(a+i*Math.PI*2/9,2.4,260,'fire',{r:5,life:1.4});break;
+  case 'BAC':for(const off of [-.22,0,.22])b(a+off,4.1,430,'ice',{pierce:1,r:5});break;
+  case 'BCA':mageZone('blizzard',point.x,point.y,98,4,1.0);break;
+  case 'CAB':at(p.x,p.y,130,4.4,'arc',235);mageReflect(p.x,p.y,139+itemCount('reflectArrow')*25,true);break;
+  case 'CBA':mageZone('gravity',point.x,point.y,100,3.1,4.8);break;
+ }
+ const cooldownMult=Math.max(.45,1-.12*itemCount('shieldBloom')-.1*upgradeCount('shield')-.1*itemCount('hourglass'))/Math.max(.7,playerStats().swing);
+ mageCooldowns[path]=arenaTime+spell.cooldown*cooldownMult;
+ mageGlobalReady=arenaTime+.18;
+ mageLastCast=path+' · '+spell.name;mageLastCastUntil=arenaTime+1.8;mageCastCount++;
+ if(itemCount('mossCharm')&&mageCastCount%5===0)healPlayer(itemCount('mossCharm'));
+ runStats.swingsHit+=0;return true;
+}
+function updateMage(dt){
+ if(hero!=='mage')return;
+ for(const z of mageZones){
+  z.life-=dt;z.tick+=dt;
+  if(z.type==='meteor'){
+   z.delay-=dt;
+   if(z.delay<=0&&!z.done){z.done=true;mageArea(z.x,z.y,z.r,z.power,'fire',170);z.life=0}
+  }else if(z.type==='mine'){
+   if(mageTargets().some(e=>Math.hypot(e.x-z.x,e.y-z.y)<z.r+(e.r||10))){mageArea(z.x,z.y,57,z.power,'arc',155);z.life=0}
+  }else if(z.type==='blizzard'&&z.tick>=.45){
+   z.tick=0;mageArea(z.x,z.y,z.r,z.power,'ice',0);
+  }else if(z.type==='gravity'){
+   for(const e of enemies)if(e.hp>0){const dx=z.x-e.x,dy=z.y-e.y,d=Math.hypot(dx,dy);if(d>8&&d<z.r+e.r){const force=290*dt*playerStats().knockback/Math.max(.7,e.mass);e.vx+=dx/d*force;e.vy+=dy/d*force}}
+   if(z.life<=0&&!z.done){z.done=true;mageArea(z.x,z.y,z.r,z.power,'arc',270)}
+  }
+ }
+ mageZones=mageZones.filter(z=>z.life>0);
+ for(const w of [...walls])if(w.mageUntil&&arenaTime>=w.mageUntil){walls.splice(walls.indexOf(w),1);resetEnemyNavigation()}
+ for(const bolt of mageBolts){
+  if(bolt.life<=0)continue;
+  bolt.life-=dt;const ox=bolt.x,oy=bolt.y;
+  bolt.x+=bolt.vx*dt;bolt.y+=bolt.vy*dt;
+  if(bolt.x<18||bolt.x>W-18||bolt.y<18||bolt.y>F-18){bolt.life=0;continue}
+  const seg={x1:ox,y1:oy,x2:bolt.x,y2:bolt.y};
+  for(const sw of trapControls)if(sw.kind==='lever'&&laserDistance(sw.x,sw.y,seg)<sw.r+bolt.r)triggerTrapControl(sw);
+  const temp={x:bolt.x,y:bolt.y,r:bolt.r,vx:bolt.vx,vy:bolt.vy,life:bolt.life,reflected:true};
+  if(projectileHitsProp(temp,ox,oy)||projectileHitsNest(temp,ox,oy)){bolt.life=0;continue}
+  const steps=Math.ceil(Math.hypot(bolt.x-ox,bolt.y-oy)/5);
+  for(let j=0;j<=steps&&bolt.life>0;j++){
+   const x=ox+(bolt.x-ox)*j/(steps||1),y=oy+(bolt.y-oy)*j/(steps||1);
+   const wall=walls.find(w=>nearRect(x,y,bolt.r,w));
+   if(wall){if(wall.cracked)hitCrackedWall(wall,2);bolt.life=0}
+  }
+  if(bolt.life<=0)continue;
+  const target=mageTargets().find(e=>!bolt.hit.has(e)&&laserDistance(e.x,e.y,seg)<e.r+bolt.r);
+  if(target){bolt.hit.add(target);mageHurt(target,bolt.damage,bolt.kind);
+   if(bolt.pierce>0){bolt.pierce--;bolt.damage*=.72}else bolt.life=0;
+  }
+ }
+ mageBolts=mageBolts.filter(b=>b.life>0);
+}
+function drawMageEffects(){
+ if(hero!=='mage')return;
+ g.save();
+ for(const z of mageZones){
+  g.globalAlpha=z.type==='meteor'?.6:.27;g.fillStyle=z.type==='blizzard'?'#89dfff':z.type==='meteor'?'#fc744b':'#bd8bff';g.strokeStyle=z.type==='blizzard'?'#baf2ff':'#e2b0ff';
+  g.lineWidth=2;g.beginPath();g.arc(z.x,z.y,z.r,0,Math.PI*2);g.fill();g.stroke();
+  if(z.type==='meteor'){g.strokeStyle='#fff0b1';g.lineWidth=3;g.beginPath();g.arc(z.x,z.y,z.r*(1-z.delay/1.15),0,Math.PI*2);g.stroke()}
+ }
+ for(const b of mageBolts){g.globalAlpha=.9;g.fillStyle=b.kind==='fire'?'#ffac6e':b.kind==='ice'?'#b6edff':'#d7b5ff';g.shadowColor=g.fillStyle;g.shadowBlur=10;g.beginPath();g.arc(b.x,b.y,b.r,0,Math.PI*2);g.fill()}
+ g.restore();
+}
+function mageRuneAt(x,y){
+ return mageRunes().find(r=>Math.hypot(r.x-x,r.y-y)<33)||null;
+}
+function mageGesturePoint(v){
+ if(!mageGesture)return;
+ const a=mageGesture.last,b=v,dx=b.x-a.x,dy=b.y-a.y,len=dx*dx+dy*dy||1,candidates=[];
+ for(const rune of mageRunes()){
+  if(mageGesture.path.includes(rune.id))continue;
+  const t=clamp(((rune.x-a.x)*dx+(rune.y-a.y)*dy)/len,0,1);
+  const d=Math.hypot(a.x+t*dx-rune.x,a.y+t*dy-rune.y);
+  if(d<26)candidates.push({rune,t});
+ }
+ candidates.sort((a,b)=>a.t-b.t);
+ for(const hit of candidates)if(mageGesture.path.length<3)mageGesture.path.push(hit.rune.id);
+ mageGesture.last=v;
+}
+function drawMageRunes(){
+ if(hero!=='mage'||editingControls)return;
+ const runes=mageRunes(),selected=mageGesture?.path||[];
+ g.save();g.globalAlpha=Math.max(.5,controls.opacity/100);g.textAlign='center';
+ g.strokeStyle='#aa88d9';g.lineWidth=1.5;g.setLineDash([5,6]);g.beginPath();g.moveTo(runes[0].x,runes[0].y);g.lineTo(runes[1].x,runes[1].y);g.lineTo(runes[2].x,runes[2].y);g.closePath();g.stroke();g.setLineDash([]);
+ for(let i=1;i<selected.length;i++){
+  const p1=runes.find(r=>r.id===selected[i-1]),p2=runes.find(r=>r.id===selected[i]);
+  g.strokeStyle='#ffe5a8';g.lineWidth=5;g.beginPath();g.moveTo(p1.x,p1.y);g.lineTo(p2.x,p2.y);g.stroke();
+ }
+ for(const rune of runes){
+  const active=selected.includes(rune.id);g.shadowColor=rune.color;g.shadowBlur=active?16:5;
+  g.fillStyle=active?'#53416e':'#211c34';g.strokeStyle=rune.color;g.lineWidth=active?4:2.3;
+  g.beginPath();g.arc(rune.x,rune.y,26,0,Math.PI*2);g.fill();g.stroke();g.shadowBlur=0;
+  g.fillStyle=rune.color;g.font='bold 19px monospace';g.fillText(rune.id,rune.x,rune.y+7);
+ }
+ g.globalAlpha=1;
+ g.fillStyle='#fff0cb';g.font='bold 11px monospace';
+ if(mageGesture){const sequence=selected.join(''),spell=MAGE_SPELLS[sequence];g.fillText(sequence+(spell?' · '+spell.name.toUpperCase():''),runes[2].x,runes[2].y-81)}
+ else if(mageLastCastUntil>arenaTime)g.fillText(mageLastCast.toUpperCase(),runes[2].x,runes[2].y-81);
+ else g.fillText('TRACE RUNES TO CAST',runes[2].x,runes[2].y-81);
+ g.restore();
+}
+
 // Elemental powers trigger only on distinct, sufficiently hard impacts.
 function shockwave(e,power,radius){
 if(!enemyAttacksEnabled())return;
