@@ -2078,6 +2078,27 @@ function setupRoomVariant(room){
    const id=cell(x,y);cells[id]=cells[id]==='O'?'=':'.';
   }
  }
+
+ // Ensure the pit variants actually contain pits outside the guaranteed safe routes.
+ const minimum=mode==='solid'?0:mode==='small'?(room.shape==='big'?2:1):Math.max(3,Math.floor(cols*rows*.035));
+ let pits=cells.filter(kind=>kind==='O').length;
+ const target=design.g?.length?rectFromLayout(room,design.g[0]):{x:W*.28,y:F*.3,w:0,h:0};
+ const cx=target.x+target.w*.5,cy=target.y+target.h*.5;
+ const candidates=[];
+ for(let y=1;y<rows-1;y++)for(let x=1;x<cols-1;x++){
+  const px=(x+.5)*TILE_SIZE,py=(y+.5)*TILE_SIZE,kind=cells[cell(x,y)];
+  if(kind!=='.'||Math.abs(x+.5-cols/2)<=1.05||Math.abs(y+.5-rows/2)<=1.05||anchors.some(([a,b])=>Math.hypot(px-a,py-b)<74))continue;
+  candidates.push({x,y,d:Math.hypot(px-cx,py-cy)+(Math.abs(x-y)*.01)});
+ }
+ candidates.sort((a,b)=>a.d-b.d);
+ for(const point of candidates){if(pits>=minimum)break;write(point.x,point.y,'O');pits++}
+ // Broken-floor designs still contain solid neutral cover.
+ if(mode==='broken'&&!cells.includes('#')){
+  for(const [fx,fy] of [[.24,.24],[.77,.73],[.24,.74],[.77,.26]]){
+   const [x,y]=nearest(W*fx,F*fy);
+   if(cells[cell(x,y)]==='.'&&Math.abs(x+.5-cols/2)>1.05&&Math.abs(y+.5-rows/2)>1.05)write(x,y,'#');
+  }
+ }
  floorGaps=[];floorBridges=[];floorTraps=[];
  for(let y=1;y<rows-1;y++)for(let x=1;x<cols-1;x++){
   const id=cell(x,y),kind=cells[id],rect={x:x*TILE_SIZE,y:y*TILE_SIZE,w:TILE_SIZE,h:TILE_SIZE};
