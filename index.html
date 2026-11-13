@@ -61,7 +61,7 @@ footer #restart{display:none}
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
-<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.3</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
+<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.4</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
   <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true">⚪ CLASSIC DOT<br>SWING BAT</button><button id="hero-archer" type="button" aria-pressed="false">🏹 ARCHER DOT<br>DRAW BOW</button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
@@ -702,7 +702,7 @@ function showItemNotice(text){
  * kill, damage, and projectile hooks. New playable heroes can add metadata here.
  */
 const HERO_ITEM_VARIANTS={
- emberHeart:{classic:{name:'Ember Heart',desc:'Bat hits burn enemies for 3 seconds.'},archer:{name:'Ember Quiver',desc:'Strong arrows ignite enemies and cause a small fireburst.'}},
+ emberHeart:{classic:{name:'Ember Heart',desc:'+10 maximum HP. Bat hits burn enemies for 3 seconds.'},archer:{name:'Ember Quiver',desc:'+10 maximum HP. Strong arrows ignite enemies and trigger a small fireburst.'}},
  frostNail:{classic:{name:'Frost Nail',desc:'Bat hits slow targets for 2 seconds.'},archer:{name:'Icehead Arrows',desc:'Strong arrows leave a slowing frost patch.'}},
  stormCoil:{classic:{name:'Storm Coil',desc:'Every 4th bat hit chains lightning to up to 3 enemies.'},archer:{name:'Charged Fletching',desc:'Every 3rd arrow hit chains lightning to nearby targets.'}},
  leechFang:{classic:{name:'Leech Fang',desc:'Each enemy kill heals 1 HP.'},archer:{name:'Hunter Fang',desc:'Arrow kills restore 2 HP. Other kills do not heal.'}},
@@ -1026,7 +1026,7 @@ function restockPracticePedestals(){
 function resetPracticeBuild(){
  if(!inSandbox()||!sandboxSavedRun)return;
  progress=JSON.parse(JSON.stringify(sandboxSavedRun.progress));progress.coins=100;
- itemHitCounter=sandboxSavedRun.itemHitCounter;mantleCooldown=0;restoreDashState();resetRoomSynergies();
+ itemHitCounter=sandboxSavedRun.itemHitCounter;strongArrowHits=sandboxSavedRun.strongArrowHits||0;mantleCooldown=0;restoreDashState();resetRoomSynergies();
  clearSandbox();setSandboxMovement(false);setSandboxAttacks(false);
  coinDrops=makePracticeCoinPiles();currentRoom.coinDrops=coinDrops;
  restockPracticePedestals();healSandbox();
@@ -1111,7 +1111,7 @@ function normalizeSavedRun(raw){
  if(seen.size!==rooms.length)throw Error('Disconnected dungeon');
  raw.progress={coins:Math.floor(safeNumber(raw.progress.coins)),items:knownDictionary(raw.progress.items,ITEM_DEFS),upgrades:knownDictionary(raw.progress.upgrades,UPGRADE_DEFS),roomsCleared:Math.floor(safeNumber(raw.progress.roomsCleared)),synergyCoins:Math.floor(safeNumber(raw.progress.synergyCoins,0,0,9)),level:Math.floor(safeNumber(raw.progress.level,1,1,30)),xp:Math.floor(safeNumber(raw.progress.xp,0,0,100000)),elementPrimary:ELEMENTS[raw.progress.elementPrimary]?raw.progress.elementPrimary:null,elementSecondary:ELEMENTS[raw.progress.elementSecondary]&&raw.progress.elementSecondary!==raw.progress.elementPrimary?raw.progress.elementSecondary:null};
  raw.biome=BIOME_DEFS[raw.biome]?raw.biome:null;if(raw.biome==='basic')raw.biome=null;
- raw.depth=Math.floor(safeNumber(raw.depth,1,1,10000));raw.hero=Object.hasOwn(HERO_DEFS,raw.hero)?raw.hero:'classic';raw.hp=safeNumber(raw.hp,50,1,1e6);raw.lives=Math.floor(safeNumber(raw.lives,3,0,5));raw.kills=Math.floor(safeNumber(raw.kills));raw.arenaTime=safeNumber(raw.arenaTime);
+ raw.depth=Math.floor(safeNumber(raw.depth,1,1,10000));raw.hero=Object.hasOwn(HERO_DEFS,raw.hero)?raw.hero:'classic';raw.hp=safeNumber(raw.hp,50,1,1e6);raw.strongArrowHits=Math.floor(safeNumber(raw.strongArrowHits,0,0,100000));raw.lives=Math.floor(safeNumber(raw.lives,3,0,5));raw.kills=Math.floor(safeNumber(raw.kills));raw.arenaTime=safeNumber(raw.arenaTime);
  raw.player=raw.player&&typeof raw.player==='object'?raw.player:{};
  raw.player={x:safeNumber(raw.player.x,rooms[raw.roomId].w/2,23,rooms[raw.roomId].w-23),y:safeNumber(raw.player.y,rooms[raw.roomId].h/2,23,rooms[raw.roomId].h-23),a:safeNumber(raw.player.a,0,-1e7,1e7),target:safeNumber(raw.player.target,0,-1e7,1e7)};
  const hadShield=['flat','curved'].includes(raw.shieldType);raw.shieldType='curved';raw.shieldPending=false;
@@ -1131,7 +1131,7 @@ function readSlot(slot){
 function queueCheckpoint(){if(!loadingRun&&activeSlot&&!inSandbox()&&currentRoom?.cleared)savePending=true}
 function snapshotRun(){
  currentRoom.coinDrops=coinDrops;currentRoom.heartDrops=heartDrops;currentRoom.lifeDrops=lifeDrops;
- return {version:SAVE_VERSION,savedAt:Date.now(),hero,depth:dungeonDepth,biome:selectedBiome,roomId:currentRoom.id,dungeon:JSON.parse(JSON.stringify(dungeon)),progress:JSON.parse(JSON.stringify(progress)),hp,lives,kills,arenaTime,player:{x:p.x,y:p.y,a:p.a,target:p.target},shieldType,shieldHp,shieldBroken,shieldCooldown,shieldLastHit,shieldLaserTick,shieldPending:shieldPaused,bleedStacks,temporaryBleed:[...temporaryBleed],playerBleed:playerBleed.map(b=>({...b})),runStats:{...runStats},itemHitCounter,mantleCooldown,regenWhileBleeding,dashCooldown:dashCooldown()};
+ return {version:SAVE_VERSION,savedAt:Date.now(),hero,depth:dungeonDepth,biome:selectedBiome,roomId:currentRoom.id,dungeon:JSON.parse(JSON.stringify(dungeon)),progress:JSON.parse(JSON.stringify(progress)),hp,lives,kills,arenaTime,player:{x:p.x,y:p.y,a:p.a,target:p.target},shieldType,shieldHp,shieldBroken,shieldCooldown,shieldLastHit,shieldLaserTick,shieldPending:shieldPaused,bleedStacks,temporaryBleed:[...temporaryBleed],playerBleed:playerBleed.map(b=>({...b})),runStats:{...runStats},itemHitCounter,strongArrowHits,mantleCooldown,regenWhileBleeding,dashCooldown:dashCooldown()};
 }
 // Lives are committed immediately, even when the current combat room is not a safe checkpoint.
 function persistLifeCount(){
@@ -1218,7 +1218,7 @@ function continueSlot(slot){
  try{
   progress=data.progress;dungeon=data.dungeon;dungeonDepth=data.depth;selectedBiome=data.biome;lastDungeonSignature=dungeonSignature(dungeon);arenaTime=data.arenaTime;
   hero=data.hero;hp=data.hp;lives=data.lives;kills=data.kills;shieldType=data.shieldType;shieldHp=data.shieldHp;shieldBroken=!!data.shieldBroken;shieldCooldown=data.shieldCooldown;shieldLastHit=data.shieldLastHit;shieldLaserTick=safeNumber(data.shieldLaserTick);
-  bleedStacks=data.bleedStacks;temporaryBleed=data.temporaryBleed;playerBleed=data.playerBleed;runStats=data.runStats;itemHitCounter=Math.floor(safeNumber(data.itemHitCounter));mantleCooldown=safeNumber(data.mantleCooldown,0,0,3);regenWhileBleeding=!!data.regenWhileBleeding;
+  bleedStacks=data.bleedStacks;temporaryBleed=data.temporaryBleed;playerBleed=data.playerBleed;runStats=data.runStats;itemHitCounter=Math.floor(safeNumber(data.itemHitCounter));strongArrowHits=Math.floor(safeNumber(data.strongArrowHits));mantleCooldown=safeNumber(data.mantleCooldown,0,0,3);regenWhileBleeding=!!data.regenWhileBleeding;
   over=false;inv=1.2;sandboxSavedRun=null;sandboxRoom=null;currentRoom=null;
   enterRoom(data.roomId);restoreSafePosition(data.player);hp=Math.min(playerStats().maxHealth,data.hp);arenaTime=data.arenaTime;restoreDashState(data.dashCooldown);
   // enterRoom clears transient damage effects; restore the saved run's bleeding state afterwards.
@@ -1868,7 +1868,7 @@ function enemyAttacksEnabled(){return !inSandbox()||sandbox.attacks}
 function sandboxDoorSide(){return Object.keys(DIRECTIONS).find(side=>!dungeon[0].doors.some(door=>door.side===side))}
 function enterSandbox(){
  if(currentRoom?.kind!=='start'||sandboxSavedRun)return;
- sandboxSavedRun={dashCooldown:dashCooldown(),progress:JSON.parse(JSON.stringify(progress)),itemHitCounter,mantleCooldown,hp,lives,kills,inv,arenaTime,shieldType,shieldHp,shieldBroken,shieldCooldown,shieldLastHit,shieldLaserTick,bleedStacks,temporaryBleed:[...temporaryBleed],playerBleed:playerBleed.map(b=>({...b})),runStats:{...runStats},angle:p.a,target:p.target};
+ sandboxSavedRun={dashCooldown:dashCooldown(),progress:JSON.parse(JSON.stringify(progress)),itemHitCounter,strongArrowHits,mantleCooldown,hp,lives,kills,inv,arenaTime,shieldType,shieldHp,shieldBroken,shieldCooldown,shieldLastHit,shieldLaserTick,bleedStacks,temporaryBleed:[...temporaryBleed],playerBleed:playerBleed.map(b=>({...b})),runStats:{...runStats},angle:p.a,target:p.target};
  const side=sandboxDoorSide();
  sandboxRoom={id:'sandbox',name:'SANDBOX',kind:'sandbox',shape:'sandbox',w:1100,h:900,count:0,cleared:true,visited:true,discovered:true,doors:[{side:DIRECTIONS[side].opposite,to:0}]};
  sandbox.movement=false;sandbox.attacks=false;sandbox.notice='Tap a picture to spawn one.';
@@ -1880,7 +1880,7 @@ function leaveSandbox(){
  if(!inSandbox()||!sandboxSavedRun)return;
  const saved=sandboxSavedRun,side=sandboxDoorSide();sandboxSavedRun=null;shieldPaused=false;
  document.querySelector('#shield-choice').style.display='none';enterRoom(0,side);
- progress=saved.progress;itemHitCounter=saved.itemHitCounter;mantleCooldown=saved.mantleCooldown;hp=saved.hp;lives=saved.lives;kills=saved.kills;inv=saved.inv;arenaTime=saved.arenaTime;shieldType=saved.shieldType;shieldHp=saved.shieldHp;shieldBroken=saved.shieldBroken;shieldCooldown=saved.shieldCooldown;shieldLastHit=saved.shieldLastHit;shieldLaserTick=saved.shieldLaserTick;bleedStacks=saved.bleedStacks;temporaryBleed=saved.temporaryBleed;playerBleed=saved.playerBleed;runStats=saved.runStats;p.a=saved.angle;p.target=saved.target;over=false;restoreDashState(saved.dashCooldown);
+ progress=saved.progress;itemHitCounter=saved.itemHitCounter;strongArrowHits=saved.strongArrowHits||0;mantleCooldown=saved.mantleCooldown;hp=saved.hp;lives=saved.lives;kills=saved.kills;inv=saved.inv;arenaTime=saved.arenaTime;shieldType=saved.shieldType;shieldHp=saved.shieldHp;shieldBroken=saved.shieldBroken;shieldCooldown=saved.shieldCooldown;shieldLastHit=saved.shieldLastHit;shieldLaserTick=saved.shieldLaserTick;bleedStacks=saved.bleedStacks;temporaryBleed=saved.temporaryBleed;playerBleed=saved.playerBleed;runStats=saved.runStats;p.a=saved.angle;p.target=saved.target;over=false;restoreDashState(saved.dashCooldown);
  document.querySelector('#sandbox-panel').hidden=true;document.querySelector('#shield-durability').style.display=shieldType?'flex':'none';hud();
 }
 function clearSandbox(){
@@ -2868,7 +2868,7 @@ function safeRespawn(){
 function fallIntoPit(body,x,y,isPlayer=false){
  fallingFx.push({x:body.x,y:body.y,tx:x,ty:y,r:body.r,life:.46,maxLife:.46,color:isPlayer?'#fff':body.shape==='merge'?'#b388fa':'#ffbb78'});
  if(isPlayer){p.falling=.46;p.fallReturn=safeRespawn();p.kvx=p.kvy=0;inv=Math.max(inv,1.2)}
- else{body.hp=0;body.fellInHole=true;recordEnemyKill(body)}
+ else{body.hp=0;body.fellInHole=true;recordEnemyKill(body);earnXp(body.bossMinion||body.bossSummon?1:body.elite?5:['square','round'].includes(body.shape)?2:3)}
  return true;
 }
 function collideGap(body,oldX,oldY,isPlayer=false){
@@ -3390,5 +3390,5 @@ g.fillStyle='#11101c';g.fillRect(0,VIEW_F,viewW,H-VIEW_F);g.save();g.globalAlpha
 if(hero==='archer'){const s=sticks[1],radius=R*controls.size/100,power=bowPower();g.save();g.strokeStyle=bowShotCooldown>0?'#a08b6b':'#f4c56b';g.lineWidth=4;g.beginPath();g.arc(s.x,s.y,radius+6,-Math.PI/2,-Math.PI/2+Math.PI*2*power);g.stroke();if(power>.15){g.textAlign='center';g.fillStyle='#ffe9a7';g.font='bold 10px monospace';g.fillText(Math.round(power*100)+'%',s.x,s.y-radius-15)}g.restore()}
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));g.fillText(hero==='archer'?'DRAW':'BAT',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Bleed stacks '+bleedStacks,viewW/2,237)}
-requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.3';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.4';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
