@@ -597,7 +597,7 @@ const UPGRADE_DEFS = {
  luck:{name:'Good Fortune',glyph:'★',color:'#edce7e',desc:'+1 luck; occasionally find extra coins.'}
 };
 let progress=null,coinDrops=[],heartDrops=[],lifeDrops=[],damageNumbers=[],friendlyZones=[],hostileZones=[],terrainPatches=[],nearestLoot=null;
-let itemHitCounter=0,mantleCooldown=0,itemNoticeTime=0;
+let itemHitCounter=0,strongArrowHits=0,mantleCooldown=0,itemNoticeTime=0;
 
 const ELEMENTS={
  fire:{name:'Fire',color:'#ffa46b',desc:'Weapon hits burn enemies.'},
@@ -757,12 +757,12 @@ function friendlyDamage(target,amount,source='item'){
 }
 function afterPlayerBatHit(target,source='bat'){
  const archer=hero==='archer',charge=archer?(target.lastArrowPower||0):0,strong=archer&&source==='arrow'&&charge>=.7;
- applyWeaponElement(target);itemHitCounter++;
+ applyWeaponElement(target);itemHitCounter++;if(strong)strongArrowHits++;
  if(itemCount('emberHeart')){
   if(!archer){target.burnUntil=arenaTime+3;target.burnPower=.75*itemCount('emberHeart')*playerStats().damage}
   else if(strong){
    target.burnUntil=arenaTime+2.5;target.burnPower=.55*itemCount('emberHeart')*playerStats().damage;
-   if(itemHitCounter%2===0)synergyArea(target.x,target.y,43,1.1*itemCount('emberHeart'),28,'#ffad6b',target);
+   if(strongArrowHits%2===0)synergyArea(target.x,target.y,43,1.1*itemCount('emberHeart'),28,'#ffad6b',target);
   }
  }
  if(itemCount('frostNail')){
@@ -771,9 +771,9 @@ function afterPlayerBatHit(target,source='bat'){
  }
  if(itemCount('stormCoil')&&itemHitCounter%(archer?3:4)===0)elementChain(target,archer?1.7:2,archer?2:3);
  if(archer&&source==='arrow'){
-  if(strong&&itemCount('sporeSatchel')&&itemHitCounter%3===0)friendlyZones.push({x:target.x,y:target.y,r:30,life:2.8,tick:0,power:1.15*itemCount('sporeSatchel')});
-  if(strong&&itemCount('cinderSigil')&&itemHitCounter%2===0)synergyArea(target.x,target.y,50,2*itemCount('cinderSigil'),35,'#ffad6b',target);
-  if(strong&&itemCount('mossCharm')&&itemHitCounter%4===0)healPlayer(itemCount('mossCharm'));
+  if(strong&&itemCount('sporeSatchel')&&strongArrowHits%3===0)friendlyZones.push({x:target.x,y:target.y,r:30,life:2.8,tick:0,power:1.15*itemCount('sporeSatchel')});
+  if(strong&&itemCount('cinderSigil')&&strongArrowHits%2===0)synergyArea(target.x,target.y,50,2*itemCount('cinderSigil'),35,'#ffad6b',target);
+  if(strong&&itemCount('mossCharm')&&strongArrowHits%4===0)healPlayer(itemCount('mossCharm'));
   if(itemCount('magnetRing')){
    for(const e of enemies)if(e!==target&&e.hp>0){const dx=target.x-e.x,dy=target.y-e.y,d=Math.hypot(dx,dy);if(d<100&&d>5){e.vx+=dx/d*21;e.vy+=dy/d*21}}
   }
@@ -2392,7 +2392,7 @@ function updateArrows(dt){
     if(enemy.bossMinion&&arrow.power>.65)enemy.batKnockedUntil=arenaTime+1.5;
     elementalHit(enemy,arrow.impact);
    }else bossSpark(enemy.x,enemy.y,'#f5dd9c');
-   if(arrow.pierce>0&&enemy.hp<=0||arrow.pierce>0&&canDamage(enemy,arrow.impact)){arrow.pierce--;arrow.damage*=.74}else arrow.life=0;
+   if(arrow.pierce>0){arrow.pierce--;arrow.damage*=.74}else arrow.life=0;
    continue;
   }
   if(bossFight&&!bossFight.done){
@@ -3141,7 +3141,7 @@ function resolvePlayerDeath(){
  enterRoom(currentRoom.id,roomEntrySide);refillRoomShield();inv=2;
  showItemNotice('LIFE LOST · '+lives+' REMAIN · ROOM RESET');hud();
 }
-function reset(){document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
+function reset(){document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;strongArrowHits=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
 function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*viewW/r.width,y:(e.clientY-r.top)*H/r.height}}
 function setStick(s,v){let dx=v.x-s.x,dy=v.y-s.y,d=Math.hypot(dx,dy),radius=R*controls.size/100,k=d?Math.min(d,radius)/d/radius:0;s.dx=dx*k;s.dy=dy*k}
 c.addEventListener('pointerdown',e=>{e.preventDefault();let v=pt(e),i=v.x<viewW/2?0:1,s=sticks[i];if(editingControls){if(editPointer)return;let nearest=sticks.map((st,j)=>({j,d:Math.hypot(st.x-v.x,st.y-v.y)})).filter(o=>o.d<R*controls.size/100+22).sort((a,b)=>a.d-b.d)[0];if(!nearest)return;editPointer={id:e.pointerId,i:nearest.j};c.setPointerCapture(e.pointerId);return}if(s.id!==null)return;if(controls.floating)moveStick(i,v);s.id=e.pointerId;c.setPointerCapture(e.pointerId);setStick(s,v)});
