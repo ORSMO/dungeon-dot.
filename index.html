@@ -2318,7 +2318,7 @@ function drawDungeonMap(){
  g.fillStyle='#ecd29a';g.fillText('T/$ LOOT · GOLD: YOU',x+boxW/2,y+119);g.restore();
 }
 function drawRoomMap(){
- const x=viewW-116,y=186,boxW=104,boxH=82,scale=Math.min((boxW-14)/W,(boxH-14)/F);
+ const x=hero==='mage'?12:viewW-116,y=186,boxW=104,boxH=82,scale=Math.min((boxW-14)/W,(boxH-14)/F);
  const ox=x+(boxW-W*scale)/2,oy=y+(boxH-F*scale)/2;
  g.save();g.fillStyle='#100e1de8';g.fillRect(x,y,boxW,boxH);
  g.fillStyle=currentRoom.kind==='boss'?'#492536':'#312b43';g.fillRect(ox,oy,W*scale,F*scale);g.strokeStyle='#88779d';g.lineWidth=1;g.strokeRect(ox,oy,W*scale,F*scale);g.fillStyle='#aaa7b2';for(const w of walls)g.fillRect(ox+w.x*scale,oy+w.y*scale,Math.max(1,w.w*scale),Math.max(1,w.h*scale));g.fillStyle='#08070f';for(const a of floorGaps)g.fillRect(ox+a.x*scale,oy+a.y*scale,a.w*scale,a.h*scale);g.fillStyle='#9d9298';for(const a of floorBridges)g.fillRect(ox+a.x*scale,oy+a.y*scale,a.w*scale,a.h*scale);
@@ -2509,7 +2509,7 @@ function mageWall(a){
  let placed=0;
  for(const offset of [-20,20]){
   const xx=Math.floor((tx-Math.sin(a)*offset)/TILE_SIZE)*TILE_SIZE,yy=Math.floor((ty+Math.cos(a)*offset)/TILE_SIZE)*TILE_SIZE;
-  if(!safeFloor(xx+TILE_SIZE/2,yy+TILE_SIZE/2,17)||Math.hypot(xx+20-p.x,yy+20-p.y)<53)continue;
+  if(!safeFloor(xx+TILE_SIZE/2,yy+TILE_SIZE/2,17)||Math.hypot(xx+20-p.x,yy+20-p.y)<53||portals.some(q=>Math.hypot(q.x-xx-20,q.y-yy-20)<42)||roomDoors().some(q=>Math.hypot(q.x-xx-20,q.y-yy-20)<60))continue;
   walls.push({x:xx,y:yy,w:TILE_SIZE,h:TILE_SIZE,type:'neutral',mageUntil:arenaTime+2.5});placed++;
  }
  if(placed)resetEnemyNavigation();
@@ -3606,12 +3606,12 @@ if(phasing)g.restore();
 for(const enemy of enemies)drawBiomeEnemyDetails(enemy);
 for(let f of healFx){let progress=1-f.life/.85,alpha=Math.min(1,f.life/.25);g.save();g.globalAlpha=alpha;g.fillStyle='#70ff90';let x=f.x+12+progress*7,y=f.y-14-progress*21;g.fillRect(x-2,y-8,4,16);g.fillRect(x-8,y-2,16,4);g.restore()}
 drawBossFight();drawSynergies();drawDashTrail();drawDamageNumbers();
-if(!p.falling&&(inv===0||Math.floor(t/110)%2===0)){g.fillStyle=playerPoisonGlow>0?'#8dff45':hero==='archer'?'#b9f4c8':'#fff';g.beginPath();g.arc(p.x,p.y,9,0,Math.PI*2);g.fill()}
+if(!p.falling&&(inv===0||Math.floor(t/110)%2===0)){g.fillStyle=playerPoisonGlow>0?'#8dff45':hero==='mage'?'#d9bcff':hero==='archer'?'#b9f4c8':'#fff';g.beginPath();g.arc(p.x,p.y,9,0,Math.PI*2);g.fill()}
 if(!p.falling){g.save();g.translate(p.x,p.y);g.rotate(p.a);if(hero==='archer'){
  const charge=bowPower();g.strokeStyle='#deb87a';g.lineWidth=3;g.beginPath();g.moveTo(14,-18);g.quadraticCurveTo(32,0,14,18);g.stroke();
  g.strokeStyle='#f9ead0';g.lineWidth=1.5;g.beginPath();g.moveTo(14,-18);g.lineTo(14-12*charge,0);g.lineTo(14,18);g.stroke();
  if(charge>.15){g.strokeStyle='#ffe89f';g.lineWidth=2;g.beginPath();g.moveTo(14-12*charge,0);g.lineTo(37,0);g.stroke();g.fillStyle='#fff8ca';g.beginPath();g.moveTo(41,0);g.lineTo(33,-4);g.lineTo(33,4);g.fill()}
- }else{g.fillStyle='#fff';g.fillRect(17,-3,31,6);g.fillStyle='#bdb7d5';g.fillRect(19,2,27,2)}g.restore();}
+ }else if(hero==='classic'){g.fillStyle='#fff';g.fillRect(17,-3,31,6);g.fillStyle='#bdb7d5';g.fillRect(19,2,27,2)}else{g.strokeStyle='#d8adff';g.lineWidth=2;g.shadowColor='#b386ff';g.shadowBlur=8;g.beginPath();g.arc(0,0,13,0,Math.PI*2);g.stroke();g.fillStyle='#ffe1a6';g.beginPath();g.arc(20,0,4,0,Math.PI*2);g.fill()}g.restore();}
 if(FOG_OF_WAR_ENABLED)drawFog();
 g.restore(); // Joysticks, minimap and game-over text stay in screen coordinates.
 drawDungeonMap();drawRoomMap();
