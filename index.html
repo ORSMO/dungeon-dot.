@@ -141,7 +141,7 @@ if(q.x<16||q.x>W-16||q.y<16||q.y>F-16){q.life=0;continue}if(projectileHitsProp(q
 let wall=walls.find(w=>q.x+q.r>w.x&&q.x-q.r<w.x+w.w&&q.y+q.r>w.y&&q.y-q.r<w.y+w.h);if(wall){if(q.reflected&&wall.cracked)hitCrackedWall(wall,2);if(q.kind==='spitter')poisonPuddles.push({x:q.x,y:q.y,r:23,life:2,maxLife:2});if(q.kind==='frostcaster'){let water=puddles.find(z=>Math.hypot(z.x-q.x,z.y-q.y)<z.r);if(water){water.life=Math.min(water.life,.3);triggerReaction('ice',water.x,water.y,water.r)}}if(q.kind==='cannon'){q.vx*=-.75;q.vy*=-.75;q.life-=.7}else q.life=0;continue}
 let angle=p.a,ux=Math.cos(angle),uy=Math.sin(angle),along=(q.x-p.x)*ux+(q.y-p.y)*uy,at=Math.max(16,Math.min(49,along)),bx=p.x+ux*at,by=p.y+uy*at;
 if(!q.reflected&&shieldHit(q.x,q.y,q.r)){shieldDamage(q.kind==='scatter'?8:q.kind==='seeker'?20:12);let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.45;q.vy=Math.sin(a)*speed*1.45;q.reflected=true;q.life=2.5;continue}
-if(Math.hypot(q.x-bx,q.y-by)<q.r+5&&!q.reflected&&hero==='classic'){let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.35;q.vy=Math.sin(a)*speed*1.35;q.reflected=true;q.life=2.5;continue}
+if(Math.hypot(q.x-bx,q.y-by)<q.r+5+5*itemCount('reflectArrow')&&!q.reflected&&hero==='classic'){let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.35;q.vy=Math.sin(a)*speed*1.35;q.reflected=true;q.life=2.5;continue}
 if(q.reflected){for(let e of enemies){if(e.hp<=0)continue;if(Math.hypot(q.x-e.x,q.y-e.y)<e.r+q.r){if(canDamage(e,165))friendlyDamage(e,q.kind==='cannon'?3:2,'projectile');if(q.kind==='frostcaster'){let water=puddles.find(z=>Math.hypot(z.x-e.x,z.y-e.y)<z.r);if(water){water.life=.2;triggerReaction('ice',water.x,water.y,water.r)}}q.life=0;break}}}else if(Math.hypot(q.x-p.x,q.y-p.y)<q.r+8&&inv<=0){if(q.kind==='bloodcaster')playerBleed.push({remaining:7,rate:1.4});else if(q.kind==='frostcaster')p.slowUntil=arenaTime+2;else if(q.kind==='spitter')poisonPuddles.push({x:q.x,y:q.y,r:25,life:2.5,maxLife:2.5});else{if(q.kind==='emberbolt')playerBleed.push({remaining:3,rate:1.2});hp=damagedHealth((q.kind==='scatter'?8:11));if(hp<=0)over=true}inv=.4;q.life=0}}
 projectiles=projectiles.filter(q=>q.life>0)}
 
@@ -575,7 +575,7 @@ const ITEM_DEFS = {
  sporeSatchel:{name:'Spore Satchel',glyph:'✿',color:'#a4dc8a',biome:'green',desc:'Defeated enemies leave a friendly damaging spore cloud.'},
  mirrorLens:{name:'Mirror Lens',glyph:'◇',color:'#d4c5ff',desc:'Reflected projectiles deal 50% more damage.'},
  shieldBloom:{name:'Shield Bloom',glyph:'⬡',color:'#8beac7',biome:'green',desc:'Classic: shield takes 15% less damage. Archer: arrows travel 12% faster.'},
- reflectArrow:{name:'Reflect Arrow',glyph:'↶',color:'#f0e9a1',hero:'archer',desc:'Archer arrows deflect one hostile projectile they touch, sending it forward as a friendly shot.'},
+ reflectArrow:{name:'Reflect Arrow',glyph:'↶',color:'#f0e9a1',desc:'Classic: bat reflection range grows. Archer: each arrow can redirect one hostile projectile.'},
  luckyPenny:{name:'Lucky Penny',glyph:'●',color:'#f0cb76',desc:'+1 luck. Defeated enemies drop one extra coin.'},
  magnetRing:{name:'Magnet Ring',glyph:'⊙',color:'#87bdff',desc:'Collect coins from much farther away.'},
  thornMantle:{name:'Thorn Mantle',glyph:'✦',color:'#a7bf82',biome:'green',desc:'Take 10% less damage. When hurt, retaliate against nearby enemies.'},
@@ -677,17 +677,17 @@ function upgradeCount(id){return progress?.upgrades[id]||0}
 function playerStats(){
  return {
   maxHealth:Math.max(25,50+10*upgradeCount('vitality')+10*itemCount('emberHeart')-8*itemCount('glassEye')),
-  damage:1+.25*upgradeCount('power')+.4*itemCount('glassEye')+.02*Math.max(0,(progress?.level||1)-1),
-  moveSpeed:118*(1+Math.min(.8,.1*upgradeCount('speed'))),
+  damage:1+.25*upgradeCount('power')+(hero==='archer'?.2:.4)*itemCount('glassEye')+.02*Math.max(0,(progress?.level||1)-1),
+  moveSpeed:118*(1+Math.min(.8,.1*upgradeCount('speed')+(hero==='archer'?.05*itemCount('thornMantle'):0))),
   swing:Math.max(.55,1+.15*upgradeCount('swing')-.1*itemCount('counterweight')),
-  knockback:1+.2*upgradeCount('knockback')+.4*itemCount('counterweight'),
-  regen:PLAYER_REGEN+.15*upgradeCount('regen')+.3*itemCount('mossCharm')+(hasSynergy('livingArmour')?.2:0),
+  knockback:1+.2*upgradeCount('knockback')+(hero==='archer'?.12:.4)*itemCount('counterweight'),
+  regen:PLAYER_REGEN+.15*upgradeCount('regen')+(hero==='archer'?.12:.3)*itemCount('mossCharm')+(hasSynergy('livingArmour')?.2:0),
   shieldProtection:hero==='archer'?0:Math.min(.6,.1*upgradeCount('shield')+.15*itemCount('shieldBloom')),
-  crit:Math.min(.6,.05*upgradeCount('focus')),
+  crit:Math.min(.6,.05*upgradeCount('focus')+(hero==='archer'?.12*itemCount('glassEye'):0)),
   luck:upgradeCount('luck')+itemCount('luckyPenny'),
-  armour:Math.min(.4,.1*itemCount('thornMantle')+(hasSynergy('livingArmour')?.1:0)),
-  pickup:itemCount('magnetRing')?95:23,
-  bulletSpeed:Math.max(.5,1-.2*itemCount('hourglass'))
+  armour:Math.min(.4,(hero==='archer'?.04:.1)*itemCount('thornMantle')+(hasSynergy('livingArmour')?.1:0)),
+  pickup:itemCount('magnetRing')?(hero==='archer'?28:95):23,
+  bulletSpeed:Math.max(.5,1-(hero==='archer'?0:.2)*itemCount('hourglass'))
  };
 }
 function healPlayer(amount){const before=hp;hp=Math.min(playerStats().maxHealth,hp+amount);return hp-before}
@@ -695,11 +695,34 @@ function showItemNotice(text){
  const el=document.querySelector('#item-notice');el.textContent=text;el.hidden=false;itemNoticeTime=3.5;
 }
 
+
+/*
+ * All items share stable IDs and work for every hero.
+ * Character adapters define distinct mechanics in playerStats(), weapon-hit,
+ * kill, damage, and projectile hooks. New playable heroes can add metadata here.
+ */
+const HERO_ITEM_VARIANTS={
+ emberHeart:{classic:{name:'Ember Heart',desc:'Bat hits burn enemies for 3 seconds.'},archer:{name:'Ember Quiver',desc:'Strong arrows ignite enemies and cause a small fireburst.'}},
+ frostNail:{classic:{name:'Frost Nail',desc:'Bat hits slow targets for 2 seconds.'},archer:{name:'Icehead Arrows',desc:'Strong arrows leave a slowing frost patch.'}},
+ stormCoil:{classic:{name:'Storm Coil',desc:'Every 4th bat hit chains lightning to up to 3 enemies.'},archer:{name:'Charged Fletching',desc:'Every 3rd arrow hit chains lightning to nearby targets.'}},
+ leechFang:{classic:{name:'Leech Fang',desc:'Each enemy kill heals 1 HP.'},archer:{name:'Hunter Fang',desc:'Arrow kills restore 2 HP. Other kills do not heal.'}},
+ sporeSatchel:{classic:{name:'Spore Satchel',desc:'Enemies leave a damaging cloud when killed.'},archer:{name:'Spore Tips',desc:'Every 3rd strong arrow hit creates a small damaging spore cloud.'}},
+ mirrorLens:{classic:{name:'Mirror Lens',desc:'Reflected bullets deal 50% more damage.'},archer:{name:'Trueflight Lens',desc:'Arrows fly 15% faster; reflected bullets gain 20% damage.'}},
+ shieldBloom:{classic:{name:'Shield Bloom',desc:'The curved shield takes 15% less damage.'},archer:{name:'Fletching Bloom',desc:'Arrows fly 12% faster. No shield needed.'}},
+ luckyPenny:{classic:{name:'Lucky Penny',desc:'Every enemy kill drops 1 extra coin.'},archer:{name:'Bounty Mark',desc:'Arrow kills drop 2 extra coins.'}},
+ magnetRing:{classic:{name:'Magnet Ring',desc:'Collect dropped coins from 95 units away.'},archer:{name:'Collector Arrow',desc:'Flying arrows collect nearby coins.'}},
+ thornMantle:{classic:{name:'Thorn Mantle',desc:'10% damage reduction; retaliation when struck.'},archer:{name:'Windwoven Cloak',desc:'4% damage reduction and 5% move speed; being hit recovers dash sooner.'}},
+ cinderSigil:{classic:{name:'Cinder Sigil',desc:'Enemy deaths explode to damage nearby enemies.'},archer:{name:'Blasthead Sigil',desc:'Every 2nd strong arrow hit causes a small damaging burst.'}},
+ mossCharm:{classic:{name:'Moss Charm',desc:'Gain 0.3 HP regeneration per second.'},archer:{name:'Lifebloom Quiver',desc:'Gain 0.12 HP/s and recover 1 HP every 4 strong arrow hits.'}},
+ glassEye:{classic:{name:'Glass Eye',desc:'+40% bat damage but −8 maximum HP.'},archer:{name:'Hawkeye',desc:'+20% arrow damage and +12% crit chance, but −8 maximum HP.'}},
+ counterweight:{classic:{name:'Counterweight',desc:'+40% bat knockback but slower swings.'},archer:{name:'Piercer Shaft',desc:'Arrows penetrate one extra enemy but reload 10% slower.'}},
+ hourglass:{classic:{name:'Blue Hourglass',desc:'Enemy projectiles move 20% slower.'},archer:{name:'Slowtime Fletching',desc:'Arrows slow enemy projectiles they pass near.'}},
+ reflectArrow:{classic:{name:'Rebound Grip',desc:'Your bat can reflect projectiles from farther away.'},archer:{name:'Reflect Arrow',desc:'Each arrow redirects one enemy or boss projectile to fly toward enemies.'}}
+};
 function heroItemDefinition(id){
- const def=ITEM_DEFS[id];if(!def||hero!=='archer')return def;
- if(id==='shieldBloom')return {...def,name:'Fletching Bloom',desc:'Arrows travel 12% faster. No shield required.'};
- if(id==='mirrorLens')return {...def,name:'Mirror Lens',desc:'Arrows travel 15% faster. Reflected projectiles deal 50% more damage.'};
- return def;
+ const def=ITEM_DEFS[id];if(!def)return null;
+ const rule=HERO_ITEM_VARIANTS[id];
+ return {...def,...(rule?.[hero]||rule?.classic||{})};
 }
 function heroUpgradeDefinition(id){
  const def=UPGRADE_DEFS[id];if(!def||hero!=='archer')return def;
@@ -709,7 +732,7 @@ function heroUpgradeDefinition(id){
  return def;
 }
 function giveItem(id){
- if(!ITEM_DEFS[id]||(ITEM_DEFS[id].hero&&ITEM_DEFS[id].hero!==hero))return false;
+ if(!ITEM_DEFS[id])return false;
  const previousSynergies=activeSynergies();
  const before=playerStats().maxHealth;progress.items[id]=itemCount(id)+1;
  const after=playerStats().maxHealth;hp=Math.min(after,hp+Math.max(0,after-before));
@@ -723,23 +746,37 @@ function giveUpgrade(id){
 }
 function playerDamageAmount(base,source){
  let amount=base*playerStats().damage;
- if(source==='projectile')amount*=1+.5*itemCount('mirrorLens');
+ if(source==='projectile')amount*=1+(hero==='archer'?.2:.5)*itemCount('mirrorLens');
  if(Math.random()<playerStats().crit)amount*=2;
  return amount;
 }
 function friendlyDamage(target,amount,source='item'){
  if(!target||target.hp<=0)return false;
  if(target.kind&&bossFight?.units.includes(target))return damageBoss(target,amount,source);
- target.hp=Math.max(0,target.hp-playerDamageAmount(amount,source));if(source==='bat'||source==='arrow')afterPlayerBatHit(target);if(source==='projectile')synergyProjectileHit(target);return true;
+ target.hp=Math.max(0,target.hp-playerDamageAmount(amount,source));if(source==='bat'||source==='arrow'){target.lastHitBy=source;afterPlayerBatHit(target,source)}if(source==='projectile')synergyProjectileHit(target);return true;
 }
-function afterPlayerBatHit(target){
- applyWeaponElement(target);
- if(itemCount('emberHeart')){target.burnUntil=arenaTime+3;target.burnPower=.75*itemCount('emberHeart')*playerStats().damage}
- if(itemCount('frostNail'))target.slowUntil=arenaTime+2;
- itemHitCounter++;
- if(itemCount('stormCoil')&&itemHitCounter%4===0){
-  const targets=[...enemies,...(bossFight&&!bossFight.done?bossFight.units:[])].filter(e=>e!==target&&e.hp>0&&Math.hypot(e.x-target.x,e.y-target.y)<145).slice(0,3);
-  for(const e of targets){friendlyDamage(e,2*itemCount('stormCoil'),'item');elementFx.push({type:'lightning',x:target.x,y:target.y,x2:e.x,y2:e.y,life:.2,maxLife:.2})}
+function afterPlayerBatHit(target,source='bat'){
+ const archer=hero==='archer',charge=archer?(target.lastArrowPower||0):0,strong=archer&&source==='arrow'&&charge>=.7;
+ applyWeaponElement(target);itemHitCounter++;
+ if(itemCount('emberHeart')){
+  if(!archer){target.burnUntil=arenaTime+3;target.burnPower=.75*itemCount('emberHeart')*playerStats().damage}
+  else if(strong){
+   target.burnUntil=arenaTime+2.5;target.burnPower=.55*itemCount('emberHeart')*playerStats().damage;
+   if(itemHitCounter%2===0)synergyArea(target.x,target.y,43,1.1*itemCount('emberHeart'),28,'#ffad6b',target);
+  }
+ }
+ if(itemCount('frostNail')){
+  if(!archer)target.slowUntil=arenaTime+2;
+  else if(strong)friendlyZones.push({type:'frost',x:target.x,y:target.y,r:43,life:2.4,tick:0,power:itemCount('frostNail')});
+ }
+ if(itemCount('stormCoil')&&itemHitCounter%(archer?3:4)===0)elementChain(target,archer?1.7:2,archer?2:3);
+ if(archer&&source==='arrow'){
+  if(strong&&itemCount('sporeSatchel')&&itemHitCounter%3===0)friendlyZones.push({x:target.x,y:target.y,r:30,life:2.8,tick:0,power:1.15*itemCount('sporeSatchel')});
+  if(strong&&itemCount('cinderSigil')&&itemHitCounter%2===0)synergyArea(target.x,target.y,50,2*itemCount('cinderSigil'),35,'#ffad6b',target);
+  if(strong&&itemCount('mossCharm')&&itemHitCounter%4===0)healPlayer(itemCount('mossCharm'));
+  if(itemCount('magnetRing')){
+   for(const e of enemies)if(e!==target&&e.hp>0){const dx=target.x-e.x,dy=target.y-e.y,d=Math.hypot(dx,dy);if(d<100&&d>5){e.vx+=dx/d*21;e.vy+=dy/d*21}}
+  }
  }
  synergyBatHit(target);
 }
@@ -751,13 +788,14 @@ function updateItemEffects(dt){
  }
  for(const zone of friendlyZones){
   zone.life-=dt;zone.tick=(zone.tick||0)+dt;
-  if(zone.tick>=.5){zone.tick=0;for(const e of [...enemies,...(bossFight&&!bossFight.done?bossFight.units:[])])if(e.hp>0&&Math.hypot(e.x-zone.x,e.y-zone.y)<zone.r+e.r)friendlyDamage(e,.75*zone.power,'item')}
+  if(zone.tick>=.5){zone.tick=0;for(const e of [...enemies,...(bossFight&&!bossFight.done?bossFight.units:[])])if(e.hp>0&&Math.hypot(e.x-zone.x,e.y-zone.y)<zone.r+e.r){if(zone.type==='frost')e.slowUntil=Math.max(e.slowUntil||0,arenaTime+1);else friendlyDamage(e,.75*zone.power,'item')}}
  }
  friendlyZones=friendlyZones.filter(zone=>zone.life>0);
 }
 function captureDamage(){return new Map([...enemies,...(bossFight&&!bossFight.done?bossFight.units:[])].map(e=>[e,{hp:e.hp,maxHp:e.maxHp,x:e.x,y:e.y}]))}
 function finishDamageCapture(before,oldPlayerHp,dt){
- if(oldPlayerHp>hp&&(!inSandbox()||sandbox.attacks)&&itemCount('thornMantle')&&mantleCooldown===0){
+ if(oldPlayerHp>hp&&hero==='archer'&&itemCount('thornMantle')){dash.readyAt=Math.max(arenaTime,(dash.readyAt||0)-itemCount('thornMantle'));if(hasSynergy('thornBloom')){synergyArea(p.x,p.y,65,1.3,35,'#a6e7bd');}}
+ if(oldPlayerHp>hp&&hero!=='archer'&&(!inSandbox()||sandbox.attacks)&&itemCount('thornMantle')&&mantleCooldown===0){
   mantleCooldown=1;for(const e of [...enemies,...(bossFight&&!bossFight.done?bossFight.units:[])])if(e.hp>0&&Math.hypot(e.x-p.x,e.y-p.y)<75)friendlyDamage(e,4*itemCount('thornMantle'),'item');synergyRetaliation();
  }
  for(const [e,old] of before){
@@ -781,16 +819,16 @@ function drawDamageNumbers(){
 function rewardEnemy(enemy){
  if(enemy.rewarded)return;enemy.rewarded=true;recordEnemyKill(enemy);synergyEnemyDeath(enemy);
  earnXp(enemy.bossMinion||enemy.bossSummon?1:enemy.elite?5:['square','round'].includes(enemy.shape)?2:3);
- const amount=((enemy.elite?3:1)+itemCount('luckyPenny')+(Math.random()<Math.min(.5,playerStats().luck*.08)?1:0))*(currentRoom?.kind==='cursed'?2:1);
+ const amount=((enemy.elite?3:1)+(hero==='archer'?(enemy.lastHitBy==='arrow'?2*itemCount('luckyPenny'):0):itemCount('luckyPenny'))+(Math.random()<Math.min(.5,playerStats().luck*.08)?1:0))*(currentRoom?.kind==='cursed'?2:1);
  if(!enemy.bossMinion&&!enemy.bossSummon)coinDrops.push({x:enemy.x,y:enemy.y,amount});
  if(!inSandbox()&&!enemy.bossMinion&&!enemy.bossSummon){
   if(Math.random()<.03)heartDrops.push({x:enemy.x,y:enemy.y});
   if(Math.random()<.0025&&lives<5)lifeDrops.push({x:enemy.x,y:enemy.y});
  }
  if(enemy.isTreasure)coinDrops.push({x:enemy.x,y:enemy.y,amount:18});
- if(itemCount('leechFang'))healPlayer(itemCount('leechFang'));
- if(itemCount('sporeSatchel'))friendlyZones.push({x:enemy.x,y:enemy.y,r:35,life:3,tick:0,power:itemCount('sporeSatchel')});
- if(itemCount('cinderSigil'))for(const e of enemies)if(e!==enemy&&e.hp>0&&Math.hypot(e.x-enemy.x,e.y-enemy.y)<55)friendlyDamage(e,3*itemCount('cinderSigil'),'item');
+ if(itemCount('leechFang')&&(hero!=='archer'||enemy.lastHitBy==='arrow'))healPlayer((hero==='archer'?2:1)*itemCount('leechFang'));
+ if(hero!=='archer'&&itemCount('sporeSatchel'))friendlyZones.push({x:enemy.x,y:enemy.y,r:35,life:3,tick:0,power:itemCount('sporeSatchel')});
+ if(hero!=='archer'&&itemCount('cinderSigil'))for(const e of enemies)if(e!==enemy&&e.hp>0&&Math.hypot(e.x-enemy.x,e.y-enemy.y)<55)friendlyDamage(e,3*itemCount('cinderSigil'),'item');
 }
 function collectDefeatedEnemies(){
  const defeated=enemies.filter(e=>e.hp<=0&&e.hp!==-999&&!e.fellInHole),seen=new Set(defeated);
@@ -804,7 +842,7 @@ function rewardRoom(){
  if(inSandbox()||currentRoom.clearRewarded||!['combat','cursed'].includes(currentRoom.kind))return;
  currentRoom.clearRewarded=true;coinDrops.push({x:W/2,y:F/2,amount:currentRoom.kind==='cursed'?6:3});
  if(currentRoom.kind==='cursed'&&Math.random()<.55){
-  const rares=['stormCoil','leechFang','glassEye','cinderSigil','shieldBloom','thornMantle',...(hero==='archer'?['reflectArrow']:[])];
+  const rares=['stormCoil','leechFang','glassEye','cinderSigil','shieldBloom','thornMantle','reflectArrow'];
   const unowned=rares.filter(id=>!itemCount(id)),pool=unowned.length?unowned:rares;
   currentRoom.loot.push({id:'curse-reward',kind:'item',key:pool[Math.floor(Math.random()*pool.length)],price:0,x:W/2+85,y:F/2,claimed:false,rare:true});
  }
@@ -824,7 +862,7 @@ function rewardBoss(){
  if(itemCount('leechFang'))healPlayer(4*itemCount('leechFang'));
 }
 function rollItem(){
- const all=Object.keys(ITEM_DEFS).filter(id=>!ITEM_DEFS[id].hero||ITEM_DEFS[id].hero===hero),unowned=all.filter(id=>!itemCount(id)),pool=unowned.length?unowned:all;
+ const all=Object.keys(ITEM_DEFS),unowned=all.filter(id=>!itemCount(id)),pool=unowned.length?unowned:all;
  const themed=pool.filter(id=>ITEM_DEFS[id].biome===selectedBiome),weighted=pool.concat(themed,themed);
  return weighted[Math.floor(Math.random()*weighted.length)];
 }
@@ -968,7 +1006,7 @@ function makePracticeCoinPiles(){
 function prepareSandboxEconomy(room,restock=false){
  if(room.practiceEconomy&&!restock)return;
  room.practiceEconomy=true;
- const items=Object.keys(ITEM_DEFS).filter(id=>!ITEM_DEFS[id].hero||ITEM_DEFS[id].hero===hero),upgrades=Object.keys(UPGRADE_DEFS);
+ const items=Object.keys(ITEM_DEFS),upgrades=Object.keys(UPGRADE_DEFS);
  room.loot=items.map((key,i)=>({id:'sandbox-item-'+key,kind:'item',key,price:0,x:150+(i%5)*200,y:130+Math.floor(i/5)*100,claimed:false,section:'gallery'}));
  const stock=[...items];
  for(let i=stock.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[stock[i],stock[j]]=[stock[j],stock[i]]}
@@ -1568,7 +1606,7 @@ function damageBoss(unit,amount,source='bat'){
   else bossSpark(unit.x,unit.y,'#8eb4f5');
   return false;
  }
- unit.hp=Math.max(0,unit.hp-playerDamageAmount(amount,source));unit.flash=.16;if(source==='bat'||source==='arrow')afterPlayerBatHit(unit);if(source==='projectile')synergyProjectileHit(unit);
+ unit.hp=Math.max(0,unit.hp-playerDamageAmount(amount,source));unit.flash=.16;if(source==='bat'||source==='arrow'){unit.lastHitBy=source;afterPlayerBatHit(unit,source)}if(source==='projectile')synergyProjectileHit(unit);
  if(unit.kind==='gatekeeper'&&source==='projectile'){unit.state='stunned';unit.timer=1.5;unit.chargesLeft=0}
  if(unit.kind==='slime'&&source==='minion'){unit.state='stunned';unit.timer=1.3}
  return true;
@@ -1666,7 +1704,7 @@ function updateBossShots(dt,previousAngle){
   if(shot.x<16||shot.x>W-16||shot.y<16||shot.y>F-16){bounceBossProjectile(shot);if(shot.life<=0)continue}
   if(!shot.reflected){
    const swing=p.a-previousAngle,steps=Math.max(1,Math.ceil(Math.abs(swing)/.055));
-   let bat=false;if(hero==='classic')for(let k=0;k<=steps&&!bat;k++)bat=sweptBossShotHits(shot,ox,oy,bossBatSegment(previousAngle+swing*k/steps),shot.r+4);
+   let bat=false;if(hero==='classic')for(let k=0;k<=steps&&!bat;k++)bat=sweptBossShotHits(shot,ox,oy,bossBatSegment(previousAngle+swing*k/steps),shot.r+4+4*itemCount('reflectArrow'));
    const shield=!bat&&shieldSegments().some(seg=>sweptBossShotHits(shot,ox,oy,seg,shot.r+3));
    if(bat||shield){
     if(shield)shieldDamage(shot.kind==='cannonball'?18:10);
@@ -2574,7 +2612,7 @@ function hitProp(o,power,source='hit'){
  const amount=PROP_DEFS[o.kind].coins+(o.kind==='chest'?Math.floor(Math.random()*4):Math.random()<.4?1:0);
  if(!inSandbox())coinDrops.push({x:o.x,y:o.y,amount});
  if(o.kind==='chest'&&!inSandbox()&&Math.random()<.35){
-  const items=Object.keys(ITEM_DEFS).filter(id=>!ITEM_DEFS[id].hero||ITEM_DEFS[id].hero===hero),unowned=items.filter(id=>!itemCount(id)),pool=unowned.length?unowned:items;
+  const items=Object.keys(ITEM_DEFS),unowned=items.filter(id=>!itemCount(id)),pool=unowned.length?unowned:items;
   currentRoom.loot.push({id:'broken-'+o.id,kind:'item',key:pool[Math.floor(Math.random()*pool.length)],price:0,x:o.x,y:o.y,claimed:false});
  }
  if(o.kind==='chest'&&!inSandbox()&&Math.random()<.02&&lives<5)lifeDrops.push({x:o.x,y:o.y});
