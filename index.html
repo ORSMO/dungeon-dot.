@@ -614,7 +614,7 @@ function refreshElementHud(){
  const el=document.querySelector('#level-hud');
  if(!el||!progress)return;
  const first=progress.elementPrimary,second=progress.elementSecondary;
- el.textContent='LV '+progress.level+' · '+Math.floor(progress.xp)+'/'+xpRequirement(progress.level)+' XP'+(first?' · '+ELEMENTS[first].name:'')+(second?' + '+ELEMENTS[second].name:'');
+ el.textContent='LV '+progress.level+' · '+progress.xp+'/'+xpRequirement(progress.level)+' XP'+(first?' · '+ELEMENTS[first].name:'')+(second?' + '+ELEMENTS[second].name:'');
 }
 function openElementChoice(){
  const panel=document.querySelector('#element-choice');
@@ -640,7 +640,7 @@ function selectElement(id){
 }
 function earnXp(amount){
  if(!progress||inSandbox()||over||amount<=0)return;
- progress.xp+=amount;
+ progress.xp+=amount*.5;
  let gained=0;
  while(progress.level<30&&progress.xp>=xpRequirement(progress.level)){progress.xp-=xpRequirement(progress.level);progress.level++;gained++}
  if(gained){showItemNotice('LEVEL '+progress.level+' · +'+(gained*2)+'% WEAPON DAMAGE');}
@@ -1110,7 +1110,7 @@ function normalizeSavedRun(raw){
   if(!seen.has(door.to)){seen.add(door.to);queue.push(door.to)}
  }
  if(seen.size!==rooms.length)throw Error('Disconnected dungeon');
- raw.progress={coins:Math.floor(safeNumber(raw.progress.coins)),items:knownDictionary(raw.progress.items,ITEM_DEFS),upgrades:knownDictionary(raw.progress.upgrades,UPGRADE_DEFS),roomsCleared:Math.floor(safeNumber(raw.progress.roomsCleared)),synergyCoins:Math.floor(safeNumber(raw.progress.synergyCoins,0,0,9)),level:Math.floor(safeNumber(raw.progress.level,1,1,30)),xp:Math.floor(safeNumber(raw.progress.xp,0,0,100000)),elementPrimary:ELEMENTS[raw.progress.elementPrimary]?raw.progress.elementPrimary:null,elementSecondary:ELEMENTS[raw.progress.elementSecondary]&&raw.progress.elementSecondary!==raw.progress.elementPrimary?raw.progress.elementSecondary:null};
+ raw.progress={coins:Math.floor(safeNumber(raw.progress.coins)),items:knownDictionary(raw.progress.items,ITEM_DEFS),upgrades:knownDictionary(raw.progress.upgrades,UPGRADE_DEFS),roomsCleared:Math.floor(safeNumber(raw.progress.roomsCleared)),synergyCoins:Math.floor(safeNumber(raw.progress.synergyCoins,0,0,9)),level:Math.floor(safeNumber(raw.progress.level,1,1,30)),xp:safeNumber(raw.progress.xp,0,0,100000),elementPrimary:ELEMENTS[raw.progress.elementPrimary]?raw.progress.elementPrimary:null,elementSecondary:ELEMENTS[raw.progress.elementSecondary]&&raw.progress.elementSecondary!==raw.progress.elementPrimary?raw.progress.elementSecondary:null};
  raw.biome=BIOME_DEFS[raw.biome]?raw.biome:null;if(raw.biome==='basic')raw.biome=null;
  raw.depth=Math.floor(safeNumber(raw.depth,1,1,10000));raw.hero=Object.hasOwn(HERO_DEFS,raw.hero)?raw.hero:'classic';raw.hp=safeNumber(raw.hp,50,1,1e6);raw.strongArrowHits=Math.floor(safeNumber(raw.strongArrowHits,0,0,100000));raw.lives=Math.floor(safeNumber(raw.lives,3,0,5));raw.kills=Math.floor(safeNumber(raw.kills));raw.arenaTime=safeNumber(raw.arenaTime);
  raw.player=raw.player&&typeof raw.player==='object'?raw.player:{};
