@@ -677,15 +677,15 @@ function upgradeCount(id){return progress?.upgrades[id]||0}
 function playerStats(){
  return {
   maxHealth:Math.max(25,50+10*upgradeCount('vitality')+10*itemCount('emberHeart')-8*itemCount('glassEye')),
-  damage:1+.25*upgradeCount('power')+(hero==='archer'?.2:.4)*itemCount('glassEye')+.02*Math.max(0,(progress?.level||1)-1),
+  damage:1+.25*upgradeCount('power')+(hero==='mage'?0:hero==='archer'?.2:.4)*itemCount('glassEye')+.02*Math.max(0,(progress?.level||1)-1),
   moveSpeed:(hero==='mage'?112:118)*(1+Math.min(.8,.1*upgradeCount('speed')+(hero==='archer'?.05*itemCount('thornMantle'):0))),
-  swing:Math.max(.55,1+.15*upgradeCount('swing')-.1*itemCount('counterweight')),
+  swing:Math.max(.55,1+.15*upgradeCount('swing')-(hero==='mage'?0:.1)*itemCount('counterweight')),
   knockback:1+.2*upgradeCount('knockback')+(hero==='archer'?.12:.4)*itemCount('counterweight'),
   regen:(hero==='mage'?.5:PLAYER_REGEN)+.15*upgradeCount('regen')+(hero==='mage'?.18:hero==='archer'?.12:.3)*itemCount('mossCharm')+(hasSynergy('livingArmour')?.2:0),
   shieldProtection:hero!=='classic'?0:Math.min(.6,.1*upgradeCount('shield')+.15*itemCount('shieldBloom')),
   crit:Math.min(.6,.05*upgradeCount('focus')+(hero==='archer'?.12*itemCount('glassEye'):0)),
   luck:upgradeCount('luck')+itemCount('luckyPenny'),
-  armour:Math.min(.4,(hero==='archer'?.04:.1)*itemCount('thornMantle')+(hasSynergy('livingArmour')?.1:0)),
+  armour:Math.min(.4,(hero==='mage'?.06:hero==='archer'?.04:.1)*itemCount('thornMantle')+(hasSynergy('livingArmour')?.1:0)),
   pickup:itemCount('magnetRing')?(hero==='archer'?28:95):23,
   bulletSpeed:Math.max(.5,1-(hero==='archer'?0:.2)*itemCount('hourglass'))
  };
@@ -702,22 +702,22 @@ function showItemNotice(text){
  * kill, damage, and projectile hooks. New playable heroes can add metadata here.
  */
 const HERO_ITEM_VARIANTS={
- emberHeart:{classic:{name:'Ember Heart',desc:'+10 maximum HP. Bat hits burn enemies for 3 seconds.'},archer:{name:'Ember Quiver',desc:'+10 maximum HP. Strong arrows ignite enemies and trigger a small fireburst.'}},
- frostNail:{classic:{name:'Frost Nail',desc:'Bat hits slow targets for 2 seconds.'},archer:{name:'Icehead Arrows',desc:'Strong arrows leave a slowing frost patch.'}},
- stormCoil:{classic:{name:'Storm Coil',desc:'Every 4th bat hit chains lightning to up to 3 enemies.'},archer:{name:'Charged Fletching',desc:'Every 3rd arrow hit chains lightning to nearby targets.'}},
- leechFang:{classic:{name:'Leech Fang',desc:'Each enemy kill heals 1 HP.'},archer:{name:'Hunter Fang',desc:'Arrow kills restore 2 HP. Other kills do not heal.'}},
- sporeSatchel:{classic:{name:'Spore Satchel',desc:'Enemies leave a damaging cloud when killed.'},archer:{name:'Spore Tips',desc:'Every 3rd strong arrow hit creates a small damaging spore cloud.'}},
- mirrorLens:{classic:{name:'Mirror Lens',desc:'Reflected bullets deal 50% more damage.'},archer:{name:'Trueflight Lens',desc:'Arrows fly 15% faster; reflected bullets gain 20% damage.'}},
- shieldBloom:{classic:{name:'Shield Bloom',desc:'The curved shield takes 15% less damage.'},archer:{name:'Fletching Bloom',desc:'Arrows fly 12% faster. No shield needed.'}},
- luckyPenny:{classic:{name:'Lucky Penny',desc:'Every enemy kill drops 1 extra coin.'},archer:{name:'Bounty Mark',desc:'Arrow kills drop 2 extra coins.'}},
- magnetRing:{classic:{name:'Magnet Ring',desc:'Collect dropped coins from 95 units away.'},archer:{name:'Collector Arrow',desc:'Flying arrows collect nearby coins.'}},
- thornMantle:{classic:{name:'Thorn Mantle',desc:'10% damage reduction; retaliation when struck.'},archer:{name:'Windwoven Cloak',desc:'4% damage reduction and 5% move speed; being hit recovers dash sooner.'}},
- cinderSigil:{classic:{name:'Cinder Sigil',desc:'Enemy deaths explode to damage nearby enemies.'},archer:{name:'Blasthead Sigil',desc:'Every 2nd strong arrow hit causes a small damaging burst.'}},
- mossCharm:{classic:{name:'Moss Charm',desc:'Gain 0.3 HP regeneration per second.'},archer:{name:'Lifebloom Quiver',desc:'Gain 0.12 HP/s and recover 1 HP every 4 strong arrow hits.'}},
- glassEye:{classic:{name:'Glass Eye',desc:'+40% bat damage but −8 maximum HP.'},archer:{name:'Hawkeye',desc:'+20% arrow damage and +12% crit chance, but −8 maximum HP.'}},
- counterweight:{classic:{name:'Counterweight',desc:'+40% bat knockback but slower swings.'},archer:{name:'Piercer Shaft',desc:'Arrows penetrate one extra enemy but reload 10% slower.'}},
- hourglass:{classic:{name:'Blue Hourglass',desc:'Enemy projectiles move 20% slower.'},archer:{name:'Slowtime Fletching',desc:'Arrows slow enemy projectiles they pass near.'}},
- reflectArrow:{classic:{name:'Rebound Grip',desc:'Your bat can reflect projectiles from farther away.'},archer:{name:'Reflect Arrow',desc:'Each arrow redirects one enemy or boss projectile to fly toward enemies.'}}
+ emberHeart:{classic:{name:'Ember Heart',desc:'+10 maximum HP. Bat hits burn enemies for 3 seconds.'},archer:{name:'Ember Quiver',desc:'+10 maximum HP. Strong arrows ignite enemies and trigger a small fireburst.'},mage:{name:'Searing Codex',desc:'+10 maximum HP. Spell hits burn targets for 2.5 seconds.'}},
+ frostNail:{classic:{name:'Frost Nail',desc:'Bat hits slow targets for 2 seconds.'},archer:{name:'Icehead Arrows',desc:'Strong arrows leave a slowing frost patch.'},mage:{name:'Frost Script',desc:'Spell hits slow targets for 1.5 seconds.'}},
+ stormCoil:{classic:{name:'Storm Coil',desc:'Every 4th bat hit chains lightning to up to 3 enemies.'},archer:{name:'Charged Fletching',desc:'Every 3rd arrow hit chains lightning to nearby targets.'},mage:{name:'Thunder Glyph',desc:'Every 4th spell hit chains lightning to nearby enemies.'}},
+ leechFang:{classic:{name:'Leech Fang',desc:'Each enemy kill heals 1 HP.'},archer:{name:'Hunter Fang',desc:'Arrow kills restore 2 HP. Other kills do not heal.'},mage:{name:'Soul Siphon',desc:'Kills with spells restore 1 HP.'}},
+ sporeSatchel:{classic:{name:'Spore Satchel',desc:'Enemies leave a damaging cloud when killed.'},archer:{name:'Spore Tips',desc:'Every 3rd strong arrow hit creates a small damaging spore cloud.'},mage:{name:'Spore Grimoire',desc:'Every 4th spell hit grows a damaging spore field.'}},
+ mirrorLens:{classic:{name:'Mirror Lens',desc:'Reflected bullets deal 50% more damage.'},archer:{name:'Trueflight Lens',desc:'Arrows fly 15% faster; reflected bullets gain 20% damage.'},mage:{name:'Prism Focus',desc:'Spells deal 15% more damage.'}},
+ shieldBloom:{classic:{name:'Shield Bloom',desc:'The curved shield takes 15% less damage.'},archer:{name:'Fletching Bloom',desc:'Arrows fly 12% faster. No shield needed.'},mage:{name:'Rune Bloom',desc:'Reduce all spell cooldowns by 12%.'}},
+ luckyPenny:{classic:{name:'Lucky Penny',desc:'Every enemy kill drops 1 extra coin.'},archer:{name:'Bounty Mark',desc:'Arrow kills drop 2 extra coins.'},mage:{name:'Alchemy Coin',desc:'Spell kills drop 2 extra coins.'}},
+ magnetRing:{classic:{name:'Magnet Ring',desc:'Collect dropped coins from 95 units away.'},archer:{name:'Collector Arrow',desc:'Flying arrows collect nearby coins.'},mage:{name:'Attractor Sigil',desc:'Spell hits gently pull nearby enemies toward the target.'}},
+ thornMantle:{classic:{name:'Thorn Mantle',desc:'10% damage reduction; retaliation when struck.'},archer:{name:'Windwoven Cloak',desc:'4% damage reduction and 5% move speed; being hit recovers dash sooner.'},mage:{name:'Ward Cloak',desc:'Reduce incoming damage by 6% and send a short retaliatory pulse when hit.'}},
+ cinderSigil:{classic:{name:'Cinder Sigil',desc:'Enemy deaths explode to damage nearby enemies.'},archer:{name:'Blasthead Sigil',desc:'Every 2nd strong arrow hit causes a small damaging burst.'},mage:{name:'Wildfire Seal',desc:'Every 3rd spell hit triggers a small damaging fireburst.'}},
+ mossCharm:{classic:{name:'Moss Charm',desc:'Gain 0.3 HP regeneration per second.'},archer:{name:'Lifebloom Quiver',desc:'Gain 0.12 HP/s and recover 1 HP every 4 strong arrow hits.'},mage:{name:'Restorative Script',desc:'Gain 0.18 HP/s; every 5 spells recover 1 HP.'}},
+ glassEye:{classic:{name:'Glass Eye',desc:'+40% bat damage but −8 maximum HP.'},archer:{name:'Hawkeye',desc:'+20% arrow damage and +12% crit chance, but −8 maximum HP.'},mage:{name:'Forbidden Eye',desc:'+25% spell damage, but 8 less maximum HP.'}},
+ counterweight:{classic:{name:'Counterweight',desc:'+40% bat knockback but slower swings.'},archer:{name:'Piercer Shaft',desc:'Arrows penetrate one extra enemy but reload 10% slower.'},mage:{name:'Force Amplifier',desc:'All spell knockback and gravity pull are 25% stronger.'}},
+ hourglass:{classic:{name:'Blue Hourglass',desc:'Enemy projectiles move 20% slower.'},archer:{name:'Slowtime Fletching',desc:'Arrows slow enemy projectiles they pass near.'},mage:{name:'Temporal Rune',desc:'Reduce all spell cooldowns by 10%.'}},
+ reflectArrow:{classic:{name:'Rebound Grip',desc:'Your bat can reflect projectiles from farther away.'},archer:{name:'Reflect Arrow',desc:'Each arrow redirects one enemy or boss projectile to fly toward enemies.'},mage:{name:'Mirror Ward',desc:'Arc Pulse and Repulsion Wave reflect enemy bullets over a larger area.'}}
 };
 function heroItemDefinition(id){
  const def=ITEM_DEFS[id];if(!def)return null;
@@ -746,7 +746,7 @@ function giveUpgrade(id){
 }
 function playerDamageAmount(base,source){
  let amount=base*playerStats().damage;
- if(source==='projectile')amount*=1+(hero==='archer'?.2:.5)*itemCount('mirrorLens');
+ if(source==='projectile')amount*=1+(hero==='mage'?.15:hero==='archer'?.2:.5)*itemCount('mirrorLens');
  if(Math.random()<playerStats().crit)amount*=2;
  return amount;
 }
@@ -794,6 +794,7 @@ function updateItemEffects(dt){
 }
 function captureDamage(){return new Map([...enemies,...(bossFight&&!bossFight.done?bossFight.units:[])].map(e=>[e,{hp:e.hp,maxHp:e.maxHp,x:e.x,y:e.y}]))}
 function finishDamageCapture(before,oldPlayerHp,dt){
+ if(oldPlayerHp>hp&&hero==='mage'&&itemCount('thornMantle')&&mantleCooldown===0){mantleCooldown=1;mageArea(p.x,p.y,65,1.3*itemCount('thornMantle'),'arc',85);}
  if(oldPlayerHp>hp&&hero==='archer'&&itemCount('thornMantle')&&mantleCooldown===0){mantleCooldown=1;dash.readyAt=Math.max(arenaTime,(dash.readyAt||0)-itemCount('thornMantle'));if(hasSynergy('thornBloom'))synergyArea(p.x,p.y,65,1.3,35,'#a6e7bd');}
  if(oldPlayerHp>hp&&hero!=='archer'&&(!inSandbox()||sandbox.attacks)&&itemCount('thornMantle')&&mantleCooldown===0){
   mantleCooldown=1;for(const e of [...enemies,...(bossFight&&!bossFight.done?bossFight.units:[])])if(e.hp>0&&Math.hypot(e.x-p.x,e.y-p.y)<75)friendlyDamage(e,4*itemCount('thornMantle'),'item');synergyRetaliation();
@@ -819,14 +820,14 @@ function drawDamageNumbers(){
 function rewardEnemy(enemy){
  if(enemy.rewarded)return;enemy.rewarded=true;recordEnemyKill(enemy);synergyEnemyDeath(enemy);
  earnXp(enemy.bossMinion||enemy.bossSummon?1:enemy.elite?5:['square','round'].includes(enemy.shape)?2:3);
- const amount=((enemy.elite?3:1)+(hero==='archer'?(enemy.lastHitBy==='arrow'?2*itemCount('luckyPenny'):0):itemCount('luckyPenny'))+(Math.random()<Math.min(.5,playerStats().luck*.08)?1:0))*(currentRoom?.kind==='cursed'?2:1);
+ const amount=((enemy.elite?3:1)+(hero==='archer'?(enemy.lastHitBy==='arrow'?2*itemCount('luckyPenny'):0):hero==='mage'?(enemy.lastHitBy==='mage'?2*itemCount('luckyPenny'):0):itemCount('luckyPenny'))+(Math.random()<Math.min(.5,playerStats().luck*.08)?1:0))*(currentRoom?.kind==='cursed'?2:1);
  if(!enemy.bossMinion&&!enemy.bossSummon)coinDrops.push({x:enemy.x,y:enemy.y,amount});
  if(!inSandbox()&&!enemy.bossMinion&&!enemy.bossSummon){
   if(Math.random()<.03)heartDrops.push({x:enemy.x,y:enemy.y});
   if(Math.random()<.0025&&lives<5)lifeDrops.push({x:enemy.x,y:enemy.y});
  }
  if(enemy.isTreasure)coinDrops.push({x:enemy.x,y:enemy.y,amount:18});
- if(itemCount('leechFang')&&(hero!=='archer'||enemy.lastHitBy==='arrow'))healPlayer((hero==='archer'?2:1)*itemCount('leechFang'));
+ if(itemCount('leechFang')&&(hero==='classic'||hero==='archer'&&enemy.lastHitBy==='arrow'||hero==='mage'&&enemy.lastHitBy==='mage'))healPlayer((hero==='archer'?2:1)*itemCount('leechFang'));
  if(hero!=='archer'&&itemCount('sporeSatchel'))friendlyZones.push({x:enemy.x,y:enemy.y,r:35,life:3,tick:0,power:itemCount('sporeSatchel')});
  if(hero!=='archer'&&itemCount('cinderSigil'))for(const e of enemies)if(e!==enemy&&e.hp>0&&Math.hypot(e.x-enemy.x,e.y-enemy.y)<55)friendlyDamage(e,3*itemCount('cinderSigil'),'item');
 }
@@ -2465,7 +2466,7 @@ function mageHurt(target,base,kind='arc'){
  if(!target.kind&& !canDamage(target,160))return false;
  const before=target.hp;target.lastHitBy='mage';
  // Boss projectiles can open Gatekeeper defenses and remove Crystal Eye armor.
- const done=friendlyDamage(target,base*(1+itemCount('glassEye')*.25+itemCount('mirrorLens')*.15),'projectile');
+ const done=friendlyDamage(target,base*(1+itemCount('glassEye')*.25),'projectile');
  if(done&&target.hp<before){mageOnHit(target);
   if(kind==='fire'){target.burnUntil=Math.max(target.burnUntil||0,arenaTime+2.4);target.burnPower=Math.max(target.burnPower||0,.6)}
   if(kind==='ice')target.slowUntil=Math.max(target.slowUntil||0,arenaTime+2);
