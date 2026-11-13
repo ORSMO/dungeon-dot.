@@ -680,7 +680,7 @@ function playerStats(){
   damage:1+.25*upgradeCount('power')+(hero==='mage'?0:hero==='archer'?.2:.4)*itemCount('glassEye')+.02*Math.max(0,(progress?.level||1)-1),
   moveSpeed:(hero==='mage'?112:118)*(1+Math.min(.8,.1*upgradeCount('speed')+(hero==='archer'?.05*itemCount('thornMantle'):0))),
   swing:Math.max(.55,1+.15*upgradeCount('swing')-(hero==='mage'?0:.1)*itemCount('counterweight')),
-  knockback:1+.2*upgradeCount('knockback')+(hero==='archer'?.12:.4)*itemCount('counterweight'),
+  knockback:1+.2*upgradeCount('knockback')+(hero==='mage'?.25:hero==='archer'?.12:.4)*itemCount('counterweight'),
   regen:(hero==='mage'?.5:PLAYER_REGEN)+.15*upgradeCount('regen')+(hero==='mage'?.18:hero==='archer'?.12:.3)*itemCount('mossCharm')+(hasSynergy('livingArmour')?.2:0),
   shieldProtection:hero!=='classic'?0:Math.min(.6,.1*upgradeCount('shield')+.15*itemCount('shieldBloom')),
   crit:Math.min(.6,.05*upgradeCount('focus')+(hero==='archer'?.12*itemCount('glassEye'):0)),
@@ -2521,7 +2521,7 @@ function castMageSpell(path){
  if(remaining>0){mageLastCast=spell.name+' · '+remaining.toFixed(1)+'s';mageLastCastUntil=arenaTime+.9;document.querySelector('#mage-cast-status').textContent=spell.name+' recharging ('+remaining.toFixed(1)+'s)';return false}
  const {a,tx,ty}=mageAim(),range=(distance)=>({x:clamp(p.x+Math.cos(a)*distance,38,W-38),y:clamp(p.y+Math.sin(a)*distance,38,F-38)});
  const point=range(135);
- const amp=1+Math.min(.7,itemCount('counterweight')*.25);
+ const amp=1;
  const at=(x,y,r,d,kind,push=0)=>mageArea(x,y,r,d,kind,push*amp);
  const b=(angle,damage,speed,kind,options={})=>mageBolt(angle,damage,speed,kind,options);
  switch(path){
@@ -2607,7 +2607,10 @@ function mageGesturePoint(v){
  if(!mageGesture)return;
  const a=mageGesture.last,b=v,dx=b.x-a.x,dy=b.y-a.y,len=dx*dx+dy*dy||1,candidates=[];
  for(const rune of mageRunes()){
-  if(mageGesture.path.includes(rune.id))continue;
+  if(mageGesture.path.includes(rune.id)){
+   if(mageGesture.path.length>1&&mageGesture.path[mageGesture.path.length-1]!==rune.id){const t=clamp(((rune.x-a.x)*dx+(rune.y-a.y)*dy)/len,0,1);if(Math.hypot(a.x+t*dx-rune.x,a.y+t*dy-rune.y)<21)mageGesture.invalid=true}
+   continue;
+  }
   const t=clamp(((rune.x-a.x)*dx+(rune.y-a.y)*dy)/len,0,1);
   const d=Math.hypot(a.x+t*dx-rune.x,a.y+t*dy-rune.y);
   if(d<26)candidates.push({rune,t});
@@ -3375,7 +3378,7 @@ function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*viewW
 function setStick(s,v){let dx=v.x-s.x,dy=v.y-s.y,d=Math.hypot(dx,dy),radius=R*controls.size/100,k=d?Math.min(d,radius)/d/radius:0;s.dx=dx*k;s.dy=dy*k}
 c.addEventListener('pointerdown',e=>{e.preventDefault();let v=pt(e),i=v.x<viewW/2?0:1,s=sticks[i];if(hero==='mage'&&!editingControls&&i===1){const rune=mageRuneAt(v.x,v.y);if(rune&&mageInputEnabled()&&!mageGesture){mageGesture={id:e.pointerId,path:[rune.id],last:v};c.setPointerCapture(e.pointerId)}return}if(editingControls){if(editPointer)return;let nearest=sticks.map((st,j)=>({j,d:Math.hypot(st.x-v.x,st.y-v.y)})).filter(o=>o.d<R*controls.size/100+22).sort((a,b)=>a.d-b.d)[0];if(!nearest)return;editPointer={id:e.pointerId,i:nearest.j};c.setPointerCapture(e.pointerId);return}if(s.id!==null)return;if(controls.floating)moveStick(i,v);s.id=e.pointerId;c.setPointerCapture(e.pointerId);setStick(s,v)});
 c.addEventListener('pointermove',e=>{if(mageGesture&&mageGesture.id===e.pointerId){e.preventDefault();mageGesturePoint(pt(e));return}if(editPointer&&editPointer.id===e.pointerId){e.preventDefault();moveStick(editPointer.i,pt(e));return}let s=sticks.find(s=>s.id===e.pointerId);if(s){e.preventDefault();setStick(s,pt(e))}});
-function up(e){if(mageGesture&&mageGesture.id===e.pointerId){e.preventDefault();mageGesturePoint(pt(e));const pattern=mageGesture.path.join('');mageGesture=null;if(e.type==='pointerup')castMageSpell(pattern);return}if(editPointer&&editPointer.id===e.pointerId){editPointer=null;saveControls();return}let s=sticks.find(s=>s.id===e.pointerId);if(s){if(hero==='archer'&&s===sticks[1]&&e.type==='pointerup'){const power=bowPower();if(power>.15)p.target=Math.atan2(s.dy,s.dx);fireArrow(power,p.target)}s.id=null;s.dx=s.dy=0}}c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);document.querySelector('#restart').onclick=()=>{if(inSandbox())resetSandbox();else reset()};
+function up(e){if(mageGesture&&mageGesture.id===e.pointerId){e.preventDefault();mageGesturePoint(pt(e));const pattern=mageGesture.path.join(''),invalid=mageGesture.invalid;mageGesture=null;if(e.type==='pointerup'){if(invalid){document.querySelector('#mage-cast-status').textContent='Invalid rune path';mageLastCast='INVALID PATH';mageLastCastUntil=arenaTime+1}else castMageSpell(pattern)}return}if(editPointer&&editPointer.id===e.pointerId){editPointer=null;saveControls();return}let s=sticks.find(s=>s.id===e.pointerId);if(s){if(hero==='archer'&&s===sticks[1]&&e.type==='pointerup'){const power=bowPower();if(power>.15)p.target=Math.atan2(s.dy,s.dx);fireArrow(power,p.target)}s.id=null;s.dx=s.dy=0}}c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);document.querySelector('#restart').onclick=()=>{if(inSandbox())resetSandbox();else reset()};
 const settings=document.querySelector('#settings-panel'),sub=document.querySelector('#controls-settings');function closeSettings(){settings.hidden=true;sub.hidden=true}
 document.querySelector('#settings-toggle').onclick=()=>{document.querySelector('#character-panel').hidden=true;document.querySelector('#sandbox-panel').hidden=true;settings.hidden=!settings.hidden;sub.hidden=true};
 document.querySelector('#settings-close').onclick=closeSettings;
