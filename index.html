@@ -2005,19 +2005,91 @@ function safeFloor(x,y,r=0){
  for(const [px,py] of [[x,y],[x-r,y],[x+r,y],[x,y-r],[x,y+r],[x-r*.7,y-r*.7],[x+r*.7,y+r*.7]])if(floorVoid(px,py))return false;
  return !walls.some(w=>x+r>w.x&&x-r<w.x+w.w&&y+r>w.y&&y-r<w.y+w.h)&&!holes.some(h=>Math.hypot(x-h.x,y-h.y)<h.r+r+3);
 }
+const TILE_SIZE=40;
+let roomTiles=null;
+function blankTiles(){
+ const cols=Math.ceil(W/TILE_SIZE),rows=Math.ceil(F/TILE_SIZE);
+ roomTiles={cols,rows,cells:Array(cols*rows).fill('.')};
+}
 function setupRoomVariant(room){
  const family=layoutFamily(room),variants=ROOM_LAYOUTS[family];if(!variants)return false;
  const index=Number.isInteger(room.layoutId)?room.layoutId:room.id%variants.length;
  room.layoutId=((index%variants.length)+variants.length)%variants.length;
  const design=variants[room.layoutId];room.layoutName=design.name;
- floorGaps=(design.g||[]).map(o=>rectFromLayout(room,o));
- floorBridges=(design.b||[]).map(o=>rectFromLayout(room,o));
- for(const part of design.w||[]){
-  let r=rectFromLayout(room,part),axis=part[5]||null;
-  if(axis&&room.shape==='tall')axis=axis==='x'?'y':'x';
-  walls.push({...r,type:part[4],...(axis?{moving:true,axis,baseX:r.x,baseY:r.y,range:28,speed:1.2,phase:room.id*.8}: {})});
+ blankTiles();
+ const {cols,rows,cells}=roomTiles,cell=(x,y)=>y*cols+x;
+ const safeCell=(x,y)=>x>0&&y>0&&x<cols-1&&y<rows-1;
+ const write=(x,y,type)=>{if(safeCell(x,y))cells[cell(x,y)]=type};
+ const nearest=(x,y)=>[clamp(Math.floor(x/TILE_SIZE),1,cols-2),clamp(Math.floor(y/TILE_SIZE),1,rows-2)];
+ const paint=(part,type)=>{
+  const r=rectFromLayout(room,part);
+  for(let y=1;y<rows-1;y++)for(let x=1;x<cols-1;x++){
+   const cx=(x+.5)*TILE_SIZE,cy=(y+.5)*TILE_SIZE;
+   if(cx>=r.x&&cx<r.x+r.w&&cy>=r.y&&cy<r.y+r.h)write(x,y,type);
+  }
+ };
+ // Five solid-floor plans, three with modest holes, and two broken-floor arenas.
+ const mode=[1,7].includes(room.layoutId)?'broken':[3,5,9].includes(room.layoutId)?'small':'solid';
+ for(let i=0;i<(design.g||[]).length;i++){
+  const part=design.g[i];
+  paint(part,mode==='broken'&&(i===0||(i===1&&(design.g||[]).length<3))?'O':'#');
  }
- floorTraps=(design.t||[]).map((part,i)=>({...rectFromLayout(room,part),phase:room.id*.7+i*1.3,lastHit:0}));
+ if(mode==='small'&&design.g?.length){
+  const part=design.g[room.layoutId%design.g.length],r=rectFromLayout(room,part);
+  const [x,y]=nearest(r.x+r.w*.5,r.y+r.h*.5);write(x,y,'O');
+  if(room.shape==='big'&&x+1<cols-2)write(x+1,y,'O');
+ }
+ for(const part of design.b||[]){
+  const r=rectFromLayout(room,part);
+  for(let y=1;y<rows-1;y++)for(let x=1;x<cols-1;x++){
+   const cx=(x+.5)*TILE_SIZE,cy=(y+.5)*TILE_SIZE;
+   if(cx>=r.x-6&&cx<r.x+r.w+6&&cy>=r.y-6&&cy<r.y+r.h+6)write(x,y,cells[cell(x,y)]==='O'?'=':'.');
+  }
+ }
+ for(const part of design.w||[]){
+  const rect=rectFromLayout(room,part);
+  let axis=part[5]||null;if(axis&&room.shape==='tall')axis=axis==='x'?'y':'x';
+  if(axis){
+   // Moving walls are full square blocks, never thin sticks.
+   const [x,y]=nearest(rect.x+rect.w/2,rect.y+rect.h/2);
+   walls.push({x:x*TILE_SIZE,y:y*TILE_SIZE,w:TILE_SIZE,h:TILE_SIZE,type:part[4],moving:true,axis,baseX:x*TILE_SIZE,baseY:y*TILE_SIZE,range:18,speed:1.2,phase:room.id*.8});
+   continue;
+  }
+  const x1=rect.x,y1=rect.y,x2=rect.x+rect.w,y2=rect.y+rect.h;
+  const horizontal=rect.w>=rect.h;
+  if(horizontal){
+   const [,cy]=nearest((x1+x2)/2,(y1+y2)/2);
+   for(let x=Math.floor(x1/TILE_SIZE);x<=Math.floor(x2/TILE_SIZE);x++)if(cells[cell(clamp(x,0,cols-1),cy)]!== 'O')write(x,cy,part[4]==='spike'?'D':part[4]==='bounce'?'B':'S');
+  }else{
+   const [cx]=nearest((x1+x2)/2,(y1+y2)/2);
+   for(let y=Math.floor(y1/TILE_SIZE);y<=Math.floor(y2/TILE_SIZE);y++)if(cells[cell(cx,clamp(y,0,rows-1))]!=='O')write(cx,y,part[4]==='spike'?'D':part[4]==='bounce'?'B':'S');
+  }
+ }
+ // Keep a two-tile-wide cross between doors. A pit here becomes a real bridge.
+ for(let y=1;y<rows-1;y++)for(let x=1;x<cols-1;x++){
+  const onRoute=Math.abs(x+.5-cols/2)<=1.05||Math.abs(y+.5-rows/2)<=1.05;
+  if(onRoute){const id=cell(x,y);cells[id]=cells[id]==='O'?'=':'.'}
+ }
+ // Doors and the middle reward/respawn zone always have room to maneuver.
+ const anchors=[[62,F/2],[W-62,F/2],[W/2,62],[W/2,F-62],[W/2,F/2]];
+ for(let y=1;y<rows-1;y++)for(let x=1;x<cols-1;x++){
+  const cx=(x+.5)*TILE_SIZE,cy=(y+.5)*TILE_SIZE;
+  if(anchors.some(([a,b])=>Math.hypot(cx-a,cy-b)<66)){
+   const id=cell(x,y);cells[id]=cells[id]==='O'?'=':'.';
+  }
+ }
+ floorGaps=[];floorBridges=[];floorTraps=[];
+ for(let y=1;y<rows-1;y++)for(let x=1;x<cols-1;x++){
+  const id=cell(x,y),kind=cells[id],rect={x:x*TILE_SIZE,y:y*TILE_SIZE,w:TILE_SIZE,h:TILE_SIZE};
+  if(kind==='O')floorGaps.push(rect);
+  else if(kind==='=')floorBridges.push(rect);
+  else if(kind==='#'||kind==='B'||kind==='D'||kind==='S')walls.push({...rect,type:kind==='#'?'neutral':kind==='B'?'bounce':kind==='D'?'spike':'sticky',tile:true});
+ }
+ for(let i=0;i<(design.t||[]).length;i++){
+  const r=rectFromLayout(room,design.t[i]),[x,y]=nearest(r.x+r.w/2,r.y+r.h/2);
+  if(cells[cell(x,y)]!=='.')continue;
+  floorTraps.push({x:x*TILE_SIZE,y:y*TILE_SIZE,w:TILE_SIZE,h:TILE_SIZE,phase:room.id*.7+i*1.3,lastHit:0});
+ }
  return true;
 }
 
@@ -2054,15 +2126,15 @@ function placeRoomPortals(room){
 
 function makeRoomLayout(room){
  walls.length=holes.length=portals.length=0;
- floorGaps=[];floorBridges=[];floorTraps=[];breakables=[];
+ blankTiles();floorGaps=[];floorBridges=[];floorTraps=[];breakables=[];
  if(!['combat','cursed'].includes(room.kind))return;
  if(room.kind==='combat'&&setupRoomVariant(room)){
   placeRoomPortals(room);
   return;
  }
- const points=[[.25,.25,'bounce'],[.70,.25,'spike'],[.25,.73,'spike'],[.70,.73,'bounce']];
- walls.push(...points.map(([x,y,type])=>({x:W*x-35,y:F*y-7,w:70,h:14,type})));
- if(room.shape==='big')walls.push({x:W*.50-7,y:F*.30,w:14,h:66,type:'sticky',moving:true,baseX:W*.50-7,baseY:F*.30,axis:'x',range:34,speed:1.1,phase:0});
+ const points=[[.25,.25,'neutral'],[.70,.25,'spike'],[.25,.73,'bounce'],[.70,.73,'neutral']];
+ walls.push(...points.map(([x,y,type])=>({x:Math.round((W*x-20)/TILE_SIZE)*TILE_SIZE,y:Math.round((F*y-20)/TILE_SIZE)*TILE_SIZE,w:TILE_SIZE,h:TILE_SIZE,type,tile:true})));
+ if(room.shape==='big')walls.push({x:Math.floor(W*.50/TILE_SIZE)*TILE_SIZE,y:Math.floor(F*.30/TILE_SIZE)*TILE_SIZE,w:TILE_SIZE,h:TILE_SIZE,type:'sticky',moving:true,baseX:Math.floor(W*.50/TILE_SIZE)*TILE_SIZE,baseY:Math.floor(F*.30/TILE_SIZE)*TILE_SIZE,axis:'x',range:18,speed:1.1,phase:0});
  if(room.shape==='big')holes.push({x:W*.35,y:F*.57,r:20});
  placeRoomPortals(room);
 }
@@ -2187,7 +2259,7 @@ function drawRoomMap(){
  const x=viewW-116,y=186,boxW=104,boxH=82,scale=Math.min((boxW-14)/W,(boxH-14)/F);
  const ox=x+(boxW-W*scale)/2,oy=y+(boxH-F*scale)/2;
  g.save();g.fillStyle='#100e1de8';g.fillRect(x,y,boxW,boxH);
- g.fillStyle=currentRoom.kind==='boss'?'#492536':'#312b43';g.fillRect(ox,oy,W*scale,F*scale);g.strokeStyle='#88779d';g.lineWidth=1;g.strokeRect(ox,oy,W*scale,F*scale);g.fillStyle='#08070f';for(const a of floorGaps)g.fillRect(ox+a.x*scale,oy+a.y*scale,a.w*scale,a.h*scale);g.fillStyle='#9d9298';for(const a of floorBridges)g.fillRect(ox+a.x*scale,oy+a.y*scale,a.w*scale,a.h*scale);
+ g.fillStyle=currentRoom.kind==='boss'?'#492536':'#312b43';g.fillRect(ox,oy,W*scale,F*scale);g.strokeStyle='#88779d';g.lineWidth=1;g.strokeRect(ox,oy,W*scale,F*scale);g.fillStyle='#aaa7b2';for(const w of walls)g.fillRect(ox+w.x*scale,oy+w.y*scale,Math.max(1,w.w*scale),Math.max(1,w.h*scale));g.fillStyle='#08070f';for(const a of floorGaps)g.fillRect(ox+a.x*scale,oy+a.y*scale,a.w*scale,a.h*scale);g.fillStyle='#9d9298';for(const a of floorBridges)g.fillRect(ox+a.x*scale,oy+a.y*scale,a.w*scale,a.h*scale);
  for(const door of roomDoors()){const biome=BIOME_PATHS.find(path=>path.id===door.biome);g.fillStyle=door.kind==='sandbox'||door.kind==='sandboxExit'?'#79ddff':biome?biome.color:currentRoom.cleared?'#75f2bd':'#f58b99';g.fillRect(ox+door.x*scale-3,oy+door.y*scale-3,6,6)}
  g.fillStyle='#ed7a98';for(const enemy of enemies){if(enemy.hp>0){g.beginPath();g.arc(ox+enemy.x*scale,oy+enemy.y*scale,1.5,0,Math.PI*2);g.fill()}}
  if(bossFight&&!bossFight.done){g.fillStyle='#ffbc70';for(const unit of bossFight.units)if(unit.hp>0){g.beginPath();g.arc(ox+unit.x*scale,oy+unit.y*scale,3,0,Math.PI*2);g.fill()}}
@@ -2201,7 +2273,7 @@ let arrows=[],bowShotCooldown=0;
 function showHeal(x,y){healFx.push({x,y,life:.85})}
 function showWallHit(w,x,y,nx,ny,speed){
 if(speed<22)return;
-const color=w.type==='spike'?'#ff5969':w.type==='bounce'?'#6cddff':'#d69aff';
+const color=w.type==='spike'?'#ff5969':w.type==='bounce'?'#6cddff':w.type==='neutral'?'#a0a0a8':'#d69aff';
 const strength=Math.min(1.7,Math.max(.45,speed/150));
 wallFx.push({x,y,life:.32,maxLife:.32,color,type:w.type,strength});
 for(let i=0;i<(w.type==='sticky'?5:8);i++){
@@ -2469,7 +2541,7 @@ function initRoomProps(room){
    let index=room.props.findLastIndex(o=>o.kind!=='chest');room.props.splice(index<0?0:index,1);
   }
  }
- room.props=room.props.filter(o=>o&&PROP_DEFS[o.kind]&&Number.isFinite(o.x)&&Number.isFinite(o.y)&&o.x>=18&&o.x<=W-18&&o.y>=18&&o.y<=F-18).slice(0,24);
+ room.props=room.props.filter(o=>o&&PROP_DEFS[o.kind]&&Number.isFinite(o.x)&&Number.isFinite(o.y)&&o.x>=18&&o.x<=W-18&&o.y>=18&&o.y<=F-18&&safeFloor(o.x,o.y,PROP_DEFS[o.kind].r+2)).slice(0,24);
  breakables=room.props;
 }
 function hitProp(o,power,source='hit'){
@@ -2761,6 +2833,7 @@ function updateFloorTraps(){
 }
 function drawRoomTerrain(){
  g.save();
+ if(roomTiles){g.strokeStyle='#ffffff0d';g.lineWidth=.7;for(let x=TILE_SIZE;x<W;x+=TILE_SIZE){g.beginPath();g.moveTo(x,14);g.lineTo(x,F-14);g.stroke()}for(let y=TILE_SIZE;y<F;y+=TILE_SIZE){g.beginPath();g.moveTo(14,y);g.lineTo(W-14,y);g.stroke()}}
  for(const a of floorGaps){g.fillStyle='#090812';g.fillRect(a.x,a.y,a.w,a.h);g.strokeStyle='#6b586d';g.lineWidth=3;g.strokeRect(a.x,a.y,a.w,a.h)}
  for(const a of floorBridges){g.fillStyle='#5b5264';g.fillRect(a.x,a.y,a.w,a.h);g.strokeStyle='#c3b6af';g.lineWidth=2;g.strokeRect(a.x,a.y,a.w,a.h)}
  for(const a of floorTraps){const {active,warning}=trapPhase(a);g.fillStyle=active?'#b24353':warning?'#a37843':'#342839';g.fillRect(a.x,a.y,a.w,a.h);g.strokeStyle=active?'#ffb0a5':'#816478';g.lineWidth=2;g.strokeRect(a.x,a.y,a.w,a.h)}
@@ -2835,7 +2908,7 @@ return remaining||!newContact?0:impact
 }
 // Always resolve penetration, but only apply a new bounce impulse once per pair cooldown.
 e.x+=nx*depth;e.y+=ny*depth;
-if(vn<0){if(newContact&&!remaining){let restitution=(curseActive('pinball')?(w.type==='bounce'?3.1:w.type==='spike'?1.5:1.85):w.type==='bounce'?2.45:w.type==='spike'?.65:.78)*(e.shape==='rubber'?1.65:1);e.vx-=(1+restitution)*vn*nx;e.vy-=(1+restitution)*vn*ny;e.wallCooldowns.set(w,WALL_HIT_COOLDOWN);if(!e.isPlayer||e.knockbackSpeed>90)showWallHit(w,cx,cy,nx,ny,impact);if(!e.isPlayer){elementalHit(e,impact);flipMagnet(e,impact)}}
+if(vn<0){if(newContact&&!remaining){let restitution=(curseActive('pinball')?(w.type==='bounce'?3.1:w.type==='spike'?1.5:1.85):w.type==='bounce'?2.45:w.type==='spike'?.65:w.type==='neutral'?.15:.78)*(e.shape==='rubber'?1.65:1);e.vx-=(1+restitution)*vn*nx;e.vy-=(1+restitution)*vn*ny;e.wallCooldowns.set(w,WALL_HIT_COOLDOWN);if(!e.isPlayer||e.knockbackSpeed>90)showWallHit(w,cx,cy,nx,ny,impact);if(!e.isPlayer){elementalHit(e,impact);flipMagnet(e,impact)}}
 else{e.vx-=vn*nx;e.vy-=vn*ny}}
 return remaining||!newContact?0:impact
 }
@@ -3194,8 +3267,8 @@ for(let q of puddles){g.save();g.globalAlpha=Math.min(.65,q.life/.6*.55);g.fillS
 for(let q of portals){g.save();const linked=q.type==='linked',color=linked?'#5cf6fa':'#c792ff',pulse=1.5+Math.sin(arenaTime*3+q.x*.02)*1.5;g.strokeStyle=color;g.fillStyle=linked?'#1c6b7b':'#62358e';g.globalAlpha=.7;g.lineWidth=1.5;g.beginPath();g.arc(q.x,q.y,17+pulse,0,Math.PI*2);g.stroke();g.globalAlpha=.92;g.beginPath();g.arc(q.x,q.y,13,0,Math.PI*2);g.fill();g.lineWidth=3;g.beginPath();g.arc(q.x,q.y,10,0,Math.PI*2);g.stroke();g.font='bold 12px monospace';g.textAlign='center';g.fillStyle='#ffffff';g.fillText(linked?'↔':'?',q.x,q.y+4);g.font='bold 7px monospace';g.fillStyle=color;g.fillText(linked?'LINK':'RANDOM',q.x,q.y+28);g.restore()}
 for(let f of portalFx){g.save();g.globalAlpha=f.life/f.maxLife;g.strokeStyle=f.type==='linked'?'#5cf6fa':'#c48aff';g.lineWidth=3;g.beginPath();g.arc(f.x,f.y,13+(1-f.life/f.maxLife)*23,0,Math.PI*2);g.stroke();g.restore()}
 for(let w of walls){
-g.fillStyle=w.type==='bounce'?'#246bba':w.type==='spike'?'#a93245':w.type==='sticky'?'#8050a6':'#51475f';g.fillRect(w.x,w.y,w.w,w.h);
-g.fillStyle=w.type==='bounce'?'#79d7ff':w.type==='spike'?'#ff7c80':w.type==='sticky'?'#d9a1f5':'#8b789f';g.fillRect(w.x,w.y,w.w,3);
+g.fillStyle=w.type==='bounce'?'#246bba':w.type==='spike'?'#a93245':w.type==='sticky'?'#8050a6':'#60616c';g.fillRect(w.x,w.y,w.w,w.h);
+g.fillStyle=w.type==='bounce'?'#79d7ff':w.type==='spike'?'#ff7c80':w.type==='sticky'?'#d9a1f5':'#989ba5';g.fillRect(w.x,w.y,w.w,3);
 if(w.moving){g.save();g.strokeStyle='#ffffff';g.lineWidth=1.5;g.setLineDash([3,3]);g.strokeRect(w.x-2,w.y-2,w.w+4,w.h+4);g.setLineDash([]);g.restore()}
 if(w.cracked){g.save();g.strokeStyle='#f8d17d';g.lineWidth=2;g.setLineDash([3,4]);g.strokeRect(w.x+2,w.y+2,w.w-4,w.h-4);g.setLineDash([]);g.restore()}
 if(w.type==='sticky'){g.fillStyle='#c58af0';if(w.w>w.h){for(let x=w.x+8;x<w.x+w.w-3;x+=13){g.beginPath();g.arc(x,w.y+8,2.5,0,Math.PI*2);g.fill()}}else{for(let y=w.y+8;y<w.y+w.h-3;y+=13){g.beginPath();g.arc(w.x+7,y,2.5,0,Math.PI*2);g.fill()}}}
