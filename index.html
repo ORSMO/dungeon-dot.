@@ -619,18 +619,32 @@ function healPlayer(amount){const before=hp;hp=Math.min(playerStats().maxHealth,
 function showItemNotice(text){
  const el=document.querySelector('#item-notice');el.textContent=text;el.hidden=false;itemNoticeTime=3.5;
 }
+
+function heroItemDefinition(id){
+ const def=ITEM_DEFS[id];if(!def||hero!=='archer')return def;
+ if(id==='shieldBloom')return {...def,name:'Fletching Bloom',desc:'Arrows travel 12% faster. No shield required.'};
+ if(id==='mirrorLens')return {...def,name:'Mirror Lens',desc:'Arrows travel 15% faster. Reflected projectiles deal 50% more damage.'};
+ return def;
+}
+function heroUpgradeDefinition(id){
+ const def=UPGRADE_DEFS[id];if(!def||hero!=='archer')return def;
+ if(id==='shield')return {...def,name:'Bowstring Oil',desc:'Bow reloads 10% faster, stacking up to 50%.'};
+ if(id==='power')return {...def,name:'Arrow Strength',desc:'+25% arrow and reflected-shot damage.'};
+ if(id==='swing')return {...def,name:'Quick Draw',desc:'+15% bow reload speed.'};
+ return def;
+}
 function giveItem(id){
  if(!ITEM_DEFS[id]||(ITEM_DEFS[id].hero&&ITEM_DEFS[id].hero!==hero))return false;
  const previousSynergies=activeSynergies();
  const before=playerStats().maxHealth;progress.items[id]=itemCount(id)+1;
  const after=playerStats().maxHealth;hp=Math.min(after,hp+Math.max(0,after-before));
- showItemNotice(ITEM_DEFS[id].name+' · '+ITEM_DEFS[id].desc);announceSynergies(previousSynergies);updateCharacterMenu();return true;
+ showItemNotice(heroItemDefinition(id).name+' · '+heroItemDefinition(id).desc);announceSynergies(previousSynergies);updateCharacterMenu();return true;
 }
 function giveUpgrade(id){
  if(!UPGRADE_DEFS[id])return false;
  const before=playerStats().maxHealth;progress.upgrades[id]=upgradeCount(id)+1;
  hp=Math.min(playerStats().maxHealth,hp+Math.max(0,playerStats().maxHealth-before));
- showItemNotice(UPGRADE_DEFS[id].name+' · '+UPGRADE_DEFS[id].desc);updateCharacterMenu();return true;
+ showItemNotice(heroUpgradeDefinition(id).name+' · '+heroUpgradeDefinition(id).desc);updateCharacterMenu();return true;
 }
 function playerDamageAmount(base,source){
  let amount=base*playerStats().damage;
@@ -750,7 +764,7 @@ function prepareRoomLoot(room){
   ];
  }
 }
-function lootDefinition(loot){return loot.kind==='item'?ITEM_DEFS[loot.key]:loot.kind==='stat'?UPGRADE_DEFS[loot.key]:{name:'Healing Flask',desc:'Restore 20 health.',glyph:'✚',color:'#f3a5b1'}}
+function lootDefinition(loot){return loot.kind==='item'?heroItemDefinition(loot.key):loot.kind==='stat'?heroUpgradeDefinition(loot.key):{name:'Healing Flask',desc:'Restore 20 health.',glyph:'✚',color:'#f3a5b1'}}
 function roomCoinsHome(){return !!currentRoom?.cleared&&['combat','boss','cursed'].includes(currentRoom.kind)&&!inSandbox()&&!over&&!p.falling}
 function collectCoin(coin){
  if(coin.collected)return false;
@@ -844,17 +858,17 @@ function inventoryIcon(def){
 function updateCharacterMenu(){
  const panel=document.querySelector('#character-panel');if(panel.hidden)return;
  const st=playerStats(),values=[
-  ['Maximum health',st.maxHealth],['Bat damage',st.damage.toFixed(2)+'×'],['Move speed',Math.round(st.moveSpeed)],['Swing speed',Math.round(st.swing*100)+'%'],['Knockback',Math.round(st.knockback*100)+'%'],
-  ['Health regen',st.regen.toFixed(1)+'/s'],['Shield damage reduction',Math.round(st.shieldProtection*100)+'%'],['Critical chance',Math.round(st.crit*100)+'%'],['Luck',st.luck],['Damage reduction',Math.round(st.armour*100)+'%'],['Enemy shot speed',Math.round(st.bulletSpeed*100)+'%'],['Coin pickup range',st.pickup]
+  ['Maximum health',st.maxHealth],[hero==='archer'?'Arrow damage':'Bat damage',st.damage.toFixed(2)+'×'],['Move speed',Math.round(st.moveSpeed)],[hero==='archer'?'Bow reload speed':'Swing speed',Math.round(st.swing*100)+'%'],['Knockback',Math.round(st.knockback*100)+'%'],
+  ['Health regen',st.regen.toFixed(1)+'/s'],[hero==='archer'?'Bonus bow reload':'Shield damage reduction',hero==='archer'?Math.round(Math.min(.5,upgradeCount('shield')*.1)*100)+'%':Math.round(st.shieldProtection*100)+'%'],['Critical chance',Math.round(st.crit*100)+'%'],['Luck',st.luck],['Damage reduction',Math.round(st.armour*100)+'%'],['Enemy shot speed',Math.round(st.bulletSpeed*100)+'%'],['Coin pickup range',st.pickup]
  ];
  document.querySelector('#character-stats').innerHTML=values.map(([name,value])=>'<div><span>'+name+'</span><strong>'+value+'</strong></div>').join('');
  document.querySelector('#character-coins').textContent=progress.coins+' coins · '+kills+' kills · Dungeon '+dungeonDepth;
  const inventory=document.querySelector('#item-inventory');inventory.innerHTML='';
  for(const [id,count] of Object.entries(progress.items)){
-  const def=ITEM_DEFS[id],row=document.createElement('div');row.className='inventory-row';row.innerHTML=inventoryIcon(def)+'<div><strong>'+def.name+(count>1?' ×'+count:'')+'</strong><small>'+def.desc+'</small></div>';inventory.appendChild(row);
+  const def=heroItemDefinition(id),row=document.createElement('div');row.className='inventory-row';row.innerHTML=inventoryIcon(def)+'<div><strong>'+def.name+(count>1?' ×'+count:'')+'</strong><small>'+def.desc+'</small></div>';inventory.appendChild(row);
  }
  if(!Object.keys(progress.items).length)inventory.innerHTML='<small>No items yet. Find a treasure room or visit a shop.</small>';
- document.querySelector('#run-upgrades').textContent=Object.entries(progress.upgrades).map(([id,count])=>UPGRADE_DEFS[id].name+' ×'+count).join(' · ')||'No stat upgrades yet.';
+ document.querySelector('#run-upgrades').textContent=Object.entries(progress.upgrades).map(([id,count])=>heroUpgradeDefinition(id).name+' ×'+count).join(' · ')||'No stat upgrades yet.';
  renderSynergies();
 }
 function toggleCharacterMenu(){
@@ -2123,7 +2137,7 @@ function bowPower(){return clamp(Math.hypot(sticks[1].dx,sticks[1].dy),0,1)}
 function fireArrow(power=bowPower(),angle=p?.target||0){
  if(hero!=='archer'||!activeSlot||over||!p||p.falling||editingControls||persistencePaused()||shieldPaused||!settings.hidden||!document.querySelector('#character-panel').hidden||!document.querySelector('#sandbox-panel').hidden||bowShotCooldown>0)return false;
  power=clamp(power,0,1);if(power<.18)return false;
- const ux=Math.cos(angle),uy=Math.sin(angle),speed=(220+400*power)*(1+.12*itemCount('shieldBloom'));
+ const ux=Math.cos(angle),uy=Math.sin(angle),speed=(220+400*power)*(1+.12*itemCount('shieldBloom'))*(1+.15*itemCount('mirrorLens'));
  arrows.push({x:p.x+ux*23,y:p.y+uy*23,vx:ux*speed,vy:uy*speed,r:2.5+power*1.6,life:.8+.6*power,power,damage:.7+3.1*power,impact:80+165*power,reflected:true,deflections:0});
  bowShotCooldown=Math.max(.23,.48/(1+.15*upgradeCount('swing')))*(1+.1*itemCount('counterweight'))*(1-Math.min(.5,.1*upgradeCount('shield')));
  p.a=angle;p.target=angle;p.vel=0;return true;
@@ -3163,5 +3177,5 @@ g.fillStyle='#11101c';g.fillRect(0,VIEW_F,viewW,H-VIEW_F);g.save();g.globalAlpha
 if(hero==='archer'){const s=sticks[1],radius=R*controls.size/100,power=bowPower();g.save();g.strokeStyle=bowShotCooldown>0?'#a08b6b':'#f4c56b';g.lineWidth=4;g.beginPath();g.arc(s.x,s.y,radius+6,-Math.PI/2,-Math.PI/2+Math.PI*2*power);g.stroke();if(power>.15){g.textAlign='center';g.fillStyle='#ffe9a7';g.font='bold 10px monospace';g.fillText(Math.round(power*100)+'%',s.x,s.y-radius-15)}g.restore()}
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));g.fillText(hero==='archer'?'DRAW':'BAT',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Bleed stacks '+bleedStacks,viewW/2,237)}
-requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.2';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.3';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
