@@ -136,7 +136,7 @@ if(kind==='cannon'){artillery.push({x:Math.max(25,Math.min(W-25,aim.x)),y:Math.m
 let count=kind==='scatter'?5:['shooter','spitter','frostcaster','bloodcaster'].includes(kind)?2:1;for(let k=0;k<count;k++){let a=angle+(k-(count-1)/2)*(kind==='scatter'?.21:.17),speed=kind==='seeker'?83:kind==='spitter'?110:kind==='bloodcaster'?145:kind==='frostcaster'?135:kind==='scatter'?153:165;projectiles.push({x:e.x+Math.cos(a)*(e.r+7),y:e.y+Math.sin(a)*(e.r+7),vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,kind,r:kind==='spitter'?5:4,life:4,owner:e,reflected:false})}}
 function rangedUpdate(dt){if(!enemyAttacksEnabled())return;for(let a of artillery){a.life-=dt;if(a.life<=0){if(Math.hypot(p.x-a.x,p.y-a.y)<a.r+7&&inv<=0){hp=damagedHealth(22);inv=.55;if(hp<=0)over=true}for(let e of enemies){if(e!==a.owner&&e.hp>0&&Math.hypot(e.x-a.x,e.y-a.y)<a.r+e.r&&canDamage(e,150))e.hp-=2}elementFx.push({type:'fire',x:a.x,y:a.y,r:0,life:.38,maxLife:.38})}}artillery=artillery.filter(a=>a.life>0);
 for(let q of projectiles){q.life-=dt;if(q.life<=0)continue;if(q.kind==='seeker'){let target=q.reflected?enemies.filter(e=>e.hp>0).sort((a,b)=>Math.hypot(a.x-q.x,a.y-q.y)-Math.hypot(b.x-q.x,b.y-q.y))[0]:p;if(target){let a=Math.atan2(target.y-q.y,target.x-q.x),v=Math.hypot(q.vx,q.vy),cur=Math.atan2(q.vy,q.vx),diff=Math.atan2(Math.sin(a-cur),Math.cos(a-cur)),next=cur+Math.max(-1.8*dt,Math.min(1.8*dt,diff));q.vx=Math.cos(next)*v;q.vy=Math.sin(next)*v}}
-let ox=q.x,oy=q.y;const synergySpeed=synergyProjectileFactor(q);q.x+=q.vx*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;q.y+=q.vy*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;
+let ox=q.x,oy=q.y;const synergySpeed=synergyProjectileFactor(q)*(hero==='archer'&&!q.reflected&&itemCount('hourglass')&&arrows.some(a=>Math.hypot(a.x-q.x,a.y-q.y)<65)?.62:1);q.x+=q.vx*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;q.y+=q.vy*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;
 if(q.x<16||q.x>W-16||q.y<16||q.y>F-16){q.life=0;continue}if(projectileHitsProp(q,ox,oy)||projectileHitsNest(q,ox,oy))continue
 let wall=walls.find(w=>q.x+q.r>w.x&&q.x-q.r<w.x+w.w&&q.y+q.r>w.y&&q.y-q.r<w.y+w.h);if(wall){if(q.reflected&&wall.cracked)hitCrackedWall(wall,2);if(q.kind==='spitter')poisonPuddles.push({x:q.x,y:q.y,r:23,life:2,maxLife:2});if(q.kind==='frostcaster'){let water=puddles.find(z=>Math.hypot(z.x-q.x,z.y-q.y)<z.r);if(water){water.life=Math.min(water.life,.3);triggerReaction('ice',water.x,water.y,water.r)}}if(q.kind==='cannon'){q.vx*=-.75;q.vy*=-.75;q.life-=.7}else q.life=0;continue}
 let angle=p.a,ux=Math.cos(angle),uy=Math.sin(angle),along=(q.x-p.x)*ux+(q.y-p.y)*uy,at=Math.max(16,Math.min(49,along)),bx=p.x+ux*at,by=p.y+uy*at;
@@ -975,7 +975,7 @@ function updateCharacterMenu(){
  const panel=document.querySelector('#character-panel');if(panel.hidden)return;
  const st=playerStats(),values=[
   ['Maximum health',st.maxHealth],[hero==='archer'?'Arrow damage':'Bat damage',st.damage.toFixed(2)+'×'],['Move speed',Math.round(st.moveSpeed)],[hero==='archer'?'Bow reload speed':'Swing speed',Math.round(st.swing*100)+'%'],['Knockback',Math.round(st.knockback*100)+'%'],
-  ['Health regen',st.regen.toFixed(1)+'/s'],[hero==='archer'?'Bonus bow reload':'Shield damage reduction',hero==='archer'?Math.round(Math.min(.5,upgradeCount('shield')*.1)*100)+'%':Math.round(st.shieldProtection*100)+'%'],['Critical chance',Math.round(st.crit*100)+'%'],['Luck',st.luck],['Damage reduction',Math.round(st.armour*100)+'%'],['Enemy shot speed',Math.round(st.bulletSpeed*100)+'%'],['Coin pickup range',st.pickup]
+  ['Health regen',st.regen.toFixed(1)+'/s'],[hero==='archer'?'Bonus bow reload':'Shield damage reduction',hero==='archer'?Math.round(Math.min(.5,upgradeCount('shield')*.1)*100)+'%':Math.round(st.shieldProtection*100)+'%'],['Critical chance',Math.round(st.crit*100)+'%'],['Luck',st.luck],['Damage reduction',Math.round(st.armour*100)+'%'],[hero==='archer'?'Arrow slow zone':'Enemy shot speed',hero==='archer'?(itemCount('hourglass')?'ON':'OFF'):Math.round(st.bulletSpeed*100)+'%'],[hero==='archer'?'Coin pickup (arrows collect)':'Coin pickup range',st.pickup]
  ];
  document.querySelector('#character-stats').innerHTML=values.map(([name,value])=>'<div><span>'+name+'</span><strong>'+value+'</strong></div>').join('');
  document.querySelector('#character-coins').textContent=progress.coins+' coins · '+kills+' kills · Dungeon '+dungeonDepth+' · Level '+progress.level+' ('+progress.xp+'/'+xpRequirement(progress.level)+' XP)'+(progress.elementPrimary?' · '+ELEMENTS[progress.elementPrimary].name:'')+(progress.elementSecondary?' + '+ELEMENTS[progress.elementSecondary].name:'');
@@ -1700,7 +1700,7 @@ function updateSlimeKing(unit,dt){
 function updateBossShots(dt,previousAngle){
  for(const shot of bossFight.shots){
   shot.life-=dt;if(shot.life<=0)continue;
-  const ox=shot.x,oy=shot.y;const synergySpeed=synergyProjectileFactor(shot);shot.x+=shot.vx*dt*(shot.reflected?1:playerStats().bulletSpeed)*synergySpeed;shot.y+=shot.vy*dt*(shot.reflected?1:playerStats().bulletSpeed)*synergySpeed;
+  const ox=shot.x,oy=shot.y;const synergySpeed=synergyProjectileFactor(shot)*(hero==='archer'&&!shot.reflected&&itemCount('hourglass')&&arrows.some(a=>Math.hypot(a.x-shot.x,a.y-shot.y)<65)?.62:1);shot.x+=shot.vx*dt*(shot.reflected?1:playerStats().bulletSpeed)*synergySpeed;shot.y+=shot.vy*dt*(shot.reflected?1:playerStats().bulletSpeed)*synergySpeed;
   if(shot.x<16||shot.x>W-16||shot.y<16||shot.y>F-16){bounceBossProjectile(shot);if(shot.life<=0)continue}
   if(!shot.reflected){
    const swing=p.a-previousAngle,steps=Math.max(1,Math.ceil(Math.abs(swing)/.055));
@@ -2347,7 +2347,7 @@ function fireArrow(power=bowPower(),angle=p?.target||0){
  if(hero!=='archer'||!activeSlot||over||!p||p.falling||editingControls||persistencePaused()||shieldPaused||!settings.hidden||!document.querySelector('#character-panel').hidden||!document.querySelector('#sandbox-panel').hidden||bowShotCooldown>0)return false;
  power=clamp(power,0,1);if(power<.18)return false;
  const ux=Math.cos(angle),uy=Math.sin(angle),speed=(220+400*power)*(1+.12*itemCount('shieldBloom'))*(1+.15*itemCount('mirrorLens'));
- arrows.push({x:p.x+ux*23,y:p.y+uy*23,vx:ux*speed,vy:uy*speed,r:2.5+power*1.6,life:.8+.6*power,power,damage:.7+3.1*power,impact:80+165*power,reflected:true,deflections:0});
+ arrows.push({x:p.x+ux*23,y:p.y+uy*23,vx:ux*speed,vy:uy*speed,r:2.5+power*1.6,life:.8+.6*power,power,damage:.7+3.1*power,impact:80+165*power,reflected:true,deflections:0,pierce:Math.min(2,itemCount('counterweight')),hitTargets:new Set()});
  bowShotCooldown=Math.max(.23,.48/(1+.15*upgradeCount('swing')))*(1+.1*itemCount('counterweight'))*(1-Math.min(.5,.1*upgradeCount('shield')));
  p.a=angle;p.target=angle;p.vel=0;return true;
 }
@@ -2371,6 +2371,7 @@ function updateArrows(dt){
   const ox=arrow.x,oy=arrow.y;arrow.x+=arrow.vx*dt;arrow.y+=arrow.vy*dt;
   if(arrow.x<17||arrow.x>W-17||arrow.y<17||arrow.y>F-17){arrow.life=0;continue}
   reflectArrowProjectile(arrow,ox,oy);
+  if(itemCount('magnetRing'))for(const coin of coinDrops)if(!coin.collected&&laserDistance(coin.x,coin.y,{x1:ox,y1:oy,x2:arrow.x,y2:arrow.y})<26)collectCoin(coin);
   if(projectileHitsProp(arrow,ox,oy)||projectileHitsNest(arrow,ox,oy))continue;
   const segment={x1:ox,y1:oy,x2:arrow.x,y2:arrow.y};
   for(const sw of trapControls)if(sw.kind==='lever'&&laserDistance(sw.x,sw.y,segment)<sw.r+arrow.r){triggerTrapControl(sw);arrow.life=0;break}
@@ -2382,20 +2383,21 @@ function updateArrows(dt){
    if(wall){if(wall.cracked)hitCrackedWall(wall,arrow.power>.7?2:1);arrow.life=0}
   }
   if(arrow.life<=0)continue;
-  const enemy=enemies.find(e=>e.hp>0&&laserDistance(e.x,e.y,segment)<e.r+arrow.r);
+  const enemy=enemies.find(e=>e.hp>0&&!arrow.hitTargets.has(e)&&laserDistance(e.x,e.y,segment)<e.r+arrow.r);
   if(enemy){
    if(canDamage(enemy,arrow.impact)){
-    friendlyDamage(enemy,arrow.damage,'arrow');
+    enemy.lastArrowPower=arrow.power;arrow.hitTargets.add(enemy);friendlyDamage(enemy,arrow.damage,'arrow');
     runStats.swingsHit++;runStats.biggestImpact=Math.max(runStats.biggestImpact,arrow.impact);
     const d=Math.hypot(arrow.vx,arrow.vy)||1;enemy.vx+=arrow.vx/d*arrow.impact*playerStats().knockback/Math.max(.5,enemy.mass);enemy.vy+=arrow.vy/d*arrow.impact*playerStats().knockback/Math.max(.5,enemy.mass);
     if(enemy.bossMinion&&arrow.power>.65)enemy.batKnockedUntil=arenaTime+1.5;
     elementalHit(enemy,arrow.impact);
    }else bossSpark(enemy.x,enemy.y,'#f5dd9c');
-   arrow.life=0;continue;
+   if(arrow.pierce>0&&enemy.hp<=0||arrow.pierce>0&&canDamage(enemy,arrow.impact)){arrow.pierce--;arrow.damage*=.74}else arrow.life=0;
+   continue;
   }
   if(bossFight&&!bossFight.done){
-   const unit=bossFight.units.find(u=>u.hp>0&&u.state!=='jump'&&laserDistance(u.x,u.y,segment)<u.r+arrow.r);
-   if(unit){if(damageBoss(unit,arrow.damage,'arrow')){runStats.swingsHit++;runStats.biggestImpact=Math.max(runStats.biggestImpact,arrow.impact)}arrow.life=0}
+   const unit=bossFight.units.find(u=>u.hp>0&&u.state!=='jump'&&!arrow.hitTargets.has(u)&&laserDistance(u.x,u.y,segment)<u.r+arrow.r);
+   if(unit){unit.lastArrowPower=arrow.power;arrow.hitTargets.add(unit);if(damageBoss(unit,arrow.damage,'arrow')){runStats.swingsHit++;runStats.biggestImpact=Math.max(runStats.biggestImpact,arrow.impact)}arrow.life=0}
   }
  }
  arrows=arrows.filter(a=>a.life>0);
