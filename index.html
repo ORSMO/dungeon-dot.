@@ -2491,8 +2491,8 @@ function setupDungeonMechanics(room){
   trapControls.push({...pos,kind:i===0?'plate':'lever',trap:t,ready:0,r:14});
  }
  // Nests are optional, destructible room objectives, not additional enemy types.
- if(Math.random()<.58){
-  const count=room.shape==='big'&&Math.random()<.65?2:1;
+ if(Math.random()<(hero==='archer'&&dungeonDepth===1?.25:.58)){
+  const count=hero==='archer'&&dungeonDepth===1?1:room.shape==='big'&&Math.random()<.65?2:1;
   for(let i=0;i<count;i++)for(let attempt=0;attempt<100;attempt++){
    const x=64+Math.random()*(W-128),y=64+Math.random()*(F-128),r=19;
    const reachable=room.doors.some(door=>{const a=door.side==='west'?62:door.side==='east'?W-62:W/2,b=door.side==='north'?62:door.side==='south'?F-62:F/2;return navigationSight(x,y,a,b,9)});
@@ -2501,7 +2501,7 @@ function setupDungeonMechanics(room){
    dungeonNests.push({x,y,r,hp,maxHp:hp,clock:5+Math.random()*2,spawned:0});break;
   }
  }
- if(Math.random()<.4){const types=['ambush','earthquake','treasure','invasion'];dungeonEvent={kind:types[Math.floor(Math.random()*types.length)],timer:6+Math.random()*4,done:false,message:'',messageUntil:0}}
+ if(Math.random()<(hero==='archer'&&dungeonDepth===1?.2:.4)){const types=['ambush','earthquake','treasure','invasion'];dungeonEvent={kind:types[Math.floor(Math.random()*types.length)],timer:6+Math.random()*4,done:false,message:'',messageUntil:0}}
 }
 function triggerTrapControl(sw){
  if(arenaTime<sw.ready||currentRoom.cleared)return false;
