@@ -636,7 +636,7 @@ function selectElement(id){
  else progress.elementSecondary=id;
  document.querySelector('#element-choice').hidden=true;
  showItemNotice('ELEMENT ACQUIRED · '+ELEMENTS[id].name+(progress.elementSecondary?' · COMBINATION ACTIVE':''));
- refreshElementHud();queueCheckpoint();flushCheckpoint();hud();return true;
+ refreshElementHud();queueCheckpoint();flushCheckpoint();hud();if(levelChoicePending())openElementChoice();return true;
 }
 function earnXp(amount){
  if(!progress||inSandbox()||over||amount<=0)return;
@@ -1121,7 +1121,7 @@ function updateSaveIndicator(){
 }
 function stopMenuControls(){clearRoomDash();sticks.forEach(stick=>{stick.id=null;stick.dx=stick.dy=0});if(editingControls)endEditing()}
 function closeGamePanels(){
- closeSettings();document.querySelector('#character-panel').hidden=true;document.querySelector('#sandbox-panel').hidden=true;document.querySelector('#sound-panel').hidden=true;document.querySelector('#bestiary-panel').hidden=true;
+ document.querySelector('#element-choice').hidden=true;closeSettings();document.querySelector('#character-panel').hidden=true;document.querySelector('#sandbox-panel').hidden=true;document.querySelector('#sound-panel').hidden=true;document.querySelector('#bestiary-panel').hidden=true;
 }
 function persistencePaused(){return !document.querySelector('#start-screen').hidden||!document.querySelector('#sound-panel').hidden||!document.querySelector('#bestiary-panel').hidden||!document.querySelector('#element-choice').hidden}
 function showStartScreen(){
@@ -1190,7 +1190,7 @@ function continueSlot(slot){
  }finally{loadingRun=false}
  profile.lastSlot=slot;profileDirty=true;flushProfile();savePending=false;saveError='';document.querySelector('#start-screen').hidden=true;
  if(data.shieldPending&&!shieldType)showShieldChoice();
- hud();updateSaveIndicator();document.querySelector('#save-indicator').textContent='SLOT '+slot+' · CHECKPOINT LOADED';return true;
+ hud();if(levelChoicePending())openElementChoice();updateSaveIndicator();document.querySelector('#save-indicator').textContent='SLOT '+slot+' · CHECKPOINT LOADED';return true;
 }
 function resumeCurrentGame(){
  if(over){if(activeSlot&&lives>0)continueSlot(activeSlot);return}
@@ -3007,7 +3007,7 @@ function resolvePlayerDeath(){
  enterRoom(currentRoom.id,roomEntrySide);refillRoomShield();inv=2;
  showItemNotice('LIFE LOST · '+lives+' REMAIN · ROOM RESET');hud();
 }
-function reset(){resetRoomSynergies();progress=freshProgress();lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
+function reset(){document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
 function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*viewW/r.width,y:(e.clientY-r.top)*H/r.height}}
 function setStick(s,v){let dx=v.x-s.x,dy=v.y-s.y,d=Math.hypot(dx,dy),radius=R*controls.size/100,k=d?Math.min(d,radius)/d/radius:0;s.dx=dx*k;s.dy=dy*k}
 c.addEventListener('pointerdown',e=>{e.preventDefault();let v=pt(e),i=v.x<viewW/2?0:1,s=sticks[i];if(editingControls){if(editPointer)return;let nearest=sticks.map((st,j)=>({j,d:Math.hypot(st.x-v.x,st.y-v.y)})).filter(o=>o.d<R*controls.size/100+22).sort((a,b)=>a.d-b.d)[0];if(!nearest)return;editPointer={id:e.pointerId,i:nearest.j};c.setPointerCapture(e.pointerId);return}if(s.id!==null)return;if(controls.floating)moveStick(i,v);s.id=e.pointerId;c.setPointerCapture(e.pointerId);setStick(s,v)});
