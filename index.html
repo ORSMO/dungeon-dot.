@@ -67,7 +67,7 @@ footer #restart{display:none}
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
-<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.8</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
+<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.9</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
   <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true">⚪ CLASSIC DOT<br>SWING BAT</button><button id="hero-archer" type="button" aria-pressed="false">🏹 ARCHER DOT<br>DRAW BOW</button><button id="hero-mage" type="button" aria-pressed="false">🔮 MAGE DOT<br>DRAW RUNES</button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
@@ -89,8 +89,6 @@ footer #restart{display:none}
 <small id="save-indicator" hidden></small>
 <div id="edit-hint" hidden>DRAG JOYSTICKS + DASH <button id="edit-done">DONE ✓</button></div></main><script>
 (()=>{const c=document.querySelector('#game'),g=c.getContext('2d');let viewW=640,W=480,F=480;const H=360,VIEW_F=304,R=35;const arena=document.querySelector('#arena');function resizeArena(){const r=arena.getBoundingClientRect();if(!r.width||!r.height)return;const oldW=viewW;viewW=Math.max(360,Math.round(H*r.width/r.height));c.width=viewW;c.height=H;try{if(oldW!==viewW&&typeof controls!=='undefined'){controls.positions=controls.positions.map(p=>[p[0]*viewW/oldW,p[1]]);sticks.forEach((s,i)=>{s.x=controls.positions[i][0];s.y=controls.positions[i][1]})}}catch(err){}}resizeArena();window.addEventListener('resize',resizeArena);window.visualViewport?.addEventListener('resize',resizeArena);
-// Hidden gameplay switch: set to false to disable player healing from green Plus enemies.
-const PLAYER_HEALING_ENABLED=true;
 const PLAYER_REGEN=.6;
 let shieldType='curved',shieldPaused=false,shieldHp=100,shieldBroken=false,shieldCooldown=0,shieldLastHit=-99,shieldLaserTick=0;
 // A compact body-mounted guard. Durability only refills on a genuine room entry.
@@ -591,6 +589,9 @@ const ITEM_DEFS = {
  counterweight:{name:'Counterweight',glyph:'▰',color:'#d5aa86',desc:'+40% knockback, but weapon attack speed is reduced by 10%.'},
  hourglass:{name:'Blue Hourglass',glyph:'⌛',color:'#8dbfff',biome:'blue',desc:'Enemy projectiles travel 20% slower.'}
 };
+// Stackable effects have a deliberate ceiling. Old saves may contain higher
+// counts; itemCount() applies the same effective cap without changing save data.
+const ITEM_STACK_LIMITS={emberHeart:3,frostNail:3,stormCoil:3,leechFang:3,sporeSatchel:3,mirrorLens:3,shieldBloom:3,luckyPenny:3,magnetRing:1,thornMantle:3,cinderSigil:3,mossCharm:3,glassEye:2,counterweight:2,hourglass:1,reflectArrow:1};
 const UPGRADE_DEFS = {
  vitality:{name:'Vitality',glyph:'♥',color:'#f19eaa',desc:'+10 maximum health.'},
  power:{name:'Bat Strength',glyph:'✚',color:'#efb47d',desc:'+25% weapon and reflected-shot damage.'},
@@ -678,16 +679,16 @@ function applyWeaponElement(target){
 }
 
 function freshProgress(){return {coins:0,items:{},upgrades:{},roomsCleared:0,synergyCoins:0,level:1,xp:0,elementPrimary:null,elementSecondary:null}}
-function itemCount(id){return progress?.items[id]||0}
+function itemCount(id){return Math.min(ITEM_STACK_LIMITS[id]??Number.MAX_SAFE_INTEGER,progress?.items[id]||0)}
 function upgradeCount(id){return progress?.upgrades[id]||0}
 function playerStats(){
  return {
-  maxHealth:Math.max(25,50+10*upgradeCount('vitality')+10*itemCount('emberHeart')-8*itemCount('glassEye')),
+   maxHealth:Math.min(100,Math.max(25,50+10*upgradeCount('vitality')+10*itemCount('emberHeart')-8*itemCount('glassEye'))),
   damage:1+.25*upgradeCount('power')+(hero==='mage'?0:hero==='archer'?.2:.4)*itemCount('glassEye')+.02*Math.max(0,(progress?.level||1)-1),
   moveSpeed:(hero==='mage'?112:118)*(1+Math.min(.8,.1*upgradeCount('speed')+(hero==='archer'?.05*itemCount('thornMantle'):0))),
   swing:Math.max(.55,1+.15*upgradeCount('swing')-(hero==='mage'?0:.1)*itemCount('counterweight')),
   knockback:1+.2*upgradeCount('knockback')+(hero==='mage'?.25:hero==='archer'?.12:.4)*itemCount('counterweight'),
-  regen:(hero==='mage'?.5:PLAYER_REGEN)+.15*upgradeCount('regen')+(hero==='mage'?.18:hero==='archer'?.12:.3)*itemCount('mossCharm')+(hasSynergy('livingArmour')?.2:0),
+   regen:Math.min(2.4,(hero==='mage'?.5:PLAYER_REGEN)+.15*upgradeCount('regen')+(hero==='mage'?.18:hero==='archer'?.12:.3)*itemCount('mossCharm')+(hasSynergy('livingArmour')?.2:0)),
   shieldProtection:hero!=='classic'?0:Math.min(.6,.1*upgradeCount('shield')+.15*itemCount('shieldBloom')),
   crit:Math.min(.6,.05*upgradeCount('focus')+(hero==='archer'?.12*itemCount('glassEye'):0)),
   luck:upgradeCount('luck')+itemCount('luckyPenny'),
@@ -739,6 +740,7 @@ function heroUpgradeDefinition(id){
 }
 function giveItem(id){
  if(!ITEM_DEFS[id])return false;
+  if(itemCount(id)>=(ITEM_STACK_LIMITS[id]??1)){progress.coins+=10;showItemNotice('STACK FULL · +10 COINS');queueCheckpoint();updateCharacterMenu();return true;}
  const previousSynergies=activeSynergies();
  const before=playerStats().maxHealth,beforeMana=hero==='mage'?mageMaxMana():0;progress.items[id]=itemCount(id)+1;
  const after=playerStats().maxHealth;hp=Math.min(after,hp+Math.max(0,after-before));if(hero==='mage')restoreMageMana(mageMaxMana()-beforeMana);
@@ -869,7 +871,7 @@ function rewardBoss(){
  if(itemCount('leechFang'))healPlayer(4*itemCount('leechFang'));
 }
 function rollItem(){
- const all=Object.keys(ITEM_DEFS),unowned=all.filter(id=>!itemCount(id)),pool=unowned.length?unowned:all;
+ const all=Object.keys(ITEM_DEFS),available=all.filter(id=>itemCount(id)<(ITEM_STACK_LIMITS[id]??1)),unowned=available.filter(id=>!itemCount(id)),pool=unowned.length?unowned:available.length?available:all;
  const themed=pool.filter(id=>ITEM_DEFS[id].biome===selectedBiome),weighted=pool.concat(themed,themed);
  return weighted[Math.floor(Math.random()*weighted.length)];
 }
@@ -1508,6 +1510,11 @@ function roomEnemyTarget(room){
  const depth=Math.min(5,Math.max(1,dungeonDepth));
  const populations={square:[12,14,16,18,20],wide:[16,18,22,24,28],tall:[16,18,22,24,28],big:[20,22,26,30,36],cursed:[22,26,30,34,38]};
  return populations[room.shape]?.[depth-1]||0;
+}
+function roomEnemyCount(room,character=hero,depth=dungeonDepth){
+ const base=Math.max(room.count,roomEnemyTarget({...room,kind:'combat'}));
+ const easing=character!=='classic'?[.65,.8,.9,.95,1][Math.min(4,Math.max(0,Math.floor(depth)-1))]:1;
+ return Math.max(4,Math.round(base*easing));
 }
 const CURSE_TYPES={
  float:{name:'ZERO GRAVITY',hint:'Bodies drift and keep momentum'},
@@ -2253,7 +2260,7 @@ function enterRoom(id,entry=null){
  doorCooldown=.7;inv=Math.max(inv||0,.9);
  sticks.forEach(stick=>{stick.dx=stick.dy=0});
  if(currentRoom.kind==='start')playerBleed=[];
- if(!currentRoom.cleared){if(currentRoom.kind==='boss')startBossFight(currentRoom.bossKind);else{const base=Math.max(currentRoom.count,roomEnemyTarget(currentRoom));const easing=hero!=='classic'?[.65,.8,.9,.95,1][Math.min(4,Math.max(0,dungeonDepth-1))]:1;const wanted=Math.max(4,Math.round(base*easing));currentRoom.count=wanted;for(let i=0;i<wanted;i++)spawn(selectedBiome&&i===0?currentBiome().enemies[0]:null)}}
+ if(!currentRoom.cleared){if(currentRoom.kind==='boss')startBossFight(currentRoom.bossKind);else{const wanted=roomEnemyCount(currentRoom);currentRoom.count=wanted;for(let i=0;i<wanted;i++)spawn(selectedBiome&&i===0?currentBiome().enemies[0]:null)}}
  if(!loadingRun&&changedRoom)refillRoomShield();updateHeroHud();hud();if(!loadingRun&&levelChoicePending())openElementChoice();clearRoomDash();resetRoomSynergies();queueCheckpoint();
 }
 function nextDungeon(biome){
@@ -3551,7 +3558,7 @@ if(e.x<18+e.r){e.x=18+e.r;e.vx=Math.abs(e.vx)*.85}if(e.x>W-18-e.r){e.x=W-18-e.r;
 if(e.y<18+e.r){e.y=18+e.r;e.vy=Math.abs(e.vy)*.85}if(e.y>F-18-e.r){e.y=F-18-e.r;e.vy=-Math.abs(e.vy)*.85}
 for(let w of walls)collideWall(e,w,dt);
 collideProps(e);if(collideGap(e,oldEX,oldEY)||collideHole(e,oldEX,oldEY,Math.hypot(e.vx,e.vy)))continue;teleportBody(e,dt);
-let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(e.shape!=='healer'&&!e.isTreasure&&!RANGED.includes(e.shape)){let push=Math.min(240,Math.max(65,Math.hypot(e.vx-p.vx,e.vy-p.vy)*.8));p.kvx-=nx*push;p.kvy-=ny*push;}if(e.shape==='healer'){let speed=Math.hypot(e.vx-p.vx,e.vy-p.vy);if(PLAYER_HEALING_ENABLED&&speed>50&&e.playerHealCooldown<=0){let oldHp=hp;hp=Math.min(playerStats().maxHealth,hp+Math.min(18,Math.floor((speed-35)/13)));if(hp>oldHp)showHeal(p.x,p.y);e.playerHealCooldown=.65}}else if(enemyAttacksEnabled()&&!e.isTreasure&&!RANGED.includes(e.shape)&&inv===0){if(e.shape==='bloodletter'){playerBleed.push({remaining:12,rate:2});hp=damagedHealth(8);inv=1.1;if(hp<=0)over=true}else{hp=damagedHealth(e.chargeUntil>arenaTime?18:14);inv=1.1;if(hp<=0)over=true}}}
+let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(e.shape!=='healer'&&!e.isTreasure&&!RANGED.includes(e.shape)){let push=Math.min(240,Math.max(65,Math.hypot(e.vx-p.vx,e.vy-p.vy)*.8));p.kvx-=nx*push;p.kvy-=ny*push;}if(e.shape!=='healer'&&enemyAttacksEnabled()&&!e.isTreasure&&!RANGED.includes(e.shape)&&inv===0){if(e.shape==='bloodletter'){playerBleed.push({remaining:12,rate:2});hp=damagedHealth(8);inv=1.1;if(hp<=0)over=true}else{hp=damagedHealth(e.chargeUntil>arenaTime?18:14);inv=1.1;if(hp<=0)over=true}}}
 // Solid bat: sweep its full arc so fast swings cannot tunnel through enemies.
 if(hero==='classic'){
 let sweep=p.a-previousBatAngle,steps=Math.max(1,Math.ceil(Math.abs(sweep)/.055)),hit=false;
@@ -3714,5 +3721,5 @@ g.fillStyle='#11101c';g.fillRect(0,VIEW_F,viewW,H-VIEW_F);g.save();g.globalAlpha
 if(hero==='archer'){const s=sticks[1],radius=R*controls.size/100,power=bowPower();g.save();g.strokeStyle=bowShotCooldown>0?'#a08b6b':'#f4c56b';g.lineWidth=4;g.beginPath();g.arc(s.x,s.y,radius+6,-Math.PI/2,-Math.PI/2+Math.PI*2*power);g.stroke();if(power>.15){g.textAlign='center';g.fillStyle='#ffe9a7';g.font='bold 10px monospace';g.fillText(Math.round(power*100)+'%',s.x,s.y-radius-15)}g.restore()}
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'DRAW':'BAT',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Bleed stacks '+bleedStacks,viewW/2,237)}
-requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.8';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.9';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>

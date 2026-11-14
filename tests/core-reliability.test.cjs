@@ -264,3 +264,76 @@ test('enemy specials retain their windup instead of triggering instantly', () =>
   assert.equal(result.before, 0);
   assert.equal(result.triggered, 1);
 });
+
+test('combat population eases for shieldless heroes early and converges by depth five', () => {
+  const result = run([
+    'let hero="classic",dungeonDepth=1;',
+    method('roomEnemyTarget'), method('roomEnemyCount'),
+    'const rooms=[{shape:"square",count:12},{shape:"wide",count:16},{shape:"big",count:20},{shape:"cursed",count:22}];',
+    'const rows=rooms.map(room=>({classic:roomEnemyCount(room,"classic",1),archer:roomEnemyCount(room,"archer",1),mage:roomEnemyCount(room,"mage",1),late:roomEnemyCount(room,"mage",5)}));'
+  ], 'rows');
+  for (const row of result) {
+    assert.ok(row.archer < row.classic);
+    assert.equal(row.mage, row.archer);
+    assert.equal(row.late, row.classic);
+  }
+});
+
+test('all six level-eight element pairs trigger their documented combo once per cooldown', () => {
+  const result = run([
+    declaration('ITEM_STACK_LIMITS'),
+    'const ELEMENTS={fire:{},ice:{},storm:{},poison:{}};let progress={elementPrimary:null,elementSecondary:null},arenaTime=10,elementComboClock=0,elementHitCounter=0,combos=[];',
+    'const enemies=[],bossFight=null,playerStats=()=>({damage:1}),friendlyDamage=()=>{},elementChain=()=>{};const synergyArea=(...args)=>combos.push(args);let targets=[];',
+    method('applyWeaponElement'),
+    'const pairs=[["fire","ice"],["fire","storm"],["fire","poison"],["ice","storm"],["ice","poison"],["poison","storm"]];for(const [a,b] of pairs){progress.elementPrimary=a;progress.elementSecondary=b;elementComboClock=0;const target={x:20,y:30,hp:10};applyWeaponElement(target);targets.push({a,b,burn:target.burnUntil,slow:target.slowUntil,toxic:target.toxicUntil});}',
+    'const afterFirst=combos.length;applyWeaponElement({x:20,y:30,hp:10});'
+  ], '{combos,targets,afterFirst,afterCooldown:combos.length,clock:elementComboClock}');
+  assert.equal(result.afterFirst, 6);
+  assert.equal(result.afterCooldown, 6);
+  assert.deepEqual(result.combos.map(([x,y,r,damage]) => [r,damage]), [[65,2.2],[65,2.7],[60,3],[78,2.3],[68,2.3],[70,2.7]]);
+  assert.ok(result.targets.filter(pair => pair.a === 'fire' || pair.b === 'fire').every(pair => pair.burn === 12.5));
+  assert.ok(result.targets.filter(pair => pair.a === 'ice' || pair.b === 'ice').every(pair => pair.slow === 11.8));
+  assert.ok(result.targets.filter(pair => pair.a === 'poison' || pair.b === 'poison').every(pair => pair.toxic === 13));
+});
+
+test('legacy item stacks keep save shape but effective healing and health growth stay bounded', () => {
+  const result = run([
+    declaration('ITEM_STACK_LIMITS'),
+    'let progress={items:{mossCharm:40,emberHeart:40,leechFang:40,glassEye:40},upgrades:{vitality:40,regen:40}},hero="classic";',
+    'const itemCount=id=>Math.min(ITEM_STACK_LIMITS[id]??Number.MAX_SAFE_INTEGER,progress?.items[id]||0),upgradeCount=id=>progress?.upgrades[id]||0,hasSynergy=()=>false,PLAYER_REGEN=.6;',
+    method('playerStats')
+  ], '({moss:itemCount("mossCharm"),leech:itemCount("leechFang"),maxHealth:playerStats().maxHealth,regen:playerStats().regen,stored:progress.items.mossCharm})');
+  assert.equal(result.moss, 3);
+  assert.equal(result.leech, 3);
+  assert.equal(result.maxHealth, 100);
+  assert.equal(result.regen, 2.4);
+  assert.equal(result.stored, 40, 'older saves remain readable without migration');
+});
+
+test('capped item pickups convert into coins instead of silently wasting loot', () => {
+  const result = run([
+    'const ITEM_DEFS={mossCharm:{}};', declaration('ITEM_STACK_LIMITS'),
+    'let progress={items:{mossCharm:3},coins:4},hero="classic",hp=50;',
+    'const itemCount=id=>Math.min(ITEM_STACK_LIMITS[id]??Number.MAX_SAFE_INTEGER,progress.items[id]||0),showItemNotice=()=>{},queueCheckpoint=()=>{},updateCharacterMenu=()=>{};',
+    method('giveItem'),
+    'const accepted=giveItem("mossCharm");'
+  ], '({accepted,coins:progress.coins,count:itemCount("mossCharm")})');
+  assert.deepEqual(result, {accepted:true,coins:14,count:3});
+});
+
+test('healer enemies support allies without granting free player healing on contact', () => {
+  assert.doesNotMatch(source, /PLAYER_HEALING_ENABLED/);
+  const contact = source.slice(source.indexOf('if(e.shape!==\'healer\'&&enemyAttacksEnabled()'), source.indexOf('\n', source.indexOf('if(e.shape!==\'healer\'&&enemyAttacksEnabled()')));
+  assert.ok(contact.length > 0, 'healer contact should use the non-healer damage branch');
+  assert.doesNotMatch(contact, /healPlayer|playerStats\(\)\.maxHealth/);
+  assert.match(method('executeEnemyAbility'), /if\(kind==='heal'\)\{ally\.hp=Math\.min\(ally\.maxHp,ally\.hp\+\(e\.elite\?4:2\)\)/);
+});
+
+test('Level 3 and Level 8 choices stay pending until distinct elements are selected', () => {
+  const result = run([
+    'const ELEMENTS={fire:{},ice:{},storm:{},poison:{}};let progress={level:3,elementPrimary:null,elementSecondary:null};',
+    method('levelChoicePending'),
+    'const atLevel3=levelChoicePending();progress.elementPrimary="fire";progress.level=8;const atLevel8=levelChoicePending();progress.elementSecondary="ice";const complete=levelChoicePending();'
+  ], '{atLevel3,atLevel8,complete}');
+  assert.deepEqual(result, {atLevel3:true,atLevel8:true,complete:false});
+});
