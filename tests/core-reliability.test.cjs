@@ -197,7 +197,7 @@ test('Phoenix rebirth doubles the old rounded refill and split bosses conserve r
     declaration('BOSS_HEALTH_MULTIPLIER'),
     source.slice(source.indexOf('const BOSS_BLUEPRINTS ='), source.indexOf('function currentBiome(')),
     'let bossFight,dungeonDepth=1,victories=0;const currentRoom={kind:"boss"},W=720,F=640,p={x:30,y:30,vel:0},arenaTime=1;',
-    'const inSandbox=()=>false,enemyAttacksEnabled=()=>false,enemies=[],elementFx=[];',
+    'const hero="classic",dashBatSweeps=()=>false,inSandbox=()=>false,enemyAttacksEnabled=()=>false,enemies=[],elementFx=[];',
     'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),bossSignatureRing=()=>{},bossSpiralShot=()=>{},showItemNotice=()=>{},updateBossZoneList=()=>{},updateBossShots=()=>{},updateBossSpecial=()=>{},finishBossFight=()=>victories++;',
     method('floorDifficulty'),method('bossMaxHealth'),method('bossRebirthHealth'),method('bossRadius'),method('bossArmour'),method('createBossUnit'),method('startBossFight'),
     method('handleBiomeBossPhase'), method('updateBossFight'),
@@ -313,6 +313,37 @@ test('index damage uses combat values for elite slams and boss signatures', () =
   assert.equal(result.oracle['Sky Verdict'],'20 HP per hit');
   assert.equal(result.oracle['Prism beam'],'10 HP per hit');
   assert.equal(result.ice['Slow'],'2 seconds');
+});
+
+test('Classic is protected through the final moving dash frame and loses protection afterwards', () => {
+  const result=run([
+    declaration('DASH_DURATION'),method('dashCooldown'),method('classicDashBatActive'),method('classicDashProtected'),
+    method('dashInvulnerable'),method('requestDash'),method('moveDash'),method('damagedHealth'),
+    'const hero="classic",W=480,F=480,sticks=[{dx:1,dy:0}],holes=[],p={x:100,y:100,a:0};',
+    'const dash={remaining:0,readyAt:0,immuneUntil:0,trail:[],batPath:null,batHits:new Set()};',
+    'let arenaTime=10,inv=0,hp=50,wall=false;',
+    'const combatInputEnabled=()=>true,queueCheckpoint=()=>{},updateDashButton=()=>{},blocked=()=>wall,inSandbox=()=>false,playerStats=()=>({armour:0});',
+    'requestDash();arenaTime+=.18;moveDash(.18);const finalFrame=damagedHealth(9);',
+    'dash.batPath=null;const after=damagedHealth(9);',
+    'arenaTime+=2;requestDash();wall=true;moveDash(.016);const blockedWithoutMoving=damagedHealth(9);'
+  ], '{finalFrame,after,blockedWithoutMoving,inv}');
+  assert.deepEqual(result,{finalFrame:50,after:41,blockedWithoutMoving:41,inv:0});
+});
+
+test('Classic dash sweeps the travel path, respects cover, and boosts only bat damage by 50%', () => {
+  const result=run([
+    'let hero="classic",cover=false;const p={x:80,y:70,a:0};',
+    'const dash={batPath:{x0:10,y0:70,x1:80,y1:70},batHits:new Set()};',
+    'const target={x:55,y:70,r:5};',
+    'const weaponLineClear=()=>!cover,playerStats=()=>({damage:1,crit:0}),itemCount=()=>0;',
+    method('laserDistance'),method('bossBatSegment'),method('classicDashBatActive'),method('dashBatSweeps'),method('playerDamageAmount'),
+    'const swept=dashBatSweeps(target,0);',
+    'cover=true;const blocked=dashBatSweeps(target,0);cover=false;',
+    'dash.batHits.add(target);const repeat=dashBatSweeps(target,0);',
+    'const dashBat=playerDamageAmount(2,"bat"),arrow=playerDamageAmount(2,"arrow"),item=playerDamageAmount(2,"item");',
+    'dash.batPath=null;const after=playerDamageAmount(2,"bat");'
+  ], '{swept,blocked,repeat,dashBat,arrow,item,after}');
+  assert.deepEqual(result,{swept:true,blocked:false,repeat:false,dashBat:3,arrow:2,item:2,after:2});
 });
 
 test('failed checkpoint writes are retained, throttled and retried successfully', () => {
