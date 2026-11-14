@@ -36,6 +36,23 @@ footer #restart{display:none}
 #bestiary-detail{background:#232033;border:1px solid #504258;border-radius:10px;overflow:auto;padding:14px;text-align:center}#bestiary-detail h2{font-size:16px;margin:8px 0 5px}#bestiary-detail>small{font-size:10px;color:#c2a4cf}#bestiary-detail p{font-size:11px;color:#c8bbd2;line-height:1.55;text-align:left}.index-portrait svg{width:90px;height:90px}.unknown-portrait{font:bold 70px monospace;color:#7c6e8b}.index-records{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;font-size:11px;color:#e1c889;margin:13px 0}.index-placeholder{color:#a391b0;font-size:12px;line-height:1.5;margin-top:40px}.index-footnote{font-size:9px;color:#998aa6;padding-top:9px}
 #sound-panel{position:fixed;z-index:96;left:50%;top:50%;transform:translate(-50%,-50%);width:min(360px,80vw);max-height:calc(100dvh - 24px);overflow:auto;border:1px solid #8e769f;border-radius:12px;background:#211a30f8;color:#eee6f3;padding:17px;box-shadow:0 0 0 100vmax #070810ac}.sound-heading{display:flex;align-items:center;justify-content:space-between}.sound-heading h2{font-size:18px;margin:0}.sound-heading button{padding:4px 10px;font-size:17px}#sound-panel p{font-size:11px;line-height:1.45;color:#bcb0ca}#sound-panel label{display:grid;grid-template-columns:1fr auto;gap:6px;font-size:12px;margin:14px 0}#sound-panel input[type=range]{grid-column:1/-1;width:100%;accent-color:#be9fe6}#sound-panel .mute-label{display:flex;align-items:center}
 @media(max-height:430px){.start-layout{padding:16px 4vw;gap:4vw}.start-emblem{height:35px;margin-bottom:7px;transform:scale(.8);transform-origin:left center}.start-brand h1{font-size:31px;margin-top:7px}.start-brand p{font-size:10px}.start-actions{margin-top:10px}.start-actions button{font-size:10px;padding:7px 9px}.save-slot{padding:12px 11px;min-height:215px}.save-slot h2{margin-bottom:12px}.save-slot p{font-size:11px}#bestiary-panel{inset:7px;padding:10px}.index-heading h1{font-size:19px}.index-layout{gap:9px;grid-template-columns:1fr 28%}#bestiary-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px}.index-tile{min-height:105px;padding:6px}.index-portrait svg{width:65px;height:65px}#bestiary-detail{padding:9px}#bestiary-detail h2{font-size:13px}#bestiary-detail p{font-size:10px}.index-footnote{font-size:8px}}
+.index-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 10px;padding:6px 9px;border:1px solid #534662;border-radius:8px;background:#221e31}
+.index-depth{display:flex;align-items:center;gap:10px;flex:1;min-width:0;font-size:11px}.index-depth span{white-space:nowrap}.index-depth output{font-weight:750;color:#f3d6a1}.index-depth input{width:100%;max-width:240px;min-width:40px;accent-color:#dcb1ff;margin:0}
+.index-reveal{display:flex;align-items:center;gap:4px;white-space:nowrap;font-size:10px;color:#e4d6ed}.index-reveal input{accent-color:#dcb1ff;margin:0}
+.index-layout{grid-template-columns:minmax(0,1fr) minmax(235px,38%)}
+.index-tile[aria-pressed=true]{background:#413449;border-color:#eac587}.index-tile .index-tile-hp{font-weight:750;color:#f5b5ba}
+#bestiary-detail{text-align:left}
+.index-entry-heading{display:flex;align-items:center;gap:10px}.index-entry-heading h2{margin:0 0 3px!important}.index-entry-heading small{color:#cbafd6;font-size:10px}
+.index-entry-heading .index-portrait svg{display:block;width:50px;height:50px}
+.index-stat-heading{margin:12px 0 6px;color:#ebdcf3;font-size:11px}
+.index-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin:7px 0}
+.index-stat{min-width:0;padding:6px 8px;background:#2d263d;border:1px solid #504262;border-radius:7px}
+.index-stat dt{color:#cdbcd9;font-size:9px}.index-stat dd{font-size:13px;font-weight:750;margin:2px 0 0;overflow-wrap:anywhere}.index-stat.hp dd{color:#f5b5ba}
+.index-attacks{margin:0;font-size:11px}.index-attacks div{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:6px;border-bottom:1px solid #40354e;padding:5px 0}.index-attacks dt{color:#e6d8ed}.index-attacks dd{margin:0;text-align:right;color:#f2cd9e}
+#bestiary-detail .index-context{margin:6px 0;color:#c2b2d1;font-size:10px}
+#bestiary-detail .index-records{justify-content:flex-start;margin:8px 0}
+@media(max-width:580px){.index-layout{grid-template-columns:minmax(115px,1fr) minmax(190px,55%);gap:7px}.index-controls{gap:7px}.index-depth{gap:6px}.index-toolbar button{padding-inline:8px}}
+@media(max-height:430px){.index-heading p{margin-bottom:5px}.index-toolbar{margin-bottom:6px}.index-controls{margin-bottom:6px;padding-block:4px}.index-entry-heading .index-portrait svg{width:42px;height:42px}}
 #dash-button[hidden]{display:none!important}
 #dash-button{position:absolute;z-index:3;transform:translate(-50%,-50%);border-radius:50%;padding:4px;background:radial-gradient(circle at 35% 25%,#49758b,#1b3045);border:2px solid #b9eaff;color:#effaff;font:800 10px monospace;box-shadow:0 0 14px #87c9f044;touch-action:none;user-select:none;cursor:pointer}
 #dash-button.cooling{background:#242c3c;border-color:#62758c;color:#b6c7da;box-shadow:none}
@@ -49,7 +66,7 @@ footer #restart{display:none}
 #mana-hud.low-mana #mana-fill{background:linear-gradient(90deg,#8c579c,#fa8bc0)}
 #mana-label{font-size:10px;color:#d8c8ff}
 @media(max-width:750px){#mana-hud .mana-track{width:48px}#mana-hud{gap:3px;font-size:9px}#mana-label{font-size:9px}header{gap:6px!important}}
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.12</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.13</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
  <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
  <small id="character-coins"></small>
  <div id="character-stats"></div>
@@ -67,14 +84,20 @@ footer #restart{display:none}
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
-<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.12</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
+<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.13</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
   <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true">⚪ CLASSIC DOT<br>SWING BAT</button><button id="hero-archer" type="button" aria-pressed="false">🏹 ARCHER DOT<br>DRAW BOW</button><button id="hero-mage" type="button" aria-pressed="false">🔮 MAGE DOT<br>DRAW RUNES</button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
 <section id="bestiary-panel" hidden aria-label="Enemy index">
  <div class="index-heading"><div><small>FIELD JOURNAL</small><h1>Enemy Index</h1><p id="index-summary"></p></div><button id="index-close" aria-label="Close enemy index">×</button></div>
- <div class="index-toolbar"><button id="index-all" aria-pressed="true">All</button><button id="index-enemies" aria-pressed="false">Enemies</button><button id="index-bosses" aria-pressed="false">Bosses</button><input id="index-search" type="search" placeholder="Search discovered enemies" aria-label="Search enemy index"></div>
- <div class="index-layout"><div id="bestiary-grid"></div><aside id="bestiary-detail"></aside></div>
+ <div class="index-toolbar"><button id="index-all" aria-pressed="true">All</button><button id="index-enemies" aria-pressed="false">Enemies</button><button id="index-bosses" aria-pressed="false">Bosses</button><input id="index-search" type="search" placeholder="Search enemies or bosses" aria-label="Search enemy index"></div>
+ <div class="index-controls">
+  <label class="index-depth" for="index-depth"><span>HP at <output id="index-depth-label" for="index-depth">Dungeon 1</output></span>
+   <input id="index-depth" type="range" min="1" max="14" step="1" value="1">
+  </label>
+  <label class="index-reveal"><input id="index-reveal" type="checkbox"> Show undiscovered stats</label>
+ </div>
+ <div class="index-layout"><div id="bestiary-grid" aria-label="Enemies and bosses"></div><aside id="bestiary-detail" aria-label="Selected enemy stats"></aside></div>
  <small class="index-footnote">Shared across both save slots. Dungeon encounters only; practice does not change these records.</small>
 </section>
 <section id="sound-panel" hidden aria-label="Sound settings">
@@ -123,22 +146,40 @@ function showShieldChoice(){shieldType='curved';shieldPaused=false;document.quer
 function pickShield(){showShieldChoice()}
 document.querySelector('#choose-flat').onclick=()=>pickShield('flat');document.querySelector('#choose-curved').onclick=()=>pickShield('curved');
 const RANGED=['laser','shooter','scatter','frostcaster','spitter','cannon','seeker','bloodcaster','emberling','thornling','icewisp'];
+const ENEMY_DAMAGE={contact:14,charge:18,bloodContact:8,laser:6,artillery:22,poisonTick:5,shard:6,fireImpact:10,electricImpact:9,fireTick:2,electricTick:1};
+const ENEMY_SPECIAL_DAMAGE={slam:[18,22],blood:[9,9],fire:[12,12],electric:[10,10],magnet:[10,10],mirror:[11,11],sponge:[13,13],bomb:[16,22]};
+const ENEMY_BLEED={bloodContact:[12,2],bloodSpecial:[6,1.5],bloodcaster:[7,1.4],emberbolt:[3,1.2],bossFire:[3,1.2],bossPoison:[4,1.2]};
+const ENEMY_PROJECTILES={
+ shooter:{name:'Twin shot',damage:11,count:2,speed:165},
+ scatter:{name:'Scatter fan',damage:8,count:5,speed:153},
+ frostcaster:{name:'Ice bolts',damage:0,count:2,speed:135},
+ spitter:{name:'Poison globes',damage:0,count:2,speed:110},
+ seeker:{name:'Homing shot',damage:11,count:1,speed:83},
+ bloodcaster:{name:'Bleeding bolts',damage:0,count:2,speed:145},
+ emberbolt:{name:'Ember bolt',damage:11,count:1,speed:165}
+};
+function enemyShotKind(shape){return ({emberling:'emberbolt',thornling:'spitter',icewisp:'frostcaster'})[shape]||shape}
+function addEnemyBleed(kind){
+ const [remaining,rate]=ENEMY_BLEED[kind];
+ playerBleed.push({remaining,rate});
+}
+const ZONE_DAMAGE={fire:7,poison:4,roots:2,frost:5};
 const RANGED_COLOR={emberling:'#ff974b',thornling:'#a5c65a',icewisp:'#adf1ff',emberbolt:'#ff974b',laser:'#ff3f9a',shooter:'#ff6969',scatter:'#c18aff',frostcaster:'#86dfff',spitter:'#a4ed4d',cannon:'#d6b277',seeker:'#f4e76b',bloodcaster:'#e44e7a'};
 let projectiles=[],artillery=[],gravityWells=[],reactionZones=[];
 function laserPath(x,y,a){let segments=[],dx=Math.cos(a),dy=Math.sin(a),sx=x,sy=y;for(let bounce=0;bounce<2;bounce++){let best=Math.hypot(W,F)*2,nx=0,ny=0;const boxes=[{x:13,y:13,w:W-26,h:F-26,outer:true},...walls];for(let w of boxes){let edges=w.outer?[[w.x,0,-1,0],[w.x+w.w,0,1,0],[0,w.y,0,-1],[0,w.y+w.h,0,1]]:[[w.x,0,-1,0],[w.x+w.w,0,1,0],[0,w.y,0,-1],[0,w.y+w.h,0,1]];for(let [v,_,ex,ey] of edges){if(ex){if(Math.abs(dx)<.00001)continue;let t=(v-sx)/dx,hitY=sy+dy*t;if(t>.01&&t<best&&(w.outer?hitY>=w.y&&hitY<=w.y+w.h:hitY>=w.y&&hitY<=w.y+w.h)){if(w.outer?dx*ex>0:dx*ex<0){best=t;nx=ex;ny=0}}}else{if(Math.abs(dy)<.00001)continue;let t=((ey?_:v)-sy)/dy;let hitX=sx+dx*t;if(t>.01&&t<best&&hitX>=w.x&&hitX<=w.x+w.w){if(w.outer?dy*ey>0:dy*ey<0){best=t;nx=0;ny=ey}}}}}let ex=sx+dx*best,ey=sy+dy*best;segments.push({x1:sx,y1:sy,x2:ex,y2:ey});if(bounce===1||(!nx&&!ny))break;sx=ex-nx*.25;sy=ey-ny*.25;dx=nx?-dx:dx;dy=ny?-dy:dy}return segments}
 function laserDistance(x,y,s){let dx=s.x2-s.x1,dy=s.y2-s.y1,t=Math.max(0,Math.min(1,((x-s.x1)*dx+(y-s.y1)*dy)/(dx*dx+dy*dy||1)));return Math.hypot(x-s.x1-t*dx,y-s.y1-t*dy)}
-function updateLasers(dt){if(!enemyAttacksEnabled())return;for(let e of enemies){if(e.shape!=='laser'||e.hp<=0||e.phaseIn>0)continue;e.laserClock=(e.laserClock||0)-dt;if(e.laserClock<=0&&e.laserState!=='charge'&&e.laserState!=='fire'){e.laserState='charge';e.laserTime=1.8;e.laserAngle=Math.atan2(p.y-e.y,p.x-e.x)}if(e.laserState==='charge'){e.laserTime-=dt;let target=Math.atan2(p.y-e.y,p.x-e.x),diff=Math.atan2(Math.sin(target-e.laserAngle),Math.cos(target-e.laserAngle));e.laserAngle+=Math.max(-.38*dt,Math.min(.38*dt,diff));if(e.laserTime<=0){e.laserState='fire';e.laserTime=2;e.laserHit=.15}}else if(e.laserState==='fire'){e.laserTime-=dt;let target=Math.atan2(p.y-e.y,p.x-e.x),diff=Math.atan2(Math.sin(target-e.laserAngle),Math.cos(target-e.laserAngle));e.laserAngle+=Math.max(-.16*dt,Math.min(.16*dt,diff));let rawLines=laserPath(e.x,e.y,e.laserAngle);if(shieldBlocksLaser(rawLines)){shieldLaserTick+=dt;if(shieldLaserTick>=.1){shieldDamage(1.8);shieldLaserTick=0}}let lines=shieldLaserLines(rawLines);e.laserHit-=dt;if(e.laserHit<=0){if(lines.some(seg=>laserDistance(p.x,p.y,seg)<11)&&inv<=0){hp=damagedHealth(6);inv=.32;if(hp<=0)over=true}for(let t of enemies){if(t===e||t.hp<=0)continue;if(lines.some(seg=>laserDistance(t.x,t.y,seg)<t.r+2)&&canDamage(t,150))t.hp-=1}e.laserHit=.28}if(e.laserTime<=0){e.laserState='cooldown';e.laserClock=3.4+Math.random()*1.1}}}}
+function updateLasers(dt){if(!enemyAttacksEnabled())return;for(let e of enemies){if(e.shape!=='laser'||e.hp<=0||e.phaseIn>0)continue;e.laserClock=(e.laserClock||0)-dt;if(e.laserClock<=0&&e.laserState!=='charge'&&e.laserState!=='fire'){e.laserState='charge';e.laserTime=1.8;e.laserAngle=Math.atan2(p.y-e.y,p.x-e.x)}if(e.laserState==='charge'){e.laserTime-=dt;let target=Math.atan2(p.y-e.y,p.x-e.x),diff=Math.atan2(Math.sin(target-e.laserAngle),Math.cos(target-e.laserAngle));e.laserAngle+=Math.max(-.38*dt,Math.min(.38*dt,diff));if(e.laserTime<=0){e.laserState='fire';e.laserTime=2;e.laserHit=.15}}else if(e.laserState==='fire'){e.laserTime-=dt;let target=Math.atan2(p.y-e.y,p.x-e.x),diff=Math.atan2(Math.sin(target-e.laserAngle),Math.cos(target-e.laserAngle));e.laserAngle+=Math.max(-.16*dt,Math.min(.16*dt,diff));let rawLines=laserPath(e.x,e.y,e.laserAngle);if(shieldBlocksLaser(rawLines)){shieldLaserTick+=dt;if(shieldLaserTick>=.1){shieldDamage(1.8);shieldLaserTick=0}}let lines=shieldLaserLines(rawLines);e.laserHit-=dt;if(e.laserHit<=0){if(lines.some(seg=>laserDistance(p.x,p.y,seg)<11)&&inv<=0){hp=damagedHealth(ENEMY_DAMAGE.laser);inv=.32;if(hp<=0)over=true}for(let t of enemies){if(t===e||t.hp<=0)continue;if(lines.some(seg=>laserDistance(t.x,t.y,seg)<t.r+2)&&canDamage(t,150))t.hp-=1}e.laserHit=.28}if(e.laserTime<=0){e.laserState='cooldown';e.laserClock=3.4+Math.random()*1.1}}}}
 
 function triggerReaction(type,x,y,r=35){if(type==='steam'){elementFx.push({type:'steam',x,y,life:.55,maxLife:.55});return}reactionZones.push({type,x,y,r,life:type==='electric'?1.6:type==='fire'?2.2:2.8,tick:0});elementFx.push({type:type==='fire'?'fire':'shock',x,y,radius:r,life:.4,maxLife:.4})}
 function updateReactions(dt){if(!enemyAttacksEnabled())return;for(let w of gravityWells){w.life-=dt;let elapsed=w.maxLife-w.life,range=w.range;for(let e of enemies){if(e.hp<=0)continue;let dx=w.x-e.x,dy=w.y-e.y,d=Math.hypot(dx,dy)||1;if(d<range){let force=175*(1-d/range)*dt/Math.max(.5,e.mass);e.vx+=dx/d*force;e.vy+=dy/d*force}}let dx=w.x-p.x,dy=w.y-p.y,d=Math.hypot(dx,dy)||1;if(d<range){let force=105*(1-d/range)*dt;p.kvx=(p.kvx||0)+dx/d*force;p.kvy=(p.kvy||0)+dy/d*force}for(let q of projectiles){let dx=w.x-q.x,dy=w.y-q.y,d=Math.hypot(dx,dy)||1;if(d<range){q.vx+=dx/d*460*(1-d/range)*dt;q.vy+=dy/d*460*(1-d/range)*dt}}if(w.life<=0){shockwave({x:w.x,y:w.y},w.elite?390:300,range);elementFx.push({type:'shock',x:w.x,y:w.y,radius:range,life:.55,maxLife:.55})}}gravityWells=gravityWells.filter(w=>w.life>0);
-for(let z of reactionZones){z.life-=dt;z.tick+=dt;if(z.tick<.3)continue;z.tick=0;for(let e of enemies){if(e.hp<=0||Math.hypot(e.x-z.x,e.y-z.y)>z.r+e.r)continue;if(z.type==='ice'){e.vx*=.65;e.vy*=.65}else if(z.type==='electric'||z.type==='fire'){e.hp-=z.type==='fire'?.6:.4;e.vx+=(e.x-z.x)*.02;e.vy+=(e.y-z.y)*.02}}if(Math.hypot(p.x-z.x,p.y-z.y)<z.r+8){if(z.type==='ice')p.slowUntil=Math.max(p.slowUntil||0,arenaTime+.45);else if(inv<=0){hp=damagedHealth((z.type==='fire'?2:1));inv=.25;if(hp<=0)over=true}}}reactionZones=reactionZones.filter(z=>z.life>0);
+for(let z of reactionZones){z.life-=dt;z.tick+=dt;if(z.tick<.3)continue;z.tick=0;for(let e of enemies){if(e.hp<=0||Math.hypot(e.x-z.x,e.y-z.y)>z.r+e.r)continue;if(z.type==='ice'){e.vx*=.65;e.vy*=.65}else if(z.type==='electric'||z.type==='fire'){e.hp-=z.type==='fire'?.6:.4;e.vx+=(e.x-z.x)*.02;e.vy+=(e.y-z.y)*.02}}if(Math.hypot(p.x-z.x,p.y-z.y)<z.r+8){if(z.type==='ice')p.slowUntil=Math.max(p.slowUntil||0,arenaTime+.45);else if(inv<=0){hp=damagedHealth((z.type==='fire'?ENEMY_DAMAGE.fireTick:ENEMY_DAMAGE.electricTick));inv=.25;if(hp<=0)over=true}}}reactionZones=reactionZones.filter(z=>z.life>0);
 for(let water of puddles){if(water.reacted)continue;let electric=enemies.find(e=>e.shape==='electric'&&e.elementCooldown>0&&Math.hypot(e.x-water.x,e.y-water.y)<water.r+e.r)||projectiles.find(q=>q.kind==='seeker'&&Math.hypot(q.x-water.x,q.y-water.y)<water.r);if(electric){water.reacted=true;triggerReaction('electric',water.x,water.y,water.r)}}
 for(let poison of poisonPuddles){if(poison.reacted)continue;let fire=enemies.find(e=>e.shape==='fire'&&e.elementCooldown>0&&Math.hypot(e.x-poison.x,e.y-poison.y)<poison.r+e.r)||artillery.find(a=>a.life<=0&&Math.hypot(a.x-poison.x,a.y-poison.y)<poison.r+a.r);if(fire){poison.reacted=true;poison.life=Math.min(poison.life,.25);triggerReaction('fire',poison.x,poison.y,poison.r+8)}}}
 
-function fireRanged(e,aim=p){if(!enemyAttacksEnabled())return;let dx=aim.x-e.x,dy=aim.y-e.y,d=Math.hypot(dx,dy)||1,angle=Math.atan2(dy,dx),kind=e.shape==='emberling'?'emberbolt':e.shape==='thornling'?'spitter':e.shape==='icewisp'?'frostcaster':e.shape;
+function fireRanged(e,aim=p){if(!enemyAttacksEnabled())return;let dx=aim.x-e.x,dy=aim.y-e.y,d=Math.hypot(dx,dy)||1,angle=Math.atan2(dy,dx),kind=enemyShotKind(e.shape);
 if(kind==='cannon'){artillery.push({x:Math.max(25,Math.min(W-25,aim.x)),y:Math.max(25,Math.min(F-25,aim.y)),startX:e.x,startY:e.y,life:1.35,maxLife:1.35,r:26,owner:e});return}
-let count=kind==='scatter'?5:['shooter','spitter','frostcaster','bloodcaster'].includes(kind)?2:1;for(let k=0;k<count;k++){let a=angle+(k-(count-1)/2)*(kind==='scatter'?.21:.17),speed=kind==='seeker'?83:kind==='spitter'?110:kind==='bloodcaster'?145:kind==='frostcaster'?135:kind==='scatter'?153:165;projectiles.push({x:e.x+Math.cos(a)*(e.r+7),y:e.y+Math.sin(a)*(e.r+7),vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,kind,r:kind==='spitter'?5:4,life:4,owner:e,reflected:false})}}
-function rangedUpdate(dt){if(!enemyAttacksEnabled())return;for(let a of artillery){a.life-=dt;if(a.life<=0){if(Math.hypot(p.x-a.x,p.y-a.y)<a.r+7&&inv<=0){hp=damagedHealth(22);inv=.55;if(hp<=0)over=true}for(let e of enemies){if(e!==a.owner&&e.hp>0&&Math.hypot(e.x-a.x,e.y-a.y)<a.r+e.r&&canDamage(e,150))e.hp-=2}elementFx.push({type:'fire',x:a.x,y:a.y,r:0,life:.38,maxLife:.38})}}artillery=artillery.filter(a=>a.life>0);
+const {count,speed}=ENEMY_PROJECTILES[kind];for(let k=0;k<count;k++){let a=angle+(k-(count-1)/2)*(kind==='scatter'?.21:.17);projectiles.push({x:e.x+Math.cos(a)*(e.r+7),y:e.y+Math.sin(a)*(e.r+7),vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,kind,r:kind==='spitter'?5:4,life:4,owner:e,reflected:false})}}
+function rangedUpdate(dt){if(!enemyAttacksEnabled())return;for(let a of artillery){a.life-=dt;if(a.life<=0){if(Math.hypot(p.x-a.x,p.y-a.y)<a.r+7&&inv<=0){hp=damagedHealth(ENEMY_DAMAGE.artillery);inv=.55;if(hp<=0)over=true}for(let e of enemies){if(e!==a.owner&&e.hp>0&&Math.hypot(e.x-a.x,e.y-a.y)<a.r+e.r&&canDamage(e,150))e.hp-=2}elementFx.push({type:'fire',x:a.x,y:a.y,r:0,life:.38,maxLife:.38})}}artillery=artillery.filter(a=>a.life>0);
 for(let q of projectiles){q.life-=dt;if(q.life<=0)continue;if(q.kind==='seeker'){let target=q.reflected?enemies.filter(e=>e.hp>0).sort((a,b)=>Math.hypot(a.x-q.x,a.y-q.y)-Math.hypot(b.x-q.x,b.y-q.y))[0]:p;if(target){let a=Math.atan2(target.y-q.y,target.x-q.x),v=Math.hypot(q.vx,q.vy),cur=Math.atan2(q.vy,q.vx),diff=Math.atan2(Math.sin(a-cur),Math.cos(a-cur)),next=cur+Math.max(-1.8*dt,Math.min(1.8*dt,diff));q.vx=Math.cos(next)*v;q.vy=Math.sin(next)*v}}
 let ox=q.x,oy=q.y;const synergySpeed=synergyProjectileFactor(q)*(hero==='archer'&&!q.reflected&&itemCount('hourglass')&&arrows.some(a=>Math.hypot(a.x-q.x,a.y-q.y)<65)?.62:1);q.x+=q.vx*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;q.y+=q.vy*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;
 if(q.x<16||q.x>W-16||q.y<16||q.y>F-16){q.life=0;continue}if(projectileHitsProp(q,ox,oy)||projectileHitsNest(q,ox,oy))continue
@@ -146,7 +187,7 @@ let wall=walls.find(w=>q.x+q.r>w.x&&q.x-q.r<w.x+w.w&&q.y+q.r>w.y&&q.y-q.r<w.y+w.
 let angle=p.a,ux=Math.cos(angle),uy=Math.sin(angle),along=(q.x-p.x)*ux+(q.y-p.y)*uy,at=Math.max(16,Math.min(49,along)),bx=p.x+ux*at,by=p.y+uy*at;
 if(!q.reflected&&shieldHit(q.x,q.y,q.r)){shieldDamage(q.kind==='scatter'?8:q.kind==='seeker'?20:12);let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.45;q.vy=Math.sin(a)*speed*1.45;q.reflected=true;q.life=2.5;continue}
 if(Math.hypot(q.x-bx,q.y-by)<q.r+5+5*itemCount('reflectArrow')&&!q.reflected&&hero==='classic'){let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.35;q.vy=Math.sin(a)*speed*1.35;q.reflected=true;q.life=2.5;continue}
-if(q.reflected){for(let e of enemies){if(e.hp<=0)continue;if(Math.hypot(q.x-e.x,q.y-e.y)<e.r+q.r){if(canDamage(e,165))friendlyDamage(e,q.kind==='cannon'?3:2,'projectile');if(q.kind==='frostcaster'){let water=puddles.find(z=>Math.hypot(z.x-e.x,z.y-e.y)<z.r);if(water){water.life=.2;triggerReaction('ice',water.x,water.y,water.r)}}q.life=0;break}}}else if(Math.hypot(q.x-p.x,q.y-p.y)<q.r+8&&inv<=0){if(q.kind==='bloodcaster')playerBleed.push({remaining:7,rate:1.4});else if(q.kind==='frostcaster')p.slowUntil=arenaTime+2;else if(q.kind==='spitter')poisonPuddles.push({x:q.x,y:q.y,r:25,life:2.5,maxLife:2.5});else{if(q.kind==='emberbolt')playerBleed.push({remaining:3,rate:1.2});hp=damagedHealth((q.kind==='scatter'?8:11));if(hp<=0)over=true}inv=.4;q.life=0}}
+if(q.reflected){for(let e of enemies){if(e.hp<=0)continue;if(Math.hypot(q.x-e.x,q.y-e.y)<e.r+q.r){if(canDamage(e,165))friendlyDamage(e,q.kind==='cannon'?3:2,'projectile');if(q.kind==='frostcaster'){let water=puddles.find(z=>Math.hypot(z.x-e.x,z.y-e.y)<z.r);if(water){water.life=.2;triggerReaction('ice',water.x,water.y,water.r)}}q.life=0;break}}}else if(Math.hypot(q.x-p.x,q.y-p.y)<q.r+8&&inv<=0){if(q.kind==='bloodcaster')addEnemyBleed('bloodcaster');else if(q.kind==='frostcaster')p.slowUntil=arenaTime+2;else if(q.kind==='spitter')poisonPuddles.push({x:q.x,y:q.y,r:25,life:2.5,maxLife:2.5});else{if(q.kind==='emberbolt')addEnemyBleed('emberbolt');hp=damagedHealth(ENEMY_PROJECTILES[q.kind]?.damage??ENEMY_PROJECTILES.shooter.damage);if(hp<=0)over=true}inv=.4;q.life=0}}
 projectiles=projectiles.filter(q=>q.life>0)}
 
 let bleedStacks=0,temporaryBleed=[];let playerBleed=[],regenWhileBleeding=false;const regenToggle=document.querySelector("#regen-toggle");regenToggle.onclick=()=>{regenWhileBleeding=!regenWhileBleeding;regenToggle.textContent="Regen while bleeding: "+(regenWhileBleeding?"ON":"OFF")};
@@ -200,7 +241,7 @@ const BOSS_BLUEPRINTS = {
  avalanche:{name:'AVALANCHE GOLEM',archetype:'slime',hp:128,color:'#b4dce9',biome:'blue',element:'frost',hint:'LANDINGS CALL ROCKFALLS · DEFEAT BOTH HALVES'}
 };
 function currentBiome(){return BIOME_DEFS[selectedBiome]||BIOME_DEFS.basic}
-function floorDifficulty(){return 1+Math.min(1.5,Math.max(0,dungeonDepth-1)*.12)}
+function floorDifficulty(depth=dungeonDepth){return 1+Math.min(1.5,Math.max(0,depth-1)*.12)}
 function enemyDefinition(shape){
  if(BIOME_ENEMIES[shape])return BIOME_ENEMIES[shape];
  return {
@@ -210,10 +251,15 @@ function enemyDefinition(shape){
   armour:shape==='armored'?115:0
  };
 }
+const ROYAL_SLIME={hp:2,r:8,mass:.55};
+function enemyMaxHealth(shape,depth=dungeonDepth,elite=false,practice=false){
+ if(shape==='royalSlime')return ROYAL_SLIME.hp;
+ return Math.ceil(enemyDefinition(shape).hp*(practice?1:floorDifficulty(depth))*(elite?2:1));
+}
 // Every specialist has a distinct pressure move; basic melee learn theirs more often on deeper floors.
 const ENEMY_SPECIALS={square:'charge',round:'feint',armored:'slam',healer:'heal',merge:'rally',splitter:'brood',regenerator:'heal',bloodletter:'blood',fire:'fire',water:'water',electric:'electric',poison:'poison',gravity:'gravity',magnet:'magnet',crystal:'crystal',mirror:'mirror',sponge:'sponge',rubber:'ricochet',bomb:'bomb',frostguard:'frost'};
 function makeEnemy(shape,x,y,elite=false,practice=false){
- const def=enemyDefinition(shape),scale=practice?1:floorDifficulty(),maxHp=Math.ceil(def.hp*scale*(elite?2:1));
+ const def=enemyDefinition(shape),maxHp=enemyMaxHealth(shape,dungeonDepth,elite,practice);
  const common=shape==='square'||shape==='round',veteranChance=Math.min(.6,.18+.1*Math.max(0,dungeonDepth-1));
  return {x,y,vx:0,vy:0,r:def.r*(elite?1.4:1),shape,origins:null,elite,mass:def.mass*(elite?2:1),hp:maxHp,maxHp,phaseIn:practice?.35:1.15,healGlow:0,cool:0,impactCooldown:0,playerHealCooldown:0,elementCooldown:0,poisonTimer:0,magnetMode:1,magnetCooldown:0,bombTimer:0,spongeEnergy:0,specialCooldown:0,abilityEnabled:!!ENEMY_SPECIALS[shape]&&(!common||elite||Math.random()<veteranChance),abilityCooldown:2.7+Math.random()*3.8,ability:null,chargeUntil:0,allyBoostUntil:0,shotWindup:0,shotTarget:null,regenPulse:0,shootClock:1+Math.random(),laserClock:2+Math.random(),laserState:'cooldown',laserTime:0,laserAngle:0,strafe:Math.random()<.5?-1:1,guardRole:Math.random()<.42,biomeClock:2+Math.random()*2};
 }
@@ -291,7 +337,7 @@ function updateZone(zone,dt){
  if(zone.tick<.65)return;zone.tick=0;
  if(Math.hypot(p.x-zone.x,p.y-zone.y)<zone.r+8&&inv<=0){
   if(zone.type==='frost')p.slowUntil=arenaTime+1.2;
-  hp=damagedHealth(zone.type==='fire'?7:zone.type==='poison'?4:zone.type==='roots'?2:5);inv=.5;if(hp<=0)over=true;
+  hp=damagedHealth(ZONE_DAMAGE[zone.type]??ZONE_DAMAGE.frost);inv=.5;if(hp<=0)over=true;
  }
 }
 function updateBiomeWorld(dt){
@@ -361,7 +407,7 @@ function radialBossShots(unit,count=8){
  }
 }
 function updateVariantArmour(unit,dt){
- if(unit.vulnerable>0){unit.vulnerable=Math.max(0,unit.vulnerable-dt);if(unit.vulnerable===0&&unit.hp>0)unit.armour=unit.phase2?2:3}
+ if(unit.vulnerable>0){unit.vulnerable=Math.max(0,unit.vulnerable-dt);if(unit.vulnerable===0&&unit.hp>0)unit.armour=bossArmour(BOSS_BLUEPRINTS[unit.variant],unit.phase2)}
 }
 function updateBiomeBossUnit(unit,dt){
  const id=unit.variant;
@@ -526,6 +572,10 @@ function bossSpecialHits(step,x,y){
  if(Math.hypot(x-step.x,y-step.y)>step.r)return false;
  return step.type!=='arc'||Math.abs(bossAngleBetween(Math.atan2(y-step.y,x-step.x),step.angle))<=step.spread;
 }
+function bossSignatureDamage(rule){
+ if(['rings','curtain','wings'].includes(rule.type))return 4;
+ return rule.pattern==='lightning'?8:rule.type==='fall'?6:7;
+}
 function resolveBossSpecialStep(special,step){
  if(step.type==='volley'){
   const unit=special.unit,speed=step.speed;
@@ -534,11 +584,10 @@ function resolveBossSpecialStep(special,step){
    if(bossFight.shots.length>=96)break;
    const dx=Math.cos(angle),dy=Math.sin(angle);
    bossFight.shots.push({x:step.x+dx*offset,y:step.y+dy*offset,vx:dx*speed,vy:dy*speed,
-    r:5,kind:'crystal',owner:unit,life:7,reflected:false,damage:4,color:special.rule.color});
+    r:5,kind:'crystal',owner:unit,life:7,reflected:false,damage:bossSignatureDamage(special.rule),color:special.rule.color});
   }
  }else if(!dashInvulnerable()&&bossSpecialHits(step,p.x,p.y)){
-  const damage=special.rule.pattern==='lightning'?8:step.type==='fall'?6:7;
-  hurtBossPlayer(damage,step.x??p.x,step.y??p.y);
+  hurtBossPlayer(bossSignatureDamage(special.rule),step.x??p.x,step.y??p.y);
  }
 }
 function updateBossSpecial(dt){
@@ -604,7 +653,7 @@ function updateBossSignature(u,dt){
    else if(u.prismState==='fire'){
     const raw=laserPath(u.x,u.y,u.prismAngle),shield=shieldBlocksLaser(raw);
     u.prismHit-=dt;
-    if(u.prismHit<=0){if(shield)shieldDamage(5);else if(raw.some(a=>laserDistance(p.x,p.y,a)<12))hurtBossPlayer(4,u.x,u.y);u.prismHit=.28}
+    if(u.prismHit<=0){if(shield)shieldDamage(5);else if(raw.some(a=>laserDistance(p.x,p.y,a)<12))hurtBossPlayer(BOSS_DAMAGE.beam,u.x,u.y);u.prismHit=.28}
     if(u.prismTimer<=0)u.prismState=null;
    }
   }
@@ -614,7 +663,7 @@ function updateBossSignature(u,dt){
   const twins=bossFight.units.filter(a=>a.hp>0);
   if(twins.length===2&&laserDistance(p.x,p.y,{x1:twins[0].x,y1:twins[0].y,x2:twins[1].x,y2:twins[1].y})<13){
    p.slowUntil=Math.max(p.slowUntil||0,arenaTime+.3);
-   if(u===twins[0]){u.tetherTick=(u.tetherTick||0)-dt;if(u.tetherTick<=0){hurtBossPlayer(3,u.x,u.y);u.tetherTick=1.4}}
+   if(u===twins[0]){u.tetherTick=(u.tetherTick||0)-dt;if(u.tetherTick<=0){hurtBossPlayer(BOSS_DAMAGE.tether,u.x,u.y);u.tetherTick=1.4}}
   }
  }
  u.signatureClock=(u.signatureClock??(id==='crystal'?4.1:5.3))-dt;
@@ -731,9 +780,9 @@ function handleBiomeBossPhase(){
  if(bossFight?.variant==='phoenix'&&!bossFight.reborn){
   const unit=bossFight.units[0];
   if(unit&&unit.hp<=0){
-   const baseMaxHp=unit.maxHp/BOSS_HEALTH_MULTIPLIER;
+
    bossFight.reborn=true;unit.enraged=true;
-   unit.hp=BOSS_HEALTH_MULTIPLIER*Math.max(1,Math.ceil(baseMaxHp*.48));
+   unit.hp=bossRebirthHealth(unit.maxHp);
    unit.state='rebirth';unit.timer=1.65;unit.hitCooldown=2;unit.flash=.6;
    bossSignatureRing(unit,'fire',9,105,26,1.4,1.5);bossSpiralShot(unit,12,arenaTime*.5);showItemNotice('ASH PHOENIX · REBIRTH!')}
  }
@@ -742,7 +791,7 @@ function updateBossZoneList(dt){
  for(const hazard of bossFight.hazards){
   if(hazard.type)updateZone(hazard,dt);
   else if(!hazard.active){hazard.warn-=dt;if(hazard.warn<=0)hazard.active=true}
-  else{hazard.life-=dt;if(hazard.life>0&&!hazard.hit&&Math.hypot(p.x-hazard.x,p.y-hazard.y)<hazard.r+8){hurtBossPlayer(14,hazard.x,hazard.y);hazard.hit=true}}
+  else{hazard.life-=dt;if(hazard.life>0&&!hazard.hit&&Math.hypot(p.x-hazard.x,p.y-hazard.y)<hazard.r+8){hurtBossPlayer(BOSS_DAMAGE.quake,hazard.x,hazard.y);hazard.hit=true}}
  }
  bossFight.hazards=bossFight.hazards.filter(h=>!h.active||h.life>0);
 }
@@ -755,7 +804,7 @@ function bounceBossProjectile(shot){
 function bossProjectileStatus(shot){
  if(dashInvulnerable())return;
  if(shot.element==='frost')p.slowUntil=arenaTime+1.4;
- if(shot.element==='fire'||shot.element==='poison')playerBleed.push({remaining:shot.element==='fire'?3:4,rate:1.2});
+ if(shot.element==='fire'||shot.element==='poison')addEnemyBleed(shot.element==='fire'?'bossFire':'bossPoison');
 }
 function drawBiomeBossBody(unit,flash){
  const def=BOSS_BLUEPRINTS[unit.variant];if(!def||def.biome==='basic')return false;
@@ -1324,7 +1373,8 @@ function playBatImpact(clean){
  tone.connect(gain);gain.connect(combatAudio.destination);
  tone.start(now);tone.stop(now+.1);
 }
-let bestiaryFilter='all',selectedBestiary=null;
+const BESTIARY_MAX_DEPTH=14;
+let bestiaryFilter='all',selectedBestiary=null,bestiaryDepth=1,bestiaryReveal=false;
 function slotKey(slot){return 'dd-save-slot-'+slot}
 function safeNumber(value,fallback=0,min=0,max=1e8){return Number.isFinite(value)?Math.max(min,Math.min(max,value)):fallback}
 function knownDictionary(value,definitions){
@@ -1547,34 +1597,185 @@ function bestiaryPortrait(entry){
  if(entry.id==='royalSlime')return sandboxEnemyIcon({id:'round',color:entry.color,name:entry.name});
  return sandboxEnemyIcon(entry);
 }
+function bestiaryDepthLabel(depth){
+ return 'Dungeon '+depth+(depth===BESTIARY_MAX_DEPTH?'+':'');
+}
+function bestiaryHealth(entry,depth,elite=false){
+ if(entry.boss)return bossMaxHealth(BOSS_BLUEPRINTS[entry.id.slice(5)],depth);
+ return enemyMaxHealth(entry.id,depth,elite);
+}
+function bestiaryEnemyAttacks(id){
+ const rows=[];
+ const add=(name,damage,detail='')=>rows.push([name,damage==null?detail:damage+' HP'+(detail?' '+detail:'')]);
+ if(id==='royalSlime'){
+  add('Return to the king',null,'Heals the king by 2 HP');
+  add('Body contact',ENEMY_DAMAGE.contact);
+  return rows;
+ }
+ if(id==='laser'){add('Laser beam',ENEMY_DAMAGE.laser,'per hit');return rows}
+ if(id==='cannon'){add('Artillery blast',ENEMY_DAMAGE.artillery);return rows}
+ if(RANGED.includes(id)){
+  const kind=enemyShotKind(id),shot=ENEMY_PROJECTILES[kind];
+  add(shot.name,shot.damage,'per projectile');
+  if(kind==='spitter')add('Poison pool',ENEMY_DAMAGE.poisonTick,'per tick');
+  if(kind==='frostcaster')add('Slow',null,'2 seconds');
+  if(ENEMY_BLEED[kind])add('Bleed',ENEMY_BLEED[kind][0],'over time');
+  return rows;
+ }
+ if(id!=='healer'){
+  add('Body contact',id==='bloodletter'?ENEMY_DAMAGE.bloodContact:ENEMY_DAMAGE.contact);
+  if(id==='bloodletter')add('Contact bleed',ENEMY_BLEED.bloodContact[0],'over time');
+ }
+ const ability=ENEMY_SPECIALS[id],hit=ENEMY_SPECIAL_DAMAGE[ability];
+ if(hit){
+  const labels={slam:'Ground slam',blood:'Blood strike',fire:'Flame ring',electric:'Electric strike',magnet:'Magnetic pulse',mirror:'Repulsion pulse',sponge:'Stored shockwave',bomb:'Detonation'};
+  add(labels[ability],hit[0],hit[1]===hit[0]?'':'· '+hit[1]+' elite');
+ }
+ switch(id){
+  case 'square':case 'round':case 'rubber':add('Charge contact',ENEMY_DAMAGE.charge);break;
+  case 'fire':add('Impact burst',ENEMY_DAMAGE.fireImpact);add('Burning ground',ENEMY_DAMAGE.fireTick,'per tick');break;
+  case 'electric':add('Impact chain',ENEMY_DAMAGE.electricImpact);add('Charged ground',ENEMY_DAMAGE.electricTick,'per tick');break;
+  case 'water':add('Water pool',null,'Slippery ground');break;
+  case 'poison':add('Poison pool',ENEMY_DAMAGE.poisonTick,'per tick');break;
+  case 'crystal':add('Crystal shard',ENEMY_DAMAGE.shard,'per shard');break;
+  case 'bloodletter':add('Strike bleed',ENEMY_BLEED.bloodSpecial[0],'over time');break;
+  case 'healer':case 'regenerator':add('Healing pulse',null,'2 HP to allies · 4 elite');break;
+  case 'gravity':add('Gravity well',null,'Pulls, then knocks back');break;
+  case 'merge':add('Rally',null,'Boosts allied movement');break;
+  case 'splitter':add('Brood / split',null,'2 summoned / 3 on defeat');break;
+  case 'cinderknight':add('Short rush',null,'Contact plus knockback');break;
+  case 'rootguard':add('Root patch',ZONE_DAMAGE.roots,'per tick + slow');break;
+  case 'frostguard':add('Frost ring / shards',null,'Slow');break;
+ }
+ return rows;
+}
+function bestiaryBossAttacks(id,def){
+ const rows=[],special=BOSS_SPECIALS[id];
+ const add=(name,amount,unit='')=>rows.push([name,bossDamageAmount(amount)+' HP'+(unit?' '+unit:'')]);
+ add('Body contact',BOSS_DAMAGE.contact);
+ if(def.archetype==='gatekeeper'){
+  add('Charge',BOSS_DAMAGE.charge);
+  add('Cannonball',BOSS_DAMAGE.cannonball,'per shot');
+ }
+ if(def.archetype==='crystal'||id==='phoenix'||id==='avalanche'||id==='glacier')add('Regular volley',BOSS_DAMAGE.crystal,'per shot');
+ if(def.archetype==='slime'){
+  add('Jump landing',BOSS_DAMAGE.landing);
+  if(id!=='phoenix')add('Split landing',BOSS_DAMAGE.splitLanding);
+ }
+ const zone={slime:'roots',furnace:'fire',hydra:'fire',phoenix:'fire',briar:'roots',matriarch:'poison',mire:'poison',glacier:'frost',oracle:'frost',avalanche:'frost'}[id];
+ if(zone)rows.push(['Lingering '+zone,ZONE_DAMAGE[zone]+' HP per tick']);
+ if(id==='oracle')add('Prism beam',BOSS_DAMAGE.beam,'per hit');
+ if(id==='mire')add('Twin tether',BOSS_DAMAGE.tether,'per hit');
+ if(['fire','poison'].includes(def.element)&&id!=='furnace'&&id!=='briar'&&id!=='mire'){
+  rows.push(['Volley bleed',ENEMY_BLEED[def.element==='fire'?'bossFire':'bossPoison'][0]+' HP over time']);
+ }
+ if(id==='furnace')rows.push(['Cannonball bleed',ENEMY_BLEED.bossFire[0]+' HP over time']);
+ if(id==='briar')rows.push(['Cannonball bleed',ENEMY_BLEED.bossPoison[0]+' HP over time']);
+ add(id==='gatekeeper'?'Wall crash quake / enrage ring':id==='crystal'?'Spike trap / enrage ring':id==='avalanche'?'Landing rockfall / enrage ring':'Enrage ring',BOSS_DAMAGE.quake,'per hit');
+ add(special.name,bossSignatureDamage(special),['rings','curtain','wings'].includes(special.type)?'per projectile':'per hit');
+ return rows;
+}
+function bestiaryStats(entry,depth){
+ const hp=bestiaryHealth(entry,depth),vitals=[['Starting HP',hp+' HP']];
+ if(entry.boss){
+  const id=entry.id.slice(5),def=BOSS_BLUEPRINTS[id],kind=def.archetype;
+  const body=[['Radius',bossRadius(kind)+' units']];
+  if(kind==='crystal'){
+   vitals.push(['Armour plates',bossArmour(def)+' → '+bossArmour(def,true)]);
+   body.push(['Core exposure','6 seconds']);
+  }else if(kind==='gatekeeper'){
+   body.push(['Charge count','1 → 2'],['Wall crash stun','2.1 seconds']);
+  }else if(id==='phoenix'){
+   const rebirth=bossRebirthHealth(hp);
+   vitals.push(['Rebirth HP','+'+rebirth+' HP'],['Total across both lives',hp+rebirth+' HP']);
+  }else{
+   vitals.push(['Split at',hp/2+' HP remaining'],['Each half at an exact half-HP split',hp/4+' HP']);
+   body.push(['Split radius',bossRadius(kind,true)+' units']);
+  }
+  return {vitals,body,attacks:bestiaryBossAttacks(id,def),note:kind==='crystal'?'Armour counts are for the start of the fight and when it rebuilds in phase two.':kind==='slime'&&id!=='phoenix'?'Each half gets half of the health actually left when the boss splits.':''};
+ }
+ const royal=entry.id==='royalSlime',shape=royal?'round':entry.id;
+ const def=royal?ROYAL_SLIME:enemyDefinition(shape),stats=enemyStats({shape,mass:def.mass});
+ const body=[];
+ const compare=(normal,elite,units='')=>normal+(royal?'':' / '+elite)+units;
+ const format=value=>Number(value.toFixed(2));
+ vitals[0][0]=royal?'Fixed HP':'Standard HP';
+ if(!royal)vitals.push(['Elite HP',bestiaryHealth(entry,depth,true)+' HP']);
+ body.push(['Mass',compare(stats.mass,stats.mass*2)]);
+ body.push(['Radius',compare(def.r,format(def.r*1.4),' units')]);
+ body.push(['Bounce',stats.elasticity+'×'],['Fusion stability',stats.stability+'%'],['Health regen',stats.regen+' HP/s']);
+ body.push(['Armour impact required',royal?'None':(stats.toughness||'None')+' / '+enemyStats({shape,elite:true}).toughness]);
+ const ability=ENEMY_SPECIALS[shape],cast=ENEMY_CASTS[ability];
+ if(cast&&!royal)body.push(['Special windup',cast[0]+' s'],['Special range',cast[2]+' units']);
+ const shot=ENEMY_PROJECTILES[enemyShotKind(shape)];
+ if(shot)body.push(['Projectiles per volley',shot.count],['Projectile speed',shot.speed+' units/s']);
+ const note=royal?'Summoned by the king. Its HP stays fixed.':entry.id==='mini'?'Summoned minis scale with depth. Fragments spawned on a splitter’s defeat have 2 HP.':'';
+ return {vitals,body,attacks:bestiaryEnemyAttacks(entry.id),note};
+}
+function bestiaryStatCards(rows,hp=false){
+ return '<dl class="index-stats">'+rows.map(([label,value])=>'<div class="index-stat'+(hp?' hp':'')+'"><dt>'+label+'</dt><dd>'+value+'</dd></div>').join('')+'</dl>';
+}
+function bestiaryKnown(entry){
+ const record=profile.bestiary[entry.id];
+ return !!record&&record.encounters+record.kills>0;
+}
 function renderBestiaryDetail(){
  const panel=document.querySelector('#bestiary-detail');panel.innerHTML='';
  const entry=bestiaryCatalog().find(item=>item.id===selectedBestiary);
- if(!entry){panel.innerHTML='<div class="index-placeholder">Select an entry to inspect its picture and records.</div>';return}
+ if(!entry){panel.innerHTML='<div class="index-placeholder">Choose an enemy or boss to see its HP, attacks, and stats.</div>';return}
  const record=profile.bestiary[entry.id];
- if(!record||record.encounters+record.kills===0){panel.innerHTML='<div class="unknown-portrait">?</div><h2>UNDISCOVERED</h2><p>Encounter this enemy in a dungeon to reveal its image and records.</p>';return}
- panel.innerHTML='<div class="index-portrait">'+bestiaryPortrait(entry)+'</div><h2>'+entry.name+'</h2><small>'+BIOME_DEFS[entry.biome].name+(entry.boss?' · BOSS':'')+'</small><div class="index-records"><strong>'+record.encounters+' encounters</strong><strong>'+record.kills+' defeats</strong></div><p>'+enemyDescription(entry)+'</p>';
+ const known=bestiaryKnown(entry);
+ if(!known&&!bestiaryReveal){panel.innerHTML='<div class="unknown-portrait">?</div><h2>Undiscovered</h2><p>Encounter it in a dungeon or turn on Show undiscovered stats.</p>';return}
+ const stats=bestiaryStats(entry,bestiaryDepth);
+ const records=known?record.encounters+' encounters · '+record.kills+' defeats':'Undiscovered in your runs';
+ panel.innerHTML='<div class="index-entry-heading"><div class="index-portrait">'+bestiaryPortrait(entry)+'</div><div><h2>'+entry.name+'</h2><small>'+BIOME_DEFS[entry.biome].name+(entry.boss?' · Boss':'')+'</small></div></div>'
+  +'<h3 class="index-stat-heading">'+bestiaryDepthLabel(bestiaryDepth)+'</h3>'+bestiaryStatCards(stats.vitals,true)
+  +(stats.note?'<p class="index-context">'+stats.note+'</p>':'')
+  +'<h3 class="index-stat-heading">Attacks</h3><p class="index-context">Damage before shields or damage reduction.</p><dl class="index-attacks">'
+  +stats.attacks.map(([label,value])=>'<div><dt>'+label+'</dt><dd>'+value+'</dd></div>').join('')+'</dl>'
+  +'<h3 class="index-stat-heading">'+(entry.boss?'Fight stats':'Body stats · Standard / Elite')+'</h3>'+bestiaryStatCards(stats.body)
+  +'<p>'+enemyDescription(entry)+'</p><div class="index-records">'+records+'</div>';
 }
 function renderBestiary(){
  const entries=bestiaryCatalog(),query=document.querySelector('#index-search').value.trim().toLowerCase(),grid=document.querySelector('#bestiary-grid');grid.innerHTML='';
- const discovered=entries.filter(entry=>profile.bestiary[entry.id]&&profile.bestiary[entry.id].encounters+profile.bestiary[entry.id].kills>0).length;
+ const discovered=entries.filter(bestiaryKnown).length;
  const total=Object.values(profile.bestiary).reduce((sum,record)=>sum+record.kills,0);
  document.querySelector('#index-summary').textContent=discovered+' / '+entries.length+' discovered · '+total+' total defeats';
  for(const entry of entries){
   if(bestiaryFilter==='bosses'&&!entry.boss||bestiaryFilter==='enemies'&&entry.boss)continue;
-  const record=profile.bestiary[entry.id],known=!!record&&(record.encounters+record.kills>0),name=known?entry.name:entry.boss?'Unknown boss':'Unknown enemy';
+  const known=bestiaryKnown(entry),visible=known||bestiaryReveal,name=visible?entry.name:entry.boss?'Unknown boss':'Unknown enemy';
   if(query&&!name.toLowerCase().includes(query))continue;
-  const button=document.createElement('button');button.type='button';button.className='index-tile'+(known?' discovered':' locked');
-  button.setAttribute('aria-label',name+(known?' · '+record.kills+' defeats':''));
-  button.innerHTML=(known?bestiaryPortrait(entry):'<span class="unknown-icon">?</span>')+'<strong>'+name+'</strong><small>'+(known?'Seen '+record.encounters+' · Defeated '+record.kills:'Not encountered')+'</small>';
-  button.onclick=()=>{selectedBestiary=entry.id;renderBestiaryDetail()};grid.appendChild(button);
+  const button=document.createElement('button');button.type='button';button.className='index-tile'+(visible?' discovered':' locked');
+  button.setAttribute('aria-pressed',String(selectedBestiary===entry.id));
+  button.innerHTML=(visible?bestiaryPortrait(entry):'<span class="unknown-icon">?</span>')+'<strong>'+name+'</strong>'
+   +(visible?'<small class="index-tile-hp" data-index-hp="'+entry.id+'">'+bestiaryHealth(entry,bestiaryDepth)+' HP</small>':'<small>Not encountered</small>');
+  button.onclick=()=>{
+   grid.querySelector('[aria-pressed="true"]')?.setAttribute('aria-pressed','false');
+   selectedBestiary=entry.id;button.setAttribute('aria-pressed','true');
+   renderBestiaryDetail();document.querySelector('#bestiary-detail').scrollTop=0;
+  };
+  grid.appendChild(button);
  }
  for(const filter of ['all','enemies','bosses'])document.querySelector('#index-'+filter).setAttribute('aria-pressed',String(filter===bestiaryFilter));
  renderBestiaryDetail();
 }
 function showBestiary(){
  stopMenuControls();document.querySelector('#sound-panel').hidden=true;document.querySelector('#character-panel').hidden=true;
- document.querySelector('#bestiary-panel').hidden=false;selectedBestiary=null;document.querySelector('#index-search').value='';renderBestiary();
+ bestiaryDepth=clamp(activeSlot?dungeonDepth:1,1,BESTIARY_MAX_DEPTH);
+ document.querySelector('#index-depth').value=bestiaryDepth;
+ updateBestiaryDepth(bestiaryDepth);
+ document.querySelector('#bestiary-panel').hidden=false;document.querySelector('#index-search').value='';renderBestiary();
+}
+function updateBestiaryDepth(depth){
+ bestiaryDepth=depth;
+ const label=bestiaryDepthLabel(depth);
+ document.querySelector('#index-depth-label').textContent=label;
+ document.querySelector('#index-depth').setAttribute('aria-valuetext',label);
+ const entries=new Map(bestiaryCatalog().map(entry=>[entry.id,entry]));
+ for(const el of document.querySelectorAll('[data-index-hp]')){
+  el.textContent=bestiaryHealth(entries.get(el.dataset.indexHp),depth)+' HP';
+ }
+ renderBestiaryDetail();
 }
 function showSoundSettings(){
  stopMenuControls();document.querySelector('#bestiary-panel').hidden=true;document.querySelector('#character-panel').hidden=true;document.querySelector('#sound-panel').hidden=false;
@@ -1589,6 +1790,8 @@ function initializePersistence(){
  document.querySelector('#index-close').onclick=()=>{document.querySelector('#bestiary-panel').hidden=true};
  document.querySelector('#sound-close').onclick=()=>{document.querySelector('#sound-panel').hidden=true};
  document.querySelector('#index-search').oninput=renderBestiary;
+ document.querySelector('#index-depth').oninput=event=>updateBestiaryDepth(Number(event.target.value));
+ document.querySelector('#index-reveal').onchange=event=>{bestiaryReveal=event.target.checked;renderBestiary()};
  for(const filter of ['all','enemies','bosses'])document.querySelector('#index-'+filter).onclick=()=>{bestiaryFilter=filter;renderBestiary()};
  for(const key of ['master','music','effects'])document.querySelector('#sound-'+key).oninput=event=>{profile.audio[key]=Math.round(safeNumber(Number(event.target.value),80,0,100));document.querySelector('#sound-'+key+'-value').textContent=profile.audio[key]+'%';profileDirty=true;flushProfile()};
  document.querySelector('#sound-muted').onchange=event=>{profile.audio.muted=!!event.target.checked;profileDirty=true;flushProfile()};
@@ -1880,12 +2083,20 @@ const BOSS_TYPES=['gatekeeper','crystal','slime'];
 const BOSS_NAMES={gatekeeper:'THE GATEKEEPER',crystal:'THE CRYSTAL EYE',slime:'THE SLIME KING'};
 let bossFight=null;
 function chooseBoss(){const pool=currentBiome().bosses;return pool[Math.floor(Math.random()*pool.length)]}
+function bossMaxHealth(def,depth=dungeonDepth,part=false,practice=false){
+ const scale=practice?1:floorDifficulty(depth);
+ const baseMaxHp=Math.ceil(def.hp*(part?.25:1)*scale*(practice?1:.75));
+ return baseMaxHp*BOSS_HEALTH_MULTIPLIER;
+}
+function bossRebirthHealth(maxHp){
+ return BOSS_HEALTH_MULTIPLIER*Math.max(1,Math.ceil(maxHp/BOSS_HEALTH_MULTIPLIER*.48));
+}
+function bossRadius(kind,part=false){return kind==='gatekeeper'?28:kind==='crystal'?25:part?22:34}
+function bossArmour(def,phase2=false){return def.archetype==='crystal'?(def.biome==='basic'?4:3)-Number(phase2):0}
 function createBossUnit(id,x,y,part=false){
  const def=BOSS_BLUEPRINTS[id]||BOSS_BLUEPRINTS.slime,kind=def.archetype;
- const practice=inSandbox(),scale=practice?1:floorDifficulty();
- const baseMaxHp=Math.ceil(def.hp*(part?.25:1)*scale*(practice?1:.75));
- const maxHp=baseMaxHp*BOSS_HEALTH_MULTIPLIER;
- return {kind,variant:id,color:def.color,x,y,r:kind==='gatekeeper'?28:kind==='crystal'?25:part?22:34,hp:maxHp,maxHp,part,state:'recover',timer:part?1.7:1.2,hitCooldown:0,turn:0,phase2:part,armour:kind==='crystal'?(def.biome==='basic'?4:3):0,vulnerable:0,chargesLeft:0,signatureClock:id==='crystal'?4.1:5.3,prismState:null,prismClock:5};
+ const maxHp=bossMaxHealth(def,dungeonDepth,part,inSandbox());
+ return {kind,variant:id,color:def.color,x,y,r:bossRadius(kind,part),hp:maxHp,maxHp,part,state:'recover',timer:part?1.7:1.2,hitCooldown:0,turn:0,phase2:part,armour:bossArmour(def),vulnerable:0,chargesLeft:0,signatureClock:id==='crystal'?4.1:5.3,prismState:null,prismClock:5};
 }
 function startBossFight(id){
  const unit=createBossUnit(id,W/2,F/2);
@@ -1895,9 +2106,11 @@ function startBossFight(id){
 function bossSpark(x,y,color='#ffe4a3'){
  wallFx.push({type:'particle',x,y,vx:0,vy:-25,life:.35,maxLife:.35,color,size:4});
 }
+const BOSS_DAMAGE={contact:8,charge:16,cannonball:12,crystal:7,quake:14,landing:15,splitLanding:11,beam:4,tether:3};
+function bossDamageAmount(amount){return Math.ceil(amount*2.5)}
 function hurtBossPlayer(amount,x,y,blockable=false,radius=0){
  if(!enemyAttacksEnabled()||inv>0||over||p.falling)return;
- const strike=Math.ceil(amount*2.5);
+ const strike=bossDamageAmount(amount);
  if(blockable&&shieldHit(x,y,radius)){shieldDamage(strike*1.8);inv=.45;bossSpark(p.x,p.y,'#8ceaff');return}
  hp=damagedHealth(strike);inv=.8;
  const dx=p.x-x,dy=p.y-y,d=Math.hypot(dx,dy)||1;
@@ -1977,7 +2190,7 @@ function markCrystalSpikes(unit){
  for(const [dx,dy] of offsets)bossFight.hazards.push({x:clamp(p.x+dx,40,W-40),y:clamp(p.y+dy,40,F-40),r:19,warn:1.1,life:.8,active:false,hit:false});
 }
 function updateCrystalEye(unit,dt){
- if(unit.vulnerable>0){unit.vulnerable=Math.max(0,unit.vulnerable-dt);if(unit.vulnerable===0&&unit.hp>0){unit.armour=unit.phase2?3:4;bossSpark(unit.x,unit.y,'#a5efff')}}
+ if(unit.vulnerable>0){unit.vulnerable=Math.max(0,unit.vulnerable-dt);if(unit.vulnerable===0&&unit.hp>0){unit.armour=bossArmour(BOSS_BLUEPRINTS[unit.variant],unit.phase2);bossSpark(unit.x,unit.y,'#a5efff')}}
  unit.timer-=dt;
  if(unit.state==='recover'&&unit.timer<=0){
   unit.turn++;
@@ -1991,7 +2204,7 @@ function spawnBossSlimes(unit){
  const count=bossFight.units.length>1?1:3;
  for(let i=0;i<count&&enemies.filter(e=>e.bossMinion&&e.hp>0).length<6;i++){
   const a=(i+1)*Math.PI*2/(count+1)+unit.turn;
-  enemies.push({x:clamp(unit.x+Math.cos(a)*(unit.r+27),30,W-30),y:clamp(unit.y+Math.sin(a)*(unit.r+27),30,F-30),vx:Math.cos(a)*40,vy:Math.sin(a)*40,r:8,shape:'round',bossMinion:true,mass:.55,hp:2,maxHp:2,phaseIn:.4,healGlow:0,cool:0,impactCooldown:0,playerHealCooldown:0,elementCooldown:0,poisonTimer:0,fusionCooldown:999,splitCooldown:0,magnetCooldown:0,specialCooldown:0,regenPulse:0});
+  enemies.push({x:clamp(unit.x+Math.cos(a)*(unit.r+27),30,W-30),y:clamp(unit.y+Math.sin(a)*(unit.r+27),30,F-30),vx:Math.cos(a)*40,vy:Math.sin(a)*40,...ROYAL_SLIME,shape:'round',bossMinion:true,maxHp:ROYAL_SLIME.hp,phaseIn:.4,healGlow:0,cool:0,impactCooldown:0,playerHealCooldown:0,elementCooldown:0,poisonTimer:0,fusionCooldown:999,splitCooldown:0,magnetCooldown:0,specialCooldown:0,regenPulse:0});
  }
 }
 function updateSlimeKing(unit,dt){
@@ -2005,7 +2218,7 @@ function updateSlimeKing(unit,dt){
   const progress=1-Math.max(0,unit.timer)/.75;
   if(enemyMovementEnabled()){unit.x=unit.jumpX+(unit.targetX-unit.jumpX)*progress;unit.y=unit.jumpY+(unit.targetY-unit.jumpY)*progress;}
   if(unit.timer<=0){
-   if(Math.hypot(p.x-unit.x,p.y-unit.y)<unit.r+19)hurtBossPlayer(unit.part?11:15,unit.x,unit.y);
+   if(Math.hypot(p.x-unit.x,p.y-unit.y)<unit.r+19)hurtBossPlayer(unit.part?BOSS_DAMAGE.splitLanding:BOSS_DAMAGE.landing,unit.x,unit.y);
    elementFx.push({type:'shock',x:unit.x,y:unit.y,radius:unit.r+20,life:.4,maxLife:.4});
    unit.turn++;if(unit.turn%2===0)spawnBossSlimes(unit);
    unit.state='recover';unit.timer=unit.part?1.1:1.5;
@@ -2028,7 +2241,7 @@ function updateBossShots(dt,previousAngle){
    }
    if(laserDistance(p.x,p.y,{x1:ox,y1:oy,x2:shot.x,y2:shot.y})<shot.r+9){
     if(shot.damage&&dashInvulnerable())continue;
-    hurtBossPlayer(shot.damage??(shot.kind==='cannonball'?12:7),shot.x,shot.y);
+     hurtBossPlayer(shot.damage??BOSS_DAMAGE[shot.kind]??BOSS_DAMAGE.crystal,shot.x,shot.y);
     bossProjectileStatus(shot);shot.life=0;
    }
   }else for(const unit of bossFight.units){
@@ -2077,7 +2290,7 @@ function updateBossFight(dt,previousAngle){
    if(unit.hp<=0)continue;
    const dx=p.x-unit.x,dy=p.y-unit.y,dist=Math.hypot(dx,dy),reach=unit.r+9;
    if(dist<reach){const nx=dist>.001?dx/dist:1,ny=dist>.001?dy/dist:0;
-    if(unit.state!=='stunned')hurtBossPlayer(unit.state==='charge'?16:8,unit.x,unit.y,true,unit.r);
+    if(unit.state!=='stunned')hurtBossPlayer(unit.state==='charge'?BOSS_DAMAGE.charge:BOSS_DAMAGE.contact,unit.x,unit.y,true,unit.r);
     p.x=clamp(unit.x+nx*(reach+1),23,W-23);p.y=clamp(unit.y+ny*(reach+1),23,F-23);
    }
   }
@@ -3079,16 +3292,16 @@ function executeEnemyAbility(e,a){
   e.vx+=Math.cos(angle)*force;e.vy+=Math.sin(angle)*force;e.chargeUntil=arenaTime+.48;
   elementFx.push({type:'shock',x:e.x,y:e.y,radius:e.r+12,life:.3,maxLife:.3});return;
  }
- if(kind==='slam'){specialPlayerHit(x,y,48,e.elite?22:18,e);e.slowUntil=arenaTime+.9}
- else if(kind==='blood'){if(specialPlayerHit(x,y,42,9,e))playerBleed.push({remaining:6,rate:1.5})}
- else if(kind==='fire'){specialPlayerHit(e.x,e.y,55,12,e);triggerReaction('fire',e.x,e.y,49)}
- else if(kind==='electric'){specialPlayerHit(x,y,45,10,e);triggerReaction('electric',x,y,45)}
+ if(kind==='slam'){specialPlayerHit(x,y,48,ENEMY_SPECIAL_DAMAGE.slam[Number(e.elite||false)],e);e.slowUntil=arenaTime+.9}
+ else if(kind==='blood'){if(specialPlayerHit(x,y,42,ENEMY_SPECIAL_DAMAGE.blood[0],e))addEnemyBleed('bloodSpecial')}
+ else if(kind==='fire'){specialPlayerHit(e.x,e.y,55,ENEMY_SPECIAL_DAMAGE.fire[0],e);triggerReaction('fire',e.x,e.y,49)}
+ else if(kind==='electric'){specialPlayerHit(x,y,45,ENEMY_SPECIAL_DAMAGE.electric[0],e);triggerReaction('electric',x,y,45)}
  else if(kind==='water')puddles.push({x,y,r:43,life:3.7,maxLife:3.7});
  else if(kind==='poison')poisonPuddles.push({x,y,r:37,life:3.8,maxLife:3.8});
  else if(kind==='gravity')gravityWells.push({x,y,life:2,maxLife:2,range:70,elite:e.elite});
- else if(kind==='magnet'){shockwave(e,270,82);specialPlayerHit(e.x,e.y,68,10,e)}
- else if(kind==='mirror'){shockwave(e,225,63);specialPlayerHit(e.x,e.y,63,11,e)}
- else if(kind==='sponge'){shockwave(e,290,75);specialPlayerHit(e.x,e.y,75,13,e)}
+ else if(kind==='magnet'){shockwave(e,270,82);specialPlayerHit(e.x,e.y,68,ENEMY_SPECIAL_DAMAGE.magnet[0],e)}
+ else if(kind==='mirror'){shockwave(e,225,63);specialPlayerHit(e.x,e.y,63,ENEMY_SPECIAL_DAMAGE.mirror[0],e)}
+ else if(kind==='sponge'){shockwave(e,290,75);specialPlayerHit(e.x,e.y,75,ENEMY_SPECIAL_DAMAGE.sponge[0],e)}
  else if(kind==='bomb'){if(e.bombTimer<=0)e.bombTimer=1.45}
  else if(kind==='frost'){triggerReaction('ice',x,y,57);p.slowUntil=Math.hypot(p.x-x,p.y-y)<57?Math.max(p.slowUntil||0,arenaTime+1.3):p.slowUntil}
  else if(kind==='crystal'){
@@ -3167,7 +3380,7 @@ e.elementCooldown=1.25;elementFx.push({type:'fire',x:e.x,y:e.y,r:0,life:.38,maxL
 for(let target of enemies){if(target===e||target.hp<=0||target.shape==='fire')continue;
 let distance=Math.hypot(target.x-e.x,target.y-e.y);
 if(distance<39+target.r&&canDamage(target,speed))target.hp-=2}
-if(Math.hypot(p.x-e.x,p.y-e.y)<48&&inv<=0){hp=damagedHealth(10);inv=.65;if(hp<=0)over=true}
+if(Math.hypot(p.x-e.x,p.y-e.y)<48&&inv<=0){hp=damagedHealth(ENEMY_DAMAGE.fireImpact);inv=.65;if(hp<=0)over=true}
 }else if(e.shape==='water'){
 e.elementCooldown=1.45;puddles.push({x:e.x,y:e.y,r:34,life:3.6,maxLife:3.6});
 }else if(e.shape==='poison'){
@@ -3182,7 +3395,7 @@ let origin={x:e.x,y:e.y},hits=0;
 for(let item of candidates){if(hits>=(e.elite?3:2))break;
 let target=item.t;
 if(target){if(!canDamage(target,speed))continue;target.hp-=2;target.cool=Math.max(target.cool,.18)}
-else{if(inv<=0){hp=damagedHealth(9);inv=.65;if(hp<=0)over=true}}
+else{if(inv<=0){hp=damagedHealth(ENEMY_DAMAGE.electricImpact);inv=.65;if(hp<=0)over=true}}
 elementFx.push({type:'lightning',x:origin.x,y:origin.y,x2:target?target.x:p.x,y2:target?target.y:p.y,life:.23,maxLife:.23});
 origin=target||p;hits++;
 }
@@ -3916,7 +4129,7 @@ healFx=healFx.filter(f=>(f.life-=dt)>0);wallFx=wallFx.filter(f=>{f.life-=dt;if(f
 if(!over&&!p.falling){let l=sticks[0],ox=p.x,oy=p.y;
 poisonPlayerTimer=Math.max(0,poisonPlayerTimer-dt);playerPoisonGlow=Math.max(0,playerPoisonGlow-dt);
 if(poisonPuddles.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<q.r+7))playerPoisonGlow=.24;
-if(poisonPlayerTimer<=0&&poisonPuddles.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<q.r+7)){hp=damagedHealth(5);poisonPlayerTimer=.65;if(hp<=0)over=true}
+if(poisonPlayerTimer<=0&&poisonPuddles.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<q.r+7)){hp=damagedHealth(ENEMY_DAMAGE.poisonTick);poisonPlayerTimer=.65;if(hp<=0)over=true}
 let onPuddle=puddles.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<q.r+7);let slideBoost=(onPuddle?1.65:1)*groundSlideFactor();
 p.kvx=(p.kvx||0)*Math.exp(-(curseActive('float')?2:groundSlideFactor()>1?3:6)*dt);p.kvy=(p.kvy||0)*Math.exp(-(curseActive('float')?2:groundSlideFactor()>1?3:6)*dt);
 if(!moveDash(dt)){p.x=clamp(p.x+(l.dx*playerStats().moveSpeed*(arenaTime<(p.slowUntil||0)?.58:1)*slideBoost+p.kvx)*dt,23,W-23);p.y=clamp(p.y+(l.dy*playerStats().moveSpeed*(arenaTime<(p.slowUntil||0)?.58:1)*slideBoost+p.kvy)*dt,23,F-23);}
@@ -3944,7 +4157,7 @@ if(d<radius&&d>e.r+m.r*.5){let f=strength*(1-d/radius)*dt/Math.sqrt(e.mass);e.vx
 let dx=m.x-p.x,dy=m.y-p.y,d=Math.hypot(dx,dy)||1;
 if(d<radius&&d>m.r+5){let f=90*(1-d/radius)*dt;p.kvx=(p.kvx||0)+dx/d*f*mode;p.kvy=(p.kvy||0)+dy/d*f*mode}
 }
-for(let e of enemies){if(e.hp<=0)continue;updateBiomeEnemy(e,dt);if((e.bleedStacks||0)>0&&e.hp>0){e.bleedTick=(e.bleedTick||0)+dt;e.bleedGlow=Math.max(0,(e.bleedGlow||0)-dt);if(e.bleedTick>=.5){e.hp-=Math.min(3,.12*e.bleedStacks)*e.bleedTick;e.bleedTick=0;e.bleedGlow=.25}}if(e.shape==='regenerator'&&e.hp>0&&e.hp<e.maxHp){e.hp=Math.min(e.maxHp,e.hp+1.1*dt);e.regenPulse=.35}e.regenPulse=Math.max(0,(e.regenPulse||0)-dt);e.phaseIn=Math.max(0,(e.phaseIn||0)-dt);e.fusionCooldown=Math.max(0,(e.fusionCooldown||0)-dt);e.splitCooldown=Math.max(0,(e.splitCooldown||0)-dt);e.specialCooldown=Math.max(0,(e.specialCooldown||0)-dt);if(e.bombTimer>0){e.bombTimer-=dt;if(e.bombTimer<=0){shockwave(e,e.elite?440:310,e.elite?145:105);specialPlayerHit(e.x,e.y,e.elite?120:95,e.elite?22:16,e);e.hp=0}}e.magnetCooldown=Math.max(0,(e.magnetCooldown||0)-dt);e.poisonGlow=Math.max(0,(e.poisonGlow||0)-dt);if(e.shape!=='poison'&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r))e.poisonGlow=.24;e.poisonTimer=Math.max(0,(e.poisonTimer||0)-dt);if(e.shape!=='poison'&&e.poisonTimer<=0&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r)){if(canDamage(e,115)){e.hp-=1;e.cool=Math.max(e.cool,.12)}e.poisonTimer=.7}e.elementCooldown=Math.max(0,(e.elementCooldown||0)-dt);e.cool=Math.max(0,e.cool-dt);e.impactCooldown=Math.max(0,e.impactCooldown-dt);e.playerHealCooldown=Math.max(0,e.playerHealCooldown-dt);e.healGlow=Math.max(0,e.healGlow-dt);let target=e.bossMinion&&bossFight?bossFight.units.filter(u=>u.hp>0).sort((a,b)=>Math.hypot(a.x-e.x,a.y-e.y)-Math.hypot(b.x-e.x,b.y-e.y))[0]||p:p;let dx=target.x-e.x,dy=target.y-e.y,d=Math.hypot(dx,dy)||1;updateEnemyAbility(e,dt,target,d);
+for(let e of enemies){if(e.hp<=0)continue;updateBiomeEnemy(e,dt);if((e.bleedStacks||0)>0&&e.hp>0){e.bleedTick=(e.bleedTick||0)+dt;e.bleedGlow=Math.max(0,(e.bleedGlow||0)-dt);if(e.bleedTick>=.5){e.hp-=Math.min(3,.12*e.bleedStacks)*e.bleedTick;e.bleedTick=0;e.bleedGlow=.25}}if(e.shape==='regenerator'&&e.hp>0&&e.hp<e.maxHp){e.hp=Math.min(e.maxHp,e.hp+1.1*dt);e.regenPulse=.35}e.regenPulse=Math.max(0,(e.regenPulse||0)-dt);e.phaseIn=Math.max(0,(e.phaseIn||0)-dt);e.fusionCooldown=Math.max(0,(e.fusionCooldown||0)-dt);e.splitCooldown=Math.max(0,(e.splitCooldown||0)-dt);e.specialCooldown=Math.max(0,(e.specialCooldown||0)-dt);if(e.bombTimer>0){e.bombTimer-=dt;if(e.bombTimer<=0){shockwave(e,e.elite?440:310,e.elite?145:105);specialPlayerHit(e.x,e.y,e.elite?120:95,ENEMY_SPECIAL_DAMAGE.bomb[Number(e.elite||false)],e);e.hp=0}}e.magnetCooldown=Math.max(0,(e.magnetCooldown||0)-dt);e.poisonGlow=Math.max(0,(e.poisonGlow||0)-dt);if(e.shape!=='poison'&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r))e.poisonGlow=.24;e.poisonTimer=Math.max(0,(e.poisonTimer||0)-dt);if(e.shape!=='poison'&&e.poisonTimer<=0&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r)){if(canDamage(e,115)){e.hp-=1;e.cool=Math.max(e.cool,.12)}e.poisonTimer=.7}e.elementCooldown=Math.max(0,(e.elementCooldown||0)-dt);e.cool=Math.max(0,e.cool-dt);e.impactCooldown=Math.max(0,e.impactCooldown-dt);e.playerHealCooldown=Math.max(0,e.playerHealCooldown-dt);e.healGlow=Math.max(0,e.healGlow-dt);let target=e.bossMinion&&bossFight?bossFight.units.filter(u=>u.hp>0).sort((a,b)=>Math.hypot(a.x-e.x,a.y-e.y)-Math.hypot(b.x-e.x,b.y-e.y))[0]||p:p;let dx=target.x-e.x,dy=target.y-e.y,d=Math.hypot(dx,dy)||1;updateEnemyAbility(e,dt,target,d);
 // Movement and attacks can be tested independently in the sandbox.
 if(e.isTreasure){
  if(enemyMovementEnabled()){const away=navigationAvoid(e,-dx/d,-dy/d);e.vx+=away.x*245*dt;e.vy+=away.y*245*dt}
@@ -3984,7 +4197,7 @@ if(e.x<18+e.r){e.x=18+e.r;e.vx=Math.abs(e.vx)*.85}if(e.x>W-18-e.r){e.x=W-18-e.r;
 if(e.y<18+e.r){e.y=18+e.r;e.vy=Math.abs(e.vy)*.85}if(e.y>F-18-e.r){e.y=F-18-e.r;e.vy=-Math.abs(e.vy)*.85}
 for(let w of walls)collideWall(e,w,dt);
 collideProps(e);if(collideGap(e,oldEX,oldEY)||collideHole(e,oldEX,oldEY,Math.hypot(e.vx,e.vy)))continue;teleportBody(e,dt);
-let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(e.shape!=='healer'&&!e.isTreasure&&!RANGED.includes(e.shape)){let push=Math.min(240,Math.max(65,Math.hypot(e.vx-p.vx,e.vy-p.vy)*.8));p.kvx-=nx*push;p.kvy-=ny*push;}if(e.shape!=='healer'&&enemyAttacksEnabled()&&!e.isTreasure&&!RANGED.includes(e.shape)&&inv===0){if(e.shape==='bloodletter'){playerBleed.push({remaining:12,rate:2});hp=damagedHealth(8);inv=1.1;if(hp<=0)over=true}else{hp=damagedHealth(e.chargeUntil>arenaTime?18:14);inv=1.1;if(hp<=0)over=true}}}
+let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(e.shape!=='healer'&&!e.isTreasure&&!RANGED.includes(e.shape)){let push=Math.min(240,Math.max(65,Math.hypot(e.vx-p.vx,e.vy-p.vy)*.8));p.kvx-=nx*push;p.kvy-=ny*push;}if(e.shape!=='healer'&&enemyAttacksEnabled()&&!e.isTreasure&&!RANGED.includes(e.shape)&&inv===0){if(e.shape==='bloodletter'){addEnemyBleed('bloodContact');hp=damagedHealth(ENEMY_DAMAGE.bloodContact);inv=1.1;if(hp<=0)over=true}else{hp=damagedHealth(e.chargeUntil>arenaTime?ENEMY_DAMAGE.charge:ENEMY_DAMAGE.contact);inv=1.1;if(hp<=0)over=true}}}
 // Solid bat: sweep its full arc so fast swings cannot tunnel through enemies.
 if(hero==='classic'){
 let sweep=p.a-previousBatAngle,steps=Math.max(1,Math.ceil(Math.abs(sweep)/.055)),hit=false;
@@ -4066,7 +4279,7 @@ a.impactCooldown=.3;b.impactCooldown=.3;a.cool=Math.max(a.cool,.15);b.cool=Math.
 }
 let restitution=Math.max(enemyStats(a).elasticity,enemyStats(b).elasticity,curseActive('pinball')?1.65:0);let jimp=-(1+restitution)*rel/tot;a.vx-=jimp*nx*invA;a.vy-=jimp*ny*invA;b.vx+=jimp*nx*invB;b.vy+=jimp*ny*invB;
 }}
-shards=shards.filter(q=>{q.life-=dt;if(q.life<=0)return false;q.x+=q.vx*dt;q.y+=q.vy*dt;if(q.x<17||q.x>W-17||q.y<17||q.y>F-17||blocked(q.x,q.y,2))return false;for(let e of enemies){if(e===q.owner||e.hp<=0||q.hit.has(e))continue;if(Math.hypot(e.x-q.x,e.y-q.y)<e.r+3){q.hit.add(e);if(canDamage(e,130))e.hp-=1;e.vx+=q.vx*.35/e.mass;e.vy+=q.vy*.35/e.mass;return false}}if(Math.hypot(p.x-q.x,p.y-q.y)<11){if(inv<=0){hp=damagedHealth(6);inv=.45;if(hp<=0)over=true}return false}return true});
+shards=shards.filter(q=>{q.life-=dt;if(q.life<=0)return false;q.x+=q.vx*dt;q.y+=q.vy*dt;if(q.x<17||q.x>W-17||q.y<17||q.y>F-17||blocked(q.x,q.y,2))return false;for(let e of enemies){if(e===q.owner||e.hp<=0||q.hit.has(e))continue;if(Math.hypot(e.x-q.x,e.y-q.y)<e.r+3){q.hit.add(e);if(canDamage(e,130))e.hp-=1;e.vx+=q.vx*.35/e.mass;e.vy+=q.vy*.35/e.mass;return false}}if(Math.hypot(p.x-q.x,p.y-q.y)<11){if(inv<=0){hp=damagedHealth(ENEMY_DAMAGE.shard);inv=.45;if(hp<=0)over=true}return false}return true});
 let defeated=collectDefeatedEnemies();for(let e of defeated)if(e.shape==='gravity'&&enemyAttacksEnabled())gravityWells.push({x:e.x,y:e.y,life:2.4,maxLife:2.4,range:e.elite?105:85,elite:e.elite});
 for(const fallen of defeated)if(fallen.elite||fallen.shape==='armored')for(const ally of enemies){
  if(ally!==fallen&&ally.hp>0&&['square','round','mini'].includes(ally.shape)&&Math.hypot(ally.x-fallen.x,ally.y-fallen.y)<140)ally.moraleUntil=arenaTime+1.5;
@@ -4174,5 +4387,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'DRAW':'BAT',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Bleed stacks '+bleedStacks,viewW/2,237)}
-requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.12';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.13';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>

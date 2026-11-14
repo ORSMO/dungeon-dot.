@@ -174,7 +174,7 @@ test('all 12 bosses have twice the previous HP in dungeons, practice and split f
     declaration('BOSS_HEALTH_MULTIPLIER'),
     source.slice(source.indexOf('const BOSS_BLUEPRINTS ='), source.indexOf('function currentBiome(')),
     'let inPractice=false,dungeonDepth=1,bossFight;const inSandbox=()=>inPractice,W=720,F=640;',
-    method('floorDifficulty'), method('createBossUnit'), method('startBossFight'),
+    method('floorDifficulty'),method('bossMaxHealth'),method('bossRadius'),method('bossArmour'),method('createBossUnit'),method('startBossFight'),
     'const rows=[];',
     'for(const [id,oldHp] of Object.entries({gatekeeper:90,crystal:72,slime:96,furnace:112,hydra:98,phoenix:114,briar:122,matriarch:102,mire:120,glacier:118,oracle:104,avalanche:128})){',
     ' for(dungeonDepth of [1,2,5,20])for(inPractice of [false,true]){',
@@ -199,7 +199,7 @@ test('Phoenix rebirth doubles the old rounded refill and split bosses conserve r
     'let bossFight,dungeonDepth=1,victories=0;const currentRoom={kind:"boss"},W=720,F=640,p={x:30,y:30,vel:0},arenaTime=1;',
     'const inSandbox=()=>false,enemyAttacksEnabled=()=>false,enemies=[],elementFx=[];',
     'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),bossSignatureRing=()=>{},bossSpiralShot=()=>{},showItemNotice=()=>{},updateBossZoneList=()=>{},updateBossShots=()=>{},updateBossSpecial=()=>{},finishBossFight=()=>victories++;',
-    method('floorDifficulty'), method('createBossUnit'), method('startBossFight'),
+    method('floorDifficulty'),method('bossMaxHealth'),method('bossRebirthHealth'),method('bossRadius'),method('bossArmour'),method('createBossUnit'),method('startBossFight'),
     method('handleBiomeBossPhase'), method('updateBossFight'),
     'startBossFight("phoenix");const phoenix=bossFight.units[0];phoenix.hp=0;updateBossFight(0,0);',
     'const rebirth={hp:phoenix.hp,state:phoenix.state,victories};phoenix.hp=0;updateBossFight(0,0);',
@@ -214,7 +214,7 @@ test('Phoenix rebirth doubles the old rounded refill and split bosses conserve r
 });
 
 const bossPatternMethods=[
-  declaration('BOSS_SPECIALS'), method('bossAngleBetween'),method('buildBossSpecial'),
+  declaration('BOSS_SPECIALS'),method('bossAngleBetween'),method('buildBossSpecial'),method('bossSignatureDamage'),
 ];
 const bossPatternArena='const W=720,F=640,p={x:470,y:350},clamp=(x,a,b)=>Math.max(a,Math.min(b,x));';
 
@@ -284,6 +284,35 @@ test('Archer strong shots crack boss armor without a reflection item', () => {
     'arenaTime=1.8;damageBoss(unit,3,"arrow");'
   ], '{weak,strong,armour:unit.armour,opening:unit.vulnerable,hp:unit.hp}');
   assert.deepEqual(result,{weak:2,strong:1,armour:0,opening:6,hp:100});
+});
+
+test('index HP matches actual dungeon spawns, including elite rounding and Dungeon 14+', () => {
+  const result=run([
+    declaration('RANGED'), declaration('ROYAL_SLIME'),declaration('ENEMY_SPECIALS'),
+    source.slice(source.indexOf('const BIOME_ENEMIES ='),source.indexOf('function currentBiome(')),
+    'let dungeonDepth=1;const inSandbox=()=>false;',
+    method('floorDifficulty'),method('enemyDefinition'),method('enemyMaxHealth'),method('makeEnemy'),
+    method('bossMaxHealth'),method('bossRadius'),method('bossArmour'),method('createBossUnit'),method('bestiaryHealth'),
+    'const rows=[];for(dungeonDepth of [1,4,14,30]){',
+    ' for(const elite of [false,true]){const enemy=makeEnemy("round",0,0,elite);rows.push([enemy.hp,bestiaryHealth({id:"round"},dungeonDepth,elite)]);}',
+    ' const boss=createBossUnit("gatekeeper",0,0);rows.push([boss.hp,bestiaryHealth({id:"boss:gatekeeper",boss:true},dungeonDepth)]);',
+    '}'
+  ], '{rows,royal:bestiaryHealth({id:"royalSlime"},30)}');
+  assert.ok(result.rows.every(([actual,index])=>actual===index));
+  assert.deepEqual(result.rows.map(([,hp])=>hp),[3,6,136,5,9,184,8,15,338,8,15,338]);
+  assert.equal(result.royal,2);
+});
+
+test('index damage uses combat values for elite slams and boss signatures', () => {
+  const result=run([
+    ...['RANGED','ENEMY_DAMAGE','ENEMY_SPECIAL_DAMAGE','ENEMY_BLEED','ENEMY_PROJECTILES','ENEMY_SPECIALS','BOSS_DAMAGE','ZONE_DAMAGE','BOSS_SPECIALS'].map(declaration),
+    method('enemyShotKind'),method('bossDamageAmount'),method('bossSignatureDamage'),
+    method('bestiaryEnemyAttacks'),method('bestiaryBossAttacks'),
+  ], '{armored:Object.fromEntries(bestiaryEnemyAttacks("armored")),oracle:Object.fromEntries(bestiaryBossAttacks("oracle",{archetype:"crystal",element:"frost"})),ice:Object.fromEntries(bestiaryEnemyAttacks("icewisp"))}');
+  assert.equal(result.armored['Ground slam'],'18 HP · 22 elite');
+  assert.equal(result.oracle['Sky Verdict'],'20 HP per hit');
+  assert.equal(result.oracle['Prism beam'],'10 HP per hit');
+  assert.equal(result.ice['Slow'],'2 seconds');
 });
 
 test('failed checkpoint writes are retained, throttled and retried successfully', () => {

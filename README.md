@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.13 — Enemy Index stats
+
+Open **Enemy Index** from the start screen or in-game settings. The HP slider updates every visible tile and the selected card. Dungeon 14+ is the cap for HP scaling. Enemy cards include standard and elite HP, damage by attack, status effects, and body stats. Boss cards also show armour plates, split health or rebirth HP where applicable, and signature damage. Damage is shown before shields or damage reduction. Use **Show undiscovered stats** to inspect entries early without changing your encounter records.
+
 ## V8.12 — Boss signature attacks
 
 | Boss | Signature |
