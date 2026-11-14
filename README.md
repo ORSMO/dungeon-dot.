@@ -2,6 +2,20 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.8 — Character combat and enemy AI reliability (mechanics only)
+
+- **Classic Bat:** The bat sweep, physical bat collision, and stationary bat defense are now exclusive to Classic Dot. Archer and Mage no longer have an invisible bat that pushes nearby enemies. Classic also cannot hit enemies through neutral stone walls or intact props.
+- **Archer:** Piercing arrows now resolve enemies **nearest first along their flight path**. Fast arrows can strike multiple enemies in the same frame; each enemy is hit at most once per arrow. Deflection and coin pickup now occur after solid collision checks, so arrows cannot reflect bullets through walls. Armoured targets stop arrows instead of consuming piercing charges on ineffective hits.
+- **Mage:** Automatic targeting prefers living enemies/nests with a clear projectile route, instead of locking onto an enemy hidden behind stone or crates. When none is visible, casts use the last facing direction.
+- **Enemy AI:** Ranged enemies only start a telegraphed volley when they have a clear line of fire; cover blocks their sight. Pathfinding searches a wider area for a safe navigable tile, and won't blindly steer directly into a wall when no path exists.
+- **No new visuals, items, enemies, or level changes.** Existing character controls and saves continue to work.
+
+### Regression coverage
+
+Run `node --test tests/core-reliability.test.cjs` from a repository clone (Node.js 20+). The existing GitHub Actions workflow runs the expanded **16-test suite** on pushes to `main` and pull requests. Six new tests cover Mage target selection, projectile line-of-sight, arrow sweep ordering, Classic-only bat physics, unreachable enemy navigation, and timed enemy specials.
+
+---
+
 ## V8.7 — Core reliability pass (no visual changes)
 
 V8.7 stabilizes **five foundational systems** before the later visual overhaul:
@@ -20,7 +34,7 @@ Run locally from a clone with Node.js 20 or newer:
 node --test tests/core-reliability.test.cjs
 ```
 
-Ten dependency-free tests cover game syntax, **1,200 generated dungeon graphs**, **40 tile layout orientations**, pit reward idempotency, sticky/neutral/bounce wall physics, diagonal pit checks, stored prop clearance, boss final-hit/victory behavior, and save-write failure/retry. GitHub Actions also runs the suite on commits to `main` and pull requests.
+The original ten dependency-free tests cover game syntax, **1,200 generated dungeon graphs**, **40 tile layout orientations**, pit reward idempotency, sticky/neutral/bounce wall physics, diagonal pit checks, stored prop clearance, boss final-hit/victory behavior, and save-write failure/retry. GitHub Actions also runs the suite on commits to `main` and pull requests.
 
 The suite is designed to catch regressions; it does **not** prove every boss, item interaction, or full playthrough is bug-free. Continue playtesting on phones, especially complex fights and long runs.
 
