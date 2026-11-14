@@ -169,6 +169,50 @@ test('boss hint survives the final-hit frame and victory rewards are idempotent'
   assert.equal(result.kills, 1);
 });
 
+test('all 12 bosses have twice the previous HP in dungeons, practice and split forms', () => {
+  const result = run([
+    declaration('BOSS_HEALTH_MULTIPLIER'),
+    source.slice(source.indexOf('const BOSS_BLUEPRINTS ='), source.indexOf('function currentBiome(')),
+    'let inPractice=false,dungeonDepth=1,bossFight;const inSandbox=()=>inPractice,W=720,F=640;',
+    method('floorDifficulty'), method('createBossUnit'), method('startBossFight'),
+    'const rows=[];',
+    'for(const [id,oldHp] of Object.entries({gatekeeper:90,crystal:72,slime:96,furnace:112,hydra:98,phoenix:114,briar:122,matriarch:102,mire:120,glacier:118,oracle:104,avalanche:128})){',
+    ' for(dungeonDepth of [1,2,5,20])for(inPractice of [false,true]){',
+    '  const expected=2*Math.ceil(oldHp*(inPractice?1:1+Math.min(1.5,(dungeonDepth-1)*.12))*(inPractice?1:.75));',
+    '  startBossFight(id);const unit=bossFight.units[0];',
+    '  rows.push({id,expected,hp:unit.hp,maxHp:unit.maxHp,hud:bossFight.totalMax});',
+    '  const part=createBossUnit(id,0,0,true);',
+    '  if(part.kind==="slime"&&id!=="phoenix"){const expectedPart=2*Math.ceil(oldHp*.25*(inPractice?1:floorDifficulty())*(inPractice?1:.75));rows.push({id,expected:expectedPart,hp:part.hp,maxHp:part.maxHp,hud:expectedPart});}',
+    ' }',
+    '}'
+  ], 'rows');
+  assert.equal(new Set(result.map(row => row.id)).size, 12);
+  for (const {id,expected,hp,maxHp,hud} of result) {
+    assert.deepEqual([hp,maxHp,hud], [expected,expected,expected], id);
+  }
+});
+
+test('Phoenix rebirth doubles the old rounded refill and split bosses conserve remaining HP', () => {
+  const result = run([
+    declaration('BOSS_HEALTH_MULTIPLIER'),
+    source.slice(source.indexOf('const BOSS_BLUEPRINTS ='), source.indexOf('function currentBiome(')),
+    'let bossFight,dungeonDepth=1,victories=0;const currentRoom={kind:"boss"},W=720,F=640,p={x:30,y:30,vel:0},arenaTime=1;',
+    'const inSandbox=()=>false,enemyAttacksEnabled=()=>false,enemies=[],elementFx=[];',
+    'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),bossSignatureRing=()=>{},bossSpiralShot=()=>{},showItemNotice=()=>{},updateBossZoneList=()=>{},updateBossShots=()=>{},finishBossFight=()=>victories++;',
+    method('floorDifficulty'), method('createBossUnit'), method('startBossFight'),
+    method('handleBiomeBossPhase'), method('updateBossFight'),
+    'startBossFight("phoenix");const phoenix=bossFight.units[0];phoenix.hp=0;updateBossFight(0,0);',
+    'const rebirth={hp:phoenix.hp,state:phoenix.state,victories};phoenix.hp=0;updateBossFight(0,0);',
+    'startBossFight("slime");bossFight.units[0].hp=57.5;updateBossFight(0,0);'
+  ], '{rebirth,victories,split:bossFight.split,hp:bossFight.units.map(unit=>unit.hp)}');
+  assert.deepEqual(result, {
+    rebirth:{hp:84,state:'rebirth',victories:0},
+    victories:1,
+    split:true,
+    hp:[28.75,28.75]
+  });
+});
+
 test('failed checkpoint writes are retained, throttled and retried successfully', () => {
   const result = run([
     'let savePending=true,saveRetryAt=0,saveError="",activeSlot=1,currentRoom={cleared:true},loadingRun=false,over=false,writes=0,clock=1000,allow=false,notes=0;',

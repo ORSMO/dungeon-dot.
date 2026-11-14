@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.11 — Boss health
+
+All 12 bosses start with twice their V8.10 HP in dungeon runs and practice. For example, Dungeon 1's Gatekeeper now has 136 HP, Crystal Eye 108 HP, and Slime King 144 HP. Ash Phoenix also returns with twice its previous rebirth HP. Splitting bosses divide their remaining health evenly between the two halves.
+
 ## V8.10 — Controls and combat feel
 
 - **Archer:** The draw ring shows when to release, when a shot is strong (70% draw), and when the bow is reloading. Releasing below 18% cancels the draw, including when the player slides back to center before lifting their thumb.
