@@ -2,6 +2,30 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.7 — Core reliability pass (no visual changes)
+
+V8.7 stabilizes **five foundational systems** before the later visual overhaul:
+
+- **Combat accounting:** Pit knockouts now count toward kills and award XP exactly once. They stay out of normal ground-loot/death-effect handling, avoiding unreachable drops and duplicate rewards.
+- **Physics:** Sticky-wall impacts no longer apply elemental and magnetic reactions twice; floor safety checks inspect all four diagonal pit directions. Neutral and bouncy walls retain distinct collision responses.
+- **Dungeon generation:** Each generated dungeon is checked for valid topology, reciprocal doors, a single boss, connected rooms, and unique coordinates. Generation retries malformed layouts. Saved breakable props are also checked against door-to-center routes and removed selectively if they block progression.
+- **Bosses:** The victory handler now guards against being called twice, and the Phoenix rebirth handler tolerates a missing unit. The earlier final-hit HUD freeze fix remains in place.
+- **Saves:** Failed storage writes retain their pending checkpoint instead of silently discarding it. The game retries after five seconds and gives explicit error feedback; successful writes clear the retry state.
+
+### Regression tests
+
+Run locally from a clone with Node.js 20 or newer:
+
+```sh
+node --test tests/core-reliability.test.cjs
+```
+
+Ten dependency-free tests cover game syntax, **1,200 generated dungeon graphs**, **40 tile layout orientations**, pit reward idempotency, sticky/neutral/bounce wall physics, diagonal pit checks, stored prop clearance, boss final-hit/victory behavior, and save-write failure/retry. GitHub Actions also runs the suite on commits to `main` and pull requests.
+
+The suite is designed to catch regressions; it does **not** prove every boss, item interaction, or full playthrough is bug-free. Continue playtesting on phones, especially complex fights and long runs.
+
+---
+
 ## V8.2 Archer Dot
 
 - **Choose a hero:** Start a fresh run as Classic Dot (the original silly bat) or Archer Dot (a bow). Each save slot remembers its own hero; old saves remain Classic Dot. Hero choice does not alter an existing save.
