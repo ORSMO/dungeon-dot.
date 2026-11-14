@@ -1330,7 +1330,7 @@ function initializePersistence(){
  for(const filter of ['all','enemies','bosses'])document.querySelector('#index-'+filter).onclick=()=>{bestiaryFilter=filter;renderBestiary()};
  for(const key of ['master','music','effects'])document.querySelector('#sound-'+key).oninput=event=>{profile.audio[key]=Math.round(safeNumber(Number(event.target.value),80,0,100));document.querySelector('#sound-'+key+'-value').textContent=profile.audio[key]+'%';profileDirty=true;flushProfile()};
  document.querySelector('#sound-muted').onchange=event=>{profile.audio.muted=!!event.target.checked;profileDirty=true;flushProfile()};
- const flush=()=>{flushCheckpoint();flushProfile()};window.addEventListener('pagehide',flush);document.addEventListener('visibilitychange',()=>{if(document.hidden)flush()});
+ const flush=()=>{if(hero==='mage'&&!loadingRun&&currentRoom?.cleared)queueCheckpoint();flushCheckpoint();flushProfile()};window.addEventListener('pagehide',flush);document.addEventListener('visibilitychange',()=>{if(document.hidden)flush()});
 }
 
 // Recipes are derived from inventory so old saves unlock them without migration.
@@ -2343,7 +2343,7 @@ function drawRoomMap(){
 let arenaTime=0;
 let p,enemies,hp,lives=3,kills,inv,over,roomEntrySide=null,last=0,spawnClock=0,healFx=[],wallFx=[],elementFx=[],puddles=[],poisonPuddles=[],poisonPlayerTimer=0,playerPoisonGlow=0,shards=[],portalFx=[];
 let arrows=[],bowShotCooldown=0;
-let mageBolts=[],mageZones=[],mageCooldowns={},mageGlobalReady=0,mageGesture=null,mageLastCast='',mageLastCastUntil=0,mageHitCount=0,mageCastCount=0,mageMana=100;
+let mageBolts=[],mageZones=[],mageCooldowns={},mageGlobalReady=0,mageGesture=null,mageLastCast='',mageLastCastUntil=0,mageHitCount=0,mageCastCount=0,mageMana=100,mageManaCheckpointAt=0;
 function showHeal(x,y){healFx.push({x,y,life:.85})}
 function showWallHit(w,x,y,nx,ny,speed){
 if(speed<22)return;
@@ -2579,7 +2579,10 @@ function castMageSpell(path){
 }
 function updateMage(dt){
  if(hero!=='mage'||over)return;
- restoreMageMana(mageManaRegen()*dt);
+ const previousMana=mageMana;restoreMageMana(mageManaRegen()*dt);
+ // Persist regenerated mana at safe checkpoints without writing localStorage every frame.
+ if(mageMana>previousMana&&!inSandbox()&&currentRoom?.cleared&&(arenaTime-mageManaCheckpointAt>=1.2||mageMana>=mageMaxMana()-.001)){mageManaCheckpointAt=arenaTime;queueCheckpoint()}
+
  for(const z of mageZones){
   z.life-=dt;z.tick+=dt;
   if(z.type==='meteor'){
@@ -3403,7 +3406,7 @@ function resolvePlayerDeath(){
  enterRoom(currentRoom.id,roomEntrySide);refillRoomShield();inv=2;
  showItemNotice('LIFE LOST · '+lives+' REMAIN · ROOM RESET');hud();
 }
-function reset(){mageMana=100;mageBolts=[];mageZones=[];mageGesture=null;mageCooldowns={};mageGlobalReady=0;mageLastCast='';mageHitCount=0;mageCastCount=0;document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;strongArrowHits=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
+function reset(){mageMana=100;mageManaCheckpointAt=0;mageBolts=[];mageZones=[];mageGesture=null;mageCooldowns={};mageGlobalReady=0;mageLastCast='';mageHitCount=0;mageCastCount=0;document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;strongArrowHits=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
 function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*viewW/r.width,y:(e.clientY-r.top)*H/r.height}}
 function setStick(s,v){let dx=v.x-s.x,dy=v.y-s.y,d=Math.hypot(dx,dy),radius=R*controls.size/100,k=d?Math.min(d,radius)/d/radius:0;s.dx=dx*k;s.dy=dy*k}
 c.addEventListener('pointerdown',e=>{e.preventDefault();let v=pt(e),i=v.x<viewW/2?0:1,s=sticks[i];if(hero==='mage'&&!editingControls&&i===1){const rune=mageRuneAt(v.x,v.y);if(rune&&mageInputEnabled()&&!mageGesture){mageGesture={id:e.pointerId,path:[rune.id],last:v};c.setPointerCapture(e.pointerId)}return}if(editingControls){if(editPointer)return;let nearest=sticks.map((st,j)=>({j,d:Math.hypot(st.x-v.x,st.y-v.y)})).filter(o=>o.d<R*controls.size/100+22).sort((a,b)=>a.d-b.d)[0];if(!nearest)return;editPointer={id:e.pointerId,i:nearest.j};c.setPointerCapture(e.pointerId);return}if(s.id!==null)return;if(controls.floating)moveStick(i,v);s.id=e.pointerId;c.setPointerCapture(e.pointerId);setStick(s,v)});
