@@ -67,7 +67,7 @@ footer #restart{display:none}
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
-<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.7</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
+<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.8</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
   <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true">⚪ CLASSIC DOT<br>SWING BAT</button><button id="hero-archer" type="button" aria-pressed="false">🏹 ARCHER DOT<br>DRAW BOW</button><button id="hero-mage" type="button" aria-pressed="false">🔮 MAGE DOT<br>DRAW RUNES</button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
@@ -2496,7 +2496,10 @@ function mageInputEnabled(){
 function mageAim(){
  const targets=[...enemies.filter(e=>e.hp>0),...(bossFight&&!bossFight.done?bossFight.units.filter(u=>u.hp>0):[]),...dungeonNests.filter(n=>n.hp>0)];
  let nearest=null,dist=Infinity;
- for(const e of targets){const d=Math.hypot(e.x-p.x,e.y-p.y);if(d<dist&&d<620){dist=d;nearest=e}}
+ for(const e of targets){
+  const d=Math.hypot(e.x-p.x,e.y-p.y);
+  if(d<dist&&d<620&&weaponLineClear(p.x,p.y,e.x,e.y,4)){dist=d;nearest=e}
+ }
  const a=nearest?Math.atan2(nearest.y-p.y,nearest.x-p.x):p.target||0;
  return {a,tx:nearest?.x??p.x+Math.cos(a)*170,ty:nearest?.y??p.y+Math.sin(a)*170};
 }
@@ -3297,6 +3300,17 @@ g.drawImage(layer,0,0);
 const NAV_CELL=16;
 let enemyNav=null;
 function resetEnemyNavigation(){enemyNav=null}
+// Projectile and targeting clearance checks solid walls and intact props.
+// Pits do not obstruct flying projectiles, unlike movement navigation.
+function weaponLineClear(ax,ay,bx,by,r=3){
+ const distance=Math.hypot(bx-ax,by-ay),steps=Math.max(1,Math.ceil(distance/10));
+ for(let i=1;i<steps;i++){
+  const t=i/steps,x=ax+(bx-ax)*t,y=ay+(by-ay)*t;
+  if(walls.some(w=>nearRect(x,y,r,w)))return false;
+  if(breakables.some(o=>!o.broken&&Math.hypot(o.x-x,o.y-y)<PROP_DEFS[o.kind].r+r))return false;
+ }
+ return true;
+}
 function navigationClear(x,y,r=11){
  if(!safeFloor(x,y,r))return false;
  return !breakables.some(o=>!o.broken&&Math.hypot(x-o.x,y-o.y)<r+PROP_DEFS[o.kind].r+1);
@@ -3351,7 +3365,7 @@ function navigationVector(e,target=p){
  }
  if(chosen)return chosen;
  // A displaced enemy may temporarily be in a blocked cell: steer back to the nearest open tile.
- for(let ring=1;ring<=4;ring++){
+ for(let ring=1;ring<=7;ring++){
   let nearest=null,dMin=Infinity;
   for(let y=Math.max(0,cy-ring);y<=Math.min(ny-1,cy+ring);y++)for(let x=Math.max(0,cx-ring);x<=Math.min(nx-1,cx+ring);x++){
    const id=y*nx+x;if(!nav.walkable[id]||!Number.isFinite(nav.cost[id]))continue;
@@ -3361,7 +3375,7 @@ function navigationVector(e,target=p){
   }
   if(nearest)return nearest;
  }
- return{x:dx/d,y:dy/d};
+ return{x:0,y:0};
 }
 function navigationAvoid(e,vx,vy){
  const norm=Math.hypot(vx,vy)||1,dx=vx/norm,dy=vy/norm,look=clamp(e.r+5,14,23),radius=Math.min(18,Math.max(9,e.r+1));
@@ -3515,7 +3529,7 @@ if(e.isTreasure){
   const force=e.panicTime>0?55:dir?70:22;
   e.vx+=steer.x*force*dt;e.vy+=steer.y*force*dt;
  }
- if(enemyAttacksEnabled()){if(e.shotWindup>0){e.shotWindup-=dt;if(e.shotWindup<=0){fireRanged(e,e.shotTarget||p);e.shotTarget=null;e.shootClock=(e.shape==='cannon'?3.9:e.shape==='scatter'?2.7:e.shape==='seeker'?3.2:2.35)*(e.elite?.8:1)}}else{e.shootClock-=dt;if(e.shootClock<=0&&d<265&&e.phaseIn<=0){if(enemies.filter(other=>other.shotWindup>0).length>=3+Math.floor(Math.min(5,dungeonDepth)/2))e.shootClock=.25;else{e.shotTarget={x:clamp(p.x+(e.shape==='cannon'?(p.vx||0)*.5:0),25,W-25),y:clamp(p.y+(e.shape==='cannon'?(p.vy||0)*.5:0),25,F-25)};e.shotWindup=(e.shape==='cannon'?.8:.55)*(e.elite?.8:1)}}}}
+ if(enemyAttacksEnabled()){if(e.shotWindup>0){e.shotWindup-=dt;if(e.shotWindup<=0){fireRanged(e,e.shotTarget||p);e.shotTarget=null;e.shootClock=(e.shape==='cannon'?3.9:e.shape==='scatter'?2.7:e.shape==='seeker'?3.2:2.35)*(e.elite?.8:1)}}else{e.shootClock-=dt;if(e.shootClock<=0&&d<265&&e.phaseIn<=0){if(!weaponLineClear(e.x,e.y,p.x,p.y,4)){e.shootClock=.45+Math.random()*.25}else if(enemies.filter(other=>other.shotWindup>0).length>=3+Math.floor(Math.min(5,dungeonDepth)/2))e.shootClock=.25;else{e.shotTarget={x:clamp(p.x+(e.shape==='cannon'?(p.vx||0)*.5:0),25,W-25),y:clamp(p.y+(e.shape==='cannon'?(p.vy||0)*.5:0),25,F-25)};e.shotWindup=(e.shape==='cannon'?.8:.55)*(e.elite?.8:1)}}}}
 }else if(enemyMovementEnabled()&&d>21){
  const avoid=teamworkVector(e,target,d);
  e.vx+=avoid.x*62*dt*(e.allyBoostUntil>arenaTime?1.65:1);e.vy+=avoid.y*62*dt*(e.allyBoostUntil>arenaTime?1.65:1);
@@ -3530,8 +3544,10 @@ for(let w of walls)collideWall(e,w,dt);
 collideProps(e);if(collideGap(e,oldEX,oldEY)||collideHole(e,oldEX,oldEY,Math.hypot(e.vx,e.vy)))continue;teleportBody(e,dt);
 let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(e.shape!=='healer'&&!e.isTreasure&&!RANGED.includes(e.shape)){let push=Math.min(240,Math.max(65,Math.hypot(e.vx-p.vx,e.vy-p.vy)*.8));p.kvx-=nx*push;p.kvy-=ny*push;}if(e.shape==='healer'){let speed=Math.hypot(e.vx-p.vx,e.vy-p.vy);if(PLAYER_HEALING_ENABLED&&speed>50&&e.playerHealCooldown<=0){let oldHp=hp;hp=Math.min(playerStats().maxHealth,hp+Math.min(18,Math.floor((speed-35)/13)));if(hp>oldHp)showHeal(p.x,p.y);e.playerHealCooldown=.65}}else if(enemyAttacksEnabled()&&!e.isTreasure&&!RANGED.includes(e.shape)&&inv===0){if(e.shape==='bloodletter'){playerBleed.push({remaining:12,rate:2});hp=damagedHealth(8);inv=1.1;if(hp<=0)over=true}else{hp=damagedHealth(e.chargeUntil>arenaTime?18:14);inv=1.1;if(hp<=0)over=true}}}
 // Solid bat: sweep its full arc so fast swings cannot tunnel through enemies.
+if(hero==='classic'){
 let sweep=p.a-previousBatAngle,steps=Math.max(1,Math.ceil(Math.abs(sweep)/.055)),hit=false;
-for(let k=0;k<=steps;k++){
+const batHasLine=weaponLineClear(p.x,p.y,e.x,e.y,2);
+for(let k=0;k<=steps&&batHasLine;k++){
 let angle=previousBatAngle+sweep*k/steps,ux=Math.cos(angle),uy=Math.sin(angle),along=(e.x-p.x)*ux+(e.y-p.y)*uy,at=clamp(along,17,48);
 let bx=p.x+ux*at,by=p.y+uy*at,dx=e.x-bx,dy=e.y-by,dist=Math.hypot(dx,dy),limit=e.r+4;
 if(dist>=limit)continue;
@@ -3551,8 +3567,9 @@ if(e.cool===0&&Math.abs(p.vel)>1.1){if(canDamage(e,kick)){if(e.ability&&kick>115
 hit=true;break;
 }
 // Even a stationary bat blocks enemies and prevents overlap.
-if(!hit){let ux=Math.cos(p.a),uy=Math.sin(p.a),at=clamp((e.x-p.x)*ux+(e.y-p.y)*uy,17,48),bx=p.x+ux*at,by=p.y+uy*at,dx=e.x-bx,dy=e.y-by,d=Math.hypot(dx,dy);
+if(!hit&&batHasLine){let ux=Math.cos(p.a),uy=Math.sin(p.a),at=clamp((e.x-p.x)*ux+(e.y-p.y)*uy,17,48),bx=p.x+ux*at,by=p.y+uy*at,dx=e.x-bx,dy=e.y-by,d=Math.hypot(dx,dy);
 if(d<e.r+4){let nx=d>.001?dx/d:-uy,ny=d>.001?dy/d:ux;e.x+=nx*(e.r+4-d+.5);e.y+=ny*(e.r+4-d+.5);let vn=e.vx*nx+e.vy*ny;if(vn<0){e.vx-=1.6*vn*nx;e.vy-=1.6*vn*ny}}}
+}
 }
 // Elastic body collisions, impact healing and high-speed merging.
 for(let i=0;i<enemies.length;i++)for(let j=i+1;j<enemies.length;j++){
@@ -3688,5 +3705,5 @@ g.fillStyle='#11101c';g.fillRect(0,VIEW_F,viewW,H-VIEW_F);g.save();g.globalAlpha
 if(hero==='archer'){const s=sticks[1],radius=R*controls.size/100,power=bowPower();g.save();g.strokeStyle=bowShotCooldown>0?'#a08b6b':'#f4c56b';g.lineWidth=4;g.beginPath();g.arc(s.x,s.y,radius+6,-Math.PI/2,-Math.PI/2+Math.PI*2*power);g.stroke();if(power>.15){g.textAlign='center';g.fillStyle='#ffe9a7';g.font='bold 10px monospace';g.fillText(Math.round(power*100)+'%',s.x,s.y-radius-15)}g.restore()}
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'DRAW':'BAT',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Bleed stacks '+bleedStacks,viewW/2,237)}
-requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.7';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.8';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
