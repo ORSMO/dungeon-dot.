@@ -2,6 +2,13 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.10 — Controls and combat feel
+
+- **Archer:** The draw ring shows when to release, when a shot is strong (70% draw), and when the bow is reloading. Releasing below 18% cancels the draw, including when the player slides back to center before lifting their thumb.
+- **Classic:** The bat ignores input below 22% stick travel and responds to deliberate flicks even when they finish between frames. Clean hits and blocks have distinct sounds controlled by the existing Master and Sound effects settings.
+- **Mage:** Rune tracing accepts wider passes between touch samples. The cast indicator distinguishes an invalid trace, a spell on cooldown, and low mana.
+- **All heroes:** Menus, rotation, and loss of focus clear held controls and cancel unfinished attacks. Combat pauses while the page is hidden or the display is in portrait.
+
 ## V8.9 — Difficulty, elements and character balance (mechanics only)
 
 - **Encounter pacing and damage:** Classic keeps the full room population because its shield can block ranged pressure. Archer and Mage retain a smaller early-floor population and converge to the same room counts by Dungeon 5; they also take 5% and 10% less incoming damage, respectively. The character stats panel shows this mitigation. Existing enemy attack damage and telegraphs remain in place.

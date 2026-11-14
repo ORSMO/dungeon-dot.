@@ -347,3 +347,64 @@ test('Level 3 and Level 8 choices stay pending until distinct elements are selec
   ], '{atLevel3,atLevel8,complete}');
   assert.deepEqual(result, {atLevel3:true,atLevel8:true,complete:false});
 });
+
+test('Archer uses the release position and never fires on a cancelled pointer', () => {
+  const result = run([
+    declaration('BOW_MIN_DRAW'),
+    'const hero="archer",R=35,controls={size:100},p={x:10,y:10};',
+    'const sticks=[{id:null},{id:7,x:100,y:200,dx:1,dy:0}],arrows=[];',
+    'let bowShotCooldown=0,mageGesture=null,editPointer=null;',
+    'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),pt=event=>event;',
+    'const combatInputEnabled=()=>true,itemCount=()=>0,upgradeCount=()=>0;',
+    method('setStick'), method('bowPower'), method('bowDrawStage'), method('fireArrow'), method('endCanvasPointer'),
+    'endCanvasPointer({type:"pointerup",pointerId:7,x:100,y:200});',
+    'sticks[1].id=7;endCanvasPointer({type:"pointercancel",pointerId:7,x:135,y:200});',
+    'const afterCancels=arrows.length;',
+    'sticks[1].id=7;endCanvasPointer({type:"pointerup",pointerId:7,x:100,y:229});'
+  ], '{afterCancels,shots:arrows.length,stage:bowDrawStage(arrows[0].power),angle:p.target}');
+  assert.deepEqual(result, {afterCancels:0,shots:1,stage:'strong',angle:Math.PI/2});
+});
+
+test('Classic ignores center drift and records a flick before the next frame', () => {
+  const result = run([
+    declaration('BOW_MIN_DRAW'),
+    'const hero="classic",R=35,controls={size:100},p={target:0};',
+    'const sticks=[{id:null},{id:7,x:100,y:200,dx:0,dy:0}];',
+    'let mageGesture=null,editPointer=null;',
+    'const combatInputEnabled=()=>true,unlockCombatAudio=()=>{},pt=event=>event;',
+    method('setStick'), method('endCanvasPointer'),
+    'setStick(sticks[1],{x:100,y:193});const afterDrift=p.target;',
+    'endCanvasPointer({type:"pointerup",pointerId:7,x:100,y:190});'
+  ], '{afterDrift,afterFlick:p.target,held:sticks[1].id}');
+  assert.deepEqual(result, {afterDrift:0,afterFlick:-Math.PI/2,held:null});
+});
+
+test('Mage rune tracing detects a fast edge pass and rejects returning to a used rune', () => {
+  const result = run([
+    declaration('RUNE_TOUCH_RADIUS'),
+    'const mageRunes=()=>[{id:"A",x:0,y:0},{id:"B",x:104,y:0},{id:"C",x:52,y:64}];',
+    'const mageGesture={path:["A"],last:{x:0,y:0}};',
+    method('runeEntryTime'), method('mageGesturePoint'),
+    'mageGesturePoint({x:134,y:-29});const path=mageGesture.path.join("");',
+    'mageGesturePoint({x:104,y:0});const lingerInvalid=!!mageGesture.invalid;',
+    'mageGesturePoint({x:0,y:0});'
+  ], '{path,lingerInvalid,repeatInvalid:mageGesture.invalid}');
+  assert.deepEqual(result, {path:'AB',lingerInvalid:false,repeatInvalid:true});
+});
+
+test('Interrupting controls clears both sticks, the rune trace and any bat momentum', () => {
+  const result = run([
+    'let mageGesture={id:3},editPointer=null,dashDrag=null;',
+    'const sticks=[{id:1,dx:1,dy:0},{id:2,dx:0,dy:1}],p={a:1,target:2,vel:3};',
+    'const captured=new Set([1,2,3]);',
+    'const c={hasPointerCapture:id=>captured.has(id),releasePointerCapture:id=>captured.delete(id)};',
+    method('releaseCapture'), method('cancelHeldInputs'),
+    'cancelHeldInputs();'
+  ], '{mageGesture,sticks,p,captured:[...captured]}');
+  assert.deepEqual(result, {
+    mageGesture:null,
+    sticks:[{id:null,dx:0,dy:0},{id:null,dx:0,dy:0}],
+    p:{a:1,target:1,vel:0},
+    captured:[]
+  });
+});
