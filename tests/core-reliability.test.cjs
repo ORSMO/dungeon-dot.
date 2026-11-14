@@ -198,7 +198,7 @@ test('Phoenix rebirth doubles the old rounded refill and split bosses conserve r
     source.slice(source.indexOf('const BOSS_BLUEPRINTS ='), source.indexOf('function currentBiome(')),
     'let bossFight,dungeonDepth=1,victories=0;const currentRoom={kind:"boss"},W=720,F=640,p={x:30,y:30,vel:0},arenaTime=1;',
     'const inSandbox=()=>false,enemyAttacksEnabled=()=>false,enemies=[],elementFx=[];',
-    'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),bossSignatureRing=()=>{},bossSpiralShot=()=>{},showItemNotice=()=>{},updateBossZoneList=()=>{},updateBossShots=()=>{},finishBossFight=()=>victories++;',
+    'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),bossSignatureRing=()=>{},bossSpiralShot=()=>{},showItemNotice=()=>{},updateBossZoneList=()=>{},updateBossShots=()=>{},updateBossSpecial=()=>{},finishBossFight=()=>victories++;',
     method('floorDifficulty'), method('createBossUnit'), method('startBossFight'),
     method('handleBiomeBossPhase'), method('updateBossFight'),
     'startBossFight("phoenix");const phoenix=bossFight.units[0];phoenix.hp=0;updateBossFight(0,0);',
@@ -211,6 +211,79 @@ test('Phoenix rebirth doubles the old rounded refill and split bosses conserve r
     split:true,
     hp:[28.75,28.75]
   });
+});
+
+const bossPatternMethods=[
+  declaration('BOSS_SPECIALS'), method('bossAngleBetween'),method('buildBossSpecial'),
+];
+const bossPatternArena='const W=720,F=640,p={x:470,y:350},clamp=(x,a,b)=>Math.max(a,Math.min(b,x));';
+
+test('each boss builds a unique signature with visible warning time in both phases', () => {
+  const plans=run([
+    bossPatternArena,...bossPatternMethods,
+    'const plans=Object.keys(BOSS_SPECIALS).map(variant=>[false,true].map(phase2=>buildBossSpecial({variant,x:360,y:320,r:28,phase2})));'
+  ], 'plans');
+  assert.equal(new Set(plans.map(([plan])=>plan.rule.name)).size,12);
+  assert.equal(new Set(plans.map(([plan])=>JSON.stringify(plan.steps))).size,12);
+  for(const [first,second] of plans){
+    assert.ok(second.steps.length>=first.steps.length);
+    for(const plan of [first,second]){
+      assert.ok(plan.steps.length>0);
+      assert.ok(plan.steps.every(step=>step.at>=.9&&step.at<=plan.duration&&!step.hit),plan.rule.name);
+    }
+  }
+});
+
+test('Crystal Eye rings and Hydra bullet walls keep the marked gap across all waves', () => {
+  const result=run([
+    bossPatternArena,...bossPatternMethods,
+    'const plans=["crystal","hydra","phoenix"].map(variant=>buildBossSpecial({variant,x:360,y:320,r:28,phase2:true}));',
+    'const clear=plans.map(({opening,steps})=>steps.every(step=>opening.width?Math.abs(step.x-opening.x)>opening.width/2:step.angles.every(angle=>Math.abs(bossAngleBetween(angle,opening.angle))>=opening.spread-1e-9)));'
+  ], 'clear');
+  assert.deepEqual(result,[true,true,true]);
+});
+
+test('cleaves respect the marked arc and lightning hits once after its warning', () => {
+  const result=run([
+    bossPatternArena,...bossPatternMethods,
+    'const hits=[],oracle={hp:80,variant:"oracle",kind:"crystal",state:"recover",timer:.4,x:360,y:320,r:25};',
+    'const bossFight={units:[oracle],shots:[],hazards:[],special:null,specialCooldown:0,specialTurn:0};',
+    'const enemyAttacksEnabled=()=>true,dashInvulnerable=()=>false,hurtBossPlayer=damage=>hits.push(damage);',
+    method('bossSpecialHits'),method('resolveBossSpecialStep'),method('updateBossSpecial'),
+    'const cleave={type:"arc",x:100,y:100,r:80,angle:0,spread:1};',
+    'const inside=bossSpecialHits(cleave,155,110),behind=bossSpecialHits(cleave,50,100),far=bossSpecialHits(cleave,190,100);',
+    'updateBossSpecial(0);updateBossSpecial(.92);const before=hits.length;',
+    'updateBossSpecial(.03);updateBossSpecial(.05);p.x=700;p.y=600;updateBossSpecial(1.4);'
+  ], '{inside,behind,far,before,hits,ended:bossFight.special===null}');
+  assert.deepEqual(result,{inside:true,behind:false,far:false,before:0,hits:[8],ended:true});
+});
+
+test('split bosses take turns and a dead caster cancels its pending signature', () => {
+  const result=run([
+    bossPatternArena,...bossPatternMethods,
+    'const left={hp:20,variant:"mire",kind:"slime",state:"recover",timer:.5,x:325,y:320,r:22,phase2:true,part:true};',
+    'const right={...left,x:395};',
+    'const bossFight={units:[left,right],shots:[],hazards:[],special:null,specialCooldown:0,specialTurn:0};',
+    'const enemyAttacksEnabled=()=>true,dashInvulnerable=()=>true,hurtBossPlayer=()=>{throw Error("unexpected damage")};',
+    method('bossSpecialHits'),method('resolveBossSpecialStep'),method('updateBossSpecial'),
+    'updateBossSpecial(0);const first=bossFight.special.unit===left;',
+    'updateBossSpecial(2);bossFight.specialCooldown=0;',
+    'updateBossSpecial(0);const second=bossFight.special.unit===right;',
+    'right.hp=0;const pending=bossFight.special.steps;updateBossSpecial(3);'
+  ], '{first,second,cancelled:bossFight.special===null,discharged:pending.some(step=>step.hit)}');
+  assert.deepEqual(result,{first:true,second:true,cancelled:true,discharged:false});
+});
+
+test('Archer strong shots crack boss armor without a reflection item', () => {
+  const result=run([
+    declaration('BOW_MIN_DRAW'),method('bowDrawStage'),method('damageBoss'),
+    'let arenaTime=1;const bossFight={done:false},elementFx=[],bossSpark=()=>{};',
+    'const unit={kind:"crystal",state:"recover",hp:100,armour:2};',
+    'unit.lastArrowPower=.5;damageBoss(unit,3,"arrow");const weak=unit.armour;',
+    'unit.lastArrowPower=.8;damageBoss(unit,3,"arrow");damageBoss(unit,3,"arrow");const strong=unit.armour;',
+    'arenaTime=1.8;damageBoss(unit,3,"arrow");'
+  ], '{weak,strong,armour:unit.armour,opening:unit.vulnerable,hp:unit.hp}');
+  assert.deepEqual(result,{weak:2,strong:1,armour:0,opening:6,hp:100});
 });
 
 test('failed checkpoint writes are retained, throttled and retried successfully', () => {

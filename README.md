@@ -2,6 +2,25 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.12 — Boss signature attacks
+
+| Boss | Signature |
+| --- | --- |
+| Gatekeeper | Crown Cleave sweeps a wide arc. Dodge behind it and attack during the stun. |
+| Crystal Eye | Shard Carousel sends out staggered bullet rings with a marked gap. |
+| Slime King | Royal Ripple throws slow waves of globules. The split halves take turns. |
+| Furnace Warden | Forge Cross cuts across two marked lanes, then adds a diagonal at low HP. |
+| Cinder Hydra | Hydra Barrage rolls bullet walls down the room with a marked passage. |
+| Ash Phoenix | Ashwing Salvo fires two wings of bullets with a gap through the middle. |
+| Briar Colossus | Thorn Scythe reaches farther, with two sweeping arcs at low HP. |
+| Spore Matriarch | Spore Minefield blooms across marked patches in sequence. |
+| Mire Twins | Twin Riptide leaves a dry corridor between two incoming waves. |
+| Glacier Knight | Ice Guillotine cuts along successive diagonals, adding a third lane at low HP. |
+| Prism Oracle | Sky Verdict drops sequential lightning bolts on marked ground. |
+| Avalanche Golem | Boulder Trail drops rocks down a staggered path across the arena. |
+
+Signatures begin between normal attacks. The ground previews show where damage will land, and the boss HUD names the active move. Bosses with Crystal Eye armor can also lose a plate to a strong arrow without a reflection item. Gatekeeper variants are safe to approach during their stun.
+
 ## V8.11 — Boss health
 
 All 12 bosses start with twice their V8.10 HP in dungeon runs and practice. For example, Dungeon 1's Gatekeeper now has 136 HP, Crystal Eye 108 HP, and Slime King 144 HP. Ash Phoenix also returns with twice its previous rebirth HP. Splitting bosses divide their remaining health evenly between the two halves.
