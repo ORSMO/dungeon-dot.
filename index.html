@@ -2406,14 +2406,20 @@ function reflectArrowProjectile(arrow,ox,oy){
  }
  return false;
 }
+// Resolve arrow sweeps in travel order so fast piercing shots cannot skip a
+// second enemy during a single frame or strike a target behind the first one.
+function arrowSweepTargets(arrow,segment){
+ const dx=segment.x2-segment.x1,dy=segment.y2-segment.y1,len2=dx*dx+dy*dy||1;
+ return enemies.filter(e=>e.hp>0&&!arrow.hitTargets.has(e)&&laserDistance(e.x,e.y,segment)<e.r+arrow.r)
+  .map(enemy=>({enemy,t:clamp(((enemy.x-segment.x1)*dx+(enemy.y-segment.y1)*dy)/len2,0,1)}))
+  .sort((a,b)=>a.t-b.t);
+}
 function updateArrows(dt){
  bowShotCooldown=Math.max(0,bowShotCooldown-dt);
  for(const arrow of arrows){
   arrow.life-=dt;if(arrow.life<=0)continue;
   const ox=arrow.x,oy=arrow.y;arrow.x+=arrow.vx*dt;arrow.y+=arrow.vy*dt;
   if(arrow.x<17||arrow.x>W-17||arrow.y<17||arrow.y>F-17){arrow.life=0;continue}
-  reflectArrowProjectile(arrow,ox,oy);
-  if(itemCount('magnetRing'))for(const coin of coinDrops)if(!coin.collected&&laserDistance(coin.x,coin.y,{x1:ox,y1:oy,x2:arrow.x,y2:arrow.y})<26)collectCoin(coin);
   if(projectileHitsProp(arrow,ox,oy)||projectileHitsNest(arrow,ox,oy))continue;
   const segment={x1:ox,y1:oy,x2:arrow.x,y2:arrow.y};
   for(const sw of trapControls)if(sw.kind==='lever'&&laserDistance(sw.x,sw.y,segment)<sw.r+arrow.r){triggerTrapControl(sw);arrow.life=0;break}
@@ -2425,18 +2431,21 @@ function updateArrows(dt){
    if(wall){if(wall.cracked)hitCrackedWall(wall,arrow.power>.7?2:1);arrow.life=0}
   }
   if(arrow.life<=0)continue;
-  const enemy=enemies.find(e=>e.hp>0&&!arrow.hitTargets.has(e)&&laserDistance(e.x,e.y,segment)<e.r+arrow.r);
-  if(enemy){
+  reflectArrowProjectile(arrow,ox,oy);
+  if(itemCount('magnetRing'))for(const coin of coinDrops)if(!coin.collected&&laserDistance(coin.x,coin.y,segment)<26)collectCoin(coin);
+  for(const {enemy} of arrowSweepTargets(arrow,segment)){
+   if(arrow.life<=0)break;
+   if(enemy.hp<=0)continue;
    if(canDamage(enemy,arrow.impact)){
     enemy.lastArrowPower=arrow.power;arrow.hitTargets.add(enemy);friendlyDamage(enemy,arrow.damage,'arrow');
     runStats.swingsHit++;runStats.biggestImpact=Math.max(runStats.biggestImpact,arrow.impact);
     const d=Math.hypot(arrow.vx,arrow.vy)||1;enemy.vx+=arrow.vx/d*arrow.impact*playerStats().knockback/Math.max(.5,enemy.mass);enemy.vy+=arrow.vy/d*arrow.impact*playerStats().knockback/Math.max(.5,enemy.mass);
     if(enemy.bossMinion&&arrow.power>.65)enemy.batKnockedUntil=arenaTime+1.5;
     elementalHit(enemy,arrow.impact);
-   }else bossSpark(enemy.x,enemy.y,'#f5dd9c');
-   if(arrow.pierce>0){arrow.pierce--;arrow.damage*=.74}else arrow.life=0;
-   continue;
+    if(arrow.pierce>0){arrow.pierce--;arrow.damage*=.74}else arrow.life=0;
+   }else{bossSpark(enemy.x,enemy.y,'#f5dd9c');arrow.life=0}
   }
+  if(arrow.life<=0)continue;
   if(bossFight&&!bossFight.done){
    const unit=bossFight.units.find(u=>u.hp>0&&u.state!=='jump'&&!arrow.hitTargets.has(u)&&laserDistance(u.x,u.y,segment)<u.r+arrow.r);
    if(unit){unit.lastArrowPower=arrow.power;arrow.hitTargets.add(unit);if(damageBoss(unit,arrow.damage,'arrow')){runStats.swingsHit++;runStats.biggestImpact=Math.max(runStats.biggestImpact,arrow.impact)}arrow.life=0}
