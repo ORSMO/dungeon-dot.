@@ -4,7 +4,7 @@ Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
 ## V8.9 — Difficulty, elements and character balance (mechanics only)
 
-- **Encounter pacing:** Classic keeps the full room population because its shield can block ranged pressure. Archer and Mage retain a smaller early-floor population and converge to the same room counts by Dungeon 5; the existing depth ramp and encounter telegraphs remain in place.
+- **Encounter pacing and damage:** Classic keeps the full room population because its shield can block ranged pressure. Archer and Mage retain a smaller early-floor population and converge to the same room counts by Dungeon 5; they also take 5% and 10% less incoming damage, respectively. The character stats panel shows this mitigation. Existing enemy attack damage and telegraphs remain in place.
 - **Healing and recovery:** Enemy Healers now heal their allies only; touching one no longer restores the player's health. Player regeneration is capped at 2.4 HP/s, maximum health at 100, and item stack effects have per-item ceilings. Starting runs remain 50 HP and three lives.
 - **Stacked loot:** Item effects cap at one to three stacks (Shield Bloom at three, Glass Eye and Counterweight at two); capped pickups grant 10 coins. Old saves keep their existing shape and values, while gameplay applies the new ceilings without a save migration.
 - **Elements:** Level 3 still grants one of Fire, Ice, Lightning, or Poison. Level 8 still grants a distinct second element. All six two-element combinations have repeatable regression coverage, including their two-second combo throttle.
@@ -12,7 +12,7 @@ Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
 ### Regression coverage
 
-Run `node --test tests/core-reliability.test.cjs` with Node.js 20+. The 22-test suite now also checks hero-specific encounter counts, all six Level 8 element pairs, Level 3/8 choice progression, legacy save compatibility under stack limits, capped-pickup compensation, and healer behavior.
+Run `node --test tests/core-reliability.test.cjs` with Node.js 20+. The 23-test suite now also checks hero-specific encounter counts and incoming damage, all six Level 8 element pairs, Level 3/8 choice progression, legacy save compatibility under stack limits, capped-pickup compensation, and healer behavior.
 
 ---
 

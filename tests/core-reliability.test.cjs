@@ -279,6 +279,16 @@ test('combat population eases for shieldless heroes early and converges by depth
   }
 });
 
+test('Archer and Mage get modest damage mitigation to offset the missing shield', () => {
+  const result = run([
+    'let hero="classic",hp=50;const dashInvulnerable=()=>false,inSandbox=()=>false,sandbox={attacks:true};',
+    'const playerStats=()=>({armour:hero==="archer"?.05:hero==="mage"?.10:0});',
+    method('damagedHealth'),
+    'const damage=[];for(const character of ["classic","archer","mage"]){hero=character;hp=50;hp=damagedHealth(14);damage.push(50-hp)}'
+  ], 'damage');
+  assert.deepEqual(result.map(value => Math.round(value*10)/10), [14,13.3,12.6]);
+});
+
 test('all six level-eight element pairs trigger their documented combo once per cooldown', () => {
   const result = run([
     declaration('ITEM_STACK_LIMITS'),

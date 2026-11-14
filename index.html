@@ -692,7 +692,7 @@ function playerStats(){
   shieldProtection:hero!=='classic'?0:Math.min(.6,.1*upgradeCount('shield')+.15*itemCount('shieldBloom')),
   crit:Math.min(.6,.05*upgradeCount('focus')+(hero==='archer'?.12*itemCount('glassEye'):0)),
   luck:upgradeCount('luck')+itemCount('luckyPenny'),
-  armour:Math.min(.4,(hero==='mage'?.06:hero==='archer'?.04:.1)*itemCount('thornMantle')+(hasSynergy('livingArmour')?.1:0)),
+   armour:Math.min(.4,(hero==='mage'?.10:hero==='archer'?.05:0)+(hero==='mage'?.06:hero==='archer'?.04:.1)*itemCount('thornMantle')+(hasSynergy('livingArmour')?.1:0)),
   pickup:itemCount('magnetRing')?(hero==='archer'?28:95):23,
   bulletSpeed:Math.max(.5,1-(hero==='archer'?0:.2)*itemCount('hourglass'))
  };
