@@ -185,3 +185,82 @@ test('failed checkpoint writes are retained, throttled and retried successfully'
   assert.equal(result.savePending, false);
   assert.equal(result.saveRetryAt, 0);
 });
+
+test('Mage targeting prefers an unobstructed enemy to a closer one behind cover', () => {
+  const result = run([
+    'const p={x:60,y:120,target:0},enemies=[{x:150,y:120,hp:5},{x:60,y:230,hp:5}],dungeonNests=[];',
+    'let bossFight=null;',
+    'const weaponLineClear=(x,y,tx,ty)=>tx!==150;',
+    method('mageAim'),
+    'const aim=mageAim();'
+  ], '{tx:aim.tx,ty:aim.ty,angle:aim.a}');
+  assert.equal(result.tx, 60);
+  assert.equal(result.ty, 230);
+  assert.ok(result.angle > 1.5 && result.angle < 1.65);
+});
+
+test('weapon line-of-sight blocks stone walls and props, not airborne crossings over pits', () => {
+  const result = run([
+    'let walls=[{x:105,y:80,w:40,h:80}],breakables=[],floorGaps=[{x:80,y:80,w:80,h:80}],PROP_DEFS={crate:{r:12}};',
+    'const nearRect=(x,y,r,w)=>x+r>w.x&&x-r<w.x+w.w&&y+r>w.y&&y-r<w.y+w.h;',
+    method('weaponLineClear'),
+    'const wallBlocked=weaponLineClear(40,120,200,120,3);',
+    'walls=[];const pitClear=weaponLineClear(40,120,200,120,3);',
+    'breakables=[{kind:"crate",x:120,y:120,broken:false}];const propBlocked=weaponLineClear(40,120,200,120,3);',
+    'breakables[0].broken=true;const brokenClear=weaponLineClear(40,120,200,120,3);'
+  ], '{wallBlocked,pitClear,propBlocked,brokenClear}');
+  assert.deepEqual(result, {wallBlocked:false,pitClear:true,propBlocked:false,brokenClear:true});
+});
+
+test('piercing arrows resolve multiple targets in travel order, never twice', () => {
+  const result = run([
+    'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));',
+    'const laserDistance=(x,y,l)=>{const dx=l.x2-l.x1,dy=l.y2-l.y1,t=clamp(((x-l.x1)*dx+(y-l.y1)*dy)/(dx*dx+dy*dy||1),0,1);return Math.hypot(x-(l.x1+t*dx),y-(l.y1+t*dy))};',
+    'const behind={id:"behind",x:180,y:100,r:8,hp:5},front={id:"front",x:80,y:100,r:8,hp:5};',
+    'const enemies=[behind,front],arrow={r:3,hitTargets:new Set([front])};',
+    method('arrowSweepTargets'),
+    'const segment={x1:20,y1:100,x2:220,y2:100};',
+    'const first=arrowSweepTargets({r:3,hitTargets:new Set()},segment).map(v=>v.enemy.id);',
+    'const repeat=arrowSweepTargets(arrow,segment).map(v=>v.enemy.id);'
+  ], '{first,repeat}');
+  assert.deepEqual(result.first, ['front','behind']);
+  assert.deepEqual(result.repeat, ['behind']);
+});
+
+test('non-Classic heroes do not get an invisible stationary bat', () => {
+  const start = source.indexOf('// Solid bat: sweep its full arc');
+  assert.ok(start > 0, 'Bat physics block not found.');
+  const section = source.slice(start, start + 550);
+  assert.match(section, /if\(hero==='classic'\)\{\s*let sweep=/);
+  assert.match(source, /if\(!hit&&batHasLine\)/);
+});
+
+test('enemy navigation does not blindly steer into a wall when no route exists', () => {
+  const result = run([
+    'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));const p={x:240,y:240};',
+    'let W=280,F=280,arenaTime=0,enemyNav={w:280,h:280,expire:2,px:240,py:240,nx:7,ny:7,step:40,walkable:new Uint8Array(49),cost:new Float32Array(49).fill(Infinity)};',
+    'const navigationSight=()=>false,enemyMovementEnabled=()=>true;',
+    'const rebuildEnemyNavigation=()=>{throw new Error("Should not rebuild")};',
+    method('navigationVector'),
+    'const vec=navigationVector({x:70,y:70,r:9});'
+  ], 'vec');
+  assert.deepEqual(result, {x:0,y:0});
+});
+
+test('enemy specials retain their windup instead of triggering instantly', () => {
+  const result = run([
+    declaration('ENEMY_SPECIALS'),declaration('ENEMY_CASTS'),
+    'let arenaTime=0,dungeonDepth=1,triggered=0;',
+    'const p={x:100,y:100},enemyAttacksEnabled=()=>true,executeEnemyAbility=()=>triggered++;',
+    'const enemy={shape:"square",x:120,y:110,abilityEnabled:true,abilityCooldown:0,phaseIn:0,hp:5,elite:false},enemies=[enemy];',
+    method('updateEnemyAbility'),
+    'const kind=ENEMY_SPECIALS.square,range=ENEMY_CASTS[kind][2];',
+    'updateEnemyAbility(enemy,.016,p,Math.min(50,range));const started=!!enemy.ability,windup=enemy.ability?.remaining||0;',
+    'updateEnemyAbility(enemy,Math.max(.01,windup/2),p,10);const before=triggered;',
+    'updateEnemyAbility(enemy,windup+1,p,10);'
+  ], '{started,windup,before,triggered}');
+  assert.equal(result.started, true);
+  assert.ok(result.windup > 0);
+  assert.equal(result.before, 0);
+  assert.equal(result.triggered, 1);
+});
