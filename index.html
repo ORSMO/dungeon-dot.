@@ -67,7 +67,7 @@ footer #restart{display:none}
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
-<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.6</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
+<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.7</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
   <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true">⚪ CLASSIC DOT<br>SWING BAT</button><button id="hero-archer" type="button" aria-pressed="false">🏹 ARCHER DOT<br>DRAW BOW</button><button id="hero-mage" type="button" aria-pressed="false">🔮 MAGE DOT<br>DRAW RUNES</button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
@@ -508,7 +508,7 @@ function drawBossSignatures(){
 function handleBiomeBossPhase(){
  if(bossFight?.variant==='phoenix'&&!bossFight.reborn){
   const unit=bossFight.units[0];
-  if(unit.hp<=0){bossFight.reborn=true;unit.enraged=true;unit.hp=Math.max(1,Math.ceil(unit.maxHp*.48));unit.state='rebirth';unit.timer=1.65;unit.hitCooldown=2;unit.flash=.6;
+  if(unit&&unit.hp<=0){bossFight.reborn=true;unit.enraged=true;unit.hp=Math.max(1,Math.ceil(unit.maxHp*.48));unit.state='rebirth';unit.timer=1.65;unit.hitCooldown=2;unit.flash=.6;
    bossSignatureRing(unit,'fire',9,105,26,1.4,1.5);bossSpiralShot(unit,12,arenaTime*.5);showItemNotice('ASH PHOENIX · REBIRTH!')}
  }
 }
@@ -1066,7 +1066,7 @@ function setupSandboxEconomyUI(){
 const SAVE_VERSION=1,PROFILE_KEY='dd-profile-v1';
 const HERO_DEFS={classic:{name:'Classic Dot',hint:'Swing the silly bat with the right stick. All original combat mechanics remain.'},archer:{name:'Archer Dot',hint:'Aim with the right stick, pull farther to draw the bow, then release to shoot. No bat swings.'},mage:{name:'Mage Dot',hint:'Trace A, B and C runes in order to cast 15 spells. Short spells cost less mana; powerful three-rune spells use more. Mana regenerates automatically. No shield.'}};
 let hero='classic',selectedHero='classic';
-let activeSlot=null,loadingRun=false,savePending=false,profileDirty=false,saveError='',pendingReplacement=null;
+let activeSlot=null,loadingRun=false,savePending=false,saveRetryAt=0,profileDirty=false,saveError='',pendingReplacement=null;
 let profile={version:1,lastSlot:null,audio:{master:80,music:60,effects:80,muted:false},bestiary:{}};
 let bestiaryFilter='all',selectedBestiary=null;
 function slotKey(slot){return 'dd-save-slot-'+slot}
@@ -1155,12 +1155,13 @@ function persistLifeCount(){
 }
 function flushCheckpoint(){
  if(!savePending)return true;
+ if(Date.now()<saveRetryAt)return false;
  if(loadingRun||!activeSlot||inSandbox()||!currentRoom?.cleared||over)return false;
  try{
-  localStorage.setItem(slotKey(activeSlot),JSON.stringify(snapshotRun()));savePending=false;saveError='';
+  localStorage.setItem(slotKey(activeSlot),JSON.stringify(snapshotRun()));savePending=false;saveRetryAt=0;saveError='';
   document.querySelector('#save-indicator').textContent='SLOT '+activeSlot+' · SAVED';
   return true;
- }catch(error){savePending=false;saveError='Could not save. Browser storage is unavailable or full.';updateSaveIndicator();return false}
+ }catch(error){savePending=true;saveRetryAt=Date.now()+5000;saveError='Could not save. Will retry automatically when storage is available.';updateSaveIndicator();return false}
 }
 function updateSaveIndicator(){
  const label=document.querySelector('#save-indicator');label.hidden=!activeSlot;
@@ -1205,6 +1206,7 @@ function renderHeroPicker(){
 function updateHeroHud(){document.querySelector('#mage-cast-status').textContent='';document.querySelector('footer small').textContent=hero==='mage'?'LEFT · MOVE   RIGHT · TRACE RUNES':hero==='archer'?'LEFT · MOVE   RIGHT · DRAW & RELEASE':'LEFT · MOVE   RIGHT · HEAVY BAT'}
 for(const id of Object.keys(HERO_DEFS))document.querySelector('#hero-'+id).onclick=()=>{selectedHero=id;renderHeroPicker()};
 function prepareSlotSwitch(){
+ saveRetryAt=0;
  if(inSandbox())leaveSandbox();
  queueCheckpoint();flushCheckpoint();flushProfile();closeGamePanels();document.querySelector('#shield-choice').style.display='none';shieldPaused=false;
 }
@@ -1575,8 +1577,32 @@ function generateDungeon(){
  link(spot.room,add('boss',spot.col,spot.row,'boss'),spot.side);
  return addSpecialRooms(rooms);
 }
+
+function validateDungeonTopology(rooms){
+ if(!Array.isArray(rooms)||![12,13].includes(rooms.length))return false;
+ const counts={start:0,combat:0,boss:0,treasure:0,shop:0,cursed:0},positions=new Set();
+ for(let i=0;i<rooms.length;i++){
+  const room=rooms[i];if(!room||room.id!==i||!Object.hasOwn(counts,room.kind)||!Array.isArray(room.doors)||room.doors.length>4)return false;
+  counts[room.kind]++;
+  const key=room.col+','+room.row;if(positions.has(key))return false;positions.add(key);
+  const sides=new Set();
+  for(const door of room.doors){
+   const dir=DIRECTIONS[door.side];
+   if(!dir||sides.has(door.side)||!Number.isInteger(door.to)||!rooms[door.to])return false;
+   sides.add(door.side);
+   const target=rooms[door.to];
+   if(target.col!==room.col+dir.dx||target.row!==room.row+dir.dy||!target.doors.some(back=>back.to===i&&back.side===dir.opposite))return false;
+  }
+ }
+ if(counts.start!==1||counts.combat!==8||counts.boss!==1||counts.shop!==1||counts.treasure!==1||counts.cursed!==rooms.length-12||rooms[0].kind!=='start')return false;
+ const seen=new Set([0]),queue=[0];
+ for(let i=0;i<queue.length;i++)for(const door of rooms[queue[i]].doors)if(!seen.has(door.to)){seen.add(door.to);queue.push(door.to)}
+ return seen.size===rooms.length;
+}
 function buildDungeon(){
  let rooms=generateDungeon();
+ for(let tries=0;tries<20&&!validateDungeonTopology(rooms);tries++)rooms=generateDungeon();
+ if(!validateDungeonTopology(rooms))throw Error('Dungeon generation failed to create a connected floor');
  for(let attempt=0;attempt<4&&dungeonSignature(rooms)===lastDungeonSignature;attempt++)rooms=generateDungeon();
  if(dungeonSignature(rooms)===lastDungeonSignature){
   const clockwise={north:'east',east:'south',south:'west',west:'north'};
@@ -1730,6 +1756,7 @@ function updateBossShots(dt,previousAngle){
  bossFight.shots=bossFight.shots.filter(shot=>shot.life>0);
 }
 function finishBossFight(){
+ if(!bossFight||bossFight.done)return;
  if(inSandbox()){bossFight.done=true;bossFight.shots=[];bossFight.hazards=[];coinDrops.push({x:p.x+45,y:p.y,amount:20});if(itemCount('leechFang'))healPlayer(8*itemCount('leechFang'));enemies=enemies.filter(e=>!e.bossMinion&&!e.bossSummon);sandbox.notice='Test boss defeated. Choose another enemy.';return}
  bossFight.done=true;currentRoom.bossDefeated=true;currentRoom.cleared=true;rewardBoss();recordBossKill(bossFight);queueCheckpoint();
  bossFight.shots=[];bossFight.hazards=[];enemies=[];pendingSplits=[];
@@ -2053,7 +2080,7 @@ function floorVoid(x,y){
 }
 function safeFloor(x,y,r=0){
  if(x<24+r||y<24+r||x>W-24-r||y>F-24-r)return false;
- for(const [px,py] of [[x,y],[x-r,y],[x+r,y],[x,y-r],[x,y+r],[x-r*.7,y-r*.7],[x+r*.7,y+r*.7]])if(floorVoid(px,py))return false;
+ for(const [px,py] of [[x,y],[x-r,y],[x+r,y],[x,y-r],[x,y+r],[x-r*.7,y-r*.7],[x+r*.7,y+r*.7],[x-r*.7,y+r*.7],[x+r*.7,y-r*.7]])if(floorVoid(px,py))return false;
  return !walls.some(w=>x+r>w.x&&x-r<w.x+w.w&&y+r>w.y&&y-r<w.y+w.h)&&!holes.some(h=>Math.hypot(x-h.x,y-h.y)<h.r+r+3);
 }
 const TILE_SIZE=40;
@@ -2868,6 +2895,12 @@ function initRoomProps(room){
   }
  }
  room.props=room.props.filter(o=>o&&PROP_DEFS[o.kind]&&Number.isFinite(o.x)&&Number.isFinite(o.y)&&o.x>=18&&o.x<=W-18&&o.y>=18&&o.y<=F-18&&safeFloor(o.x,o.y,PROP_DEFS[o.kind].r+2)).slice(0,24);
+ // Older checkpoints can contain props from a previous tile layout. Remove only
+ // blockers, preferring to retain treasure chests and any already-broken props.
+ while(room.props.length&&!propsKeepRoutesOpen(room.props)){
+  const index=room.props.findLastIndex(o=>!o.broken&&o.kind!=='chest');
+  room.props.splice(index<0?room.props.length-1:index,1);
+ }
  breakables=room.props;
 }
 function hitProp(o,power,source='hit'){
@@ -3133,7 +3166,7 @@ function safeRespawn(){
 function fallIntoPit(body,x,y,isPlayer=false){
  fallingFx.push({x:body.x,y:body.y,tx:x,ty:y,r:body.r,life:.46,maxLife:.46,color:isPlayer?'#fff':body.shape==='merge'?'#b388fa':'#ffbb78'});
  if(isPlayer){p.falling=.46;p.fallReturn=safeRespawn();p.kvx=p.kvy=0;inv=Math.max(inv,1.2)}
- else{body.hp=0;body.fellInHole=true;recordEnemyKill(body);earnXp(body.bossMinion||body.bossSummon?1:body.elite?5:['square','round'].includes(body.shape)?2:3)}
+ else{body.hp=0;body.fellInHole=true;if(!body.rewarded){body.rewarded=true;recordEnemyKill(body);earnXp(body.bossMinion||body.bossSummon?1:body.elite?5:['square','round'].includes(body.shape)?2:3);if(!inSandbox())kills++}}
  return true;
 }
 function collideGap(body,oldX,oldY,isPlayer=false){
@@ -3223,7 +3256,7 @@ if(w.moving&&w.type==='spike'&&impact>24&&enemyAttacksEnabled()){
  else if(!e.isPlayer&&e.hp>0&&(e.crusherHitUntil||0)<arenaTime){e.hp-=2;e.crusherHitUntil=arenaTime+.8}
 }
 if(w.type==='sticky'){
-if(!e.sticky||e.sticky.wall!==w){e.sticky={wall:w,allow:newContact&&!remaining?Math.min(e.r*.72,impact*.065):0,age:0};if(newContact&&!remaining){e.wallCooldowns.set(w,WALL_HIT_COOLDOWN);if(!e.isPlayer||e.knockbackSpeed>90)showWallHit(w,cx,cy,nx,ny,impact);if(!e.isPlayer){elementalHit(e,impact);flipMagnet(e,impact)}}}
+if(!e.sticky||e.sticky.wall!==w){e.sticky={wall:w,allow:newContact&&!remaining?Math.min(e.r*.72,impact*.065):0,age:0};if(newContact&&!remaining){e.wallCooldowns.set(w,WALL_HIT_COOLDOWN);if(!e.isPlayer||e.knockbackSpeed>90)showWallHit(w,cx,cy,nx,ny,impact)}}
 e.sticky.age+=dt;e.sticky.allow=Math.max(0,e.sticky.allow-7*dt);
 let allowed=e.sticky.allow;
 if(depth>allowed){e.x+=nx*(depth-allowed);e.y+=ny*(depth-allowed)}
@@ -3406,7 +3439,7 @@ function resolvePlayerDeath(){
  enterRoom(currentRoom.id,roomEntrySide);refillRoomShield();inv=2;
  showItemNotice('LIFE LOST · '+lives+' REMAIN · ROOM RESET');hud();
 }
-function reset(){mageMana=100;mageManaCheckpointAt=0;mageBolts=[];mageZones=[];mageGesture=null;mageCooldowns={};mageGlobalReady=0;mageLastCast='';mageHitCount=0;mageCastCount=0;document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;strongArrowHits=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
+function reset(){saveRetryAt=0;mageMana=100;mageManaCheckpointAt=0;mageBolts=[];mageZones=[];mageGesture=null;mageCooldowns={};mageGlobalReady=0;mageLastCast='';mageHitCount=0;mageCastCount=0;document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;strongArrowHits=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
 function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*viewW/r.width,y:(e.clientY-r.top)*H/r.height}}
 function setStick(s,v){let dx=v.x-s.x,dy=v.y-s.y,d=Math.hypot(dx,dy),radius=R*controls.size/100,k=d?Math.min(d,radius)/d/radius:0;s.dx=dx*k;s.dy=dy*k}
 c.addEventListener('pointerdown',e=>{e.preventDefault();let v=pt(e),i=v.x<viewW/2?0:1,s=sticks[i];if(hero==='mage'&&!editingControls&&i===1){const rune=mageRuneAt(v.x,v.y);if(rune&&mageInputEnabled()&&!mageGesture){mageGesture={id:e.pointerId,path:[rune.id],last:v};c.setPointerCapture(e.pointerId)}return}if(editingControls){if(editPointer)return;let nearest=sticks.map((st,j)=>({j,d:Math.hypot(st.x-v.x,st.y-v.y)})).filter(o=>o.d<R*controls.size/100+22).sort((a,b)=>a.d-b.d)[0];if(!nearest)return;editPointer={id:e.pointerId,i:nearest.j};c.setPointerCapture(e.pointerId);return}if(s.id!==null)return;if(controls.floating)moveStick(i,v);s.id=e.pointerId;c.setPointerCapture(e.pointerId);setStick(s,v)});
@@ -3655,5 +3688,5 @@ g.fillStyle='#11101c';g.fillRect(0,VIEW_F,viewW,H-VIEW_F);g.save();g.globalAlpha
 if(hero==='archer'){const s=sticks[1],radius=R*controls.size/100,power=bowPower();g.save();g.strokeStyle=bowShotCooldown>0?'#a08b6b':'#f4c56b';g.lineWidth=4;g.beginPath();g.arc(s.x,s.y,radius+6,-Math.PI/2,-Math.PI/2+Math.PI*2*power);g.stroke();if(power>.15){g.textAlign='center';g.fillStyle='#ffe9a7';g.font='bold 10px monospace';g.fillText(Math.round(power*100)+'%',s.x,s.y-radius-15)}g.restore()}
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'DRAW':'BAT',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Bleed stacks '+bleedStacks,viewW/2,237)}
-requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.6';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.7';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
