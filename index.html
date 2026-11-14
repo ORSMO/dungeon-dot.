@@ -43,7 +43,13 @@ footer #restart{display:none}
 #synergy-list{display:grid;gap:7px}.synergy-row{display:flex;gap:10px;border:1px solid #4d415c;border-radius:8px;padding:9px;background:#211d2d}.synergy-row.active{border-color:#a48b56;background:#352c32}.synergy-row strong{font-size:12px;color:#c3afcf}.synergy-row.active strong{color:#f3d391}.synergy-row small{display:block;font-size:10px;color:#a69ab3;margin:3px 0}.synergy-row p{font-size:10px;line-height:1.45;color:#c7bacf;margin:3px 0 0}.synergy-icons{display:flex;align-items:center;gap:4px;min-width:62px;font-size:22px}.synergy-icons b{font-size:12px;color:#82708e}#synergy-count{color:#ebcc87;font-size:11px}
 #hero-picker{display:flex;gap:8px;margin:9px 0 5px}#hero-picker button{flex:1;padding:10px 8px;border:1px solid #796886;background:#2b2539;color:#e4dbea;font:700 11px monospace;line-height:1.4}#hero-picker button[aria-pressed=true]{border-color:#bff9d9;background:#294b3c;color:#e5fff0;box-shadow:0 0 10px #92e6b43b}#hero-choice-hint{display:block;margin:4px 2px 12px;color:#c0e3cc;font:10px system-ui;line-height:1.4}
 #level-hud{color:#e7c9ff;font:700 10px monospace;white-space:nowrap}#element-choice[hidden]{display:none!important}#element-choice{position:fixed;inset:0;z-index:75;background:#0c0b17e8;display:flex;align-items:center;justify-content:center;padding:20px;color:white}#element-choice .element-dialog{width:min(560px,94vw);max-height:90dvh;overflow:auto;background:#252036;border:2px solid #ae8de0;border-radius:13px;padding:15px;text-align:center}#element-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}#element-options button{background:#382d50;color:#fff;border:1px solid #a38cbe;padding:11px;border-radius:9px;text-align:left;min-height:75px}#element-options strong{display:block;font-size:15px}#element-options small{display:block;font-size:11px;line-height:1.3;margin-top:4px;color:#d1c2df}@media(max-height:380px){#element-choice .element-dialog{padding:9px}#element-options button{min-height:55px;padding:6px}}
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.3</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
+#mana-hud{display:none;align-items:center;gap:5px;flex:none;color:#c6baff;font:700 10px monospace;white-space:nowrap}
+#mana-hud .mana-track{width:clamp(55px,8.4vw,100px);height:10px;border:1px solid #8d79d8;border-radius:5px;background:#28213e;overflow:hidden}
+#mana-fill{height:100%;width:100%;background:linear-gradient(90deg,#5d88f0,#c481ff);transition:width .10s linear}
+#mana-hud.low-mana #mana-fill{background:linear-gradient(90deg,#8c579c,#fa8bc0)}
+#mana-label{font-size:10px;color:#d8c8ff}
+@media(max-width:750px){#mana-hud .mana-track{width:48px}#mana-hud{gap:3px;font-size:9px}#mana-label{font-size:9px}header{gap:6px!important}}
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.3</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
  <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
  <small id="character-coins"></small>
  <div id="character-stats"></div>
@@ -61,7 +67,7 @@ footer #restart{display:none}
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
-<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.5.1</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
+<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.6</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
   <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true">⚪ CLASSIC DOT<br>SWING BAT</button><button id="hero-archer" type="button" aria-pressed="false">🏹 ARCHER DOT<br>DRAW BOW</button><button id="hero-mage" type="button" aria-pressed="false">🔮 MAGE DOT<br>DRAW RUNES</button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
@@ -705,15 +711,15 @@ const HERO_ITEM_VARIANTS={
  emberHeart:{classic:{name:'Ember Heart',desc:'+10 maximum HP. Bat hits burn enemies for 3 seconds.'},archer:{name:'Ember Quiver',desc:'+10 maximum HP. Strong arrows ignite enemies and trigger a small fireburst.'},mage:{name:'Searing Codex',desc:'+10 maximum HP. Spell hits burn targets for 2.5 seconds.'}},
  frostNail:{classic:{name:'Frost Nail',desc:'Bat hits slow targets for 2 seconds.'},archer:{name:'Icehead Arrows',desc:'Strong arrows leave a slowing frost patch.'},mage:{name:'Frost Script',desc:'Spell hits slow targets for 1.5 seconds.'}},
  stormCoil:{classic:{name:'Storm Coil',desc:'Every 4th bat hit chains lightning to up to 3 enemies.'},archer:{name:'Charged Fletching',desc:'Every 3rd arrow hit chains lightning to nearby targets.'},mage:{name:'Thunder Glyph',desc:'Every 4th spell hit chains lightning to nearby enemies.'}},
- leechFang:{classic:{name:'Leech Fang',desc:'Each enemy kill heals 1 HP.'},archer:{name:'Hunter Fang',desc:'Arrow kills restore 2 HP. Other kills do not heal.'},mage:{name:'Soul Siphon',desc:'Kills with spells restore 1 HP.'}},
+ leechFang:{classic:{name:'Leech Fang',desc:'Each enemy kill heals 1 HP.'},archer:{name:'Hunter Fang',desc:'Arrow kills restore 2 HP. Other kills do not heal.'},mage:{name:'Soul Siphon',desc:'Spell kills restore 1 HP and 6 mana.'}},
  sporeSatchel:{classic:{name:'Spore Satchel',desc:'Enemies leave a damaging cloud when killed.'},archer:{name:'Spore Tips',desc:'Every 3rd strong arrow hit creates a small damaging spore cloud.'},mage:{name:'Spore Grimoire',desc:'Every 4th spell hit grows a damaging spore field.'}},
  mirrorLens:{classic:{name:'Mirror Lens',desc:'Reflected bullets deal 50% more damage.'},archer:{name:'Trueflight Lens',desc:'Arrows fly 15% faster; reflected bullets gain 20% damage.'},mage:{name:'Prism Focus',desc:'Spells deal 15% more damage.'}},
- shieldBloom:{classic:{name:'Shield Bloom',desc:'The curved shield takes 15% less damage.'},archer:{name:'Fletching Bloom',desc:'Arrows fly 12% faster. No shield needed.'},mage:{name:'Rune Bloom',desc:'Reduce all spell cooldowns by 12%.'}},
+ shieldBloom:{classic:{name:'Shield Bloom',desc:'The curved shield takes 15% less damage.'},archer:{name:'Fletching Bloom',desc:'Arrows fly 12% faster. No shield needed.'},mage:{name:'Rune Bloom',desc:'+15 maximum mana, +1.5 mana regeneration/s and 12% faster spell cooldowns.'}},
  luckyPenny:{classic:{name:'Lucky Penny',desc:'Every enemy kill drops 1 extra coin.'},archer:{name:'Bounty Mark',desc:'Arrow kills drop 2 extra coins.'},mage:{name:'Alchemy Coin',desc:'Spell kills drop 2 extra coins.'}},
  magnetRing:{classic:{name:'Magnet Ring',desc:'Collect dropped coins from 95 units away.'},archer:{name:'Collector Arrow',desc:'Flying arrows collect nearby coins.'},mage:{name:'Attractor Sigil',desc:'Spell hits gently pull nearby enemies toward the target.'}},
  thornMantle:{classic:{name:'Thorn Mantle',desc:'10% damage reduction; retaliation when struck.'},archer:{name:'Windwoven Cloak',desc:'4% damage reduction and 5% move speed; being hit recovers dash sooner.'},mage:{name:'Ward Cloak',desc:'Reduce incoming damage by 6% and send a short retaliatory pulse when hit.'}},
  cinderSigil:{classic:{name:'Cinder Sigil',desc:'Enemy deaths explode to damage nearby enemies.'},archer:{name:'Blasthead Sigil',desc:'Every 2nd strong arrow hit causes a small damaging burst.'},mage:{name:'Wildfire Seal',desc:'Every 3rd spell hit triggers a small damaging fireburst.'}},
- mossCharm:{classic:{name:'Moss Charm',desc:'Gain 0.3 HP regeneration per second.'},archer:{name:'Lifebloom Quiver',desc:'Gain 0.12 HP/s and recover 1 HP every 4 strong arrow hits.'},mage:{name:'Restorative Script',desc:'Gain 0.18 HP/s; every 5 spells recover 1 HP.'}},
+ mossCharm:{classic:{name:'Moss Charm',desc:'Gain 0.3 HP regeneration per second.'},archer:{name:'Lifebloom Quiver',desc:'Gain 0.12 HP/s and recover 1 HP every 4 strong arrow hits.'},mage:{name:'Restorative Script',desc:'Gain 0.18 HP/s, +0.75 mana regeneration/s; every 5 spells recover 1 HP.'}},
  glassEye:{classic:{name:'Glass Eye',desc:'+40% bat damage but −8 maximum HP.'},archer:{name:'Hawkeye',desc:'+20% arrow damage and +12% crit chance, but −8 maximum HP.'},mage:{name:'Forbidden Eye',desc:'+25% spell damage, but 8 less maximum HP.'}},
  counterweight:{classic:{name:'Counterweight',desc:'+40% bat knockback but slower swings.'},archer:{name:'Piercer Shaft',desc:'Arrows penetrate one extra enemy but reload 10% slower.'},mage:{name:'Force Amplifier',desc:'All spell knockback and gravity pull are 25% stronger.'}},
  hourglass:{classic:{name:'Blue Hourglass',desc:'Enemy projectiles move 20% slower.'},archer:{name:'Slowtime Fletching',desc:'Arrows slow enemy projectiles they pass near.'},mage:{name:'Temporal Rune',desc:'Reduce all spell cooldowns by 10%.'}},
@@ -725,7 +731,7 @@ function heroItemDefinition(id){
  return {...def,...(rule?.[hero]||rule?.classic||{})};
 }
 function heroUpgradeDefinition(id){
- const def=UPGRADE_DEFS[id];if(!def)return def;if(hero==='mage'){if(id==='shield')return {...def,name:'Rune Oil',desc:'Reduce spell cooldowns by 10%.'};if(id==='power')return {...def,name:'Spell Power',desc:'+25% spell damage.'};if(id==='swing')return {...def,name:'Quick Incantation',desc:'Cast spells sooner.'};if(id==='knockback')return {...def,name:'Force Mastery',desc:'Stronger spell push and pull.'};return def;}if(hero!=='archer')return def;
+ const def=UPGRADE_DEFS[id];if(!def)return def;if(hero==='mage'){if(id==='shield')return {...def,name:'Rune Oil',desc:'Reduce spell cooldowns by 10%.'};if(id==='power')return {...def,name:'Spell Power',desc:'+25% spell damage.'};if(id==='swing')return {...def,name:'Quick Incantation',desc:'Cast spells sooner.'};if(id==='knockback')return {...def,name:'Force Mastery',desc:'Stronger spell push and pull.'};if(id==='regen')return {...def,name:'Mana Flow',desc:'+0.15 HP/s and +1.5 mana regeneration/s.'};return def;}if(hero!=='archer')return def;
  if(id==='shield')return {...def,name:'Bowstring Oil',desc:'Bow reloads 10% faster, stacking up to 50%.'};
  if(id==='power')return {...def,name:'Arrow Strength',desc:'+25% arrow and reflected-shot damage.'};
  if(id==='swing')return {...def,name:'Quick Draw',desc:'+15% bow reload speed.'};
@@ -734,8 +740,8 @@ function heroUpgradeDefinition(id){
 function giveItem(id){
  if(!ITEM_DEFS[id])return false;
  const previousSynergies=activeSynergies();
- const before=playerStats().maxHealth;progress.items[id]=itemCount(id)+1;
- const after=playerStats().maxHealth;hp=Math.min(after,hp+Math.max(0,after-before));
+ const before=playerStats().maxHealth,beforeMana=hero==='mage'?mageMaxMana():0;progress.items[id]=itemCount(id)+1;
+ const after=playerStats().maxHealth;hp=Math.min(after,hp+Math.max(0,after-before));if(hero==='mage')restoreMageMana(mageMaxMana()-beforeMana);
  showItemNotice(heroItemDefinition(id).name+' · '+heroItemDefinition(id).desc);announceSynergies(previousSynergies);updateCharacterMenu();return true;
 }
 function giveUpgrade(id){
@@ -827,7 +833,7 @@ function rewardEnemy(enemy){
   if(Math.random()<.0025&&lives<5)lifeDrops.push({x:enemy.x,y:enemy.y});
  }
  if(enemy.isTreasure)coinDrops.push({x:enemy.x,y:enemy.y,amount:18});
- if(itemCount('leechFang')&&(hero==='classic'||hero==='archer'&&enemy.lastHitBy==='arrow'||hero==='mage'&&enemy.lastHitBy==='mage'))healPlayer((hero==='archer'?2:1)*itemCount('leechFang'));
+ if(itemCount('leechFang')&&(hero==='classic'||hero==='archer'&&enemy.lastHitBy==='arrow'||hero==='mage'&&enemy.lastHitBy==='mage')){healPlayer((hero==='archer'?2:1)*itemCount('leechFang'));if(hero==='mage')restoreMageMana(6*itemCount('leechFang'))}
  if(hero!=='archer'&&itemCount('sporeSatchel'))friendlyZones.push({x:enemy.x,y:enemy.y,r:35,life:3,tick:0,power:itemCount('sporeSatchel')});
  if(hero!=='archer'&&itemCount('cinderSigil'))for(const e of enemies)if(e!==enemy&&e.hp>0&&Math.hypot(e.x-enemy.x,e.y-enemy.y)<55)friendlyDamage(e,3*itemCount('cinderSigil'),'item');
 }
@@ -978,8 +984,9 @@ function updateCharacterMenu(){
   ['Maximum health',st.maxHealth],[hero==='mage'?'Spell damage':hero==='archer'?'Arrow damage':'Bat damage',st.damage.toFixed(2)+'×'],['Move speed',Math.round(st.moveSpeed)],[hero==='mage'?'Cast speed':hero==='archer'?'Bow reload speed':'Swing speed',Math.round(st.swing*100)+'%'],['Knockback',Math.round(st.knockback*100)+'%'],
   ['Health regen',st.regen.toFixed(1)+'/s'],[hero==='mage'?'Magic recovery':hero==='archer'?'Bonus bow reload':'Shield damage reduction',hero==='mage'?Math.round(Math.min(.45,upgradeCount('shield')*.1+itemCount('shieldBloom')*.12)*100)+'%':hero==='archer'?Math.round(Math.min(.5,upgradeCount('shield')*.1)*100)+'%':Math.round(st.shieldProtection*100)+'%'],['Critical chance',Math.round(st.crit*100)+'%'],['Luck',st.luck],['Damage reduction',Math.round(st.armour*100)+'%'],[hero==='archer'?'Arrow slow zone':'Enemy shot speed',hero==='archer'?(itemCount('hourglass')?'ON':'OFF'):Math.round(st.bulletSpeed*100)+'%'],[hero==='archer'?'Coin pickup (arrows collect)':'Coin pickup range',st.pickup]
  ];
+ if(hero==='mage')values.splice(1,0,['Mana',Math.floor(mageMana)+' / '+mageMaxMana()],['Mana regeneration',mageManaRegen().toFixed(1)+'/s']);
  document.querySelector('#character-stats').innerHTML=values.map(([name,value])=>'<div><span>'+name+'</span><strong>'+value+'</strong></div>').join('');
- document.querySelector('#character-panel .character-note').textContent=hero==='mage'?'MAGE: Draw 1, 2 or 3 rune patterns to cast 15 spells. No shield. Auto-aimed casts. Level 3 and 8 elements apply to your magic.':hero==='archer'?'ARCHER: Draw and release arrows. No shield. Items transform into bow-related upgrades. Reach level 3 for your first element and level 8 to combine two.':'CLASSIC: Your curved shield blocks projectiles and reflects lasers; it refills on room entry. Bat strikes and charged knockback are your main strength.';
+ document.querySelector('#character-panel .character-note').textContent=hero==='mage'?'MAGE: Mana regenerates automatically. 1-rune spells cost 8–10 MP, 2-rune spells 18–22 MP, and 3-rune spells 40–45 MP. No shield. Level 3 and 8 elements enhance your magic.':hero==='archer'?'ARCHER: Draw and release arrows. No shield. Items transform into bow-related upgrades. Reach level 3 for your first element and level 8 to combine two.':'CLASSIC: Your curved shield blocks projectiles and reflects lasers; it refills on room entry. Bat strikes and charged knockback are your main strength.';
  document.querySelector('#character-coins').textContent=progress.coins+' coins · '+kills+' kills · Dungeon '+dungeonDepth+' · Level '+progress.level+' ('+progress.xp+'/'+xpRequirement(progress.level)+' XP)'+(progress.elementPrimary?' · '+ELEMENTS[progress.elementPrimary].name:'')+(progress.elementSecondary?' + '+ELEMENTS[progress.elementSecondary].name:'');
  const inventory=document.querySelector('#item-inventory');inventory.innerHTML='';
  for(const [id,count] of Object.entries(progress.items)){
@@ -1057,7 +1064,7 @@ function setupSandboxEconomyUI(){
 
 // Two browser-local cleared-room checkpoints, shared audio preferences and bestiary.
 const SAVE_VERSION=1,PROFILE_KEY='dd-profile-v1';
-const HERO_DEFS={classic:{name:'Classic Dot',hint:'Swing the silly bat with the right stick. All original combat mechanics remain.'},archer:{name:'Archer Dot',hint:'Aim with the right stick, pull farther to draw the bow, then release to shoot. No bat swings.'},mage:{name:'Mage Dot',hint:'Trace A, B and C runes in any order on the right. Release to cast one of 15 spells. No shield.'}};
+const HERO_DEFS={classic:{name:'Classic Dot',hint:'Swing the silly bat with the right stick. All original combat mechanics remain.'},archer:{name:'Archer Dot',hint:'Aim with the right stick, pull farther to draw the bow, then release to shoot. No bat swings.'},mage:{name:'Mage Dot',hint:'Trace A, B and C runes in order to cast 15 spells. Short spells cost less mana; powerful three-rune spells use more. Mana regenerates automatically. No shield.'}};
 let hero='classic',selectedHero='classic';
 let activeSlot=null,loadingRun=false,savePending=false,profileDirty=false,saveError='',pendingReplacement=null;
 let profile={version:1,lastSlot:null,audio:{master:80,music:60,effects:80,muted:false},bestiary:{}};
@@ -1112,6 +1119,7 @@ function normalizeSavedRun(raw){
  }
  if(seen.size!==rooms.length)throw Error('Disconnected dungeon');
  raw.progress={coins:Math.floor(safeNumber(raw.progress.coins)),items:knownDictionary(raw.progress.items,ITEM_DEFS),upgrades:knownDictionary(raw.progress.upgrades,UPGRADE_DEFS),roomsCleared:Math.floor(safeNumber(raw.progress.roomsCleared)),synergyCoins:Math.floor(safeNumber(raw.progress.synergyCoins,0,0,9)),level:Math.floor(safeNumber(raw.progress.level,1,1,30)),xp:safeNumber(raw.progress.xp,0,0,100000),elementPrimary:ELEMENTS[raw.progress.elementPrimary]?raw.progress.elementPrimary:null,elementSecondary:ELEMENTS[raw.progress.elementSecondary]&&raw.progress.elementSecondary!==raw.progress.elementPrimary?raw.progress.elementSecondary:null};
+ raw.mageMana=safeNumber(raw.mageMana,100,0,190);
  raw.biome=BIOME_DEFS[raw.biome]?raw.biome:null;if(raw.biome==='basic')raw.biome=null;
  raw.depth=Math.floor(safeNumber(raw.depth,1,1,10000));raw.hero=Object.hasOwn(HERO_DEFS,raw.hero)?raw.hero:'classic';raw.hp=safeNumber(raw.hp,50,1,1e6);raw.strongArrowHits=Math.floor(safeNumber(raw.strongArrowHits,0,0,100000));raw.lives=Math.floor(safeNumber(raw.lives,3,0,5));raw.kills=Math.floor(safeNumber(raw.kills));raw.arenaTime=safeNumber(raw.arenaTime);
  raw.player=raw.player&&typeof raw.player==='object'?raw.player:{};
@@ -1133,7 +1141,7 @@ function readSlot(slot){
 function queueCheckpoint(){if(!loadingRun&&activeSlot&&!inSandbox()&&currentRoom?.cleared)savePending=true}
 function snapshotRun(){
  currentRoom.coinDrops=coinDrops;currentRoom.heartDrops=heartDrops;currentRoom.lifeDrops=lifeDrops;
- return {version:SAVE_VERSION,savedAt:Date.now(),hero,depth:dungeonDepth,biome:selectedBiome,roomId:currentRoom.id,dungeon:JSON.parse(JSON.stringify(dungeon)),progress:JSON.parse(JSON.stringify(progress)),hp,lives,kills,arenaTime,player:{x:p.x,y:p.y,a:p.a,target:p.target},shieldType,shieldHp,shieldBroken,shieldCooldown,shieldLastHit,shieldLaserTick,shieldPending:shieldPaused,bleedStacks,temporaryBleed:[...temporaryBleed],playerBleed:playerBleed.map(b=>({...b})),runStats:{...runStats},itemHitCounter,strongArrowHits,mantleCooldown,regenWhileBleeding,dashCooldown:dashCooldown()};
+ return {version:SAVE_VERSION,savedAt:Date.now(),hero,depth:dungeonDepth,biome:selectedBiome,roomId:currentRoom.id,dungeon:JSON.parse(JSON.stringify(dungeon)),progress:JSON.parse(JSON.stringify(progress)),hp,lives,kills,arenaTime,player:{x:p.x,y:p.y,a:p.a,target:p.target},shieldType,shieldHp,shieldBroken,shieldCooldown,shieldLastHit,shieldLaserTick,mageMana:Math.round(mageMana*100)/100,shieldPending:shieldPaused,bleedStacks,temporaryBleed:[...temporaryBleed],playerBleed:playerBleed.map(b=>({...b})),runStats:{...runStats},itemHitCounter,strongArrowHits,mantleCooldown,regenWhileBleeding,dashCooldown:dashCooldown()};
 }
 // Lives are committed immediately, even when the current combat room is not a safe checkpoint.
 function persistLifeCount(){
@@ -1219,10 +1227,10 @@ function continueSlot(slot){
  prepareSlotSwitch();const data=readSlot(slot).data;if(!data)return false;loadingRun=true;activeSlot=slot;
  try{
   progress=data.progress;dungeon=data.dungeon;dungeonDepth=data.depth;selectedBiome=data.biome;lastDungeonSignature=dungeonSignature(dungeon);arenaTime=data.arenaTime;
-  hero=data.hero;hp=data.hp;lives=data.lives;kills=data.kills;shieldType=data.shieldType;shieldHp=data.shieldHp;shieldBroken=!!data.shieldBroken;shieldCooldown=data.shieldCooldown;shieldLastHit=data.shieldLastHit;shieldLaserTick=safeNumber(data.shieldLaserTick);
+  hero=data.hero;mageMana=safeNumber(data.mageMana,100,0,190);hp=data.hp;lives=data.lives;kills=data.kills;shieldType=data.shieldType;shieldHp=data.shieldHp;shieldBroken=!!data.shieldBroken;shieldCooldown=data.shieldCooldown;shieldLastHit=data.shieldLastHit;shieldLaserTick=safeNumber(data.shieldLaserTick);
   bleedStacks=data.bleedStacks;temporaryBleed=data.temporaryBleed;playerBleed=data.playerBleed;runStats=data.runStats;itemHitCounter=Math.floor(safeNumber(data.itemHitCounter));strongArrowHits=Math.floor(safeNumber(data.strongArrowHits));mantleCooldown=safeNumber(data.mantleCooldown,0,0,3);regenWhileBleeding=!!data.regenWhileBleeding;
   over=false;inv=1.2;sandboxSavedRun=null;sandboxRoom=null;currentRoom=null;
-  enterRoom(data.roomId);restoreSafePosition(data.player);hp=Math.min(playerStats().maxHealth,data.hp);arenaTime=data.arenaTime;restoreDashState(data.dashCooldown);
+  enterRoom(data.roomId);mageMana=hero==='mage'?Math.min(mageMaxMana(),safeNumber(data.mageMana,100,0,190)):100;restoreSafePosition(data.player);hp=Math.min(playerStats().maxHealth,data.hp);arenaTime=data.arenaTime;restoreDashState(data.dashCooldown);
   // enterRoom clears transient damage effects; restore the saved run's bleeding state afterwards.
   playerBleed=data.playerBleed;shieldPaused=false;
   document.querySelector('#regen-toggle').textContent='Regen while bleeding: '+(regenWhileBleeding?'ON':'OFF');
@@ -1873,19 +1881,19 @@ function enemyAttacksEnabled(){return !inSandbox()||sandbox.attacks}
 function sandboxDoorSide(){return Object.keys(DIRECTIONS).find(side=>!dungeon[0].doors.some(door=>door.side===side))}
 function enterSandbox(){
  if(currentRoom?.kind!=='start'||sandboxSavedRun)return;
- sandboxSavedRun={dashCooldown:dashCooldown(),progress:JSON.parse(JSON.stringify(progress)),itemHitCounter,strongArrowHits,mantleCooldown,hp,lives,kills,inv,arenaTime,shieldType,shieldHp,shieldBroken,shieldCooldown,shieldLastHit,shieldLaserTick,bleedStacks,temporaryBleed:[...temporaryBleed],playerBleed:playerBleed.map(b=>({...b})),runStats:{...runStats},angle:p.a,target:p.target};
+ sandboxSavedRun={mageMana,dashCooldown:dashCooldown(),progress:JSON.parse(JSON.stringify(progress)),itemHitCounter,strongArrowHits,mantleCooldown,hp,lives,kills,inv,arenaTime,shieldType,shieldHp,shieldBroken,shieldCooldown,shieldLastHit,shieldLaserTick,bleedStacks,temporaryBleed:[...temporaryBleed],playerBleed:playerBleed.map(b=>({...b})),runStats:{...runStats},angle:p.a,target:p.target};
  const side=sandboxDoorSide();
  sandboxRoom={id:'sandbox',name:'SANDBOX',kind:'sandbox',shape:'sandbox',w:1100,h:900,count:0,cleared:true,visited:true,discovered:true,doors:[{side:DIRECTIONS[side].opposite,to:0}]};
  sandbox.movement=false;sandbox.attacks=false;sandbox.notice='Tap a picture to spawn one.';
  closeSettings();if(editingControls)endEditing();enterRoom('sandbox',DIRECTIONS[side].opposite);progress.coins=100;p.x=W/2;p.y=F/2;sandbox.notice='Free items north · practice shop south · +100 coins in this menu.';
- hp=playerStats().maxHealth;over=false;playerBleed=[];shieldPaused=false;
+ hp=playerStats().maxHealth;mageMana=mageMaxMana();over=false;playerBleed=[];shieldPaused=false;
  document.querySelector('#sandbox-panel').hidden=false;hud();
 }
 function leaveSandbox(){
  if(!inSandbox()||!sandboxSavedRun)return;
  const saved=sandboxSavedRun,side=sandboxDoorSide();sandboxSavedRun=null;shieldPaused=false;
  document.querySelector('#shield-choice').style.display='none';enterRoom(0,side);
- progress=saved.progress;itemHitCounter=saved.itemHitCounter;strongArrowHits=saved.strongArrowHits||0;mantleCooldown=saved.mantleCooldown;hp=saved.hp;lives=saved.lives;kills=saved.kills;inv=saved.inv;arenaTime=saved.arenaTime;shieldType=saved.shieldType;shieldHp=saved.shieldHp;shieldBroken=saved.shieldBroken;shieldCooldown=saved.shieldCooldown;shieldLastHit=saved.shieldLastHit;shieldLaserTick=saved.shieldLaserTick;bleedStacks=saved.bleedStacks;temporaryBleed=saved.temporaryBleed;playerBleed=saved.playerBleed;runStats=saved.runStats;p.a=saved.angle;p.target=saved.target;over=false;restoreDashState(saved.dashCooldown);
+ progress=saved.progress;mageMana=Math.min(mageMaxMana(),saved.mageMana??100);itemHitCounter=saved.itemHitCounter;strongArrowHits=saved.strongArrowHits||0;mantleCooldown=saved.mantleCooldown;hp=saved.hp;lives=saved.lives;kills=saved.kills;inv=saved.inv;arenaTime=saved.arenaTime;shieldType=saved.shieldType;shieldHp=saved.shieldHp;shieldBroken=saved.shieldBroken;shieldCooldown=saved.shieldCooldown;shieldLastHit=saved.shieldLastHit;shieldLaserTick=saved.shieldLaserTick;bleedStacks=saved.bleedStacks;temporaryBleed=saved.temporaryBleed;playerBleed=saved.playerBleed;runStats=saved.runStats;p.a=saved.angle;p.target=saved.target;over=false;restoreDashState(saved.dashCooldown);
  document.querySelector('#sandbox-panel').hidden=true;document.querySelector('#shield-durability').style.display=shieldType?'flex':'none';hud();
 }
 function clearSandbox(){
@@ -1896,7 +1904,7 @@ function clearSandbox(){
 }
 function healSandbox(){
  if(!inSandbox())return;
- hp=playerStats().maxHealth;over=false;inv=1;playerBleed=[];p.falling=0;p.slowUntil=0;p.kvx=p.kvy=0;shieldPaused=false;document.querySelector('#shield-choice').style.display='none';hud();
+ hp=playerStats().maxHealth;mageMana=mageMaxMana();over=false;inv=1;playerBleed=[];p.falling=0;p.slowUntil=0;p.kvx=p.kvy=0;shieldPaused=false;document.querySelector('#shield-choice').style.display='none';hud();
 }
 function resetSandbox(){clearSandbox();setSandboxMovement(false);setSandboxAttacks(false);healSandbox()}
 function setSandboxMovement(value){
@@ -2204,7 +2212,7 @@ function makeRoomLayout(room){
 }
 function enterRoom(id,entry=null){
  mageBolts=[];mageZones=[];mageGesture=null;mageCooldowns={};mageGlobalReady=0;
- const changedRoom=currentRoom?.id!==id;if(changedRoom&&!loadingRun&&dungeon.includes(currentRoom))bankClearedRoomCoins();
+ const changedRoom=currentRoom?.id!==id;if(hero==='mage'&&changedRoom&&!loadingRun)mageMana=mageMaxMana();if(changedRoom&&!loadingRun&&dungeon.includes(currentRoom))bankClearedRoomCoins();
  if(currentRoom&&!inSandbox()){currentRoom.coinDrops=coinDrops;currentRoom.heartDrops=heartDrops;currentRoom.lifeDrops=lifeDrops}
  currentRoom=id==='sandbox'?sandboxRoom:dungeon[id];currentRoom.visited=currentRoom.discovered=true;W=currentRoom.w;F=currentRoom.h;
  roomEntrySide=entry;
@@ -2335,7 +2343,7 @@ function drawRoomMap(){
 let arenaTime=0;
 let p,enemies,hp,lives=3,kills,inv,over,roomEntrySide=null,last=0,spawnClock=0,healFx=[],wallFx=[],elementFx=[],puddles=[],poisonPuddles=[],poisonPlayerTimer=0,playerPoisonGlow=0,shards=[],portalFx=[];
 let arrows=[],bowShotCooldown=0;
-let mageBolts=[],mageZones=[],mageCooldowns={},mageGlobalReady=0,mageGesture=null,mageLastCast='',mageLastCastUntil=0,mageHitCount=0,mageCastCount=0;
+let mageBolts=[],mageZones=[],mageCooldowns={},mageGlobalReady=0,mageGesture=null,mageLastCast='',mageLastCastUntil=0,mageHitCount=0,mageCastCount=0,mageMana=100;
 function showHeal(x,y){healFx.push({x,y,life:.85})}
 function showWallHit(w,x,y,nx,ny,speed){
 if(speed<22)return;
@@ -2418,22 +2426,38 @@ function drawArrows(){
  g.restore();
 }
 
+
+function mageMaxMana(){return Math.min(190,100+15*itemCount('shieldBloom'))}
+function mageManaRegen(){return Math.min(22,8+1.5*upgradeCount('regen')+1.5*itemCount('shieldBloom')+.75*itemCount('mossCharm'))}
+function restoreMageMana(amount){if(hero!=='mage'||amount<=0)return 0;const before=mageMana;mageMana=Math.min(mageMaxMana(),mageMana+amount);return mageMana-before}
+function refreshManaHud(){
+ const bar=document.querySelector('#mana-hud');if(!bar)return;
+ bar.style.display=hero==='mage'?'flex':'none';
+ if(hero!=='mage')return;
+ const max=mageMaxMana();mageMana=Math.max(0,Math.min(max,mageMana));
+ const value=Math.floor(mageMana+.0001);
+ document.querySelector('#mana-fill').style.width=(100*mageMana/max)+'%';
+ document.querySelector('#mana-label').textContent=value+'/'+max;
+ bar.classList.toggle('low-mana',mageMana<18);
+ bar.setAttribute('aria-valuemax',String(max));bar.setAttribute('aria-valuenow',String(value));
+}
+
 const MAGE_SPELLS={
- A:{name:'Ember Bolt',cooldown:.35,tier:1,color:'#ffb078'},
- B:{name:'Frost Needle',cooldown:.35,tier:1,color:'#a1e4ff'},
- C:{name:'Arc Pulse',cooldown:.45,tier:1,color:'#c5a4ff'},
- AB:{name:'Steam Burst',cooldown:1.4,tier:2,color:'#f4d5c0'},
- BA:{name:'Frostfire Lance',cooldown:1.6,tier:2,color:'#ffd4a1'},
- AC:{name:'Flame Ring',cooldown:1.8,tier:2,color:'#ff986c'},
- CA:{name:'Arcane Mine',cooldown:2,tier:2,color:'#d8afff'},
- BC:{name:'Ice Wall',cooldown:2.4,tier:2,color:'#a6ecff'},
- CB:{name:'Repulsion Wave',cooldown:1.7,tier:2,color:'#c9a4ff'},
- ABC:{name:'Meteor Drop',cooldown:4.8,tier:3,color:'#ff996b'},
- ACB:{name:'Flame Spiral',cooldown:4.4,tier:3,color:'#ffc18e'},
- BAC:{name:'Crystal Barrage',cooldown:4.2,tier:3,color:'#b8d9ff'},
- BCA:{name:'Blizzard Zone',cooldown:5,tier:3,color:'#b1e7ff'},
- CAB:{name:'Arc Nova',cooldown:4.6,tier:3,color:'#e0afff'},
- CBA:{name:'Gravity Well',cooldown:5.5,tier:3,color:'#c89dff'}
+ A:{name:'Ember Bolt',cooldown:.35,mana:8,tier:1,color:'#ffb078'},
+ B:{name:'Frost Needle',cooldown:.35,mana:8,tier:1,color:'#a1e4ff'},
+ C:{name:'Arc Pulse',cooldown:.45,mana:10,tier:1,color:'#c5a4ff'},
+ AB:{name:'Steam Burst',cooldown:1.4,mana:18,tier:2,color:'#f4d5c0'},
+ BA:{name:'Frostfire Lance',cooldown:1.6,mana:20,tier:2,color:'#ffd4a1'},
+ AC:{name:'Flame Ring',cooldown:1.8,mana:22,tier:2,color:'#ff986c'},
+ CA:{name:'Arcane Mine',cooldown:2,mana:18,tier:2,color:'#d8afff'},
+ BC:{name:'Ice Wall',cooldown:2.4,mana:18,tier:2,color:'#a6ecff'},
+ CB:{name:'Repulsion Wave',cooldown:1.7,mana:20,tier:2,color:'#c9a4ff'},
+ ABC:{name:'Meteor Drop',cooldown:4.8,mana:45,tier:3,color:'#ff996b'},
+ ACB:{name:'Flame Spiral',cooldown:4.4,mana:42,tier:3,color:'#ffc18e'},
+ BAC:{name:'Crystal Barrage',cooldown:4.2,mana:40,tier:3,color:'#b8d9ff'},
+ BCA:{name:'Blizzard Zone',cooldown:5,mana:40,tier:3,color:'#b1e7ff'},
+ CAB:{name:'Arc Nova',cooldown:4.6,mana:42,tier:3,color:'#e0afff'},
+ CBA:{name:'Gravity Well',cooldown:5.5,mana:45,tier:3,color:'#c89dff'}
 };
 function mageRunes(){
  const st=sticks[1],x=clamp(st.x,viewW/2+76,viewW-77),y=clamp(st.y-91,190,236);
@@ -2450,7 +2474,7 @@ function mageAim(){
  return {a,tx:nearest?.x??p.x+Math.cos(a)*170,ty:nearest?.y??p.y+Math.sin(a)*170};
 }
 function mageAvailable(path){
- return !!MAGE_SPELLS[path]&&arenaTime>=mageGlobalReady&&(mageCooldowns[path]||0)<=arenaTime;
+ return !!MAGE_SPELLS[path]&&mageMana>=MAGE_SPELLS[path].mana&&arenaTime>=mageGlobalReady&&(mageCooldowns[path]||0)<=arenaTime;
 }
 function mageTargets(){return [...enemies,...(bossFight&&!bossFight.done?bossFight.units:[])].filter(e=>e.hp>0)}
 function mageOnHit(target){
@@ -2522,6 +2546,8 @@ function castMageSpell(path){
  if(!mageInputEnabled()||!MAGE_SPELLS[path])return false;
  const spell=MAGE_SPELLS[path],remaining=Math.max(mageGlobalReady-arenaTime,(mageCooldowns[path]||0)-arenaTime);
  if(remaining>0){mageLastCast=spell.name+' · '+remaining.toFixed(1)+'s';mageLastCastUntil=arenaTime+.9;document.querySelector('#mage-cast-status').textContent=spell.name+' recharging ('+remaining.toFixed(1)+'s)';return false}
+ if(mageMana+1e-6<spell.mana){mageLastCast='NOT ENOUGH MANA · NEED '+spell.mana+' MP';mageLastCastUntil=arenaTime+1.35;document.querySelector('#mage-cast-status').textContent='Not enough mana for '+spell.name+' (need '+spell.mana+' MP)';return false}
+ mageMana=Math.max(0,mageMana-spell.mana);refreshManaHud();
  const {a,tx,ty}=mageAim(),range=(distance)=>({x:clamp(p.x+Math.cos(a)*distance,38,W-38),y:clamp(p.y+Math.sin(a)*distance,38,F-38)});
  const point=range(135);
  const amp=1;
@@ -2547,12 +2573,13 @@ function castMageSpell(path){
  const cooldownMult=Math.max(.45,1-.12*itemCount('shieldBloom')-.1*upgradeCount('shield')-.1*itemCount('hourglass'))/Math.max(.7,playerStats().swing);
  mageCooldowns[path]=arenaTime+spell.cooldown*cooldownMult;
  mageGlobalReady=arenaTime+.18;
- mageLastCast=path+' · '+spell.name;mageLastCastUntil=arenaTime+1.8;mageCastCount++;document.querySelector('#mage-cast-status').textContent=path+' · '+spell.name;
+ mageLastCast=path+' · '+spell.name;mageLastCastUntil=arenaTime+1.8;mageCastCount++;document.querySelector('#mage-cast-status').textContent=path+' · '+spell.name+' · -'+spell.mana+' MP';queueCheckpoint();
  if(itemCount('mossCharm')&&mageCastCount%5===0)healPlayer(itemCount('mossCharm'));
  runStats.swingsHit+=0;return true;
 }
 function updateMage(dt){
- if(hero!=='mage')return;
+ if(hero!=='mage'||over)return;
+ restoreMageMana(mageManaRegen()*dt);
  for(const z of mageZones){
   z.life-=dt;z.tick+=dt;
   if(z.type==='meteor'){
@@ -2639,7 +2666,7 @@ function drawMageRunes(){
  }
  g.globalAlpha=1;
  g.fillStyle='#fff0cb';g.font='bold 11px monospace';
- if(mageGesture){const sequence=selected.join(''),spell=MAGE_SPELLS[sequence];g.fillText(sequence+(spell?' · '+spell.name.toUpperCase():''),runes[2].x,runes[2].y-81)}
+ if(mageGesture){const sequence=selected.join(''),spell=MAGE_SPELLS[sequence];g.fillStyle=spell&&mageMana<spell.mana?'#ff91b2':'#fff0cb';g.fillText(sequence+(spell?' · '+spell.name.toUpperCase()+' · '+spell.mana+' MP':''),runes[2].x,runes[2].y-81)}
  else if(mageLastCastUntil>arenaTime)g.fillText(mageLastCast.toUpperCase(),runes[2].x,runes[2].y-81);
  else g.fillText('TRACE RUNES TO CAST',runes[2].x,runes[2].y-81);
  g.restore();
@@ -3352,7 +3379,7 @@ elementFx.push({type:'split',x:oldX,y:oldY,life:.38,maxLife:.38});
 }
 const lifeDisplay=document.createElement('span');lifeDisplay.id='lives-count';lifeDisplay.style.cssText='font:700 10px monospace;color:#ffb2bc;white-space:nowrap';document.querySelector('header .health').appendChild(lifeDisplay);
 function hud(){
- refreshElementHud();
+ refreshElementHud();refreshManaHud();
  document.querySelector('#hp-fill').style.width=(Math.max(0,hp)/playerStats().maxHealth*100)+'%';document.querySelector('#hp-bleed').style.width=(Math.min(Math.max(0,hp),pendingBleed())/playerStats().maxHealth*100)+'%';
  document.querySelector('#hp-fill').style.background=hp/playerStats().maxHealth<=.3?'#f06470':hp/playerStats().maxHealth<=.6?'#e7bb62':'#69d58a';document.querySelector('#hp-label').textContent=Math.round(Math.max(0,hp))+'/'+playerStats().maxHealth;lifeDisplay.textContent='LIVES '+lives+'/5';document.querySelector('#kills').textContent='KILLS '+kills;
  if(currentRoom){
@@ -3372,11 +3399,11 @@ function resolvePlayerDeath(){
  // Clear uncollected fight rewards so repeating the same room cannot farm them.
  coinDrops=[];heartDrops=[];lifeDrops=[];currentRoom.coinDrops=[];currentRoom.heartDrops=[];currentRoom.lifeDrops=[];
  playerBleed=[];temporaryBleed=[];bleedStacks=0;poisonPlayerTimer=0;
- hp=playerStats().maxHealth;over=false;inv=2;
+ hp=playerStats().maxHealth;mageMana=mageMaxMana();over=false;inv=2;
  enterRoom(currentRoom.id,roomEntrySide);refillRoomShield();inv=2;
  showItemNotice('LIFE LOST · '+lives+' REMAIN · ROOM RESET');hud();
 }
-function reset(){mageBolts=[];mageZones=[];mageGesture=null;mageCooldowns={};mageGlobalReady=0;mageLastCast='';mageHitCount=0;mageCastCount=0;document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;strongArrowHits=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
+function reset(){mageMana=100;mageBolts=[];mageZones=[];mageGesture=null;mageCooldowns={};mageGlobalReady=0;mageLastCast='';mageHitCount=0;mageCastCount=0;document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;strongArrowHits=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
 function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*viewW/r.width,y:(e.clientY-r.top)*H/r.height}}
 function setStick(s,v){let dx=v.x-s.x,dy=v.y-s.y,d=Math.hypot(dx,dy),radius=R*controls.size/100,k=d?Math.min(d,radius)/d/radius:0;s.dx=dx*k;s.dy=dy*k}
 c.addEventListener('pointerdown',e=>{e.preventDefault();let v=pt(e),i=v.x<viewW/2?0:1,s=sticks[i];if(hero==='mage'&&!editingControls&&i===1){const rune=mageRuneAt(v.x,v.y);if(rune&&mageInputEnabled()&&!mageGesture){mageGesture={id:e.pointerId,path:[rune.id],last:v};c.setPointerCapture(e.pointerId)}return}if(editingControls){if(editPointer)return;let nearest=sticks.map((st,j)=>({j,d:Math.hypot(st.x-v.x,st.y-v.y)})).filter(o=>o.d<R*controls.size/100+22).sort((a,b)=>a.d-b.d)[0];if(!nearest)return;editPointer={id:e.pointerId,i:nearest.j};c.setPointerCapture(e.pointerId);return}if(s.id!==null)return;if(controls.floating)moveStick(i,v);s.id=e.pointerId;c.setPointerCapture(e.pointerId);setStick(s,v)});
@@ -3625,5 +3652,5 @@ g.fillStyle='#11101c';g.fillRect(0,VIEW_F,viewW,H-VIEW_F);g.save();g.globalAlpha
 if(hero==='archer'){const s=sticks[1],radius=R*controls.size/100,power=bowPower();g.save();g.strokeStyle=bowShotCooldown>0?'#a08b6b':'#f4c56b';g.lineWidth=4;g.beginPath();g.arc(s.x,s.y,radius+6,-Math.PI/2,-Math.PI/2+Math.PI*2*power);g.stroke();if(power>.15){g.textAlign='center';g.fillStyle='#ffe9a7';g.font='bold 10px monospace';g.fillText(Math.round(power*100)+'%',s.x,s.y-radius-15)}g.restore()}
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'DRAW':'BAT',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Bleed stacks '+bleedStacks,viewW/2,237)}
-requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.5.1';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.6';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
