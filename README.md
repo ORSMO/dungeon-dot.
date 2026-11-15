@@ -2,6 +2,17 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## Android preview
+
+Open `android/` in Android Studio, or run the commands below from this repository with Java 17, Gradle 8.13, Android SDK Platform 36 and Build Tools 35.0.0.
+
+```sh
+node --test
+gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
+```
+
+The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
+
 ## V8.23 — Automatic level 8 evolution
 
 At level 8, your current form evolves automatically and the HUD shows **EVOLVED**. The boost is +5 maximum HP, +15% damage, +8% movement speed, +10% swing, reload or cast speed, +10% knockback, +0.15 HP per second and +5 percentage points of damage reduction. Mage also gains +10 maximum mana and +1 mana per second. Existing stat caps apply.

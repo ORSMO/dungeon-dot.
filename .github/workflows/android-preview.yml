@@ -1,0 +1,57 @@
+name: Dungeon Dot Android Preview
+
+on:
+  push:
+    branches: [android-first]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Test gameplay
+        run: node --test
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+      - name: Install the Android build tools
+        run: sdkmanager "platforms;android-36" "build-tools;35.0.0"
+      - name: Lint and build Android
+        run: gradle -p android --no-daemon :app:lintDebug :app:assembleDebug :app:bundleRelease
+      - name: Verify the Android packages
+        run: |
+          set -euo pipefail
+          apk=android/app/build/outputs/apk/debug/app-debug.apk
+          bundle=android/app/build/outputs/bundle/release/app-release.aab
+          build_tools="$ANDROID_HOME/build-tools/35.0.0"
+          "$build_tools/apksigner" verify "$apk"
+          "$build_tools/aapt" dump badging "$apk" | tee android-badging.txt
+          grep -Fq "package: name='com.orsmo.dungeondot.preview'" android-badging.txt
+          grep -Fq "targetSdkVersion:'36'" android-badging.txt
+          if grep -Fq "android.permission.INTERNET" android-badging.txt; then
+            echo "The offline preview unexpectedly requests internet access"
+            exit 1
+          fi
+          unzip -p "$apk" assets/index.html | cmp index.html -
+          unzip -p "$bundle" base/assets/index.html | cmp index.html -
+          mkdir release-files
+          cp "$apk" release-files/Dungeon-Dot-Android-Preview.apk
+          cp "$bundle" release-files/Dungeon-Dot-Unsigned.aab
+      - name: Upload the test APK and unsigned bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: dungeon-dot-android
+          path: release-files/
+          if-no-files-found: error
+          retention-days: 21

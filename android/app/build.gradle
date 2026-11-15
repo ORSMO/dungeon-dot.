@@ -1,0 +1,45 @@
+plugins {
+    id 'com.android.application' version '8.13.2'
+}
+
+def gameAssets = layout.buildDirectory.dir('generated/gameAssets')
+def copyGame = tasks.register('copyGame', Copy) {
+    from rootProject.file('../index.html')
+    into gameAssets
+}
+
+android {
+    namespace 'com.orsmo.dungeondot'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'com.orsmo.dungeondot'
+        minSdk 26
+        targetSdk 36
+        versionCode 823
+        versionName '8.23'
+        resValue 'string', 'app_name', 'Dungeon Dot'
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix '.preview'
+            resValue 'string', 'app_name', 'Dungeon Dot Preview'
+        }
+    }
+
+    sourceSets.main.assets.srcDir(gameAssets)
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+tasks.named('preBuild') {
+    dependsOn copyGame
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.14.0'
+}
