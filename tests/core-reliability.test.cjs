@@ -319,16 +319,16 @@ test('index damage uses combat values for elite slams and boss signatures', () =
 test('Classic is protected through the final moving dash frame and loses protection afterwards', () => {
   const result=run([
     declaration('DASH_DURATION'),method('dashCooldown'),method('classicDashBatActive'),method('classicDashProtected'),
-    method('dashInvulnerable'),method('requestDash'),method('moveDash'),method('damagedHealth'),
+    method('dashInvulnerable'),method('requestDash'),method('moveDash'),method('damagedHealth'),method('bodyArmourStats'),declaration('BODY_ARMOUR_MAX_RANK'),
     'const hero="classic",W=480,F=480,sticks=[{dx:1,dy:0}],holes=[],p={x:100,y:100,a:0};',
     'const dash={remaining:0,readyAt:0,immuneUntil:0,trail:[],batPath:null,batHits:new Set()};',
-    'let arenaTime=10,inv=0,hp=50,wall=false;',
-    'const combatInputEnabled=()=>true,queueCheckpoint=()=>{},updateDashButton=()=>{},blocked=()=>wall,inSandbox=()=>false,playerStats=()=>({armour:0});',
+    'let arenaTime=10,inv=0,hp=50,wall=false,armourHp=12;const progress={upgrades:{}};',
+    'const combatInputEnabled=()=>true,queueCheckpoint=()=>{},updateDashButton=()=>{},blocked=()=>wall,inSandbox=()=>false,playerStats=()=>({armour:0}),updateBodyArmour=()=>{};',
     'requestDash();arenaTime+=.18;moveDash(.18);const finalFrame=damagedHealth(9);',
     'dash.batPath=null;const after=damagedHealth(9);',
     'arenaTime+=2;requestDash();wall=true;moveDash(.016);const blockedWithoutMoving=damagedHealth(9);'
-  ], '{finalFrame,after,blockedWithoutMoving,inv}');
-  assert.deepEqual(result,{finalFrame:50,after:41,blockedWithoutMoving:41,inv:0});
+  ], '{finalFrame,after,blockedWithoutMoving,inv,armourHp}');
+  assert.deepEqual(result,{finalFrame:50,after:43.25,blockedWithoutMoving:43.25,inv:0,armourHp:7.5});
 });
 
 test('Classic dash sweeps the travel path, respects cover, and boosts only bat damage by 50%', () => {
@@ -460,7 +460,7 @@ test('combat population eases for shieldless heroes early and converges by depth
 
 test('Archer and Mage get modest damage mitigation to offset the missing shield', () => {
   const result = run([
-    'let hero="classic",hp=50;const dashInvulnerable=()=>false,inSandbox=()=>false,sandbox={attacks:true};',
+    'let hero="classic",hp=50,armourHp=0;const dashInvulnerable=()=>false,inSandbox=()=>false,sandbox={attacks:true};',
     'const playerStats=()=>({armour:hero==="archer"?.05:hero==="mage"?.10:0});',
     method('damagedHealth'),
     'const damage=[];for(const character of ["classic","archer","mage"]){hero=character;hp=50;hp=damagedHealth(14);damage.push(50-hp)}'
@@ -602,6 +602,25 @@ test('healer enemies support allies without granting free player healing on cont
   assert.match(method('executeEnemyAbility'), /if\(kind==='heal'\)\{ally\.hp=Math\.min\(ally\.maxHp,ally\.hp\+\(e\.elite\?4:2\)\)/);
 });
 
+test('body armour absorbs a share, exhausts its durability on the breaking hit, and refills on room entry', () => {
+  const result=run([
+    declaration('BODY_ARMOUR_MAX_RANK'),
+    'const hero="classic",progress={upgrades:{}},sandbox={attacks:false};',
+    'let hp=50,armourHp=12,breaks=0,practice=false,checkpoints=0;',
+    'let shieldType="curved",shieldHp=100,shieldBroken=false,shieldCooldown=0,shieldLastHit=-99,shieldLaserTick=0;',
+    'const dashInvulnerable=()=>false,inSandbox=()=>practice,playerStats=()=>({armour:0}),shieldUpdate=()=>{},updateBodyArmour=()=>{},showItemNotice=()=>breaks++,queueCheckpoint=()=>checkpoints++;',
+    ...['bodyArmourStats','damagedHealth','refillRoomDefences'].map(method),
+    'practice=true;hp=damagedHealth(12);const protectedPractice={hp,armourHp};practice=false;',
+    'hp=damagedHealth(20);const first={hp,armourHp};',
+    'hp=damagedHealth(32);const broken={hp,armourHp};hp=damagedHealth(3);',
+    'progress.upgrades={armourPlates:5,armourPadding:5};refillRoomDefences();'
+  ],'{protectedPractice,first,broken,hp,armourHp,breaks,checkpoints,absorption:bodyArmourStats().absorption}');
+  assert.deepEqual(result,{
+    protectedPractice:{hp:50,armourHp:12},first:{hp:35,armourHp:7},broken:{hp:10,armourHp:0},
+    hp:7,armourHp:32,breaks:1,checkpoints:2,absorption:.5
+  });
+});
+
 test('Mage level 3 and level 8 choices stay pending until distinct elements are selected', () => {
   const result = run([
     'const hero="mage";let progress={level:3,elementPrimary:null,elementSecondary:null};',
@@ -664,17 +683,28 @@ test('sword width, flail ball, and spear tip match their combat geometry', () =>
     ...['equippedWeapon','weaponForm','flailHead','meleeSegment','meleeSweep','meleeHitDamage'].map(method),
     'const stickReach=!!meleeSweep(169,100,3,0);progress.weapon="spear";',
     'const shaft=meleeSweep(138,100,3,0),tip=meleeSweep(169,100,3,0);',
-    'const shaftDamage=meleeHitDamage("spear",true,shaft.tip,true),tipDamage=meleeHitDamage("spear",true,tip.tip,true);',
+    'const shaftRatio=meleeHitDamage("spear",true,shaft.tip,true)/meleeHitDamage("spear",true,tip.tip,true);',
     'cover=true;const blocked=!!meleeSweep(169,100,3,0);cover=false;',
     'progress.weapon="flail";const chain=!!meleeSweep(140,100,2,0),ball=!!meleeSweep(158,100,2,0);',
     'p.flailLag=.6;const lagged=flailHead(0,.6),trailingBall=!!meleeSweep(100+lagged.x,100+lagged.y,2,0,.6);',
     'p.flailLag=0;progress.weapon="bat";const batWide=!!meleeSweep(145,107,2,0);',
     'progress.weapon="sword";const swordWide=!!meleeSweep(145,107,2,0);'
-  ],'{stickReach,shaft:shaft.tip,tip:tip.tip,shaftDamage,tipDamage,blocked,chain,ball,trailingBall,batWide,swordWide}');
+  ],'{stickReach,shaft:shaft.tip,tip:tip.tip,shaftRatio,blocked,chain,ball,trailingBall,batWide,swordWide}');
   assert.deepEqual(result,{
-    stickReach:false,shaft:false,tip:true,shaftDamage:5.8500000000000005,tipDamage:13,blocked:false,
+    stickReach:false,shaft:false,tip:true,shaftRatio:.45,blocked:false,
     chain:false,ball:true,trailingBall:true,batWide:false,swordWide:true
   });
+});
+
+test('all five melee weapons get 0.5 more damage on light and heavy hits against enemies and bosses', () => {
+  const actual=run([
+    declaration('WEAPON_PATHS'),method('meleeHitDamage'),
+    'const keys=["stick","sword","bat","flail","spear"];',
+    'const damage=keys.map(weapon=>[false,true].flatMap(boss=>[false,true].map(heavy=>meleeHitDamage(weapon,boss,true,heavy))));'
+  ],'damage');
+  assert.deepEqual(actual,[
+    [1.35,2.05,7.5,10.5],[1.5,2.2,7.5,10.5],[1.5,2.5,8.5,12.5],[3,4.9,13.5,20.5],[1.85,2.75,9.5,13.5]
+  ]);
 });
 
 test('sword bleed refreshes its duration and only hurts vulnerable targets', () => {

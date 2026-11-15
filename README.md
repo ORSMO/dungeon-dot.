@@ -2,6 +2,12 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.18 — Melee damage and body armour
+
+Stick, Sword, Bat, Mace and Spear gain 0.5 base damage on light and heavy hits against enemies and bosses. Spear's shaft still deals 45% of its tip damage.
+
+The melee path starts each room with 12 body armour durability. It absorbs 25% of incoming damage after passive reductions, and each point absorbed costs one durability. Hits fully blocked by the curved shield bypass body armour. **Reinforced Plates** adds 4 durability per rank at room entry, while **Armour Padding** adds 5 percentage points of absorption per rank. Each upgrade caps at five ranks and can appear in shops and room rewards. In the Test Room, **Heal / revive** also refills body armour.
+
 ## V8.17 — Practice XP
 
 Use **+100 XP** in the Test Room's spawn menu to try level-up rewards. Practice levels can go up to 30 without the dungeon's two-level limit. Leaving the Test Room restores your run's XP, level, weapon, and elements.
