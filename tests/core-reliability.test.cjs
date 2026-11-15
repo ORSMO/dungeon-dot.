@@ -40,6 +40,7 @@ function method(name) {
 function run(parts, result) {
   return new Function(parts.concat(['return (' + result + ');']).join('\n'))();
 }
+const evolutionMethods=[declaration('EVOLUTION_LEVEL'),method('hasEvolved'),method('evolutionAttackRate')];
 
 test('standalone game script parses without syntax errors', () => {
   assert.doesNotThrow(() => new Function(source));
@@ -490,7 +491,7 @@ test('legacy item stacks keep save shape but effective healing and health growth
     declaration('ITEM_STACK_LIMITS'),
     'let progress={items:{mossCharm:40,emberHeart:40,leechFang:40,glassEye:40},upgrades:{vitality:40,regen:40}},hero="classic";',
     'const itemCount=id=>Math.min(ITEM_STACK_LIMITS[id]??Number.MAX_SAFE_INTEGER,progress?.items[id]||0),upgradeCount=id=>progress?.upgrades[id]||0,hasSynergy=()=>false,PLAYER_REGEN=.6;',
-    method('playerStats')
+    ...evolutionMethods,method('playerStats')
   ], '({moss:itemCount("mossCharm"),leech:itemCount("leechFang"),maxHealth:playerStats().maxHealth,regen:playerStats().regen,stored:progress.items.mossCharm})');
   assert.equal(result.moss, 3);
   assert.equal(result.leech, 3);
@@ -621,13 +622,18 @@ test('body armour absorbs a share, exhausts its durability on the breaking hit, 
   });
 });
 
-test('legacy Mage level 3 and level 8 choices stay pending until distinct elements are selected', () => {
+test('legacy Mage can choose a first element and level eight adds no new element choice', () => {
   const result = run([
     'const hero="mage";let progress={level:3,legacyMage:true,elementPrimary:null,elementSecondary:null};',
-    method('levelChoicePending'),
-    'const atLevel3=levelChoicePending();progress.elementPrimary="fire";progress.level=8;const atLevel8=levelChoicePending();progress.elementSecondary="ice";const complete=levelChoicePending();'
-  ], '{atLevel3,atLevel8,complete}');
-  assert.deepEqual(result, {atLevel3:true,atLevel8:true,complete:false});
+    'const ELEMENTS={fire:{},ice:{}},document={querySelector:()=>({})},showItemNotice=()=>{},refreshElementHud=()=>{},queueCheckpoint=()=>{},flushCheckpoint=()=>{},hud=()=>{};',
+    method('levelChoicePending'),method('selectElement'),
+    'const atLevel3=levelChoicePending(),first=selectElement("fire");progress.level=8;',
+    'const atLevel8=levelChoicePending(),second=selectElement("ice");progress.elementSecondary="ice";const existingPair=levelChoicePending();'
+  ], '{atLevel3,first,atLevel8,second,existingPair,progress}');
+  assert.deepEqual(result,{
+    atLevel3:true,first:true,atLevel8:false,second:false,existingPair:false,
+    progress:{level:8,legacyMage:true,elementPrimary:'fire',elementSecondary:'ice'}
+  });
 });
 
 const schoolSpells=[
@@ -769,11 +775,47 @@ test('excess XP is banked after two levels and pays for levels on the next floor
   });
 });
 
+test('all three paths get the automatic level-eight stats with their existing caps', () => {
+  const result=run([
+    ...evolutionMethods,method('playerStats'),method('mageMaxMana'),method('mageManaRegen'),
+    'let hero,rank=0;const progress={level:7},itemCount=()=>0,upgradeCount=()=>rank,hasSynergy=()=>false,PLAYER_REGEN=.6;',
+    'const rows=[];for(const character of ["classic","archer","mage"]){hero=character;progress.level=7;const before=playerStats();',
+    'progress.level=8;const stats=playerStats();rows.push([before.maxHealth,stats.maxHealth,stats.damage,stats.moveSpeed,stats.swing,stats.knockback,stats.regen,stats.armour])}',
+    'const mana= mageMaxMana(),manaRegen=mageManaRegen();rank=20;const capped=[playerStats().maxHealth,playerStats().regen,mageManaRegen()];'
+  ],'{rows:rows.map(row=>row.map(n=>Number(n.toFixed(3)))),mana,manaRegen,capped}');
+  assert.deepEqual(result,{
+    rows:[
+      [50,55,1.311,127.44,1.1,1.1,.75,.05],
+      [50,55,1.311,127.44,1.1,1.1,.75,.1],
+      [50,55,1.311,120.96,1.1,1.1,.65,.15]
+    ],mana:110,manaRegen:9,capped:[100,2.4,22]
+  });
+});
+
+test('crossing level eight once announces evolution, fills new capacity, and skips a reward modal', () => {
+  const result=run([
+    ...evolutionMethods,
+    ...['xpRequirement','advanceRunLevels','gainRunXp','earnXp','levelChoicePending','levelSummary','mageMaxMana','restoreMageMana','healPlayer'].map(method),
+    'const hero="mage",progress={level:7,xp:xpRequirement(7)-1,levelsThisDepth:0,mageSchool:"necromancer"};',
+    'let hp=25,mageMana=40,opens=0;const over=false,notices=[];',
+    'const playerStats=()=>({maxHealth:hasEvolved()?55:50}),itemCount=()=>0,inSandbox=()=>false;',
+    'const runHeroName=()=>"Necromancer Dot",showItemNotice=message=>notices.push(message),openElementChoice=()=>opens++;',
+    'const refreshManaHud=()=>{},refreshElementHud=()=>{},queueCheckpoint=()=>{};',
+    'earnXp(2);const evolved={hp,mageMana,level:progress.level,hud:levelSummary()};earnXp(500);'
+  ],'{evolved,hp,mageMana,level:progress.level,opens,noticeCount:notices.filter(text=>text.includes("EVOLVED")).length}');
+  assert.deepEqual(result,{
+    evolved:{hp:30,mageMana:50,level:8,hud:'LV 8 · EVOLVED · 0/206 XP'},
+    hp:30,mageMana:50,level:9,opens:0,noticeCount:1
+  });
+});
+
 test('practice XP bypasses the dungeon limit, opens rewards and stops at level 30', () => {
   const result=run([
+    ...evolutionMethods,
     'let practice=false,choices=0;const progress={level:1,xp:0,levelsThisDepth:2},sandbox={};',
     'const inSandbox=()=>practice,hud=()=>{},levelChoicePending=()=>progress.level>=3,openElementChoice=()=>choices++;',
-    ...['xpRequirement','levelSummary','advanceRunLevels','addPracticeXp'].map(method),
+    'const hero="classic",playerStats=()=>({maxHealth:hasEvolved()?55:50});',
+    ...['xpRequirement','levelSummary','advanceRunLevels','gainRunXp','addPracticeXp'].map(method),
     'addPracticeXp();const outside={...progress};',
     'practice=true;addPracticeXp();const inside={...progress};',
     'progress.level=29;progress.xp=xpRequirement(29)-1;addPracticeXp();const atCap={...progress};addPracticeXp();'
@@ -851,19 +893,20 @@ test('ranged weapon power, reload, and pierce profiles stay distinct', () => {
 
 test('Archer uses the release position and never fires on a cancelled pointer', () => {
   const result = run([
-    declaration('BOW_MIN_DRAW'),
+    declaration('BOW_MIN_DRAW'),...evolutionMethods,
     'const hero="archer",R=35,controls={size:100},p={x:10,y:10};',
     'const sticks=[{id:null},{id:7,x:100,y:200,dx:1,dy:0}],arrows=[];',
-    'let bowShotCooldown=0,mageGesture=null,editPointer=null;',
+    'let bowShotCooldown=0,mageGesture=null,editPointer=null;const progress={level:7};',
     'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),pt=event=>event;',
     'const combatInputEnabled=()=>true,itemCount=()=>0,upgradeCount=()=>0,equippedWeapon=()=>"bow";',
     method('setStick'), method('bowPower'), method('bowDrawStage'), method('rangedWeaponShot'), method('fireArrow'), method('endCanvasPointer'),
     'endCanvasPointer({type:"pointerup",pointerId:7,x:100,y:200});',
     'sticks[1].id=7;endCanvasPointer({type:"pointercancel",pointerId:7,x:135,y:200});',
     'const afterCancels=arrows.length;',
-    'sticks[1].id=7;endCanvasPointer({type:"pointerup",pointerId:7,x:100,y:229});'
-  ], '{afterCancels,shots:arrows.length,stage:bowDrawStage(arrows[0].power),angle:p.target}');
-  assert.deepEqual(result, {afterCancels:0,shots:1,stage:'strong',angle:Math.PI/2});
+    'sticks[1].id=7;endCanvasPointer({type:"pointerup",pointerId:7,x:100,y:229});',
+    'const stage=bowDrawStage(arrows[0].power),angle=p.target,normalReload=bowShotCooldown;progress.level=8;bowShotCooldown=0;fireArrow(1,0);'
+  ], '{afterCancels,shots:arrows.length,stage,angle,normalReload,evolvedReload:bowShotCooldown}');
+  assert.deepEqual(result, {afterCancels:0,shots:2,stage:'strong',angle:Math.PI/2,normalReload:.48,evolvedReload:.48/1.1});
 });
 
 test('Classic ignores center drift and records a flick before the next frame', () => {

@@ -2,6 +2,12 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.23 — Automatic level 8 evolution
+
+At level 8, your current form evolves automatically and the HUD shows **EVOLVED**. The boost is +5 maximum HP, +15% damage, +8% movement speed, +10% swing, reload or cast speed, +10% knockback, +0.15 HP per second and +5 percentage points of damage reduction. Mage also gains +10 maximum mana and +1 mana per second. Existing stat caps apply.
+
+The level 8 reward no longer opens a choice. Saved runs at level 8 or above receive the boost on load and retain previously acquired elements. The Test Room’s XP button can trigger the evolution in practice.
+
 ## V8.22 — Apprentice rune combos
 
 Apprentice Dot starts with the basic **A**, **B**, and **C** spells, all six two-rune combos, and **ABC** as the only three-rune combo. Choosing a school at level 3 equips that school’s combos and keeps the three basic spells.
