@@ -2,6 +2,15 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.15 — Stick and Sling weapon paths
+
+Pick one weapon at level 3 for the rest of the run.
+
+- **Stick Dot** starts with a short, light melee weapon. **Sword** swings faster and wider and applies a three-second bleed that refreshes on hit. **Bat** has extra knockback and deals 50% more direct damage with its dash sweep. **Mace** swings a heavy ball on a trailing chain and deals damage where the ball connects. **Spear** has the longest reach and its shaft deals 45% of the tip's damage.
+- **Sling Dot** starts with short-range stones. **Bow** rewards a full draw with more range and damage. **Crossbow** fires a full-power bolt from any valid draw and reloads slowly. **Javelin** has shorter range and can pierce up to three enemies before item bonuses.
+- Runs start with 50 HP and three lives. Each dungeon grants at most two levels. Banked XP can advance levels when you next earn XP on a new dungeon floor.
+- Mage keeps its spells and level 3 and level 8 elements. Existing saves keep their acquired elements. An older melee or ranged save at level 3 or above can choose its weapon when resumed.
+
 ## V8.14 — Classic dash attack
 
 Classic is invulnerable while dashing. The bat hits as it travels even during a steady hold and deals **50% more direct damage** while the dash moves. Each target can take one boosted hit per dash. A wall or pit edge can stop the dash early, and bosses still require their usual openings.

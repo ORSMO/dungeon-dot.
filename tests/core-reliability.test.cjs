@@ -197,7 +197,7 @@ test('Phoenix rebirth doubles the old rounded refill and split bosses conserve r
     declaration('BOSS_HEALTH_MULTIPLIER'),
     source.slice(source.indexOf('const BOSS_BLUEPRINTS ='), source.indexOf('function currentBiome(')),
     'let bossFight,dungeonDepth=1,victories=0;const currentRoom={kind:"boss"},W=720,F=640,p={x:30,y:30,vel:0},arenaTime=1;',
-    'const hero="classic",dashBatSweeps=()=>false,inSandbox=()=>false,enemyAttacksEnabled=()=>false,enemies=[],elementFx=[];',
+    'const hero="classic",dashBatSweeps=()=>false,meleeIsSwinging=()=>false,inSandbox=()=>false,enemyAttacksEnabled=()=>false,enemies=[],elementFx=[];',
     'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),bossSignatureRing=()=>{},bossSpiralShot=()=>{},showItemNotice=()=>{},updateBossZoneList=()=>{},updateBossShots=()=>{},updateBossSpecial=()=>{},finishBossFight=()=>victories++;',
     method('floorDifficulty'),method('bossMaxHealth'),method('bossRebirthHealth'),method('bossRadius'),method('bossArmour'),method('createBossUnit'),method('startBossFight'),
     method('handleBiomeBossPhase'), method('updateBossFight'),
@@ -332,18 +332,19 @@ test('Classic is protected through the final moving dash frame and loses protect
 
 test('Classic dash sweeps the travel path, respects cover, and boosts only bat damage by 50%', () => {
   const result=run([
-    'let hero="classic",cover=false;const p={x:80,y:70,a:0};',
+    'let hero="classic",cover=false;const p={x:80,y:70,a:0},progress={weapon:"bat"};',
     'const dash={batPath:{x0:10,y0:70,x1:80,y1:70},batHits:new Set()};',
     'const target={x:55,y:70,r:5};',
     'const weaponLineClear=()=>!cover,playerStats=()=>({damage:1,crit:0}),itemCount=()=>0;',
-    method('laserDistance'),method('bossBatSegment'),method('classicDashBatActive'),method('dashBatSweeps'),method('playerDamageAmount'),
+    method('laserDistance'),method('bossBatSegment'),method('equippedWeapon'),method('classicDashBatActive'),method('dashBatSweeps'),method('playerDamageAmount'),
     'const swept=dashBatSweeps(target,0);',
     'cover=true;const blocked=dashBatSweeps(target,0);cover=false;',
     'dash.batHits.add(target);const repeat=dashBatSweeps(target,0);',
     'const dashBat=playerDamageAmount(2,"bat"),arrow=playerDamageAmount(2,"arrow"),item=playerDamageAmount(2,"item");',
-    'dash.batPath=null;const after=playerDamageAmount(2,"bat");'
-  ], '{swept,blocked,repeat,dashBat,arrow,item,after}');
-  assert.deepEqual(result,{swept:true,blocked:false,repeat:false,dashBat:3,arrow:2,item:2,after:2});
+    'progress.weapon="sword";dash.batHits.clear();const swordSwept=dashBatSweeps(target,0),sword=playerDamageAmount(2,"bat");',
+    'progress.weapon="bat";dash.batPath=null;const after=playerDamageAmount(2,"bat");'
+  ], '{swept,blocked,repeat,dashBat,arrow,item,swordSwept,sword,after}');
+  assert.deepEqual(result,{swept:true,blocked:false,repeat:false,dashBat:3,arrow:2,item:2,swordSwept:false,sword:2,after:2});
 });
 
 test('failed checkpoint writes are retained, throttled and retried successfully', () => {
@@ -405,11 +406,11 @@ test('piercing arrows resolve multiple targets in travel order, never twice', ()
 });
 
 test('non-Classic heroes do not get an invisible stationary bat', () => {
-  const start = source.indexOf('// Solid bat: sweep its full arc');
-  assert.ok(start > 0, 'Bat physics block not found.');
+  const start = source.indexOf('// The melee weapon uses the same swept shape');
+  assert.ok(start > 0, 'Melee physics block not found.');
   const section = source.slice(start, start + 550);
-  assert.match(section, /if\(hero==='classic'\)\{\s*let sweep=/);
-  assert.match(source, /if\(!hit&&batHasLine\)/);
+  assert.match(section, /if\(hero==='classic'\)resolveMeleeContact\(/);
+  assert.match(method('updateBossFight'), /swingHit=hero==='classic'/);
 });
 
 test('enemy navigation does not blindly steer into a wall when no route exists', () => {
@@ -516,13 +517,97 @@ test('healer enemies support allies without granting free player healing on cont
   assert.match(method('executeEnemyAbility'), /if\(kind==='heal'\)\{ally\.hp=Math\.min\(ally\.maxHp,ally\.hp\+\(e\.elite\?4:2\)\)/);
 });
 
-test('Level 3 and Level 8 choices stay pending until distinct elements are selected', () => {
+test('Mage level 3 and level 8 choices stay pending until distinct elements are selected', () => {
   const result = run([
-    'const ELEMENTS={fire:{},ice:{},storm:{},poison:{}};let progress={level:3,elementPrimary:null,elementSecondary:null};',
+    'const hero="mage";let progress={level:3,elementPrimary:null,elementSecondary:null};',
     method('levelChoicePending'),
     'const atLevel3=levelChoicePending();progress.elementPrimary="fire";progress.level=8;const atLevel8=levelChoicePending();progress.elementSecondary="ice";const complete=levelChoicePending();'
   ], '{atLevel3,atLevel8,complete}');
   assert.deepEqual(result, {atLevel3:true,atLevel8:true,complete:false});
+});
+
+test('weapon choices are class-specific, permanent, and available from level 3', () => {
+  const result=run([
+    declaration('WEAPON_PATHS'),
+    'let hero="classic";const progress={level:2,weapon:null};',
+    'const p={a:0},document={querySelector:()=>({hidden:false})};let arrows=[],bowShotCooldown=0;',
+    'const inSandbox=()=>false,showItemNotice=()=>{},updateHeroHud=()=>{},hud=()=>{},queueCheckpoint=()=>{},flushCheckpoint=()=>{};',
+    ...['equippedWeapon','weaponChoices','validWeaponChoice','runHeroName','levelChoicePending','selectWeapon'].map(method),
+    'const stick=equippedWeapon(),early=selectWeapon("sword");progress.level=3;',
+    'const wrongClass=selectWeapon("bow"),melee=weaponChoices().map(([id])=>id),selected=selectWeapon("sword");',
+    'progress.level=8;const repeat=selectWeapon("bat"),stillSword=equippedWeapon();',
+    'hero="archer";progress.level=3;progress.weapon=null;const sling=equippedWeapon(),ranged=weaponChoices().map(([id])=>id);',
+    'const selectedRanged=selectWeapon("javelin");'
+  ],'{stick,early,wrongClass,melee,selected,repeat,stillSword,sling,ranged,selectedRanged}');
+  assert.deepEqual(result,{
+    stick:'stick',early:false,wrongClass:false,melee:['sword','bat','flail','spear'],selected:true,repeat:false,
+    stillSword:'sword',sling:'sling',ranged:['bow','crossbow','javelin'],selectedRanged:true
+  });
+});
+
+test('excess XP is banked after two levels and pays for levels on the next floor', () => {
+  const result=run([
+    method('xpRequirement'),method('advanceRunLevels'),
+    'const progress={level:1,xp:300,levelsThisDepth:0};const first=advanceRunLevels(progress),initial={...progress};',
+    'const capped=advanceRunLevels(progress);progress.levelsThisDepth=0;const next=advanceRunLevels(progress);'
+  ],'{first,initial,capped,next,progress}');
+  assert.deepEqual(result,{
+    first:2,initial:{level:3,xp:238,levelsThisDepth:2},capped:0,next:2,progress:{level:5,xp:104,levelsThisDepth:2}
+  });
+});
+
+test('sword width, flail ball, and spear tip match their combat geometry', () => {
+  const result=run([
+    declaration('WEAPON_PATHS'),
+    'let cover=false;const hero="classic",p={x:100,y:100,a:0},progress={weapon:null};',
+    'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),weaponLineClear=()=>!cover;',
+    ...['equippedWeapon','weaponForm','flailHead','meleeSegment','meleeSweep','meleeHitDamage'].map(method),
+    'const stickReach=!!meleeSweep(169,100,3,0);progress.weapon="spear";',
+    'const shaft=meleeSweep(138,100,3,0),tip=meleeSweep(169,100,3,0);',
+    'const shaftDamage=meleeHitDamage("spear",true,shaft.tip,true),tipDamage=meleeHitDamage("spear",true,tip.tip,true);',
+    'cover=true;const blocked=!!meleeSweep(169,100,3,0);cover=false;',
+    'progress.weapon="flail";const chain=!!meleeSweep(140,100,2,0),ball=!!meleeSweep(158,100,2,0);',
+    'p.flailLag=.6;const lagged=flailHead(0,.6),trailingBall=!!meleeSweep(100+lagged.x,100+lagged.y,2,0,.6);',
+    'p.flailLag=0;progress.weapon="bat";const batWide=!!meleeSweep(145,107,2,0);',
+    'progress.weapon="sword";const swordWide=!!meleeSweep(145,107,2,0);'
+  ],'{stickReach,shaft:shaft.tip,tip:tip.tip,shaftDamage,tipDamage,blocked,chain,ball,trailingBall,batWide,swordWide}');
+  assert.deepEqual(result,{
+    stickReach:false,shaft:false,tip:true,shaftDamage:5.8500000000000005,tipDamage:13,blocked:false,
+    chain:false,ball:true,trailingBall:true,batWide:false,swordWide:true
+  });
+});
+
+test('sword bleed refreshes its duration and only hurts vulnerable targets', () => {
+  const result=run([
+    'let arenaTime=1,bleedStacks=0,mantleCooldown=0,friendlyZones=[];',
+    'const hero="classic",equippedWeapon=()=>"sword",temporaryBleed=[];',
+    'const normal={hp:4},armored={hp:4,kind:"crystal",armour:1};const enemies=[normal],bossFight={units:[armored]};',
+    method('applySwordBleed'),method('updateItemEffects'),
+    'applySwordBleed(normal);applySwordBleed(armored);updateItemEffects(1);',
+    'arenaTime=2;applySwordBleed(normal);const first=normal.hp;',
+    'arenaTime=4.5;armored.armour=0;updateItemEffects(1);const refreshed=normal.hp;',
+    'arenaTime=5;updateItemEffects(1);'
+  ],'{first,refreshed,finished:normal.hp,armorHP:armored.hp,until:normal.swordBleedUntil}');
+  assert.equal(result.first,3.35);
+  assert.ok(Math.abs(result.refreshed-2.7)<1e-9);
+  assert.equal(result.finished,result.refreshed);
+  assert.equal(result.armorHP,4);
+  assert.equal(result.until,5);
+});
+
+test('ranged weapon power, reload, and pierce profiles stay distinct', () => {
+  const shots=run([method('rangedWeaponShot')],`{
+    sling:rangedWeaponShot("sling",1),bow:rangedWeaponShot("bow",1),javelin:rangedWeaponShot("javelin",1),
+    crossbow:rangedWeaponShot("crossbow",.3),fullBolt:rangedWeaponShot("crossbow",1)
+  }`);
+  assert.ok(shots.sling.damage<shots.bow.damage);
+  assert.ok(shots.sling.impact>=145);
+  assert.equal(shots.bow.speed,620);
+  assert.equal(shots.crossbow.power,1);
+  assert.equal(shots.crossbow.damage,shots.fullBolt.damage);
+  assert.ok(shots.crossbow.reload>shots.javelin.reload);
+  assert.equal(shots.javelin.pierce,2);
+  assert.ok(shots.javelin.speed*shots.javelin.life<shots.bow.speed*shots.bow.life);
 });
 
 test('Archer uses the release position and never fires on a cancelled pointer', () => {
@@ -532,8 +617,8 @@ test('Archer uses the release position and never fires on a cancelled pointer', 
     'const sticks=[{id:null},{id:7,x:100,y:200,dx:1,dy:0}],arrows=[];',
     'let bowShotCooldown=0,mageGesture=null,editPointer=null;',
     'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),pt=event=>event;',
-    'const combatInputEnabled=()=>true,itemCount=()=>0,upgradeCount=()=>0;',
-    method('setStick'), method('bowPower'), method('bowDrawStage'), method('fireArrow'), method('endCanvasPointer'),
+    'const combatInputEnabled=()=>true,itemCount=()=>0,upgradeCount=()=>0,equippedWeapon=()=>"bow";',
+    method('setStick'), method('bowPower'), method('bowDrawStage'), method('rangedWeaponShot'), method('fireArrow'), method('endCanvasPointer'),
     'endCanvasPointer({type:"pointerup",pointerId:7,x:100,y:200});',
     'sticks[1].id=7;endCanvasPointer({type:"pointercancel",pointerId:7,x:135,y:200});',
     'const afterCancels=arrows.length;',

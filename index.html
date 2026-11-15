@@ -66,7 +66,7 @@ footer #restart{display:none}
 #mana-hud.low-mana #mana-fill{background:linear-gradient(90deg,#8c579c,#fa8bc0)}
 #mana-label{font-size:10px;color:#d8c8ff}
 @media(max-width:750px){#mana-hud .mana-track{width:48px}#mana-hud{gap:3px;font-size:9px}#mana-label{font-size:9px}header{gap:6px!important}}
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.14</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · HEAVY BAT</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.15</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · SWING</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
  <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
  <small id="character-coins"></small>
  <div id="character-stats"></div>
@@ -84,8 +84,8 @@ footer #restart{display:none}
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
-<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.14</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
-  <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true">⚪ CLASSIC DOT<br>SWING BAT</button><button id="hero-archer" type="button" aria-pressed="false">🏹 ARCHER DOT<br>DRAW BOW</button><button id="hero-mage" type="button" aria-pressed="false">🔮 MAGE DOT<br>DRAW RUNES</button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
+<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.15</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
+  <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true">⚪ STICK DOT<br>MELEE PATH</button><button id="hero-archer" type="button" aria-pressed="false">🏹 SLING DOT<br>RANGED PATH</button><button id="hero-mage" type="button" aria-pressed="false">🔮 MAGE DOT<br>DRAW RUNES</button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
 <section id="bestiary-panel" hidden aria-label="Enemy index">
@@ -185,22 +185,25 @@ for(let q of projectiles){q.life-=dt;if(q.life<=0)continue;if(q.kind==='seeker')
 let ox=q.x,oy=q.y;const synergySpeed=synergyProjectileFactor(q)*(hero==='archer'&&!q.reflected&&itemCount('hourglass')&&arrows.some(a=>Math.hypot(a.x-q.x,a.y-q.y)<65)?.62:1);q.x+=q.vx*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;q.y+=q.vy*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;
 if(q.x<16||q.x>W-16||q.y<16||q.y>F-16){q.life=0;continue}if(projectileHitsProp(q,ox,oy)||projectileHitsNest(q,ox,oy))continue
 let wall=walls.find(w=>q.x+q.r>w.x&&q.x-q.r<w.x+w.w&&q.y+q.r>w.y&&q.y-q.r<w.y+w.h);if(wall){if(q.reflected&&wall.cracked)hitCrackedWall(wall,2);if(q.kind==='spitter')poisonPuddles.push({x:q.x,y:q.y,r:23,life:2,maxLife:2});if(q.kind==='frostcaster'){let water=puddles.find(z=>Math.hypot(z.x-q.x,z.y-q.y)<z.r);if(water){water.life=Math.min(water.life,.3);triggerReaction('ice',water.x,water.y,water.r)}}if(q.kind==='cannon'){q.vx*=-.75;q.vy*=-.75;q.life-=.7}else q.life=0;continue}
-let angle=p.a,ux=Math.cos(angle),uy=Math.sin(angle),along=(q.x-p.x)*ux+(q.y-p.y)*uy,at=Math.max(16,Math.min(49,along)),bx=p.x+ux*at,by=p.y+uy*at;
 if(!q.reflected&&shieldHit(q.x,q.y,q.r)){shieldDamage(q.kind==='scatter'?8:q.kind==='seeker'?20:12);let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.45;q.vy=Math.sin(a)*speed*1.45;q.reflected=true;q.life=2.5;continue}
-if(Math.hypot(q.x-bx,q.y-by)<q.r+5+5*itemCount('reflectArrow')&&!q.reflected&&hero==='classic'){let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.35;q.vy=Math.sin(a)*speed*1.35;q.reflected=true;q.life=2.5;continue}
+if(!q.reflected&&hero==='classic'&&meleeSweep(q.x,q.y,q.r+1+5*itemCount('reflectArrow'),p.a,p.flailLag||0)){let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.35;q.vy=Math.sin(a)*speed*1.35;q.reflected=true;q.life=2.5;continue}
 if(q.reflected){for(let e of enemies){if(e.hp<=0)continue;if(Math.hypot(q.x-e.x,q.y-e.y)<e.r+q.r){if(canDamage(e,165))friendlyDamage(e,q.kind==='cannon'?3:2,'projectile');if(q.kind==='frostcaster'){let water=puddles.find(z=>Math.hypot(z.x-e.x,z.y-e.y)<z.r);if(water){water.life=.2;triggerReaction('ice',water.x,water.y,water.r)}}q.life=0;break}}}else if(!classicDashProtected()&&Math.hypot(q.x-p.x,q.y-p.y)<q.r+8&&inv<=0){if(q.kind==='bloodcaster')addEnemyBleed('bloodcaster');else if(q.kind==='frostcaster')p.slowUntil=arenaTime+2;else if(q.kind==='spitter')poisonPuddles.push({x:q.x,y:q.y,r:25,life:2.5,maxLife:2.5});else{if(q.kind==='emberbolt')addEnemyBleed('emberbolt');hp=damagedHealth(ENEMY_PROJECTILES[q.kind]?.damage??ENEMY_PROJECTILES.shooter.damage);if(hp<=0)over=true}inv=.4;q.life=0}}
 projectiles=projectiles.filter(q=>q.life>0)}
 
 let bleedStacks=0,temporaryBleed=[];let playerBleed=[],regenWhileBleeding=false;const regenToggle=document.querySelector("#regen-toggle");regenToggle.onclick=()=>{regenWhileBleeding=!regenWhileBleeding;regenToggle.textContent="Regen while bleeding: "+(regenWhileBleeding?"ON":"OFF")};
 function pendingBleed(){return playerBleed.reduce((sum,b)=>sum+b.remaining,0)}
 
-function activeBleed(){return bleedStacks+temporaryBleed.length}
-function applyBleed(e){if(e.hp<=0)return;e.bleedStacks=(e.bleedStacks||0)+Math.max(1,activeBleed());e.bleedTick=0;e.bleedGlow=.45}
+function applySwordBleed(target){
+ if(hero!=='classic'||equippedWeapon()!=='sword'||target.hp<=0)return;
+ target.swordBleedUntil=arenaTime+3;
+ bleedStacks++;
+ if(target.shape==='bloodletter')temporaryBleed.push(arenaTime+12);
+}
 
 let runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};
 const statsPanel=document.querySelector("#stats-panel");document.querySelector("#stats-toggle").onclick=()=>{statsPanel.hidden=!statsPanel.hidden;updateStatsPanel()};
 function enemyStats(e){return {mass:e.mass,elasticity:e.shape==='rubber'?1.55:.92,toughness:e.elite?145:enemyDefinition(e.shape).armour||0,stability:e.shape==='square'?100:e.shape==='armored'?95:e.shape==='rubber'?75:60,regen:e.shape==='regenerator'?1.1:0}}
-function updateStatsPanel(){if(statsPanel.hidden)return;let t=Math.floor(arenaTime),maxMass=Math.max(0,...enemies.map(e=>e.mass));let nearest=enemies.filter(e=>e.hp>0).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0],es=nearest?enemyStats(nearest):null;statsPanel.textContent=`BLEED ${bleedStacks} PERMANENT + ${temporaryBleed.length} TEMP  |  TIME ${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}  |  KILLS ${kills}  |  BIGGEST HIT ${Math.round(runStats.biggestImpact)}  |  WEAPON HITS ${runStats.swingsHit}  |  SPLITS ${runStats.splits}  |  FUSIONS ${runStats.fusions}  |  HEALED ${Math.round(runStats.healed)} HP  |  LARGEST MASS ${maxMass.toFixed(1)}  |  PLAYER REGEN ${PLAYER_REGEN} HP/s  |  ENEMIES ${enemies.length}${es?'  |  NEAREST '+nearest.shape.toUpperCase()+' — HP '+Math.ceil(nearest.hp)+'/'+nearest.maxHp+'  MASS '+es.mass.toFixed(1)+'  BOUNCE '+es.elasticity.toFixed(2)+'  TOUGHNESS '+es.toughness+'  STABILITY '+es.stability+'%  REGEN '+es.regen+'/s':''}`}
+function updateStatsPanel(){if(statsPanel.hidden)return;let t=Math.floor(arenaTime),maxMass=Math.max(0,...enemies.map(e=>e.mass));let nearest=enemies.filter(e=>e.hp>0).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0],es=nearest?enemyStats(nearest):null;statsPanel.textContent=`SWORD BLEEDS ${bleedStacks}  |  TIME ${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}  |  KILLS ${kills}  |  BIGGEST HIT ${Math.round(runStats.biggestImpact)}  |  WEAPON HITS ${runStats.swingsHit}  |  SPLITS ${runStats.splits}  |  FUSIONS ${runStats.fusions}  |  HEALED ${Math.round(runStats.healed)} HP  |  LARGEST MASS ${maxMass.toFixed(1)}  |  PLAYER REGEN ${PLAYER_REGEN} HP/s  |  ENEMIES ${enemies.length}${es?'  |  NEAREST '+nearest.shape.toUpperCase()+' — HP '+Math.ceil(nearest.hp)+'/'+nearest.maxHp+'  MASS '+es.mass.toFixed(1)+'  BOUNCE '+es.elasticity.toFixed(2)+'  TOUGHNESS '+es.toughness+'  STABILITY '+es.stability+'%  REGEN '+es.regen+'/s':''}`}
 
 const sticks=[{x:86,y:326,dx:0,dy:0,id:null},{x:554,y:326,dx:0,dy:0,id:null}];
 const defaultControls={positions:[[viewW*.135,326],[viewW*.865,326]],size:100,opacity:75,floating:false};
@@ -890,20 +893,69 @@ const ELEMENTS={
  storm:{name:'Lightning',color:'#f4e77d',desc:'Every few hits chain lightning.'},
  poison:{name:'Poison',color:'#a1dc88',desc:'Weapon hits apply toxic damage over time.'}
 };
+const WEAPON_PATHS={
+ classic:{
+  stick:{name:'Stick Dot',color:'#d9b58e',reach:43,width:4,swing:1,knock:.82,hit:[.85,1.55],boss:[7,10],cooldown:.28},
+  sword:{name:'Sword Dot',color:'#f6cad7',desc:'Fast, wide swings that leave enemies bleeding.',reach:49,width:9,swing:1.32,knock:.66,hit:[1,1.7],boss:[7,10],cooldown:.22},
+  bat:{name:'Bat Dot',color:'#e8dcff',desc:'Strong knockback and a +50% damage dash sweep.',reach:48,width:4,swing:1,knock:1.42,hit:[1,2],boss:[8,12],cooldown:.28},
+  flail:{name:'Mace Dot',color:'#f2bc85',desc:'Swing a heavy ball on a chain. Only the ball deals damage.',reach:58,width:8,swing:.8,knock:1,hit:[2.5,4.4],boss:[13,20],cooldown:.56},
+  spear:{name:'Spear Dot',color:'#a9e4ef',desc:'Long reach. Land the point for full damage or hit with the shaft for less.',reach:73,width:3.5,swing:.98,knock:.82,hit:[1.35,2.25],boss:[9,13],cooldown:.31}
+ },
+ archer:{
+  sling:{name:'Sling Dot',color:'#e2bd93'},
+  bow:{name:'Bow Dot',color:'#cbecaa',desc:'Draw and release for the most flexible mix of firing speed, range and power.'},
+  crossbow:{name:'Crossbow Dot',color:'#edd594',desc:'Release to fire a full-power bolt from any valid draw. Slow reload.'},
+  javelin:{name:'Javelin Dot',color:'#a8e9dd',desc:'Throw a short-range spear that pierces up to three enemies in a line.'}
+ }
+};
+function equippedWeapon(character=hero,run=progress){
+ if(character==='mage')return null;
+ return run?.weapon||(character==='archer'?'sling':'stick');
+}
+function weaponChoices(character=hero){
+ return Object.entries(WEAPON_PATHS[character]||{}).filter(([,form])=>form.desc);
+}
+function validWeaponChoice(character,id){
+ return weaponChoices(character).some(([weapon])=>weapon===id);
+}
+function weaponForm(){return WEAPON_PATHS[hero]?.[equippedWeapon()]}
+function runHeroName(character=hero,run=progress){
+ return WEAPON_PATHS[character]?.[equippedWeapon(character,run)]?.name||HERO_DEFS[character].name;
+}
 let elementHitCounter=0,elementComboClock=0;
 function xpRequirement(level){const n=Math.max(1,level)-1;return 24+12*n+2*n*n}
 function levelChoicePending(){
- return progress&&((progress.level>=3&&!progress.elementPrimary)||(progress.level>=8&&!progress.elementSecondary));
+ if(!progress||progress.level<3)return false;
+ if(hero!=='mage')return !progress.weapon;
+ return !progress.elementPrimary||(progress.level>=8&&!progress.elementSecondary);
+}
+function levelSummary(){
+ const xp=progress.levelsThisDepth>=2&&progress.xp>=xpRequirement(progress.level)
+  ?progress.xp+' XP banked':progress.xp+'/'+xpRequirement(progress.level)+' XP';
+ return 'LV '+progress.level+' · '+xp;
 }
 function refreshElementHud(){
  const el=document.querySelector('#level-hud');
  if(!el||!progress)return;
  const first=progress.elementPrimary,second=progress.elementSecondary;
- el.textContent='LV '+progress.level+' · '+progress.xp+'/'+xpRequirement(progress.level)+' XP'+(first?' · '+ELEMENTS[first].name:'')+(second?' + '+ELEMENTS[second].name:'');
+ el.textContent=levelSummary()+(hero!=='mage'?' · '+runHeroName():(first?' · '+ELEMENTS[first].name:'')+(second?' + '+ELEMENTS[second].name:''));
 }
 function openElementChoice(){
  const panel=document.querySelector('#element-choice');
- if(!panel||!levelChoicePending()||inSandbox())return;
+ if(!panel||!panel.hidden||!levelChoicePending()||inSandbox())return;
+ if(hero!=='mage'){
+  panel.setAttribute('aria-label','Choose a weapon path');
+  document.querySelector('#element-title').textContent='LEVEL 3 · CHOOSE YOUR WEAPON';
+  document.querySelector('#element-explain').textContent='This choice lasts for the rest of the run.';
+  const wrap=document.querySelector('#element-options');wrap.innerHTML='';
+  for(const [id,form] of weaponChoices()){
+   const button=document.createElement('button');button.type='button';
+   button.innerHTML='<strong style="color:'+form.color+'">'+form.name+'</strong><small>'+form.desc+'</small>';
+   button.onclick=()=>selectWeapon(id);wrap.appendChild(button);
+  }
+  panel.hidden=false;stopMenuControls();return;
+ }
+ panel.setAttribute('aria-label','Choose an element');
  const second=!!progress.elementPrimary;
  document.querySelector('#element-title').textContent=second?'LEVEL 8 · COMBINE ELEMENTS':'LEVEL 3 · CHOOSE AN ELEMENT';
  document.querySelector('#element-explain').textContent=second?'Choose a second element. Both powers apply, and together they unlock an extra combo effect.':'One choice now. Your weapon gains this element for the rest of the run.';
@@ -916,18 +968,32 @@ function openElementChoice(){
  panel.hidden=false;stopMenuControls();
 }
 function selectElement(id){
- if(!ELEMENTS[id]||!levelChoicePending()||progress.elementPrimary===id)return false;
+ if(hero!=='mage'||!Object.hasOwn(ELEMENTS,id)||!levelChoicePending()||progress.elementPrimary===id)return false;
  if(!progress.elementPrimary)progress.elementPrimary=id;
  else progress.elementSecondary=id;
  document.querySelector('#element-choice').hidden=true;
  showItemNotice('ELEMENT ACQUIRED · '+ELEMENTS[id].name+(progress.elementSecondary?' · COMBINATION ACTIVE':''));
  refreshElementHud();queueCheckpoint();flushCheckpoint();hud();if(levelChoicePending())openElementChoice();return true;
 }
+function selectWeapon(id){
+ if(inSandbox()||!levelChoicePending()||!validWeaponChoice(hero,id))return false;
+ progress.weapon=id;p.flailLag=0;p.vel=0;p.target=p.a;
+ arrows=[];bowShotCooldown=0;
+ document.querySelector('#element-choice').hidden=true;
+ showItemNotice('WEAPON UNLOCKED · '+runHeroName());updateHeroHud();hud();
+ queueCheckpoint();flushCheckpoint();return true;
+}
+function advanceRunLevels(run){
+ let gained=0;
+ while(run.level<30&&run.levelsThisDepth<2&&run.xp>=xpRequirement(run.level)){
+  run.xp-=xpRequirement(run.level);run.level++;run.levelsThisDepth++;gained++;
+ }
+ return gained;
+}
 function earnXp(amount){
  if(!progress||inSandbox()||over||amount<=0)return;
  progress.xp+=amount*.5;
- let gained=0;
- while(progress.level<30&&progress.xp>=xpRequirement(progress.level)){progress.xp-=xpRequirement(progress.level);progress.level++;gained++}
+ const gained=advanceRunLevels(progress);
  if(gained){showItemNotice('LEVEL '+progress.level+' · +'+(gained*2)+'% WEAPON DAMAGE');}
  refreshElementHud();if(levelChoicePending())openElementChoice();
  queueCheckpoint();
@@ -956,7 +1022,7 @@ function applyWeaponElement(target){
  const effect=styles[pair];if(effect){synergyArea(target.x,target.y,effect[2],effect[1],40,effect[0],target)}
 }
 
-function freshProgress(){return {coins:0,items:{},upgrades:{},roomsCleared:0,synergyCoins:0,level:1,xp:0,elementPrimary:null,elementSecondary:null}}
+function freshProgress(){return {coins:0,items:{},upgrades:{},roomsCleared:0,synergyCoins:0,level:1,xp:0,levelsThisDepth:0,weapon:null,elementPrimary:null,elementSecondary:null}}
 function itemCount(id){return Math.min(ITEM_STACK_LIMITS[id]??Number.MAX_SAFE_INTEGER,progress?.items[id]||0)}
 function upgradeCount(id){return progress?.upgrades[id]||0}
 function playerStats(){
@@ -1044,6 +1110,7 @@ function friendlyDamage(target,amount,source='item'){
 }
 function afterPlayerBatHit(target,source='bat'){
  const archer=hero==='archer',strong=archer&&source==='arrow'&&bowDrawStage(target.lastArrowPower||0)==='strong';
+ if(source==='bat')applySwordBleed(target);
  applyWeaponElement(target);itemHitCounter++;if(strong)strongArrowHits++;
  if(itemCount('emberHeart')){
   if(!archer){target.burnUntil=arenaTime+3;target.burnPower=.75*itemCount('emberHeart')*playerStats().damage}
@@ -1072,6 +1139,9 @@ function updateItemEffects(dt){
  for(const target of [...enemies,...(bossFight&&!bossFight.done?bossFight.units:[])]){
   if(target.hp>0&&(target.burnUntil||0)>arenaTime)target.hp=Math.max(0,target.hp-(target.burnPower||.75)*dt);
   if(target.hp>0&&(target.toxicUntil||0)>arenaTime)target.hp=Math.max(0,target.hp-(target.toxicPower||.6)*dt);
+  if(target.hp>0&&target.swordBleedUntil>arenaTime&&target.state!=='rebirth'&&!(target.kind==='crystal'&&target.armour>0)){
+   target.hp=Math.max(0,target.hp-(.65+Math.min(.5,temporaryBleed.length*.12))*dt);
+  }
  }
  for(const zone of friendlyZones){
   zone.life-=dt;zone.tick=(zone.tick||0)+dt;
@@ -1262,13 +1332,13 @@ function inventoryIcon(def){
 function updateCharacterMenu(){
  const panel=document.querySelector('#character-panel');if(panel.hidden)return;
  const st=playerStats(),values=[
-  ['Maximum health',st.maxHealth],[hero==='mage'?'Spell damage':hero==='archer'?'Arrow damage':'Bat damage',st.damage.toFixed(2)+'×'],['Move speed',Math.round(st.moveSpeed)],[hero==='mage'?'Cast speed':hero==='archer'?'Bow reload speed':'Swing speed',Math.round(st.swing*100)+'%'],['Knockback',Math.round(st.knockback*100)+'%'],
+  ['Maximum health',st.maxHealth],[hero==='mage'?'Spell damage':hero==='archer'?'Ranged damage':'Melee damage',st.damage.toFixed(2)+'×'],['Move speed',Math.round(st.moveSpeed)],[hero==='mage'?'Cast speed':hero==='archer'?'Reload speed':'Swing speed',Math.round(st.swing*100)+'%'],['Knockback',Math.round(st.knockback*100)+'%'],
   ['Health regen',st.regen.toFixed(1)+'/s'],[hero==='mage'?'Magic recovery':hero==='archer'?'Bonus bow reload':'Shield damage reduction',hero==='mage'?Math.round(Math.min(.45,upgradeCount('shield')*.1+itemCount('shieldBloom')*.12)*100)+'%':hero==='archer'?Math.round(Math.min(.5,upgradeCount('shield')*.1)*100)+'%':Math.round(st.shieldProtection*100)+'%'],['Critical chance',Math.round(st.crit*100)+'%'],['Luck',st.luck],['Damage reduction',Math.round(st.armour*100)+'%'],[hero==='archer'?'Arrow slow zone':'Enemy shot speed',hero==='archer'?(itemCount('hourglass')?'ON':'OFF'):Math.round(st.bulletSpeed*100)+'%'],[hero==='archer'?'Coin pickup (arrows collect)':'Coin pickup range',st.pickup]
  ];
  if(hero==='mage')values.splice(1,0,['Mana',Math.floor(mageMana)+' / '+mageMaxMana()],['Mana regeneration',mageManaRegen().toFixed(1)+'/s']);
  document.querySelector('#character-stats').innerHTML=values.map(([name,value])=>'<div><span>'+name+'</span><strong>'+value+'</strong></div>').join('');
- document.querySelector('#character-panel .character-note').textContent=hero==='mage'?'MAGE: Mana regenerates automatically. 1-rune spells cost 8–10 MP, 2-rune spells 18–22 MP, and 3-rune spells 40–45 MP. No shield. Level 3 and 8 elements enhance your magic.':hero==='archer'?'ARCHER: Draw and release arrows. No shield. Items transform into bow-related upgrades. Reach level 3 for your first element and level 8 to combine two.':'CLASSIC: Your shield blocks projectiles and reflects lasers. Dash to become invulnerable and hit with your bat for 50% more damage.';
- document.querySelector('#character-coins').textContent=progress.coins+' coins · '+kills+' kills · Dungeon '+dungeonDepth+' · Level '+progress.level+' ('+progress.xp+'/'+xpRequirement(progress.level)+' XP)'+(progress.elementPrimary?' · '+ELEMENTS[progress.elementPrimary].name:'')+(progress.elementSecondary?' + '+ELEMENTS[progress.elementSecondary].name:'');
+ document.querySelector('#character-panel .character-note').textContent=hero==='mage'?'MAGE: Mana regenerates automatically. 1-rune spells cost 8–10 MP, 2-rune spells 18–22 MP, and 3-rune spells 40–45 MP. No shield. Level 3 and 8 elements enhance your magic.':(weaponForm().desc||HERO_DEFS[hero].hint);
+ document.querySelector('#character-coins').textContent=runHeroName()+' · '+progress.coins+' coins · '+kills+' kills · Dungeon '+dungeonDepth+' · '+levelSummary()+(progress.elementPrimary?' · '+ELEMENTS[progress.elementPrimary].name:'')+(progress.elementSecondary?' + '+ELEMENTS[progress.elementSecondary].name:'');
  const inventory=document.querySelector('#item-inventory');inventory.innerHTML='';
  for(const [id,count] of Object.entries(progress.items)){
   const def=heroItemDefinition(id),row=document.createElement('div');row.className='inventory-row';row.innerHTML=inventoryIcon(def)+'<div><strong>'+def.name+(count>1?' ×'+count:'')+'</strong><small>'+def.desc+'</small></div>';inventory.appendChild(row);
@@ -1345,7 +1415,7 @@ function setupSandboxEconomyUI(){
 
 // Two browser-local cleared-room checkpoints, shared audio preferences and bestiary.
 const SAVE_VERSION=1,PROFILE_KEY='dd-profile-v1';
-const HERO_DEFS={classic:{name:'Classic Dot',hint:'Swing with the right stick. Dash to become invulnerable and deal 50% more bat damage.'},archer:{name:'Archer Dot',hint:'Aim with the right stick, pull farther to draw the bow, then release to shoot. No bat swings.'},mage:{name:'Mage Dot',hint:'Trace A, B and C runes in order to cast 15 spells. Short spells cost less mana; powerful three-rune spells use more. Mana regenerates automatically. No shield.'}};
+const HERO_DEFS={classic:{name:'Stick Dot',hint:'Swing with the right stick. At level 3 choose Sword, Bat, Mace, or Spear.'},archer:{name:'Sling Dot',hint:'Aim with the right stick, pull back, then release a stone. At level 3 choose Bow, Crossbow, or Javelin.'},mage:{name:'Mage Dot',hint:'Trace A, B and C runes in order to cast 15 spells. Short spells cost less mana; powerful three-rune spells use more. Mana regenerates automatically. No shield.'}};
 let hero='classic',selectedHero='classic';
 let activeSlot=null,loadingRun=false,savePending=false,saveRetryAt=0,profileDirty=false,saveError='',pendingReplacement=null;
 let profile={version:1,lastSlot:null,audio:{master:80,music:60,effects:80,muted:false},bestiary:{}};
@@ -1426,10 +1496,13 @@ function normalizeSavedRun(raw){
   if(!seen.has(door.to)){seen.add(door.to);queue.push(door.to)}
  }
  if(seen.size!==rooms.length)throw Error('Disconnected dungeon');
+ const {weapon,levelsThisDepth}=raw.progress;
  raw.progress={coins:Math.floor(safeNumber(raw.progress.coins)),items:knownDictionary(raw.progress.items,ITEM_DEFS),upgrades:knownDictionary(raw.progress.upgrades,UPGRADE_DEFS),roomsCleared:Math.floor(safeNumber(raw.progress.roomsCleared)),synergyCoins:Math.floor(safeNumber(raw.progress.synergyCoins,0,0,9)),level:Math.floor(safeNumber(raw.progress.level,1,1,30)),xp:safeNumber(raw.progress.xp,0,0,100000),elementPrimary:ELEMENTS[raw.progress.elementPrimary]?raw.progress.elementPrimary:null,elementSecondary:ELEMENTS[raw.progress.elementSecondary]&&raw.progress.elementSecondary!==raw.progress.elementPrimary?raw.progress.elementSecondary:null};
+ raw.progress.levelsThisDepth=Math.floor(safeNumber(levelsThisDepth,0,0,2));
  raw.mageMana=safeNumber(raw.mageMana,100,0,190);
  raw.biome=BIOME_DEFS[raw.biome]?raw.biome:null;if(raw.biome==='basic')raw.biome=null;
  raw.depth=Math.floor(safeNumber(raw.depth,1,1,10000));raw.hero=Object.hasOwn(HERO_DEFS,raw.hero)?raw.hero:'classic';raw.hp=safeNumber(raw.hp,50,1,1e6);raw.strongArrowHits=Math.floor(safeNumber(raw.strongArrowHits,0,0,100000));raw.lives=Math.floor(safeNumber(raw.lives,3,0,5));raw.kills=Math.floor(safeNumber(raw.kills));raw.arenaTime=safeNumber(raw.arenaTime);
+ raw.progress.weapon=raw.progress.level>=3&&validWeaponChoice(raw.hero,weapon)?weapon:null;
  raw.player=raw.player&&typeof raw.player==='object'?raw.player:{};
  raw.player={x:safeNumber(raw.player.x,rooms[raw.roomId].w/2,23,rooms[raw.roomId].w-23),y:safeNumber(raw.player.y,rooms[raw.roomId].h/2,23,rooms[raw.roomId].h-23),a:safeNumber(raw.player.a,0,-1e7,1e7),target:safeNumber(raw.player.target,0,-1e7,1e7)};
  const hadShield=['flat','curved'].includes(raw.shieldType);raw.shieldType='curved';raw.shieldPending=false;
@@ -1496,7 +1569,7 @@ function renderSaveSlots(){
   const saved=readSlot(slot),card=document.createElement('article');card.className='save-slot';
   const title=document.createElement('h2');title.textContent='SAVE SLOT '+slot;card.appendChild(title);
   const detail=document.createElement('p');
-  if(saved.data){const data=saved.data,biome=BIOME_DEFS[data.biome]||BIOME_DEFS.basic;detail.textContent=(data.lives===0?'RUN ENDED · ':data.lives+' LIVES · ')+HERO_DEFS[data.hero].name+' · '+biome.name+' · Dungeon '+data.depth+' · '+data.dungeon[data.roomId].name+' · '+data.progress.coins+' coins'}
+  if(saved.data){const data=saved.data,biome=BIOME_DEFS[data.biome]||BIOME_DEFS.basic;detail.textContent=(data.lives===0?'RUN ENDED · ':data.lives+' LIVES · ')+runHeroName(data.hero,data.progress)+' · '+biome.name+' · Dungeon '+data.depth+' · '+data.dungeon[data.roomId].name+' · '+data.progress.coins+' coins'}
   else detail.textContent=saved.error||'Empty slot · begin a new adventure';
   card.appendChild(detail);
   if(saved.data){
@@ -1515,7 +1588,10 @@ function renderHeroPicker(){
  for(const id of Object.keys(HERO_DEFS))document.querySelector('#hero-'+id).setAttribute('aria-pressed',String(selectedHero===id));
  document.querySelector('#hero-choice-hint').textContent=HERO_DEFS[selectedHero].hint+' Selection applies to new runs; saved heroes stay the same.';
 }
-function updateHeroHud(){document.querySelector('#mage-cast-status').textContent='';document.querySelector('footer small').textContent=hero==='mage'?'LEFT · MOVE   RIGHT · TRACE RUNES':hero==='archer'?'LEFT · MOVE   RIGHT · DRAW & RELEASE':'LEFT · MOVE   RIGHT · HEAVY BAT'}
+function updateHeroHud(){
+ document.querySelector('#mage-cast-status').textContent='';
+ document.querySelector('footer small').textContent=hero==='mage'?'LEFT · MOVE   RIGHT · TRACE RUNES':hero==='archer'?'LEFT · MOVE   RIGHT · AIM & RELEASE':'LEFT · MOVE   RIGHT · SWING';
+}
 for(const id of Object.keys(HERO_DEFS))document.querySelector('#hero-'+id).onclick=()=>{selectedHero=id;renderHeroPicker()};
 function prepareSlotSwitch(){
  saveRetryAt=0;
@@ -1557,6 +1633,7 @@ function continueSlot(slot){
 function resumeCurrentGame(){
  if(over){if(activeSlot&&lives>0)continueSlot(activeSlot);return}
  document.querySelector('#start-screen').hidden=true;pendingReplacement=null;stopMenuControls();
+ if(levelChoicePending())openElementChoice();
 }
 function bestiaryCatalog(){
  const entries=SANDBOX_CATALOG.map(item=>({...item,boss:item.id.startsWith('boss:'),biome:item.id.startsWith('boss:')?BOSS_BLUEPRINTS[item.id.slice(5)]?.biome:BIOME_ENEMIES[item.id]?.biome||'basic'}));
@@ -1895,8 +1972,8 @@ const DASH_DURATION=.18,DASH_COOLDOWN=1.8,DASH_SPEED=510,DASH_CONTROL_KEY='dd-da
 var dashUIReady=false;
 let dash={remaining:0,readyAt:0,immuneUntil:0,dx:1,dy:0,trail:[],batPath:null,batHits:new Set()},dashControl={x:.78,y:.76},dashDrag=null;
 function dashCooldown(){return Math.max(0,dash.readyAt-arenaTime)}
-function classicDashBatActive(){return hero==='classic'&&dash.batPath!==null}
-function classicDashProtected(){return hero==='classic'&&(dash.remaining>0||classicDashBatActive())}
+function classicDashBatActive(){return hero==='classic'&&dash.batPath!==null&&equippedWeapon()==='bat'}
+function classicDashProtected(){return hero==='classic'&&(dash.remaining>0||dash.batPath!==null)}
 function dashInvulnerable(){return hero==='classic'?classicDashProtected():arenaTime<dash.immuneUntil}
 function restoreDashState(cooldown=0){
  clearRoomDash();
@@ -1939,7 +2016,50 @@ function dashBatSweeps(target,previousAngle){
  }
  return false;
 }
-function damageClassicBatEnemy(enemy,kick){
+function flailHead(angle,lag=0){
+ const ballAngle=angle-lag;
+ return {x:30*Math.cos(angle)+28*Math.cos(ballAngle),y:30*Math.sin(angle)+28*Math.sin(ballAngle)};
+}
+function updateFlail(dt,previousAngle,previousLag){
+ if(equippedWeapon()!=='flail')return;
+ const old=flailHead(previousAngle,previousLag);
+ const target=clamp(p.vel*.17,-1.1,1.1);
+ p.flailLag=previousLag+(target-previousLag)*Math.min(1,dt*12);
+ const head=flailHead(p.a,p.flailLag);
+ p.flailTipSpeed=dt>0?Math.hypot(head.x-old.x,head.y-old.y)/dt:0;
+}
+function meleeSegment(weapon,angle,lag,x,y){
+ if(weapon==='flail'){
+  const ball=flailHead(angle,lag);
+  return {x1:x+ball.x,y1:y+ball.y,x2:x+ball.x,y2:y+ball.y};
+ }
+ const reach=WEAPON_PATHS.classic[weapon].reach,dx=Math.cos(angle),dy=Math.sin(angle);
+ return {x1:x+dx*17,y1:y+dy*17,x2:x+dx*reach,y2:y+dy*reach};
+}
+function meleeSweep(x,y,radius,previousAngle,previousLag=0,cover=true,ignoredProp=null){
+ const weapon=equippedWeapon(),form=weaponForm(),lag=p.flailLag||0;
+ if(cover&&!weaponLineClear(p.x,p.y,x,y,2,ignoredProp))return null;
+ const swing=p.a-previousAngle,steps=Math.max(1,Math.ceil((Math.abs(swing)+Math.abs(lag-previousLag))/.055));
+ for(let i=0;i<=steps;i++){
+  const t=i/steps,a=previousAngle+swing*t;
+  const segment=meleeSegment(weapon,a,previousLag+(lag-previousLag)*t,p.x,p.y);
+  const sx=segment.x2-segment.x1,sy=segment.y2-segment.y1;
+  const along=clamp(((x-segment.x1)*sx+(y-segment.y1)*sy)/(sx*sx+sy*sy||1),0,1);
+  const dx=x-(segment.x1+sx*along),dy=y-(segment.y1+sy*along),dist=Math.hypot(dx,dy);
+  if(dist>=radius+form.width)continue;
+  const tip=weapon!=='spear'||along>=.77;
+  const lever=weapon==='flail'?form.reach:17+(form.reach-17)*along;
+  return {a,dx,dy,dist,tip,lever};
+ }
+ return null;
+}
+function meleeIsSwinging(){return equippedWeapon()==='flail'?(p.flailTipSpeed||0)>48:Math.abs(p.vel)>1.1}
+function meleeHitDamage(weapon,boss,tip,heavy){
+ const form=WEAPON_PATHS.classic[weapon],damage=(boss?form.boss:form.hit)[heavy?1:0];
+ return !tip&&weapon==='spear'?damage*.45:damage;
+}
+function meleeHeavy(){return equippedWeapon()==='flail'?(p.flailTipSpeed||0)>240:Math.abs(p.vel)>4.4}
+function damageClassicBatEnemy(enemy,kick,tip=true){
  const cleanHit=canDamage(enemy,kick);
  playBatImpact(cleanHit);
  if(!cleanHit){enemy.cool=.12;return false}
@@ -1947,13 +2067,43 @@ function damageClassicBatEnemy(enemy,kick){
   enemy.ability=null;enemy.abilityCooldown=Math.max(enemy.abilityCooldown,2.2);
   elementFx.push({type:'shock',x:enemy.x,y:enemy.y,radius:22,life:.28,maxLife:.28});
  }
- friendlyDamage(enemy,Math.abs(p.vel)>4.4?2:1,'bat');
- enemy.cool=.28;bleedStacks++;applyBleed(enemy);
- if(enemy.shape==='bloodletter'){
-  temporaryBleed.push(arenaTime+12);
-  elementFx.push({type:'fusion',x:enemy.x,y:enemy.y,life:.45,maxLife:.45});
- }
+ friendlyDamage(enemy,meleeHitDamage(equippedWeapon(),false,tip,meleeHeavy()),'bat');
+ enemy.cool=weaponForm().cooldown;
  return true;
+}
+function resolveMeleeContact(enemy,previousAngle,previousLag,dt){
+ const hit=meleeSweep(enemy.x,enemy.y,enemy.r,previousAngle,previousLag);
+ if(!hit)return;
+ const {a,dx,dy,dist,tip,lever}=hit,form=weaponForm(),direction=Math.sign(p.vel||1);
+ const tx=-Math.sin(a)*direction,ty=Math.cos(a)*direction;
+ const nx=dist>.001?dx/dist:tx,ny=dist>.001?dy/dist:ty;
+ const penetration=enemy.r+form.width-dist+.8;
+ enemy.x+=nx*penetration;enemy.y+=ny*penetration;
+
+ const swinging=meleeIsSwinging();
+ const speed=equippedWeapon()==='flail'?p.flailTipSpeed:Math.abs(p.vel)*lever;
+ const relative=enemy.vx*tx+enemy.vy*ty;
+ const kick=swinging?Math.max(0,speed-relative)*(tip?1:.65):0;
+ if(enemy.bossMinion&&kick>25)enemy.batKnockedUntil=arenaTime+1.5;
+ if(kick>25){
+  runStats.biggestImpact=Math.max(runStats.biggestImpact,kick);runStats.swingsHit++;
+ }
+ const impulse=kick*1.5*playerStats().knockback*form.knock/enemy.mass*(curseActive('float')?1.4:1);
+ enemy.vx+=tx*impulse+nx*24/enemy.mass;
+ enemy.vy+=ty*impulse+ny*24/enemy.mass;
+ for(const wall of walls)collideWall(enemy,wall,dt);
+ enemy.x=clamp(enemy.x,18+enemy.r,W-18-enemy.r);enemy.y=clamp(enemy.y,18+enemy.r,F-18-enemy.r);
+ flipMagnet(enemy,kick);specialImpact(enemy,kick);
+ if(enemy.splitCooldown<=0)splitOnImpact(enemy,kick);
+ if(enemy.shape==='mirror'&&kick>65){
+  const recoil=Math.min(220,kick*(enemy.elite?1.15:.7));
+  p.kvx=(p.kvx||0)-tx*recoil;p.kvy=(p.kvy||0)-ty*recoil;
+  elementFx.push({type:'mirror',x:enemy.x,y:enemy.y,life:.25,maxLife:.25});
+ }
+ const dashing=classicDashBatActive();
+ if(enemy.cool===0&&swinging&&!(dashing&&dash.batHits.has(enemy))){
+  if(damageClassicBatEnemy(enemy,kick,tip)&&dashing)dash.batHits.add(enemy);
+ }
 }
 function hitEnemyWithDashBat(enemy,previousAngle){
  if(enemy.cool>0||!dashBatSweeps(enemy,previousAngle))return;
@@ -1962,7 +2112,7 @@ function hitEnemyWithDashBat(enemy,previousAngle){
  dash.batHits.add(enemy);
  runStats.swingsHit++;
  runStats.biggestImpact=Math.max(runStats.biggestImpact,impact);
- const push=impact*playerStats().knockback/Math.max(.5,enemy.mass);
+ const push=impact*weaponForm().knock*playerStats().knockback/Math.max(.5,enemy.mass);
  enemy.vx+=dash.dx*push;enemy.vy+=dash.dy*push;
  if(enemy.bossMinion)enemy.batKnockedUntil=arenaTime+1.5;
 }
@@ -2195,11 +2345,6 @@ function bossBatSegment(angle,x=p.x,y=p.y){
  const ux=Math.cos(angle),uy=Math.sin(angle);
  return {x1:x+ux*17,y1:y+uy*17,x2:x+ux*48,y2:y+uy*48};
 }
-function bossBatHits(x,y,r,previousAngle){
- const sweep=p.a-previousAngle,steps=Math.max(1,Math.ceil(Math.abs(sweep)/.055));
- for(let k=0;k<=steps;k++)if(laserDistance(x,y,bossBatSegment(previousAngle+sweep*k/steps))<=r+4)return true;
- return false;
-}
 function sweptBossShotHits(shot,oldX,oldY,segment,radius){
  const motion={x1:oldX,y1:oldY,x2:shot.x,y2:shot.y};
  if(laserDistance(oldX,oldY,segment)<=radius||laserDistance(shot.x,shot.y,segment)<=radius||laserDistance(segment.x1,segment.y1,motion)<=radius||laserDistance(segment.x2,segment.y2,motion)<=radius)return true;
@@ -2277,14 +2422,21 @@ function updateSlimeKing(unit,dt){
   }
  }else if(unit.state==='stunned'&&unit.timer<=0){unit.state='recover';unit.timer=1}
 }
-function updateBossShots(dt,previousAngle){
+function updateBossShots(dt,previousAngle,previousLag=0){
  for(const shot of bossFight.shots){
   shot.life-=dt;if(shot.life<=0)continue;
   const ox=shot.x,oy=shot.y;const synergySpeed=synergyProjectileFactor(shot)*(hero==='archer'&&!shot.reflected&&itemCount('hourglass')&&arrows.some(a=>Math.hypot(a.x-shot.x,a.y-shot.y)<65)?.62:1);shot.x+=shot.vx*dt*(shot.reflected?1:playerStats().bulletSpeed)*synergySpeed;shot.y+=shot.vy*dt*(shot.reflected?1:playerStats().bulletSpeed)*synergySpeed;
   if(shot.x<16||shot.x>W-16||shot.y<16||shot.y>F-16){bounceBossProjectile(shot);if(shot.life<=0)continue}
   if(!shot.reflected){
-   const swing=p.a-previousAngle,steps=Math.max(1,Math.ceil(Math.abs(swing)/.055));
-   let bat=false;if(hero==='classic')for(let k=0;k<=steps&&!bat;k++)bat=sweptBossShotHits(shot,ox,oy,bossBatSegment(previousAngle+swing*k/steps),shot.r+4+4*itemCount('reflectArrow'));
+   let bat=false;
+   if(hero==='classic'&&weaponLineClear(p.x,p.y,shot.x,shot.y,2)){
+    const weapon=equippedWeapon(),lag=p.flailLag||0,swing=p.a-previousAngle;
+    const steps=Math.max(1,Math.ceil((Math.abs(swing)+Math.abs(lag-previousLag))/.055));
+    for(let k=0;k<=steps&&!bat;k++){
+     const t=k/steps,segment=meleeSegment(weapon,previousAngle+swing*t,previousLag+(lag-previousLag)*t,p.x,p.y);
+     bat=sweptBossShotHits(shot,ox,oy,segment,shot.r+weaponForm().width+4*itemCount('reflectArrow'));
+    }
+   }
    const shield=!bat&&shieldSegments().some(seg=>sweptBossShotHits(shot,ox,oy,seg,shot.r+3));
    if(bat||shield){
     if(shield)shieldDamage(shot.kind==='cannonball'?18:10);
@@ -2313,7 +2465,7 @@ function finishBossFight(){
  const oldKills=kills;kills++;if(!shieldType&&oldKills<10&&kills>=10)showShieldChoice();
  elementFx.push({type:'fusion',x:W/2,y:F/2,life:1,maxLife:1});
 }
-function updateBossFight(dt,previousAngle){
+function updateBossFight(dt,previousAngle,previousLag=0){
  if(!bossFight||bossFight.done||(currentRoom.kind!=='boss'&&!inSandbox()))return;
  updateBossSpecial(dt);
  for(const unit of bossFight.units){
@@ -2335,11 +2487,11 @@ function updateBossFight(dt,previousAngle){
   }else if(unit.state==='stunned'){unit.timer-=dt;if(unit.timer<=0){unit.state='recover';unit.timer=1.2}}
   if(unit.state!=='jump'&&unit.state!=='rebirth'){
    const dashHit=unit.hitCooldown===0&&dashBatSweeps(unit,previousAngle);
-   const swingHit=hero==='classic'&&unit.hitCooldown===0&&Math.abs(p.vel)>1.1&&bossBatHits(unit.x,unit.y,unit.r,previousAngle);
+   const swingHit=hero==='classic'&&unit.hitCooldown===0&&meleeIsSwinging()&&meleeSweep(unit.x,unit.y,unit.r,previousAngle,previousLag);
    if((dashHit||swingHit)&&!(classicDashBatActive()&&dash.batHits.has(unit))){
-    const heavy=Math.abs(p.vel)>4.4,hit=damageBoss(unit,heavy?12:8,'bat');
+    const hit=damageBoss(unit,meleeHitDamage(equippedWeapon(),true,dashHit||swingHit.tip,meleeHeavy()),'bat');
     if(hit&&classicDashBatActive())dash.batHits.add(unit);
-    playBatImpact(hit);unit.hitCooldown=.3;
+    playBatImpact(hit);unit.hitCooldown=weaponForm().cooldown+.02;
     runStats.swingsHit++;runStats.biggestImpact=Math.max(runStats.biggestImpact,Math.abs(p.vel)*40);
    }
    if(unit.hp<=0)continue;
@@ -2351,7 +2503,7 @@ function updateBossFight(dt,previousAngle){
   }
  }
  updateBossZoneList(dt);
- updateBossShots(dt,previousAngle);
+ updateBossShots(dt,previousAngle,previousLag);
  // Slimes return to the nearest living king; bat-knocked slimes interrupt it.
  for(const slime of enemies){
   if(!slime.bossMinion||slime.hp<=0)continue;
@@ -2824,7 +2976,7 @@ function enterRoom(id,entry=null){
 }
 function nextDungeon(biome){
  if(currentRoom?.kind!=='boss'||!currentRoom.bossDefeated||!BIOME_PATHS.some(path=>path.id===biome))return;
- bankClearedRoomCoins();selectedBiome=biome;dungeonDepth++;buildDungeon();enterRoom(0);
+ bankClearedRoomCoins();selectedBiome=biome;dungeonDepth++;progress.levelsThisDepth=0;buildDungeon();enterRoom(0);
 }
 function updateRoomProgress(){
  if(inSandbox()){currentRoom.cleared=true;return}
@@ -2962,11 +3114,21 @@ function bowDrawStage(power){
  if(power<BOW_MIN_DRAW)return 'idle';
  return power>=BOW_STRONG_DRAW?'strong':'ready';
 }
+function rangedWeaponShot(weapon,power){
+ switch(weapon){
+  case 'sling':return {speed:250+175*power,damage:.7+1.5*power,impact:90+125*power,life:.68+power*.30,reload:.50,minReload:.25,r:3.5,power,pierce:0};
+  case 'crossbow':return {speed:765,damage:5.4,impact:255,life:1.05,reload:.90,minReload:.48,r:3,power:1,pierce:0};
+  case 'javelin':return {speed:275+180*power,damage:1.8+2.5*power,impact:105+183*power,life:.50+power*.17,reload:.68,minReload:.34,r:4,power,pierce:2};
+  default:return {speed:220+400*power,damage:.7+3.1*power,impact:80+165*power,life:.8+.6*power,reload:.48,minReload:.23,r:2.5+power*1.6,power,pierce:0};
+ }
+}
 function fireArrow(power,angle){
  if(hero!=='archer'||!combatInputEnabled()||bowShotCooldown>0||bowDrawStage(power)==='idle')return false;
- const ux=Math.cos(angle),uy=Math.sin(angle),speed=(220+400*power)*(1+.12*itemCount('shieldBloom'))*(1+.15*itemCount('mirrorLens'));
- arrows.push({x:p.x+ux*23,y:p.y+uy*23,vx:ux*speed,vy:uy*speed,r:2.5+power*1.6,life:.8+.6*power,power,damage:.7+3.1*power,impact:80+165*power,reflected:true,deflections:0,pierce:Math.min(2,itemCount('counterweight')),hitTargets:new Set()});
- bowShotCooldown=Math.max(.23,.48/(1+.15*upgradeCount('swing')))*(1+.1*itemCount('counterweight'))*(1-Math.min(.5,.1*upgradeCount('shield')));
+ const weapon=equippedWeapon(),shot=rangedWeaponShot(weapon,power);
+ const ux=Math.cos(angle),uy=Math.sin(angle),speed=shot.speed*(1+.12*itemCount('shieldBloom'))*(1+.15*itemCount('mirrorLens'));
+ arrows.push({weapon,x:p.x+ux*23,y:p.y+uy*23,vx:ux*speed,vy:uy*speed,r:shot.r,life:shot.life,power:shot.power,damage:shot.damage,
+  impact:shot.impact,reflected:true,deflections:0,pierce:shot.pierce+Math.min(2,itemCount('counterweight')),hitTargets:new Set()});
+ bowShotCooldown=Math.max(shot.minReload,shot.reload/(1+.15*upgradeCount('swing')))*(1+.1*itemCount('counterweight'))*(1-Math.min(.5,.1*upgradeCount('shield')));
  p.a=angle;p.target=angle;p.vel=0;return true;
 }
 function reflectArrowProjectile(arrow,ox,oy){
@@ -3032,10 +3194,56 @@ function updateArrows(dt){
 function drawArrows(){
  g.save();g.lineCap='round';
  for(const arrow of arrows){const a=Math.atan2(arrow.vy,arrow.vx),ux=Math.cos(a),uy=Math.sin(a);
-  g.strokeStyle='#ffe3a0';g.lineWidth=2+arrow.power*1.2;g.beginPath();g.moveTo(arrow.x-ux*13,arrow.y-uy*13);g.lineTo(arrow.x+ux*6,arrow.y+uy*6);g.stroke();
+  const weapon=arrow.weapon||'bow';
+  if(weapon==='sling'){
+   g.fillStyle='#e8bb8d';g.beginPath();g.arc(arrow.x,arrow.y,arrow.r,0,Math.PI*2);g.fill();continue;
+  }
+  const length=weapon==='javelin'?25:weapon==='crossbow'?9:13;
+  g.strokeStyle=weapon==='javelin'?'#9bddcb':weapon==='crossbow'?'#efaa71':'#ffe3a0';g.lineWidth=2+arrow.power*1.2;
+  g.beginPath();g.moveTo(arrow.x-ux*length,arrow.y-uy*length);g.lineTo(arrow.x+ux*6,arrow.y+uy*6);g.stroke();
   g.fillStyle='#fff9d8';g.beginPath();g.moveTo(arrow.x+ux*11,arrow.y+uy*11);g.lineTo(arrow.x+uy*4,arrow.y-ux*4);g.lineTo(arrow.x-uy*4,arrow.y+ux*4);g.closePath();g.fill();
  }
  g.restore();
+}
+function drawRangedWeapon(){
+ const weapon=equippedWeapon(),charge=bowPower();
+ if(weapon==='bow'){
+  g.strokeStyle='#deb87a';g.lineWidth=3;g.beginPath();g.moveTo(14,-18);g.quadraticCurveTo(32,0,14,18);g.stroke();
+  g.strokeStyle='#f9ead0';g.lineWidth=1.5;g.beginPath();g.moveTo(14,-18);g.lineTo(14-12*charge,0);g.lineTo(14,18);g.stroke();
+  if(charge>BOW_MIN_DRAW){g.strokeStyle='#ffe89f';g.beginPath();g.moveTo(14-12*charge,0);g.lineTo(37,0);g.stroke()}
+ }else if(weapon==='sling'){
+  g.strokeStyle='#c19772';g.lineWidth=2;g.beginPath();g.moveTo(12,-7);g.lineTo(26-charge*10,0);g.lineTo(12,7);g.stroke();
+  g.fillStyle='#e8bb8d';g.beginPath();g.arc(26-charge*10,0,3.4,0,Math.PI*2);g.fill();
+ }else if(weapon==='crossbow'){
+  g.fillStyle='#b28159';g.fillRect(12,-2.5,22,5);
+  g.strokeStyle='#e0bb79';g.lineWidth=3;g.beginPath();g.moveTo(21,-13);g.quadraticCurveTo(35,0,21,13);g.stroke();
+  g.strokeStyle='#f7e7c6';g.lineWidth=1.3;g.beginPath();g.moveTo(21,-13);g.lineTo(bowShotCooldown>0?26:15,0);g.lineTo(21,13);g.stroke();
+ }else{
+  g.strokeStyle='#c7ad87';g.lineWidth=2;g.beginPath();g.moveTo(11-5*charge,4);g.lineTo(40-5*charge,4);g.stroke();
+  g.fillStyle='#b5eadf';g.beginPath();g.moveTo(46-5*charge,4);g.lineTo(36-5*charge,0);g.lineTo(36-5*charge,8);g.closePath();g.fill();
+ }
+}
+function drawMeleeWeapon(){
+ const weapon=equippedWeapon(),{reach,width,color}=weaponForm();
+ if(weapon==='stick'||weapon==='bat'){
+  g.fillStyle=color;g.fillRect(17,-width/1.5,reach-17,width*1.33);
+  g.fillStyle=weapon==='bat'?'#c0abd9':'#957456';g.fillRect(17,1,reach-17,2);
+ }else if(weapon==='sword'){
+  if(meleeIsSwinging()){
+   g.save();g.globalAlpha=.20;g.fillStyle=color;g.beginPath();
+   g.moveTo(14,0);g.arc(0,0,reach+width,-Math.sign(p.vel)*.45,0,p.vel<0);g.closePath();g.fill();g.restore();
+  }
+  g.fillStyle='#b39069';g.fillRect(22,-8,3,16);g.fillRect(16,-2,8,4);
+  g.fillStyle=color;g.beginPath();g.moveTo(24,-4);g.lineTo(reach-7,-3);g.lineTo(reach,0);g.lineTo(reach-7,3);g.lineTo(24,4);g.closePath();g.fill();
+ }else if(weapon==='spear'){
+  g.fillStyle='#b68f6e';g.fillRect(17,-1.8,reach-28,3.6);
+  g.fillStyle=color;g.beginPath();g.moveTo(reach,0);g.lineTo(reach-14,-5);g.lineTo(reach-11,0);g.lineTo(reach-14,5);g.closePath();g.fill();
+ }else{
+  const ball=flailHead(0,p.flailLag||0);
+  g.strokeStyle='#b09065';g.lineWidth=4;g.beginPath();g.moveTo(17,0);g.lineTo(30,0);g.stroke();
+  g.strokeStyle='#b9b3c7';g.lineWidth=2;g.setLineDash([3,2]);g.beginPath();g.moveTo(30,0);g.lineTo(ball.x,ball.y);g.stroke();g.setLineDash([]);
+  g.fillStyle=color;g.strokeStyle='#62483b';g.lineWidth=2;g.beginPath();g.arc(ball.x,ball.y,width,0,Math.PI*2);g.fill();g.stroke();
+ }
 }
 
 
@@ -3540,15 +3748,13 @@ function hitProp(o,power,source='hit'){
  }
  queueCheckpoint();return true;
 }
-function hitPropsWithBat(start,end){
- if(!breakables.length||Math.abs(p.vel)<.65)return;
- const steps=Math.max(1,Math.ceil(Math.abs(end-start)/.05)),power=Math.abs(p.vel)*40;
+function meleeToolPower(scale){return equippedWeapon()==='flail'?p.flailTipSpeed||0:Math.abs(p.vel)*scale}
+function hitPropsWithBat(start,previousLag){
+ if(!breakables.length)return;
+ const power=meleeToolPower(40);
+ if(power<22)return;
  for(const o of breakables){
-  if(o.broken)continue;
-  for(let i=0;i<=steps;i++){
-   const a=start+(end-start)*i/steps,ux=Math.cos(a),uy=Math.sin(a),at=clamp((o.x-p.x)*ux+(o.y-p.y)*uy,17,49);
-   if(Math.hypot(o.x-(p.x+ux*at),o.y-(p.y+uy*at))<PROP_DEFS[o.kind].r+6){hitProp(o,power,'bat');break}
-  }
+  if(!o.broken&&meleeSweep(o.x,o.y,PROP_DEFS[o.kind].r,start,previousLag,true,o))hitProp(o,power,'bat');
  }
 }
 function collideProps(body,isPlayer=false){
@@ -3638,12 +3844,16 @@ function hitCrackedWall(w,amount){
  if(w.crackHp<=0){walls.splice(walls.indexOf(w),1);resetEnemyNavigation()}
  return true;
 }
-function hitCrackedWallsWithBat(start,end){
- if(Math.abs(p.vel)<1.1)return;
- const steps=Math.max(1,Math.ceil(Math.abs(end-start)/.05));
+function hitCrackedWallsWithBat(start,previousLag){
+ if(!meleeIsSwinging())return;
+ const weapon=equippedWeapon(),lag=p.flailLag||0;
+ const steps=Math.max(1,Math.ceil((Math.abs(p.a-start)+Math.abs(lag-previousLag))/.05));
  for(const w of [...walls])if(w.cracked)for(let i=0;i<=steps;i++){
-  const a=start+(end-start)*i/steps,ux=Math.cos(a),uy=Math.sin(a);
-  for(const dist of [24,36,48])if(nearRect(p.x+ux*dist,p.y+uy*dist,5,w)){hitCrackedWall(w,1);break}
+  const t=i/steps,segment=meleeSegment(weapon,start+(p.a-start)*t,previousLag+(lag-previousLag)*t,p.x,p.y);
+  for(const pos of [0,.33,.66,1]){
+   const x=segment.x1+(segment.x2-segment.x1)*pos,y=segment.y1+(segment.y2-segment.y1)*pos;
+   if(nearRect(x,y,weaponForm().width,w)){hitCrackedWall(w,1);break}
+  }
   if((w.crackHitUntil||0)>arenaTime)break;
  }
 }
@@ -3652,15 +3862,11 @@ function trapPhase(t){
  if(t.plateDriven)return{active:arenaTime>=t.triggerAt&&arenaTime<t.forceUntil,warning:arenaTime<t.triggerAt&&t.triggerAt-arenaTime<.55};
  const phase=(arenaTime+t.phase)%3.5;return{active:phase>=1.8&&phase<2.65,warning:phase>=1.2&&phase<1.8};
 }
-function hitTrapLevers(start,end){
- if(Math.abs(p.vel)<1.1)return;
+function hitTrapLevers(start,previousLag){
+ if(!meleeIsSwinging())return;
  for(const sw of trapControls){
   if(sw.kind!=='lever'||arenaTime<sw.ready)continue;
-  const steps=Math.max(1,Math.ceil(Math.abs(end-start)/.06));
-  for(let i=0;i<=steps;i++){
-   const a=start+(end-start)*i/steps,ux=Math.cos(a),uy=Math.sin(a),at=clamp((sw.x-p.x)*ux+(sw.y-p.y)*uy,17,49);
-   if(Math.hypot(sw.x-(p.x+ux*at),sw.y-(p.y+uy*at))<sw.r+5){triggerTrapControl(sw);break}
-  }
+  if(meleeSweep(sw.x,sw.y,sw.r,start,previousLag))triggerTrapControl(sw);
  }
 }
 function hitNest(n,power){
@@ -3674,13 +3880,9 @@ function hitNest(n,power){
  }
  return true;
 }
-function hitNestsWithBat(start,end){
- if(Math.abs(p.vel)<1.1)return;
- const steps=Math.max(1,Math.ceil(Math.abs(end-start)/.06));
- for(const n of dungeonNests)if(n.hp>0)for(let i=0;i<=steps;i++){
-  const a=start+(end-start)*i/steps,ux=Math.cos(a),uy=Math.sin(a),at=clamp((n.x-p.x)*ux+(n.y-p.y)*uy,17,49);
-  if(Math.hypot(n.x-(p.x+ux*at),n.y-(p.y+uy*at))<n.r+5){hitNest(n,Math.abs(p.vel)*45);break}
- }
+function hitNestsWithBat(start,previousLag){
+ if(!meleeIsSwinging())return;
+ for(const n of dungeonNests)if(n.hp>0&&meleeSweep(n.x,n.y,n.r,start,previousLag))hitNest(n,meleeToolPower(45));
 }
 function projectileHitsNest(q,oldX,oldY){
  if(!q.reflected)return false;
@@ -3913,12 +4115,12 @@ let enemyNav=null;
 function resetEnemyNavigation(){enemyNav=null}
 // Projectile and targeting clearance checks solid walls and intact props.
 // Pits do not obstruct flying projectiles, unlike movement navigation.
-function weaponLineClear(ax,ay,bx,by,r=3){
+function weaponLineClear(ax,ay,bx,by,r=3,ignoredProp=null){
  const distance=Math.hypot(bx-ax,by-ay),steps=Math.max(1,Math.ceil(distance/10));
  for(let i=1;i<steps;i++){
   const t=i/steps,x=ax+(bx-ax)*t,y=ay+(by-ay)*t;
   if(walls.some(w=>nearRect(x,y,r,w)))return false;
-  if(breakables.some(o=>!o.broken&&Math.hypot(o.x-x,o.y-y)<PROP_DEFS[o.kind].r+r))return false;
+  if(breakables.some(o=>o!==ignoredProp&&!o.broken&&Math.hypot(o.x-x,o.y-y)<PROP_DEFS[o.kind].r+r))return false;
  }
  return true;
 }
@@ -4195,14 +4397,19 @@ if(hero==='archer'&&bowDrawStage(bowPower())!=='idle'){
  const aim=sticks[1];
  p.target=Math.atan2(aim.dy,aim.dx);
 }
-let previousBatAngle=p.a;
+const previousBatAngle=p.a,previousFlailLag=p.flailLag||0;
 if(hero!=='classic'){p.a=p.target;p.vel=0;inv=Math.max(0,inv-dt)}
 else{
- let diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a)),force=Math.sign(diff)*Math.min(1,Math.abs(diff)*1.6);
- p.vel=clamp(p.vel+(force*23*playerStats().swing-p.vel*3.1)*dt,-7.4*playerStats().swing,7.4*playerStats().swing);if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
- hitPropsWithBat(previousBatAngle,p.a);hitNestsWithBat(previousBatAngle,p.a);hitTrapLevers(previousBatAngle,p.a);hitCrackedWallsWithBat(previousBatAngle,p.a);
+ const diff=Math.atan2(Math.sin(p.target-p.a),Math.cos(p.target-p.a)),force=Math.sign(diff)*Math.min(1,Math.abs(diff)*1.6);
+ const swingSpeed=playerStats().swing*weaponForm().swing;
+ p.vel=clamp(p.vel+(force*23*swingSpeed-p.vel*3.1)*dt,-7.4*swingSpeed,7.4*swingSpeed);
+ if(Math.abs(diff)<.045&&Math.abs(p.vel)<.14)p.vel=0;
+ p.a+=p.vel*dt;inv=Math.max(0,inv-dt);
+ updateFlail(dt,previousBatAngle,previousFlailLag);
+ hitPropsWithBat(previousBatAngle,previousFlailLag);hitNestsWithBat(previousBatAngle,previousFlailLag);
+ hitTrapLevers(previousBatAngle,previousFlailLag);hitCrackedWallsWithBat(previousBatAngle,previousFlailLag);
 }
-updateBossFight(dt,previousBatAngle);updateArrows(dt);updateMage(dt);
+updateBossFight(dt,previousBatAngle,previousFlailLag);updateArrows(dt);updateMage(dt);
 // Magnetic force is distance-limited and capped to keep the arena playable.
 for(let m of enemies){if(!enemyAttacksEnabled()||m.shape!=='magnet'||m.hp<=0)continue;
 let radius=m.elite?115:88,strength=m.elite?185:135,mode=m.magnetMode||1;
@@ -4212,7 +4419,7 @@ if(d<radius&&d>e.r+m.r*.5){let f=strength*(1-d/radius)*dt/Math.sqrt(e.mass);e.vx
 let dx=m.x-p.x,dy=m.y-p.y,d=Math.hypot(dx,dy)||1;
 if(d<radius&&d>m.r+5){let f=90*(1-d/radius)*dt;p.kvx=(p.kvx||0)+dx/d*f*mode;p.kvy=(p.kvy||0)+dy/d*f*mode}
 }
-for(let e of enemies){if(e.hp<=0)continue;updateBiomeEnemy(e,dt);if((e.bleedStacks||0)>0&&e.hp>0){e.bleedTick=(e.bleedTick||0)+dt;e.bleedGlow=Math.max(0,(e.bleedGlow||0)-dt);if(e.bleedTick>=.5){e.hp-=Math.min(3,.12*e.bleedStacks)*e.bleedTick;e.bleedTick=0;e.bleedGlow=.25}}if(e.shape==='regenerator'&&e.hp>0&&e.hp<e.maxHp){e.hp=Math.min(e.maxHp,e.hp+1.1*dt);e.regenPulse=.35}e.regenPulse=Math.max(0,(e.regenPulse||0)-dt);e.phaseIn=Math.max(0,(e.phaseIn||0)-dt);e.fusionCooldown=Math.max(0,(e.fusionCooldown||0)-dt);e.splitCooldown=Math.max(0,(e.splitCooldown||0)-dt);e.specialCooldown=Math.max(0,(e.specialCooldown||0)-dt);if(e.bombTimer>0){e.bombTimer-=dt;if(e.bombTimer<=0){shockwave(e,e.elite?440:310,e.elite?145:105);specialPlayerHit(e.x,e.y,e.elite?120:95,ENEMY_SPECIAL_DAMAGE.bomb[Number(e.elite||false)],e);e.hp=0}}e.magnetCooldown=Math.max(0,(e.magnetCooldown||0)-dt);e.poisonGlow=Math.max(0,(e.poisonGlow||0)-dt);if(e.shape!=='poison'&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r))e.poisonGlow=.24;e.poisonTimer=Math.max(0,(e.poisonTimer||0)-dt);if(e.shape!=='poison'&&e.poisonTimer<=0&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r)){if(canDamage(e,115)){e.hp-=1;e.cool=Math.max(e.cool,.12)}e.poisonTimer=.7}e.elementCooldown=Math.max(0,(e.elementCooldown||0)-dt);e.cool=Math.max(0,e.cool-dt);e.impactCooldown=Math.max(0,e.impactCooldown-dt);e.playerHealCooldown=Math.max(0,e.playerHealCooldown-dt);e.healGlow=Math.max(0,e.healGlow-dt);let target=e.bossMinion&&bossFight?bossFight.units.filter(u=>u.hp>0).sort((a,b)=>Math.hypot(a.x-e.x,a.y-e.y)-Math.hypot(b.x-e.x,b.y-e.y))[0]||p:p;let dx=target.x-e.x,dy=target.y-e.y,d=Math.hypot(dx,dy)||1;updateEnemyAbility(e,dt,target,d);
+for(let e of enemies){if(e.hp<=0)continue;updateBiomeEnemy(e,dt);if(e.shape==='regenerator'&&e.hp>0&&e.hp<e.maxHp){e.hp=Math.min(e.maxHp,e.hp+1.1*dt);e.regenPulse=.35}e.regenPulse=Math.max(0,(e.regenPulse||0)-dt);e.phaseIn=Math.max(0,(e.phaseIn||0)-dt);e.fusionCooldown=Math.max(0,(e.fusionCooldown||0)-dt);e.splitCooldown=Math.max(0,(e.splitCooldown||0)-dt);e.specialCooldown=Math.max(0,(e.specialCooldown||0)-dt);if(e.bombTimer>0){e.bombTimer-=dt;if(e.bombTimer<=0){shockwave(e,e.elite?440:310,e.elite?145:105);specialPlayerHit(e.x,e.y,e.elite?120:95,ENEMY_SPECIAL_DAMAGE.bomb[Number(e.elite||false)],e);e.hp=0}}e.magnetCooldown=Math.max(0,(e.magnetCooldown||0)-dt);e.poisonGlow=Math.max(0,(e.poisonGlow||0)-dt);if(e.shape!=='poison'&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r))e.poisonGlow=.24;e.poisonTimer=Math.max(0,(e.poisonTimer||0)-dt);if(e.shape!=='poison'&&e.poisonTimer<=0&&poisonPuddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r)){if(canDamage(e,115)){e.hp-=1;e.cool=Math.max(e.cool,.12)}e.poisonTimer=.7}e.elementCooldown=Math.max(0,(e.elementCooldown||0)-dt);e.cool=Math.max(0,e.cool-dt);e.impactCooldown=Math.max(0,e.impactCooldown-dt);e.playerHealCooldown=Math.max(0,e.playerHealCooldown-dt);e.healGlow=Math.max(0,e.healGlow-dt);let target=e.bossMinion&&bossFight?bossFight.units.filter(u=>u.hp>0).sort((a,b)=>Math.hypot(a.x-e.x,a.y-e.y)-Math.hypot(b.x-e.x,b.y-e.y))[0]||p:p;let dx=target.x-e.x,dy=target.y-e.y,d=Math.hypot(dx,dy)||1;updateEnemyAbility(e,dt,target,d);
 // Movement and attacks can be tested independently in the sandbox.
 if(e.isTreasure){
  if(enemyMovementEnabled()){const away=navigationAvoid(e,-dx/d,-dy/d);e.vx+=away.x*245*dt;e.vy+=away.y*245*dt}
@@ -4255,35 +4462,8 @@ collideProps(e);if(collideGap(e,oldEX,oldEY)||collideHole(e,oldEX,oldEY,Math.hyp
 hitEnemyWithDashBat(e,previousBatAngle);
 if(e.hp<=0)continue;
 let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(!classicDashProtected()&&e.shape!=='healer'&&!e.isTreasure&&!RANGED.includes(e.shape)){let push=Math.min(240,Math.max(65,Math.hypot(e.vx-p.vx,e.vy-p.vy)*.8));p.kvx-=nx*push;p.kvy-=ny*push;}if(e.shape!=='healer'&&enemyAttacksEnabled()&&!e.isTreasure&&!RANGED.includes(e.shape)&&inv===0&&!classicDashProtected()){if(e.shape==='bloodletter'){addEnemyBleed('bloodContact');hp=damagedHealth(ENEMY_DAMAGE.bloodContact);inv=1.1;if(hp<=0)over=true}else{hp=damagedHealth(e.chargeUntil>arenaTime?ENEMY_DAMAGE.charge:ENEMY_DAMAGE.contact);inv=1.1;if(hp<=0)over=true}}}
-// Solid bat: sweep its full arc so fast swings cannot tunnel through enemies.
-if(hero==='classic'){
-let sweep=p.a-previousBatAngle,steps=Math.max(1,Math.ceil(Math.abs(sweep)/.055)),hit=false;
-const batHasLine=weaponLineClear(p.x,p.y,e.x,e.y,2);
-for(let k=0;k<=steps&&batHasLine;k++){
-let angle=previousBatAngle+sweep*k/steps,ux=Math.cos(angle),uy=Math.sin(angle),along=(e.x-p.x)*ux+(e.y-p.y)*uy,at=clamp(along,17,48);
-let bx=p.x+ux*at,by=p.y+uy*at,dx=e.x-bx,dy=e.y-by,dist=Math.hypot(dx,dy),limit=e.r+4;
-if(dist>=limit)continue;
-let tx=-uy*Math.sign(p.vel||1),ty=ux*Math.sign(p.vel||1);
-let nx=dist>.001?dx/dist:tx,ny=dist>.001?dy/dist:ty;
-// Resolve penetration immediately. Moving bat carries the body with it.
-let penetration=limit-dist+.8;e.x+=nx*penetration;e.y+=ny*penetration;
-let batSpeed=Math.abs(p.vel)*at,relative=e.vx*tx+e.vy*ty;
-let kick=Math.max(0,batSpeed-relative);if(e.bossMinion&&kick>25)e.batKnockedUntil=arenaTime+1.5;if(kick>25){runStats.biggestImpact=Math.max(runStats.biggestImpact,kick);runStats.swingsHit++}
-if(kick>0){let impulse=kick*(1.5*playerStats().knockback/e.mass)*(curseActive('float')?1.4:1);e.vx+=tx*impulse;e.vy+=ty*impulse}
-e.vx+=nx*24/e.mass;e.vy+=ny*24/e.mass;
-for(let w of walls)collideWall(e,w,dt);
-e.x=clamp(e.x,18+e.r,W-18-e.r);e.y=clamp(e.y,18+e.r,F-18-e.r);
-flipMagnet(e,kick);specialImpact(e,kick);if(e.splitCooldown<=0)splitOnImpact(e,kick);
-if(e.shape==='mirror'&&kick>65){let recoil=Math.min(220,kick*(e.elite?1.15:.7));p.kvx=(p.kvx||0)-tx*recoil;p.kvy=(p.kvy||0)-ty*recoil;elementFx.push({type:'mirror',x:e.x,y:e.y,life:.25,maxLife:.25})}
-if(e.cool===0&&Math.abs(p.vel)>1.1&&!(classicDashBatActive()&&dash.batHits.has(e))){
- if(damageClassicBatEnemy(e,kick)&&classicDashBatActive())dash.batHits.add(e);
-}
-hit=true;break;
-}
-// Even a stationary bat blocks enemies and prevents overlap.
-if(!hit&&batHasLine){let ux=Math.cos(p.a),uy=Math.sin(p.a),at=clamp((e.x-p.x)*ux+(e.y-p.y)*uy,17,48),bx=p.x+ux*at,by=p.y+uy*at,dx=e.x-bx,dy=e.y-by,d=Math.hypot(dx,dy);
-if(d<e.r+4){let nx=d>.001?dx/d:-uy,ny=d>.001?dy/d:ux;e.x+=nx*(e.r+4-d+.5);e.y+=ny*(e.r+4-d+.5);let vn=e.vx*nx+e.vy*ny;if(vn<0){e.vx-=1.6*vn*nx;e.vy-=1.6*vn*ny}}}
-}
+// The melee weapon uses the same swept shape it draws on screen.
+if(hero==='classic')resolveMeleeContact(e,previousBatAngle,previousFlailLag,dt);
 }
 // Elastic body collisions, impact healing and high-speed merging.
 for(let i=0;i<enemies.length;i++)for(let j=i+1;j<enemies.length;j++){
@@ -4385,7 +4565,7 @@ if(e.healGlow>0){g.save();g.globalAlpha=.36*e.healGlow/.75;g.fillStyle='#5eff83'
 g.fillStyle=e.isTreasure?'#ffe07b':BIOME_ENEMIES[e.shape]?BIOME_ENEMIES[e.shape].color:e.bossMinion?'#8ce68b':e.poisonGlow>0?'#8dff45':e.cool>0?'#ffb2a9':e.shape==='square'?'#ec5274':e.shape==='round'?'#55c9ce':e.shape==='healer'?'#60df79':e.shape==='splitter'?'#ff9e48':e.shape==='mini'?'#ffca73':e.shape==='armored'?'#d9ad50':e.shape==='fire'?'#ff6b2f':e.shape==='water'?'#4aabff':e.shape==='electric'?'#ffe75c':e.shape==='rubber'?'#7ce77c':e.shape==='poison'?'#9bdc38':e.shape==='magnet'?(e.magnetMode===-1?'#ff6079':'#5cbcff'):e.shape==='crystal'?'#86f5f7':e.shape==='bomb'?'#ef6646':e.shape==='mirror'?'#d9e5f4':e.shape==='sponge'?'#e2d469':e.shape==='regenerator'?'#ff82c4':e.shape==='bloodletter'?'#b5284b':e.shape==='gravity'?'#a36bff':RANGED_COLOR[e.shape]||'#b388fa';
 g.beginPath();if(e.shape==='square')g.rect(e.x-e.r,e.y-e.r,e.r*2,e.r*2);else g.arc(e.x,e.y,e.r,0,Math.PI*2);g.fill();
 if(e.origins&&e.origins.length===2){g.save();g.beginPath();g.arc(e.x,e.y,e.r,0,Math.PI*2);g.clip();g.fillStyle=HYBRID_COLORS[e.origins[0]]||'#b388fa';g.fillRect(e.x-e.r,e.y-e.r,e.r,e.r*2);g.fillStyle=HYBRID_COLORS[e.origins[1]]||'#55c9ce';g.fillRect(e.x,e.y-e.r,e.r,e.r*2);g.strokeStyle='#f4e9ff';g.globalAlpha=.65;g.lineWidth=1.5;g.beginPath();g.moveTo(e.x,e.y-e.r);g.lineTo(e.x,e.y+e.r);g.stroke();g.restore()}
-if(e.bleedGlow>0){g.save();g.globalAlpha=Math.min(.8,e.bleedGlow);g.strokeStyle='#ff244b';g.lineWidth=3;g.beginPath();g.arc(e.x,e.y,e.r+3,0,Math.PI*2);g.stroke();g.restore()}
+if(e.swordBleedUntil>arenaTime){g.save();g.globalAlpha=.45;g.strokeStyle='#ff244b';g.lineWidth=3;g.beginPath();g.arc(e.x,e.y,e.r+3,0,Math.PI*2);g.stroke();g.restore()}
 if(e.shape==='gravity'){g.save();g.strokeStyle='#e6c6ff';g.lineWidth=2;g.beginPath();g.arc(e.x,e.y,6,0,Math.PI*1.5);g.stroke();g.fillStyle='#170d29';g.beginPath();g.arc(e.x,e.y,3,0,Math.PI*2);g.fill();g.restore()}
 if(e.shape==='laser'){g.save();g.strokeStyle='#fff';g.lineWidth=2;g.beginPath();g.arc(e.x,e.y,5,0,Math.PI*2);g.stroke();g.fillStyle='#390a24';g.beginPath();g.arc(e.x,e.y,2.5,0,Math.PI*2);g.fill();g.restore()}
 if(RANGED.includes(e.shape)){g.save();g.fillStyle='#181524';g.beginPath();g.arc(e.x,e.y,4,0,Math.PI*2);g.fill();g.strokeStyle='#ffffff';g.lineWidth=1.5;g.beginPath();g.moveTo(e.x-6,e.y);g.lineTo(e.x+6,e.y);g.stroke();g.restore()}
@@ -4407,17 +4587,20 @@ for(const enemy of enemies)drawBiomeEnemyDetails(enemy);
 for(let f of healFx){let progress=1-f.life/.85,alpha=Math.min(1,f.life/.25);g.save();g.globalAlpha=alpha;g.fillStyle='#70ff90';let x=f.x+12+progress*7,y=f.y-14-progress*21;g.fillRect(x-2,y-8,4,16);g.fillRect(x-8,y-2,16,4);g.restore()}
 drawBossFight();drawSynergies();drawDashTrail();drawDamageNumbers();
 if(!p.falling&&(inv===0||Math.floor(t/110)%2===0)){g.fillStyle=playerPoisonGlow>0?'#8dff45':hero==='mage'?'#d9bcff':hero==='archer'?'#b9f4c8':'#fff';g.beginPath();g.arc(p.x,p.y,9,0,Math.PI*2);g.fill()}
-if(!p.falling){g.save();g.translate(p.x,p.y);g.rotate(p.a);if(hero==='archer'){
- const charge=bowPower();g.strokeStyle='#deb87a';g.lineWidth=3;g.beginPath();g.moveTo(14,-18);g.quadraticCurveTo(32,0,14,18);g.stroke();
- g.strokeStyle='#f9ead0';g.lineWidth=1.5;g.beginPath();g.moveTo(14,-18);g.lineTo(14-12*charge,0);g.lineTo(14,18);g.stroke();
- if(charge>.15){g.strokeStyle='#ffe89f';g.lineWidth=2;g.beginPath();g.moveTo(14-12*charge,0);g.lineTo(37,0);g.stroke();g.fillStyle='#fff8ca';g.beginPath();g.moveTo(41,0);g.lineTo(33,-4);g.lineTo(33,4);g.fill()}
- }else if(hero==='classic'){g.fillStyle='#fff';g.fillRect(17,-3,31,6);g.fillStyle='#bdb7d5';g.fillRect(19,2,27,2)}else{g.strokeStyle='#d8adff';g.lineWidth=2;g.shadowColor='#b386ff';g.shadowBlur=8;g.beginPath();g.arc(0,0,13,0,Math.PI*2);g.stroke();g.fillStyle='#ffe1a6';g.beginPath();g.arc(20,0,4,0,Math.PI*2);g.fill()}g.restore();}
+if(!p.falling){
+ g.save();g.translate(p.x,p.y);g.rotate(p.a);
+ if(hero==='archer')drawRangedWeapon();
+ else if(hero==='classic')drawMeleeWeapon();
+ else{g.strokeStyle='#d8adff';g.lineWidth=2;g.shadowColor='#b386ff';g.shadowBlur=8;g.beginPath();g.arc(0,0,13,0,Math.PI*2);g.stroke();g.fillStyle='#ffe1a6';g.beginPath();g.arc(20,0,4,0,Math.PI*2);g.fill()}
+ g.restore();
+}
 if(FOG_OF_WAR_ENABLED)drawFog();
 g.restore(); // Joysticks, minimap and game-over text stay in screen coordinates.
 drawDungeonMap();drawRoomMap();
 g.fillStyle='#11101c';g.fillRect(0,VIEW_F,viewW,H-VIEW_F);g.save();g.globalAlpha=controls.opacity/100;for(let i=0;i<2;i++){if(hero==='mage'&&i===1&&!editingControls)continue;let s=sticks[i],radius=R*controls.size/100;g.beginPath();g.arc(s.x,s.y,radius,0,Math.PI*2);g.fillStyle='#28263c';g.fill();g.strokeStyle=editingControls?'#ffe17e':i?'#b8a6ed':'#7e90ad';g.lineWidth=editingControls?4:2;g.stroke();g.beginPath();g.arc(s.x+s.dx*radius,s.y+s.dy*radius,19*controls.size/100,0,Math.PI*2);g.fillStyle=i?'#a38bd2':'#7486a7';g.fill()}g.restore()
 if(hero==='archer'&&!editingControls){
- const stick=sticks[1],power=bowPower(),stage=bowDrawStage(power),radius=R*controls.size/100;
+ const stick=sticks[1],power=bowPower(),weapon=equippedWeapon(),radius=R*controls.size/100;
+ const draw=bowDrawStage(power),stage=weapon==='crossbow'&&draw!=='idle'?'strong':draw;
  const reloading=bowShotCooldown>0;
  g.save();
  g.strokeStyle=reloading||stage==='idle'?'#a08b6b':stage==='strong'?'#b9f4c8':'#f4c56b';
@@ -4425,12 +4608,12 @@ if(hero==='archer'&&!editingControls){
  g.arc(stick.x,stick.y,radius+6,-Math.PI/2,-Math.PI/2+Math.PI*2*power);g.stroke();
  if(stick.id!==null||reloading){
   g.textAlign='center';g.fillStyle=g.strokeStyle;g.font='bold 10px monospace';
-  const label=reloading?'RELOADING':stage==='idle'?'PULL TO DRAW':stage==='strong'?'STRONG SHOT':'RELEASE TO FIRE';
+  const label=reloading?'RELOADING':stage==='idle'?(weapon==='bow'?'PULL TO DRAW':'PULL TO AIM'):weapon==='crossbow'?'RELEASE BOLT':stage==='strong'?'STRONG SHOT':'RELEASE TO FIRE';
   g.fillText(label,stick.x,stick.y-radius-15);
  }
  g.restore();
 }
-g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'DRAW':'BAT',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
-if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Bleed stacks '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.14';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
+if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.15';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
