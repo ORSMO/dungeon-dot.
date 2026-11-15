@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.20 — Level-up choice on short screens
+
+The level-up menu fits weapon and school choices across one row on short, wide screens so every card can be tapped. On narrower screens the menu can scroll within the viewport.
+
 ## V8.19 — Apprentice and magic schools
 
 New Mage runs begin as **Apprentice Dot** with **A** Magic Bolt, **B** Binding Rune, and **C** Force Pulse. Choose a school at level 3. Each school keeps the basic spells and unlocks these three recipes:

@@ -654,6 +654,26 @@ test('Apprentice evolves once and receives only the three spells in the selected
   });
 });
 
+test('every level-three evolution card selects the option named on the card', () => {
+  const result=run([
+    ...schoolSpells,declaration('WEAPON_PATHS'),
+    ...['equippedWeapon','weaponChoices','validWeaponChoice','runHeroName','levelChoicePending','openElementChoice','selectMageSchool','selectWeapon'].map(method),
+    'let hero,progress,arrows=[],bowShotCooldown=0;const p={a:0};',
+    'const panel={hidden:true},title={},description={},options={children:[],set innerHTML(value){this.children=[]},appendChild(card){this.children.push(card)}};',
+    'const nodes={"#element-choice":panel,"#element-title":title,"#element-explain":description,"#element-options":options};',
+    'const document={querySelector:id=>nodes[id],createElement:()=>({})},inSandbox=()=>false,stopMenuControls=()=>{},showItemNotice=()=>{},updateHeroHud=()=>{},hud=()=>{},queueCheckpoint=()=>{},flushCheckpoint=()=>{};',
+    'const names=[];for(const character of ["classic","archer","mage"]){hero=character;const count=character==="archer"?3:4;',
+    'for(let i=0;i<count;i++){progress={level:3,weapon:null,mageSchool:null};openElementChoice();',
+    'if(options.children.length!==count||panel.hidden)throw Error("Choice menu did not render");',
+    'const card=options.children[i];if(card.type!=="button"||!card.onclick()||!panel.hidden||levelChoicePending())throw Error("Card did not select an evolution");',
+    'const name=runHeroName();if(!card.innerHTML.includes(">"+name+"</strong>"))throw Error("Wrong evolution selected");names.push(name)}}'
+  ],'names');
+  assert.deepEqual(result,[
+    'Sword Dot','Bat Dot','Mace Dot','Spear Dot','Bow Dot','Crossbow Dot','Javelin Dot',
+    'Summoner Dot','Necromancer Dot','Pyromancer Dot','Arcane Mage Dot'
+  ]);
+});
+
 test('failed magic casts preserve mana and a successful cast enforces both cooldowns', () => {
   const result=run([
     ...schoolSpells,method('castMageSpell'),
