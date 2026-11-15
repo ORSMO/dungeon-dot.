@@ -641,6 +641,21 @@ test('excess XP is banked after two levels and pays for levels on the next floor
   });
 });
 
+test('practice XP bypasses the dungeon limit, opens rewards and stops at level 30', () => {
+  const result=run([
+    'let practice=false,choices=0;const progress={level:1,xp:0,levelsThisDepth:2},sandbox={};',
+    'const inSandbox=()=>practice,hud=()=>{},levelChoicePending=()=>progress.level>=3,openElementChoice=()=>choices++;',
+    ...['xpRequirement','levelSummary','advanceRunLevels','addPracticeXp'].map(method),
+    'addPracticeXp();const outside={...progress};',
+    'practice=true;addPracticeXp();const inside={...progress};',
+    'progress.level=29;progress.xp=xpRequirement(29)-1;addPracticeXp();const atCap={...progress};addPracticeXp();'
+  ],'{outside,inside,atCap,progress,choices}');
+  assert.deepEqual(result,{
+    outside:{level:1,xp:0,levelsThisDepth:2},inside:{level:3,xp:38,levelsThisDepth:2},
+    atCap:{level:30,xp:99,levelsThisDepth:2},progress:{level:30,xp:99,levelsThisDepth:2},choices:2
+  });
+});
+
 test('sword width, flail ball, and spear tip match their combat geometry', () => {
   const result=run([
     declaration('WEAPON_PATHS'),

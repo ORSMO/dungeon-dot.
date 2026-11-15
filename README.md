@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.17 — Practice XP
+
+Use **+100 XP** in the Test Room's spawn menu to try level-up rewards. Practice levels can go up to 30 without the dungeon's two-level limit. Leaving the Test Room restores your run's XP, level, weapon, and elements.
+
 ## V8.16 — Solid curved shield
 
 The melee path's curved guard stops enemy bodies across its front arc. Melee impacts and grounded boss contact wear down the shield. A blocked hit spares your health even when that hit breaks the guard. Enemies can still hit from an exposed angle. The guard refills when you enter another room.
