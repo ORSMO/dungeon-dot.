@@ -15,4 +15,4 @@ jobs:
         with:
           node-version: '20'
       - name: Run gameplay regression suite
-        run: node --test tests/core-reliability.test.cjs
+        run: node --test

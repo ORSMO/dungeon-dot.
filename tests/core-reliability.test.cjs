@@ -461,7 +461,7 @@ test('combat population eases for shieldless heroes early and converges by depth
 test('Archer and Mage get modest damage mitigation to offset the missing shield', () => {
   const result = run([
     'let hero="classic",hp=50,armourHp=0;const dashInvulnerable=()=>false,inSandbox=()=>false,sandbox={attacks:true};',
-    'const playerStats=()=>({armour:hero==="archer"?.05:hero==="mage"?.10:0});',
+    'const playerStats=()=>({armour:hero==="archer"?.05:hero==="mage"?.10:0}),mageIncomingDamage=damage=>damage;',
     method('damagedHealth'),
     'const damage=[];for(const character of ["classic","archer","mage"]){hero=character;hp=50;hp=damagedHealth(14);damage.push(50-hp)}'
   ], 'damage');
@@ -635,22 +635,21 @@ const schoolSpells=[
   method('mageSpell'),method('mageSpellbook')
 ];
 
-test('Apprentice evolves once and receives only the three spells in the selected school', () => {
+test('Apprentice evolves once and receives the complete spellbook for the chosen school', () => {
   const result=run([
     ...schoolSpells,method('levelChoicePending'),method('selectMageSchool'),
     'const hero="mage",progress={level:2,mageSchool:null},document={querySelector:()=>({})};',
     'const runHeroName=()=>progress.mageSchool,showItemNotice=()=>{},hud=()=>{},queueCheckpoint=()=>{},flushCheckpoint=()=>{};',
     'const starter=Object.keys(mageSpellbook()),early=selectMageSchool("summoner");progress.level=3;',
-    'const choices=Object.keys(MAGE_SCHOOLS).map(school=>Object.values(MAGE_SCHOOLS[school].spells).map(spell=>spell.name));',
+    'const choices=Object.values(MAGE_SCHOOLS).map(school=>Object.keys(school.spells).sort());',
     'const invalid=selectMageSchool("constructor"),chosen=selectMageSchool("necromancer");',
-    'progress.level=8;const later=selectMageSchool("arcane"),paths=Object.keys(mageSpellbook()),locked=mageSpell("BA")===null;',
+    'progress.level=8;const later=selectMageSchool("arcane"),paths=Object.keys(mageSpellbook()).sort(),boneSpear=mageSpell("BA").name;',
     'progress.legacyMage=true;const original=[Object.keys(mageSpellbook()).length,mageSpell("A").name];'
-  ],'{starter,early,choices,invalid,chosen,later,paths,locked,original}');
+  ],'{starter,early,choices,invalid,chosen,later,paths,boneSpear,original}');
+  const combinations=['AB','ABC','AC','ACB','BA','BAC','BC','BCA','CA','CAB','CB','CBA'];
   assert.deepEqual(result,{
-    starter:['A','B','C'],early:false,choices:[
-      ['Conjure Familiar','Pack Command','Guardian Pact'],['Grave Mark','Corpse Burst','Raise the Fallen'],
-      ['Fire Lance','Flame Trail','Meteor Drop'],['Ricochet Orb','Blink','Gravity Well']
-    ],invalid:false,chosen:true,later:false,paths:['A','B','C','AB','BC','ABC'],locked:true,original:[15,'Ember Bolt']
+    starter:['A','B','C'],early:false,choices:Array(4).fill(combinations),
+    invalid:false,chosen:true,later:false,paths:['A','B','C',...combinations].sort(),boneSpear:'Bone Spear',original:[15,'Ember Bolt']
   });
 });
 
@@ -681,7 +680,7 @@ test('failed magic casts preserve mana and a successful cast enforces both coold
     'const progress={mageSchool:"necromancer"},mageCooldowns={},mageInputEnabled=()=>true,mageAim=()=>({a:0});',
     'const castSchoolSpell=()=>resource?undefined:"NEED A SOUL",itemCount=()=>0,upgradeCount=()=>0,playerStats=()=>({swing:1});',
     'const refreshManaHud=()=>{},queueCheckpoint=()=>{},showMageFeedback=(kind,label)=>feedback=label;',
-    'const locked=castMageSpell("CBA"),failed=castMageSpell("ABC"),before={mageMana,mageGlobalReady,feedback};',
+    'const locked=castMageSpell("AA"),failed=castMageSpell("ABC"),before={mageMana,mageGlobalReady,feedback};',
     'resource=true;const applied=castMageSpell("ABC"),duringGlobal=castMageSpell("A");arenaTime=2;const duringSpell=castMageSpell("ABC");'
   ],'{locked,failed,before,applied,duringGlobal,duringSpell,mageMana,mageCastCount,ready:mageCooldowns.ABC}');
   assert.deepEqual(result,{

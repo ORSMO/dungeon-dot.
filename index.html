@@ -86,7 +86,7 @@ footer #restart{display:none}
  #element-options strong{font-size:13px}
  #element-options small{font-size:10.5px;line-height:1.22}
 }
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.20</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · SWING</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-xp" type="button">+100 XP</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.21</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · SWING</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-xp" type="button">+100 XP</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
  <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
  <small id="character-coins"></small>
  <div id="character-stats"></div>
@@ -105,7 +105,7 @@ footer #restart{display:none}
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
-<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.20</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
+<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.21</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
   <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true">⚪ STICK DOT<br>MELEE PATH</button><button id="hero-archer" type="button" aria-pressed="false">🏹 SLING DOT<br>RANGED PATH</button><button id="hero-mage" type="button" aria-pressed="false">🔮 APPRENTICE DOT<br>DRAW RUNES</button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
@@ -298,10 +298,10 @@ if(kind==='cannon'){artillery.push({x:Math.max(25,Math.min(W-25,aim.x)),y:Math.m
 const {count,speed}=ENEMY_PROJECTILES[kind];for(let k=0;k<count;k++){let a=angle+(k-(count-1)/2)*(kind==='scatter'?.21:.17);projectiles.push({x:e.x+Math.cos(a)*(e.r+7),y:e.y+Math.sin(a)*(e.r+7),vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,kind,r:kind==='spitter'?5:4,life:4,owner:e,reflected:false})}}
 function rangedUpdate(dt){if(!enemyAttacksEnabled())return;for(let a of artillery){a.life-=dt;if(a.life<=0){if(Math.hypot(p.x-a.x,p.y-a.y)<a.r+7&&inv<=0&&!classicDashProtected()){hp=damagedHealth(ENEMY_DAMAGE.artillery);inv=.55;if(hp<=0)over=true}for(let e of enemies){if(e!==a.owner&&e.hp>0&&Math.hypot(e.x-a.x,e.y-a.y)<a.r+e.r&&canDamage(e,150))e.hp-=2}elementFx.push({type:'fire',x:a.x,y:a.y,r:0,life:.38,maxLife:.38})}}artillery=artillery.filter(a=>a.life>0);
 for(let q of projectiles){q.life-=dt;if(q.life<=0)continue;if(q.kind==='seeker'){let target=q.reflected?enemies.filter(e=>e.hp>0).sort((a,b)=>Math.hypot(a.x-q.x,a.y-q.y)-Math.hypot(b.x-q.x,b.y-q.y))[0]:p;if(target){let a=Math.atan2(target.y-q.y,target.x-q.x),v=Math.hypot(q.vx,q.vy),cur=Math.atan2(q.vy,q.vx),diff=Math.atan2(Math.sin(a-cur),Math.cos(a-cur)),next=cur+Math.max(-1.8*dt,Math.min(1.8*dt,diff));q.vx=Math.cos(next)*v;q.vy=Math.sin(next)*v}}
-let ox=q.x,oy=q.y;const synergySpeed=synergyProjectileFactor(q)*(hero==='archer'&&!q.reflected&&itemCount('hourglass')&&arrows.some(a=>Math.hypot(a.x-q.x,a.y-q.y)<65)?.62:1);q.x+=q.vx*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;q.y+=q.vy*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;
+let ox=q.x,oy=q.y;const synergySpeed=synergyProjectileFactor(q)*mageShotSpeed(q)*(hero==='archer'&&!q.reflected&&itemCount('hourglass')&&arrows.some(a=>Math.hypot(a.x-q.x,a.y-q.y)<65)?.62:1);q.x+=q.vx*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;q.y+=q.vy*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;
 if(q.x<16||q.x>W-16||q.y<16||q.y>F-16){q.life=0;continue}if(projectileHitsProp(q,ox,oy)||projectileHitsNest(q,ox,oy))continue
 let wall=walls.find(w=>q.x+q.r>w.x&&q.x-q.r<w.x+w.w&&q.y+q.r>w.y&&q.y-q.r<w.y+w.h);if(wall){if(q.reflected&&wall.cracked)hitCrackedWall(wall,2);if(q.kind==='spitter')poisonPuddles.push({x:q.x,y:q.y,r:23,life:2,maxLife:2});if(q.kind==='frostcaster'){let water=puddles.find(z=>Math.hypot(z.x-q.x,z.y-q.y)<z.r);if(water){water.life=Math.min(water.life,.3);triggerReaction('ice',water.x,water.y,water.r)}}if(q.kind==='cannon'){q.vx*=-.75;q.vy*=-.75;q.life-=.7}else q.life=0;continue}
-if(guardianBlocksShot(q,ox,oy))continue;
+if(mageBlocksShot(q,ox,oy))continue;
 if(!q.reflected&&shieldHit(q.x,q.y,q.r)){shieldDamage(q.kind==='scatter'?8:q.kind==='seeker'?20:12);let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.45;q.vy=Math.sin(a)*speed*1.45;q.reflected=true;q.life=2.5;continue}
 if(!q.reflected&&hero==='classic'&&meleeSweep(q.x,q.y,q.r+1+5*itemCount('reflectArrow'),p.a,p.flailLag||0)){let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.35;q.vy=Math.sin(a)*speed*1.35;q.reflected=true;q.life=2.5;continue}
 if(q.reflected){for(let e of enemies){if(e.hp<=0)continue;if(Math.hypot(q.x-e.x,q.y-e.y)<e.r+q.r){if(canDamage(e,165))friendlyDamage(e,q.kind==='cannon'?3:2,'projectile');if(q.kind==='frostcaster'){let water=puddles.find(z=>Math.hypot(z.x-e.x,z.y-e.y)<z.r);if(water){water.life=.2;triggerReaction('ice',water.x,water.y,water.r)}}q.life=0;break}}}else if(!classicDashProtected()&&Math.hypot(q.x-p.x,q.y-p.y)<q.r+8&&inv<=0){if(q.kind==='bloodcaster')addEnemyBleed('bloodcaster');else if(q.kind==='frostcaster')p.slowUntil=arenaTime+2;else if(q.kind==='spitter')poisonPuddles.push({x:q.x,y:q.y,r:25,life:2.5,maxLife:2.5});else{if(q.kind==='emberbolt')addEnemyBleed('emberbolt');hp=damagedHealth(ENEMY_PROJECTILES[q.kind]?.damage??ENEMY_PROJECTILES.shooter.damage);if(hp<=0)over=true}inv=.4;q.life=0}}
@@ -512,9 +512,10 @@ function drawBiomeEnemyDetails(e){
  if(e.biomeWindup>0){g.strokeStyle='#ffd59a';g.beginPath();g.moveTo(e.x,e.y);g.lineTo(e.x+Math.cos(e.biomeAim)*70,e.y+Math.sin(e.biomeAim)*70);g.stroke()}
  g.restore();
 }
-function damagedHealth(amount){
+function damagedHealth(amount,periodic=false){
  if(dashInvulnerable()||inSandbox()&&!sandbox.attacks)return hp;
  const damage=Math.max(0,amount)*(1-playerStats().armour);
+ if(hero==='mage'&&damage>0)return Math.max(0,hp-mageIncomingDamage(damage,periodic));
  if(hero!=='classic'||armourHp<=0||damage===0)return Math.max(0,hp-damage);
  const absorbed=Math.min(armourHp,damage*bodyArmourStats().absorption);
  armourHp-=absorbed;
@@ -2591,7 +2592,7 @@ function updateSlimeKing(unit,dt){
 function updateBossShots(dt,previousAngle,previousLag=0){
  for(const shot of bossFight.shots){
   shot.life-=dt;if(shot.life<=0)continue;
-  const ox=shot.x,oy=shot.y;const synergySpeed=synergyProjectileFactor(shot)*(hero==='archer'&&!shot.reflected&&itemCount('hourglass')&&arrows.some(a=>Math.hypot(a.x-shot.x,a.y-shot.y)<65)?.62:1);shot.x+=shot.vx*dt*(shot.reflected?1:playerStats().bulletSpeed)*synergySpeed;shot.y+=shot.vy*dt*(shot.reflected?1:playerStats().bulletSpeed)*synergySpeed;
+  const ox=shot.x,oy=shot.y;const synergySpeed=synergyProjectileFactor(shot)*mageShotSpeed(shot)*(hero==='archer'&&!shot.reflected&&itemCount('hourglass')&&arrows.some(a=>Math.hypot(a.x-shot.x,a.y-shot.y)<65)?.62:1);shot.x+=shot.vx*dt*(shot.reflected?1:playerStats().bulletSpeed)*synergySpeed;shot.y+=shot.vy*dt*(shot.reflected?1:playerStats().bulletSpeed)*synergySpeed;
   if(shot.x<16||shot.x>W-16||shot.y<16||shot.y>F-16){bounceBossProjectile(shot);if(shot.life<=0)continue}
   if(!shot.reflected){
    let bat=false;
@@ -2603,7 +2604,7 @@ function updateBossShots(dt,previousAngle,previousLag=0){
      bat=sweptBossShotHits(shot,ox,oy,segment,shot.r+weaponForm().width+4*itemCount('reflectArrow'));
     }
    }
-   if(guardianBlocksShot(shot,ox,oy))continue;
+   if(mageBlocksShot(shot,ox,oy))continue;
    const shield=!bat&&shieldSegments().some(seg=>sweptBossShotHits(shot,ox,oy,seg,shot.r+3));
    if(bat||shield){
     if(shield)shieldDamage(shot.kind==='cannonball'?18:10);
@@ -3452,22 +3453,58 @@ const MAGE_SCHOOLS={
  summoner:{name:'Summoner Dot',color:'#abe6c6',desc:'Conjure familiars, focus them on one target and call a guardian.',spells:{
   AB:{name:'Conjure Familiar',mana:18,cooldown:2.7,effect:'familiar',desc:'Summon a fighting spirit. Up to two at a time.'},
   BC:{name:'Pack Command',mana:14,cooldown:2.8,effect:'pack',desc:'Send familiars after one enemy. Close-timed hits deal bonus damage.'},
-  ABC:{name:'Guardian Pact',mana:40,cooldown:8,effect:'guardian',desc:'Conjure a guardian that intercepts shots and slams the ground.'}
+  BA:{name:'Spirit Dart',mana:12,cooldown:.85,effect:'spiritDart',desc:'Mark an enemy for bonus damage from the next familiar strike.'},
+  AC:{name:'Recall',mana:13,cooldown:2.8,effect:'recall',desc:'Call familiars back. They shove enemies in their path.'},
+  CA:{name:'Guardian Step',mana:11,cooldown:2.5,effect:'guardianStep',desc:'Move an active guardian to the direction you are moving or aiming.'},
+  CB:{name:'Twin Hunt',mana:16,cooldown:3.4,effect:'twinHunt',desc:'Send familiars after separate nearby targets.'},
+  ABC:{name:'Guardian Pact',mana:40,cooldown:8,effect:'guardian',desc:'Conjure a guardian that intercepts shots and slams the ground.'},
+  ACB:{name:'Spirit Relay',mana:29,cooldown:5.5,effect:'spiritRelay',desc:'Your guardian and familiars slam from their own positions. Each enemy takes one hit.'},
+  BAC:{name:'Spirit Stampede',mana:36,cooldown:5.2,effect:'stampede',desc:'Launch three lines of spectral runners that pierce crowds.'},
+  BCA:{name:'Sanctuary',mana:36,cooldown:8,effect:'sanctuary',desc:'Take 40% less damage while standing inside a temporary ward.'},
+  CAB:{name:'Astral Lure',mana:32,cooldown:6,effect:'astralLure',desc:'Place an idol that draws in regular enemies and bursts after a delay.'},
+  CBA:{name:'Grand Conjuration',mana:39,cooldown:7.5,effect:'grandConjuration',desc:'Empower your familiars for stronger, faster attacks. Conjure one if needed.'}
  }},
  necromancer:{name:'Necromancer Dot',color:'#d5b2ef',desc:'Mark enemies to earn Souls, detonate corpses and raise skeletons.',spells:{
   AB:{name:'Grave Mark',mana:14,cooldown:1.25,effect:'grave',desc:'Curse a target. Marked kills and three hits on a marked boss grant a Soul.'},
   BC:{name:'Corpse Burst',mana:18,cooldown:1.8,effect:'corpse',desc:'Explode a visible corpse or spend one Soul to blast your target.'},
-  ABC:{name:'Raise the Fallen',mana:32,cooldown:5.5,effect:'raise',desc:'Spend up to three Souls. Each skeleton rushes a target and bursts on impact.'}
+  BA:{name:'Bone Spear',mana:15,cooldown:1.15,effect:'boneSpear',desc:'Pierce a line of enemies with a fast spear.'},
+  AC:{name:'Grave Snare',mana:16,cooldown:2.8,effect:'graveSnare',desc:'Skeletal hands snare up to three enemies. Bosses are slowed.'},
+  CA:{name:'Bone Guard',mana:13,cooldown:3.5,effect:'boneGuard',desc:'Spend one Soul to absorb 35% of the next hit.'},
+  CB:{name:'Soul Rend',mana:18,cooldown:2.5,effect:'soulRend',desc:'Cleave nearby enemies. Recover 2 HP if you kill a marked enemy.'},
+  ABC:{name:'Raise the Fallen',mana:32,cooldown:5.5,effect:'raise',desc:'Spend up to three Souls. Each skeleton rushes a target and bursts on impact.'},
+  ACB:{name:'Grave Dominion',mana:34,cooldown:6,effect:'graveDominion',desc:'Detonate up to three corpses in sequence. Spend a Soul for one blast if needed.'},
+  BAC:{name:'Reaper’s Scythe',mana:36,cooldown:5,effect:'reaperScythe',desc:'Sweep a wide arc. Marked targets take bonus damage.'},
+  BCA:{name:'Ossuary',mana:34,cooldown:7,effect:'ossuary',desc:'Raise temporary bone barricades to split a room.'},
+  CAB:{name:'Haunt',mana:29,cooldown:6,effect:'haunt',desc:'Spend one Soul to send a shade after one target. It bursts if the target dies.'},
+  CBA:{name:'Soul Harvest',mana:32,cooldown:7,effect:'soulHarvest',desc:'Mark a group of enemies. Gain one Soul if any were already marked.'}
  }},
  pyromancer:{name:'Pyromancer Dot',color:'#ffb478',desc:'Pierce enemies with fire and ignite burning crowds with a meteor.',spells:{
   AB:{name:'Fire Lance',mana:17,cooldown:1.35,effect:'lance',desc:'Pierce up to three enemies and set them burning.'},
   BC:{name:'Flame Trail',mana:20,cooldown:4.2,effect:'trail',desc:'Leave a trail of fire as you move.'},
-  ABC:{name:'Meteor Drop',mana:45,cooldown:5.4,effect:'meteor',desc:'Strike after a delay. Burning enemies caught in the hit flare up.'}
+  BA:{name:'Cinder Shot',mana:13,cooldown:1.05,effect:'cinderShot',desc:'Fire a bolt that bursts and singes nearby enemies on impact.'},
+  AC:{name:'Wall of Fire',mana:19,cooldown:3,effect:'fireWall',desc:'Lay a strip of flames across your aim.'},
+  CA:{name:'Backdraft',mana:16,cooldown:2.4,effect:'backdraft',desc:'Push enemies back in a cone. Crossing your flames widens the blast.'},
+  CB:{name:'Flashpoint',mana:17,cooldown:2.6,effect:'flashpoint',desc:'Consume a nearby target’s burn for an immediate burst.'},
+  ABC:{name:'Meteor Drop',mana:45,cooldown:5.4,effect:'meteor',desc:'Strike after a delay. Burning enemies caught in the hit flare up.'},
+  ACB:{name:'Firestorm',mana:41,cooldown:7,effect:'firestorm',desc:'Call a persistent storm. Consume up to three flame patches to grow it.'},
+  BAC:{name:'Scorching Ray',mana:36,cooldown:5.5,effect:'scorchingRay',desc:'Fire a straight beam after a brief warning. It stops at cover.'},
+  BCA:{name:'Phoenix Guard',mana:34,cooldown:8,effect:'phoenixGuard',desc:'Release a ring of fire bolts the next time you take damage.'},
+  CAB:{name:'Volcanic Fissure',mana:39,cooldown:6,effect:'fissure',desc:'Erupt the ground at three points in sequence along your aim.'},
+  CBA:{name:'Wildfire',mana:34,cooldown:6.5,effect:'wildfire',desc:'Spread active burns to nearby enemies. Ignite your target if the room has no fire.'}
  }},
  arcane:{name:'Arcane Mage Dot',color:'#b9bbff',desc:'Bank shots off walls, blink past pressure and pull enemies together.',spells:{
   AB:{name:'Ricochet Orb',mana:17,cooldown:1.55,effect:'ricochet',desc:'Bank an orb off up to two walls and hit multiple targets.'},
   BC:{name:'Blink',mana:19,cooldown:3.5,effect:'blink',desc:'Blink in your move direction. Leave a decoy that bursts near enemies.'},
-  ABC:{name:'Gravity Well',mana:42,cooldown:5.5,effect:'gravity',desc:'Pull regular enemies together, then collapse for damage.'}
+  BA:{name:'Prism Shot',mana:15,cooldown:1.15,effect:'prismShot',desc:'Split into two angled shards after the first hit.'},
+  AC:{name:'Mirror Rune',mana:14,cooldown:3,effect:'mirrorRune',desc:'Place an angled mirror that can bank Ricochet Orbs.'},
+  CA:{name:'Slow Field',mana:20,cooldown:4.2,effect:'slowField',desc:'Slow hostile shots inside a temporary field.'},
+  CB:{name:'Displace',mana:17,cooldown:2.5,effect:'displace',desc:'Shove an enemy toward your decoy or Gravity Well. Deal direct damage to bosses.'},
+  ABC:{name:'Gravity Well',mana:42,cooldown:5.5,effect:'gravity',desc:'Pull regular enemies together, then collapse for damage.'},
+  ACB:{name:'Rift Gate',mana:29,cooldown:5.8,effect:'riftGate',desc:'Redirect the next three bolt casts through a distant gate.'},
+  BAC:{name:'Orbiting Shields',mana:36,cooldown:7,effect:'orbitShields',desc:'Three orbiting wards intercept one projectile each.'},
+  BCA:{name:'Phase Anchor',mana:32,cooldown:7.5,effect:'phaseAnchor',desc:'Mark your current position. Return there after three seconds if it is safe.'},
+  CAB:{name:'Arc Chain',mana:36,cooldown:5.4,effect:'arcChain',desc:'Arc lightning between up to five visible enemies.'},
+  CBA:{name:'Stasis Field',mana:40,cooldown:7,effect:'stasisField',desc:'Hold up to four regular enemies briefly. Bosses take a hit instead.'}
  }}
 };
 const MAGE_SPELLS={
@@ -3519,6 +3556,27 @@ function mageAim(){
  return {a,tx:nearest?.x??p.x+Math.cos(a)*170,ty:nearest?.y??p.y+Math.sin(a)*170};
 }
 function mageTargets(){return [...enemies,...(bossFight&&!bossFight.done?bossFight.units:[])].filter(e=>e.hp>0)}
+function mageTargetsNear(x,y,range){
+ return mageTargets().filter(enemy=>enemy.state!=='jump'&&enemy.state!=='rebirth'&&
+  Math.hypot(enemy.x-x,enemy.y-y)<range+enemy.r&&weaponLineClear(x,y,enemy.x,enemy.y,3));
+}
+function mageCone(angle,range,half){
+ return mageTargetsNear(p.x,p.y,range).filter(enemy=>{
+  const offset=Math.atan2(enemy.y-p.y,enemy.x-p.x)-angle;
+  return Math.abs(Math.atan2(Math.sin(offset),Math.cos(offset)))<=half;
+ });
+}
+function magePush(enemy,angle,force){
+ if(enemy.kind)return;
+ const speed=force*playerStats().knockback/Math.max(.6,enemy.mass||1);
+ enemy.vx+=Math.cos(angle)*speed;enemy.vy+=Math.sin(angle)*speed;
+}
+function mageVisibleCorpses(x,y){
+ return mageCorpses.filter(body=>body.until>arenaTime&&Math.hypot(body.x-p.x,body.y-p.y)<320&&weaponLineClear(p.x,p.y,body.x,body.y,3))
+  .sort((first,second)=>Math.hypot(first.x-x,first.y-y)-Math.hypot(second.x-x,second.y-y));
+}
+function mageActiveZone(type){return mageZones.find(zone=>zone.type===type&&zone.life>0)}
+function mageFamiliars(){return mageSummons.filter(unit=>unit.type==='familiar'&&unit.life>0)}
 function mageEnemyTarget(x,y,range=620){
  let target=null;
  for(const enemy of mageTargets()){
@@ -3583,9 +3641,20 @@ function mageArea(x,y,r,damage,kind='arc',push=0,cover=false){
  for(const sw of trapControls)if(sw.kind==='lever'&&Math.hypot(sw.x-x,sw.y-y)<r+sw.r&&(!cover||weaponLineClear(x,y,sw.x,sw.y,2)))triggerTrapControl(sw);
 }
 function mageBolt(a,damage,speed=340,kind='arc',options={}){
- let x=p.x+Math.cos(a)*21,y=p.y+Math.sin(a)*21;
- if(!progress?.legacyMage&&(!weaponLineClear(p.x,p.y,x,y,5)||walls.some(w=>nearRect(x,y,5,w)))){x=p.x;y=p.y}
- mageBolts.push({x,y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r:options.r||5,life:options.life||1.5,damage,kind,pierce:options.pierce||0,bounces:options.bounces||0,hit:new Set()});
+ const gate=!options.origin&&!options.skipRift&&progress?.mageSchool==='arcane'&&mageActiveZone('rift');
+ let origin=options.origin||p;
+ if(gate){
+  origin=gate;
+  const target=mageEnemyTarget(gate.x,gate.y);
+  a=target?Math.atan2(target.y-gate.y,target.x-gate.x):gate.angle;
+  if(--gate.charges===0)gate.life=0;
+ }
+ const offset=options.origin?0:21;
+ let x=origin.x+Math.cos(a)*offset,y=origin.y+Math.sin(a)*offset;
+ if(!progress?.legacyMage&&(!weaponLineClear(origin.x,origin.y,x,y,5)||walls.some(w=>nearRect(x,y,5,w)))){x=origin.x;y=origin.y}
+ mageBolts.push({x,y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r:options.r||5,life:options.life||1.5,damage,kind,
+  pierce:options.pierce||0,bounces:options.bounces||0,hit:options.hit||new Set(),onImpact:options.onImpact,
+  reflectMirror:!!options.bounces&&progress?.mageSchool==='arcane'});
 }
 function mageReflect(x,y,r,clear=false,limit=Infinity){
  let reflected=0;const bullets=[projectiles,...(bossFight&&!bossFight.done?[bossFight.shots]:[])];
@@ -3601,18 +3670,22 @@ function mageReflect(x,y,r,clear=false,limit=Infinity){
  if(reflected)bossSpark(x,y,'#d9b7ff');
  return reflected;
 }
-function mageZone(type,x,y,r,life,power,delay=0){
- mageZones.push({type,x,y,r,life,power,delay,tick:0,angle:0});
+function mageZone(type,x,y,r,life,power,delay=0,options={}){
+ const zone={type,x,y,r,life,power,delay,tick:0,...options};
+ mageZones.push(zone);return zone;
 }
-function mageWall(a){
+function mageWall(a,kind='ice'){
  const tx=p.x+Math.cos(a)*110,ty=p.y+Math.sin(a)*110;
  let placed=0;
  for(const offset of [-20,20]){
   const xx=Math.floor((tx-Math.sin(a)*offset)/TILE_SIZE)*TILE_SIZE,yy=Math.floor((ty+Math.cos(a)*offset)/TILE_SIZE)*TILE_SIZE;
   if(!safeFloor(xx+TILE_SIZE/2,yy+TILE_SIZE/2,17)||Math.hypot(xx+20-p.x,yy+20-p.y)<53||portals.some(q=>Math.hypot(q.x-xx-20,q.y-yy-20)<42)||roomDoors().some(q=>Math.hypot(q.x-xx-20,q.y-yy-20)<60))continue;
-  walls.push({x:xx,y:yy,w:TILE_SIZE,h:TILE_SIZE,type:'neutral',mageUntil:arenaTime+2.5});placed++;
+  const wall={x:xx,y:yy,w:TILE_SIZE,h:TILE_SIZE,type:'neutral',mageUntil:arenaTime+(kind==='bone'?4:2.5),mageBone:kind==='bone'};
+  if(wall.mageBone&&(mageTargets().some(enemy=>nearRect(enemy.x,enemy.y,enemy.r,wall))||breakables.some(prop=>!prop.broken&&nearRect(prop.x,prop.y,PROP_DEFS[prop.kind].r,wall))))continue;
+  walls.push(wall);placed++;
  }
  if(placed)resetEnemyNavigation();
+ else if(kind==='bone')return 'NO ROOM FOR BARRICADES';
  else mageArea(tx,ty,36,1.4,'ice',20);
 }
 function magePlacement(angle,reach,radius){
@@ -3658,12 +3731,12 @@ function castSchoolSpell(effect,aim){
    mageReflect(p.x,p.y,58+itemCount('reflectArrow')*14,false,1);break;
   }
   case 'familiar':{
-   if(mageSummons.filter(unit=>unit.type==='familiar'&&unit.life>0).length>=2)return 'TWO FAMILIARS ACTIVE';
+   if(mageFamiliars().length>=2)return 'TWO FAMILIARS ACTIVE';
    const point=magePlacement(a,30,9);
    mageSummon('familiar',point.x,point.y);break;
   }
   case 'pack':{
-   const familiars=mageSummons.filter(unit=>unit.type==='familiar'&&unit.life>0);
+   const familiars=mageFamiliars();
    if(!familiars.length)return 'SUMMON A FAMILIAR FIRST';
    const target=mageEnemyTarget(p.x,p.y);
    if(!target)return 'NO VISIBLE TARGET';
@@ -3678,8 +3751,7 @@ function castSchoolSpell(effect,aim){
   }
   case 'grave':mageBolt(a,2.8,440,'grave');break;
   case 'corpse':{
-   const corpse=mageCorpses.filter(body=>body.until>arenaTime&&Math.hypot(body.x-p.x,body.y-p.y)<320&&weaponLineClear(p.x,p.y,body.x,body.y,3))
-    .sort((first,second)=>Math.hypot(first.x-tx,first.y-ty)-Math.hypot(second.x-tx,second.y-ty))[0];
+   const corpse=mageVisibleCorpses(tx,ty)[0];
    if(corpse){
     mageCorpses.splice(mageCorpses.indexOf(corpse),1);
     mageArea(corpse.x,corpse.y,65,4.6,'arc',105,true);
@@ -3707,6 +3779,263 @@ function castSchoolSpell(effect,aim){
    const point=magePlacement(a,Math.min(150,Math.hypot(tx-p.x,ty-p.y)),4);
    mageZone('arcGravity',point.x,point.y,103,2.8,5.5);break;
   }
+  default:return castAdvancedSpell(effect,aim);
+ }
+}
+function castAdvancedSpell(effect,aim){
+ switch(progress.mageSchool){
+  case 'summoner':return castSummonerCombo(effect,aim);
+  case 'necromancer':return castNecromancerCombo(effect,aim);
+  case 'pyromancer':return castPyromancerCombo(effect,aim);
+  case 'arcane':return castArcaneCombo(effect,aim);
+ }
+ return 'SPELL UNAVAILABLE';
+}
+function mageDelayedBurst(x,y,r,damage,delay,kind,hit,push){
+ mageZone('comboBurst',x,y,r,delay+.12,damage,delay,{kind,hit,push});
+}
+function mageArcFlash(angle,radius,color,half=1.5){
+ mageZone('arcFlash',p.x,p.y,radius,.3,0,0,{angle,half,color});
+}
+function mageLink(first,second,color){
+ elementFx.push({type:'lightning',x:first.x,y:first.y,x2:second.x,y2:second.y,life:.24,maxLife:.24,color});
+}
+function castSummonerCombo(effect,{a}){
+ const familiars=mageFamiliars(),guardian=mageSummons.find(unit=>unit.type==='guardian'&&unit.life>0);
+ switch(effect){
+  case 'spiritDart':mageBolt(a,2.4,510,'arc',{onImpact:'spiritDart'});break;
+  case 'recall':{
+   if(!familiars.length)return 'SUMMON A FAMILIAR FIRST';
+   const recall={until:arenaTime+2,hit:new Set()};
+   for(const unit of familiars){unit.command=null;unit.recall=recall}
+   break;
+  }
+  case 'guardianStep':{
+   if(!guardian)return 'SUMMON A GUARDIAN FIRST';
+   const point=magePlacement(mageMoveAim(a),76,guardian.r);
+   if(point.x===p.x&&point.y===p.y)return 'NO ROOM FOR THE GUARDIAN';
+   guardian.x=point.x;guardian.y=point.y;bossSpark(point.x,point.y,'#b5ffdd');break;
+  }
+  case 'twinHunt':{
+   if(familiars.length<2)return 'SUMMON TWO FAMILIARS FIRST';
+   const targets=mageTargetsNear(p.x,p.y,340).sort((x,y)=>Math.hypot(x.x-p.x,x.y-p.y)-Math.hypot(y.x-p.x,y.y-p.y));
+   if(targets.length<2)return 'NEED TWO VISIBLE TARGETS';
+   familiars.forEach((unit,i)=>{
+    unit.recall=null;unit.command={target:targets[i],until:arenaTime+2.8,twin:true};
+   });
+   break;
+  }
+  case 'spiritRelay':{
+   if(!guardian||!familiars.length)return 'NEED A GUARDIAN AND FAMILIAR';
+   const hit=new Set();
+   [guardian,...familiars].forEach((unit,i)=>mageDelayedBurst(unit.x,unit.y,i?58:68,i?5.6:7,.16+i*.25,'arc',hit,130));
+   break;
+  }
+  case 'stampede':{
+   const dx=-Math.sin(a),dy=Math.cos(a),hit=new Set();
+   for(const lane of [-27,0,27]){
+    const x=p.x+dx*lane,y=p.y+dy*lane;
+    if(safeFloor(x,y,9)&&weaponLineClear(p.x,p.y,x,y,3))
+     mageBolt(a,6,360,'arc',{origin:{x,y},hit,pierce:3,r:10,life:1.15});
+   }
+   break;
+  }
+  case 'sanctuary':mageZone('sanctuary',p.x,p.y,65,3.6,0);break;
+  case 'astralLure':{
+   const point=magePlacement(a,130,12);
+   mageZone('lure',point.x,point.y,44,2.75,5.5);break;
+  }
+  case 'grandConjuration':{
+   if(!familiars.length){
+    const point=magePlacement(a,30,9);
+    mageSummon('familiar',point.x,point.y);
+    const unit=mageSummons.at(-1);unit.life=4.6;familiars.push(unit);
+   }
+   for(const unit of familiars)unit.empoweredUntil=arenaTime+4.5;
+   break;
+  }
+  default:return 'SPELL UNAVAILABLE';
+ }
+}
+function castNecromancerCombo(effect,{a,tx,ty}){
+ switch(effect){
+  case 'boneSpear':mageBolt(a,3.8,540,'arc',{pierce:2,r:5});break;
+  case 'graveSnare':{
+   const point=magePlacement(a,Math.min(125,Math.hypot(tx-p.x,ty-p.y)),4);
+   mageZone('graveSnare',point.x,point.y,43,3.2,0,0,{charges:3,hit:new Set()});break;
+  }
+  case 'boneGuard':{
+   if(mageActiveZone('boneGuard'))return 'BONE GUARD ALREADY ACTIVE';
+   if(!mageSouls)return 'NEED AT LEAST ONE SOUL';
+   mageSouls--;mageZone('boneGuard',p.x,p.y,19,7,0);break;
+  }
+  case 'soulRend':{
+   let earned=false;
+   for(const enemy of mageCone(a,83,1.17)){
+    const marked=enemy.graveMarkUntil>arenaTime;
+    mageHurt(enemy,4.5);
+    if(marked&&enemy.hp<=0)earned=true;
+   }
+   if(earned)healPlayer(2);
+   mageArcFlash(a,83,'#dcc2ef');break;
+  }
+  case 'graveDominion':{
+   const corpses=mageVisibleCorpses(tx,ty).slice(0,3);
+   if(!corpses.length){
+    if(!mageSouls)return 'NEED A CORPSE OR SOUL';
+    mageSouls--;mageDelayedBurst(tx,ty,66,8.1,.35,'arc',new Set(),110);
+   }else{
+    mageCorpses=mageCorpses.filter(body=>!corpses.includes(body));
+    corpses.forEach((body,i)=>mageDelayedBurst(body.x,body.y,67,6.3,.28+i*.44,'arc',new Set(),105));
+   }
+   break;
+  }
+  case 'reaperScythe':{
+   for(const enemy of mageCone(a,124,1.55))mageHurt(enemy,enemy.graveMarkUntil>arenaTime?9.5:6.2);
+   mageArcFlash(a,124,'#dbc0ef');break;
+  }
+  case 'ossuary':return mageWall(mageMoveAim(a),'bone');
+  case 'haunt':{
+   const target=mageEnemyTarget(p.x,p.y);
+   if(!target)return 'NO VISIBLE TARGET';
+   if(!mageSouls)return 'NEED AT LEAST ONE SOUL';
+   mageSouls--;mageZone('haunt',target.x,target.y,24,3.25,1.9,0,{target});break;
+  }
+  case 'soulHarvest':{
+   const targets=mageTargetsNear(p.x,p.y,180);
+   if(!targets.length)return 'NO VISIBLE TARGET';
+   if(targets.some(enemy=>enemy.graveMarkUntil>arenaTime))gainMageSoul();
+   for(const enemy of targets)enemy.graveMarkUntil=arenaTime+9;
+   mageZone('sigil',p.x,p.y,175,.38,0);break;
+  }
+  default:return 'SPELL UNAVAILABLE';
+ }
+}
+function castPyromancerCombo(effect,{a,tx,ty}){
+ switch(effect){
+  case 'cinderShot':mageBolt(a,2.8,445,'fire',{onImpact:'cinderShot'});break;
+  case 'fireWall':{
+   const point=magePlacement(a,95,9),dx=-Math.sin(a),dy=Math.cos(a);
+   for(const offset of [-45,-22,0,22,45]){
+    const x=point.x+dx*offset,y=point.y+dy*offset;
+    if(safeFloor(x,y,7)&&weaponLineClear(p.x,p.y,x,y,3))mageZone('trail',x,y,24,2.7,1);
+   }
+   break;
+  }
+  case 'backdraft':{
+   const hot=mageZones.some(zone=>zone.type==='trail'&&zone.life>0&&Math.hypot(p.x-zone.x,p.y-zone.y)<75);
+   const half=hot?1.4:.72,reach=hot?115:85;
+   for(const enemy of mageCone(a,reach,half)){
+    mageHurt(enemy,hot?2.4:1.7,'fire');
+    magePush(enemy,Math.atan2(enemy.y-p.y,enemy.x-p.x),hot?265:210);
+   }
+   mageArcFlash(a,reach,'#ffa87a',half);break;
+  }
+  case 'flashpoint':{
+   const target=mageTargetsNear(p.x,p.y,270).filter(enemy=>enemy.burnUntil>arenaTime)
+    .sort((first,second)=>Math.hypot(first.x-tx,first.y-ty)-Math.hypot(second.x-tx,second.y-ty))[0];
+   if(!target)return 'IGNITE AN ENEMY FIRST';
+   const fuel=(target.burnUntil-arenaTime)*(target.burnPower||.6);
+   target.burnUntil=arenaTime;target.burnPower=0;
+   mageArea(target.x,target.y,47,2+Math.min(5,fuel*1.8),'arc',65,true);
+   // Item perks triggered by the burst can ignite nearby enemies.
+   target.burnUntil=arenaTime;target.burnPower=0;
+   break;
+  }
+  case 'firestorm':{
+   const point=magePlacement(a,Math.min(210,Math.hypot(tx-p.x,ty-p.y)),4);
+   const fuel=mageZones.filter(zone=>zone.type==='trail'&&zone.life>0&&Math.hypot(zone.x-point.x,zone.y-point.y)<125&&
+    weaponLineClear(point.x,point.y,zone.x,zone.y,3)).slice(0,3);
+   for(const patch of fuel)patch.life=0;
+   mageZone('firestorm',point.x,point.y,57+fuel.length*10,3.3,1.25+fuel.length*.15);break;
+  }
+  case 'scorchingRay':{
+   const angle=mageMoveAim(a);
+   const point=magePlacement(angle,360,4);
+   mageZone('ray',p.x,p.y,0,.55,10,.42,{x2:point.x,y2:point.y});break;
+  }
+  case 'phoenixGuard':{
+   if(mageActiveZone('phoenixGuard'))return 'PHOENIX GUARD ALREADY ACTIVE';
+   mageZone('phoenixGuard',p.x,p.y,20,6,0);break;
+  }
+  case 'fissure':{
+   const hit=new Set(),angle=mageMoveAim(a);
+   for(const [i,reach] of [58,108,158].entries()){
+    const x=p.x+Math.cos(angle)*reach,y=p.y+Math.sin(angle)*reach;
+    if(!safeFloor(x,y,4)||!weaponLineClear(p.x,p.y,x,y,4))break;
+    mageDelayedBurst(x,y,44,7.4,.29+i*.37,'fire',hit,125);
+   }
+   if(!mageZones.some(zone=>zone.hit===hit))return 'NO ROOM FOR THE FISSURE';
+   break;
+  }
+  case 'wildfire':{
+   const nearby=mageTargetsNear(p.x,p.y,270);
+   if(!nearby.length)return 'NO VISIBLE TARGET';
+   const burning=nearby.filter(enemy=>enemy.burnUntil>arenaTime);
+   if(!burning.length){mageHurt(mageEnemyTarget(p.x,p.y,290)||nearby[0],1.5,'fire');break}
+   for(const source of burning){
+    source.burnUntil=Math.max(source.burnUntil,arenaTime+3.5);bossSpark(source.x,source.y,'#ff9b68');
+   }
+   for(const enemy of nearby)if(!burning.includes(enemy)&&burning.some(source=>Math.hypot(enemy.x-source.x,enemy.y-source.y)<82&&
+    weaponLineClear(source.x,source.y,enemy.x,enemy.y,3)))mageHurt(enemy,2.2,'fire');
+   break;
+  }
+  default:return 'SPELL UNAVAILABLE';
+ }
+}
+function castArcaneCombo(effect,{a,tx,ty}){
+ switch(effect){
+  case 'prismShot':mageBolt(a,3.2,450,'arc',{onImpact:'prismShot'});break;
+  case 'mirrorRune':{
+   const point=magePlacement(a,108,8);
+   const angle=mageMoveAim(a)+Math.PI/4;
+   const previous=mageActiveZone('mirror');if(previous)previous.life=0;
+   mageZone('mirror',point.x,point.y,31,5.5,0,0,{angle});break;
+  }
+  case 'slowField':{
+   const point=magePlacement(a,105,4);
+   mageZone('slowShot',point.x,point.y,92,3.8,0);break;
+  }
+  case 'displace':{
+   const enemy=mageEnemyTarget(p.x,p.y,270);
+   if(!enemy)return 'NO VISIBLE TARGET';
+   const well=mageActiveZone('arcGravity')||mageActiveZone('decoy');
+   const angle=well?Math.atan2(well.y-enemy.y,well.x-enemy.x):a;
+   mageHurt(enemy,enemy.kind?4.6:2.8);magePush(enemy,angle,270);bossSpark(enemy.x,enemy.y,'#c6bfff');break;
+  }
+  case 'riftGate':{
+   const angle=mageMoveAim(a),point=magePlacement(angle,178,9);
+   if(Math.hypot(point.x-p.x,point.y-p.y)<35)return 'NO ROOM FOR THE GATE';
+   const previous=mageActiveZone('rift');if(previous)previous.life=0;
+   mageZone('rift',point.x,point.y,25,6,0,0,{angle,charges:3});break;
+  }
+  case 'orbitShields':{
+   const previous=mageActiveZone('orbit');if(previous)previous.life=0;
+   mageZone('orbit',p.x,p.y,34,5.4,0,0,{shields:[true,true,true]});break;
+  }
+  case 'phaseAnchor':{
+   if(mageActiveZone('anchor'))return 'PHASE ANCHOR ALREADY ACTIVE';
+   mageZone('anchor',p.x,p.y,22,3,0);break;
+  }
+  case 'arcChain':{
+   let target=mageEnemyTarget(p.x,p.y,330);
+   if(!target)return 'NO VISIBLE TARGET';
+   const hit=new Set();let origin=p;
+   for(let i=0;target&&i<5;i++){
+    mageLink(origin,target,'#b8d7ff');
+    mageHurt(target,8.5*Math.pow(.78,i));
+    hit.add(target);origin=target;
+    target=mageTargetsNear(origin.x,origin.y,105)
+     .filter(enemy=>!hit.has(enemy))
+     .sort((first,second)=>Math.hypot(first.x-origin.x,first.y-origin.y)-Math.hypot(second.x-origin.x,second.y-origin.y))[0];
+   }
+   break;
+  }
+  case 'stasisField':{
+   const point=magePlacement(a,Math.min(155,Math.hypot(tx-p.x,ty-p.y)),4);
+   mageZone('stasis',point.x,point.y,83,1.65,5.5,0,{charges:4,hit:new Set()});break;
+  }
+  default:return 'SPELL UNAVAILABLE';
  }
 }
 function castMageSpell(path){
@@ -3761,12 +4090,45 @@ function castLegacyMageSpell(path,{a,tx,ty}){
   case 'CBA':mageZone('gravity',point.x,point.y,100,3.1,4.8);break;
  }
 }
-function guardianBlocksShot(shot,oldX,oldY){
+function mageIncomingDamage(damage,periodic=false){
+ const bone=!periodic&&mageActiveZone('boneGuard');
+ if(bone){
+  bone.life=0;bossSpark(p.x,p.y,'#eee6da');return damage*.65;
+ }
+ const phoenix=!periodic&&mageActiveZone('phoenixGuard');
+ if(phoenix){
+  phoenix.life=0;
+  for(let i=0;i<8;i++)mageBolt(i*Math.PI/4,2.8,330,'fire',{skipRift:true,life:.85});
+  bossSpark(p.x,p.y,'#ffad75');
+ }
+ const ward=mageZones.some(zone=>zone.type==='sanctuary'&&zone.life>0&&Math.hypot(p.x-zone.x,p.y-zone.y)<zone.r&&
+  weaponLineClear(zone.x,zone.y,p.x,p.y,3));
+ return damage*(ward?.6:1);
+}
+function mageShotSpeed(shot){
+ if(hero!=='mage'||shot.reflected||progress?.mageSchool!=='arcane')return 1;
+ return mageZones.some(zone=>zone.type==='slowShot'&&zone.life>0&&Math.hypot(shot.x-zone.x,shot.y-zone.y)<zone.r)?.48:1;
+}
+function mageOrbPosition(zone,index){
+ const angle=arenaTime*3.4+index*Math.PI*2/3;
+ return {x:p.x+Math.cos(angle)*zone.r,y:p.y+Math.sin(angle)*zone.r};
+}
+function mageBlocksShot(shot,oldX,oldY){
  if(hero!=='mage'||shot.reflected||shot.life<=0)return false;
  const span={x1:oldX,y1:oldY,x2:shot.x,y2:shot.y};
  const guardian=mageSummons.find(unit=>unit.type==='guardian'&&unit.life>0&&laserDistance(unit.x,unit.y,span)<=unit.r+shot.r);
- if(!guardian)return false;
- shot.life=0;bossSpark(guardian.x,guardian.y,'#b5ffdd');return true;
+ if(guardian){shot.life=0;bossSpark(guardian.x,guardian.y,'#b5ffdd');return true}
+ const orbit=mageActiveZone('orbit');
+ if(!orbit)return false;
+ for(let i=0;i<orbit.shields.length;i++){
+  if(!orbit.shields[i])continue;
+  const point=mageOrbPosition(orbit,i);
+  if(laserDistance(point.x,point.y,span)>9+shot.r)continue;
+  orbit.shields[i]=false;shot.life=0;bossSpark(point.x,point.y,'#c6bfff');
+  if(!orbit.shields.some(Boolean))orbit.life=0;
+  return true;
+ }
+ return false;
 }
 function moveMageSummon(unit,target,speed,dt){
  const angle=Math.atan2(target.y-unit.y,target.x-unit.x),distance=Math.min(speed*dt,Math.hypot(target.x-unit.x,target.y-unit.y));
@@ -3784,6 +4146,16 @@ function updateMageSummons(dt){
    }
    continue;
   }
+  if(unit.recall&&arenaTime<unit.recall.until&&Math.hypot(unit.x-p.x,unit.y-p.y)>24){
+   const oldX=unit.x,oldY=unit.y;
+   moveMageSummon(unit,p,240,dt);
+   const span={x1:oldX,y1:oldY,x2:unit.x,y2:unit.y};
+   for(const enemy of mageTargetsNear(unit.x,unit.y,23))if(!enemy.kind&&!unit.recall.hit.has(enemy)&&laserDistance(enemy.x,enemy.y,span)<unit.r+enemy.r+4){
+    unit.recall.hit.add(enemy);magePush(enemy,Math.atan2(enemy.y-unit.y,enemy.x-unit.x),175);
+   }
+   continue;
+  }
+  unit.recall=null;
   if(unit.command&&(unit.command.target.hp<=0||arenaTime>=unit.command.until))unit.command=null;
   const target=unit.command?.target||mageEnemyTarget(unit.x,unit.y,340)||mageEnemyTarget(p.x,p.y,340);
   if(!target){
@@ -3792,26 +4164,28 @@ function updateMageSummons(dt){
   }
   const withinReach=Math.hypot(unit.x-target.x,unit.y-target.y)<unit.r+target.r+9;
   if(!withinReach||!weaponLineClear(unit.x,unit.y,target.x,target.y,3)){
-   moveMageSummon(unit,target,unit.command||unit.type==='skeleton'?205:126,dt);continue;
+   moveMageSummon(unit,target,unit.command||unit.type==='skeleton'?205:unit.empoweredUntil>arenaTime?164:126,dt);continue;
   }
   if((arenaTime<unit.attackAt&&!unit.command)||target.state==='jump'||target.state==='rebirth')continue;
   if(unit.type==='skeleton'){
    mageHurt(target,2.1);mageArea(unit.x,unit.y,35,1.5,'arc',85,true);unit.life=0;
-  }else if(unit.command){
-   const command=unit.command;
-   const paired=arenaTime-command.lastHit<=.4;
-   if(mageHurt(target,paired?4.4:2.6))command.lastHit=arenaTime;
-   unit.command=null;unit.attackAt=arenaTime+.8;
   }else{
-   mageHurt(target,1.1);unit.attackAt=arenaTime+.85;
+   const command=unit.command,empowered=unit.empoweredUntil>arenaTime;
+   const marked=target.spiritMarkUntil>arenaTime;
+   const damage=command?(command.twin?3.1:arenaTime-command.lastHit<=.4?4.4:2.6):1.1;
+   if(mageHurt(target,damage*(empowered?1.6:1)+(marked?1.8:0))){
+    if(marked)target.spiritMarkUntil=0;
+    if(command)command.lastHit=arenaTime;
+   }
+   unit.command=null;unit.attackAt=arenaTime+(empowered?.53:.85);
   }
   bossSpark(unit.x,unit.y,unit.type==='skeleton'?'#e8def3':'#b5ffdd');
  }
  mageSummons=mageSummons.filter(unit=>unit.life>0);
 }
 function mageDecoyTarget(enemy){
- if(hero!=='mage'||progress.mageSchool!=='arcane')return p;
- return mageZones.find(z=>z.type==='decoy'&&z.life>0&&Math.hypot(z.x-enemy.x,z.y-enemy.y)<125&&
+ if(hero!=='mage'||!['arcane','summoner'].includes(progress.mageSchool))return p;
+ return mageZones.find(z=>(z.type==='decoy'||z.type==='lure')&&z.life>0&&Math.hypot(z.x-enemy.x,z.y-enemy.y)<(z.type==='lure'?190:125)&&
   weaponLineClear(enemy.x,enemy.y,z.x,z.y,3))||p;
 }
 function detonateMageMeteor(zone){
@@ -3821,6 +4195,67 @@ function detonateMageMeteor(zone){
  for(const source of burning)bossSpark(source.x,source.y,'#ff9b68');
  for(const enemy of mageTargets())if(burning.some(source=>enemy!==source&&Math.hypot(enemy.x-source.x,enemy.y-source.y)<48+enemy.r&&
     weaponLineClear(source.x,source.y,enemy.x,enemy.y,2)))mageHurt(enemy,2.1,'fire');
+}
+function updateAdvancedMageZone(zone){
+ switch(zone.type){
+  case 'comboBurst':{
+   if(zone.tick<zone.delay)return;
+   for(const enemy of mageTargetsNear(zone.x,zone.y,zone.r))if(!zone.hit.has(enemy)){
+    zone.hit.add(enemy);mageHurt(enemy,zone.power,zone.kind);
+    magePush(enemy,Math.atan2(enemy.y-zone.y,enemy.x-zone.x),zone.push);
+   }
+   elementFx.push({type:'shock',x:zone.x,y:zone.y,radius:zone.r,life:.32,maxLife:.32});
+   zone.life=0;break;
+  }
+  case 'lure':if(zone.life<=0)mageArea(zone.x,zone.y,68,zone.power,'arc',215,true);break;
+  case 'graveSnare':
+  case 'stasis':{
+   if(zone.life<=0)return;
+   for(const enemy of mageTargetsNear(zone.x,zone.y,zone.r)){
+    if(zone.hit.has(enemy)||zone.charges<=0)continue;
+    zone.hit.add(enemy);zone.charges--;
+    if(enemy.kind){
+     if(zone.type==='graveSnare')enemy.slowUntil=Math.max(enemy.slowUntil||0,arenaTime+1.35);
+     else mageHurt(enemy,zone.power);
+    }else{
+     enemy.mageStasisUntil=Math.max(enemy.mageStasisUntil||0,arenaTime+(zone.type==='stasis'?1.25:.8));
+     bossSpark(enemy.x,enemy.y,'#dec7ff');
+    }
+   }
+   if(!zone.charges)zone.life=0;
+   break;
+  }
+  case 'haunt':{
+   const target=zone.target;zone.x=target.x;zone.y=target.y;
+   if(zone.life>0&&zone.tick>=.64&&target.hp>0){
+    zone.tick=0;mageHurt(target,zone.power);bossSpark(target.x,target.y,'#d6b7ea');
+   }
+   if(target.hp<=0){mageArea(zone.x,zone.y,51,2.5,'arc',72,true);zone.life=0}
+   break;
+  }
+  case 'firestorm':
+   if(zone.life>0&&zone.tick>=.55){
+    zone.tick=0;
+    for(const enemy of mageTargetsNear(zone.x,zone.y,zone.r))mageHurt(enemy,zone.power,'fire');
+   }
+   break;
+  case 'ray':{
+   if(zone.fired||zone.tick<zone.delay)return;
+   zone.fired=true;zone.life=.17;
+   const segment={x1:zone.x,y1:zone.y,x2:zone.x2,y2:zone.y2};
+   for(const enemy of mageTargetsNear(zone.x,zone.y,370))
+    if(laserDistance(enemy.x,enemy.y,segment)<enemy.r+8&&weaponLineClear(zone.x,zone.y,enemy.x,enemy.y,4))mageHurt(enemy,zone.power,'fire');
+   break;
+  }
+  case 'anchor':
+   if(zone.life<=0&&safeFloor(zone.x,zone.y,9)&&
+    !breakables.some(prop=>!prop.broken&&Math.hypot(prop.x-zone.x,prop.y-zone.y)<PROP_DEFS[prop.kind].r+9)&&
+    !mageTargets().some(enemy=>Math.hypot(enemy.x-zone.x,enemy.y-zone.y)<enemy.r+10)){
+    bossSpark(p.x,p.y,'#c4bdff');p.x=p.safeX=zone.x;p.y=p.safeY=zone.y;p.kvx=p.kvy=0;p.sticky=null;
+    bossSpark(p.x,p.y,'#c4bdff');queueCheckpoint();
+   }
+   break;
+ }
 }
 function updateMageZones(dt){
  if(mageTrail&&mageTrail.until>arenaTime&&mageTrail.next<=arenaTime&&Math.hypot(p.x-mageTrail.x,p.y-mageTrail.y)>=18){
@@ -3862,9 +4297,23 @@ function updateMageZones(dt){
     weaponLineClear(z.x,z.y,target.x,target.y,2)){
     target.flameTrailReady=arenaTime+.55;mageHurt(target,z.power,'fire');
    }
-  }
+  }else updateAdvancedMageZone(z);
  }
  mageZones=mageZones.filter(z=>z.life>0);
+}
+function mageMirrorBounce(bolt,x,y){
+ if(!bolt.reflectMirror||!bolt.bounces)return false;
+ const mirror=mageActiveZone('mirror');
+ if(!mirror)return false;
+ const tx=Math.cos(mirror.angle),ty=Math.sin(mirror.angle),nx=-ty,ny=tx;
+ const before=(bolt.x-mirror.x)*nx+(bolt.y-mirror.y)*ny;
+ const after=(x-mirror.x)*nx+(y-mirror.y)*ny;
+ if(Math.abs(before)<.001||before*after>0)return false;
+ const time=before/(before-after),hx=bolt.x+(x-bolt.x)*time,hy=bolt.y+(y-bolt.y)*time;
+ if(Math.abs((hx-mirror.x)*tx+(hy-mirror.y)*ty)>mirror.r+bolt.r)return false;
+ const speed=bolt.vx*nx+bolt.vy*ny;
+ bolt.vx-=2*speed*nx;bolt.vy-=2*speed*ny;bolt.bounces--;
+ bossSpark(hx,hy,'#d7c9ff');return true;
 }
 function moveMageBolt(bolt,dt){
  const ox=bolt.x,oy=bolt.y,steps=Math.max(1,Math.ceil(Math.hypot(bolt.vx,bolt.vy)*dt/4));
@@ -3872,7 +4321,10 @@ function moveMageBolt(bolt,dt){
   const x=ox+bolt.vx*dt*i/steps,y=oy+bolt.vy*dt*i/steps;
   const edgeX=x<18+bolt.r||x>W-18-bolt.r,edgeY=y<18+bolt.r||y>F-18-bolt.r;
   const wall=walls.find(w=>nearRect(x,y,bolt.r,w));
-  if(!edgeX&&!edgeY&&!wall){bolt.x=x;bolt.y=y;continue}
+  if(!edgeX&&!edgeY&&!wall){
+   if(bolt.reflectMirror&&mageMirrorBounce(bolt,x,y))return true;
+   bolt.x=x;bolt.y=y;continue;
+  }
   if(wall?.cracked)hitCrackedWall(wall,2);
   if(!bolt.bounces)return false;
   const bounceX=edgeX||wall&&nearRect(x,bolt.y,bolt.r,wall);
@@ -3882,6 +4334,19 @@ function moveMageBolt(bolt,dt){
   bolt.bounces--;bossSpark(bolt.x,bolt.y,'#c6bfff');return true;
  }
  return true;
+}
+function burstCinderShot(x,y,directTarget=null){
+ for(const enemy of mageTargetsNear(x,y,39))if(enemy!==directTarget)mageHurt(enemy,1.45,'fire');
+ bossSpark(x,y,'#ffad75');
+}
+function applyMageBoltImpact(bolt,target,landed){
+ if(bolt.onImpact==='spiritDart'&&landed)target.spiritMarkUntil=arenaTime+5;
+ else if(bolt.onImpact==='cinderShot')burstCinderShot(target.x,target.y,target);
+ else if(bolt.onImpact==='prismShot'){
+  const angle=Math.atan2(bolt.vy,bolt.vx),hit=new Set([target]);
+  for(const offset of [-.57,.57])mageBolt(angle+offset,1.9,390,'arc',{origin:target,hit,life:.45,r:3});
+  bossSpark(target.x,target.y,'#d7c9ff');
+ }
 }
 function updateMage(dt){
  if(hero!=='mage'||over)return;
@@ -3898,16 +4363,24 @@ function updateMage(dt){
   const seg={x1:ox,y1:oy,x2:bolt.x,y2:bolt.y};
   for(const sw of trapControls)if(sw.kind==='lever'&&laserDistance(sw.x,sw.y,seg)<sw.r+bolt.r)triggerTrapControl(sw);
   const temp={x:bolt.x,y:bolt.y,r:bolt.r,vx:bolt.vx,vy:bolt.vy,life:bolt.life,reflected:true};
-  if(projectileHitsProp(temp,ox,oy)||projectileHitsNest(temp,ox,oy)){bolt.life=0;continue}
+  if(projectileHitsProp(temp,ox,oy)||projectileHitsNest(temp,ox,oy)){
+   if(bolt.onImpact==='cinderShot')burstCinderShot(bolt.x,bolt.y);
+   bolt.life=0;continue;
+  }
   const dx=bolt.x-ox,dy=bolt.y-oy;
   const targets=mageTargets().filter(e=>!bolt.hit.has(e)&&e.state!=='jump'&&laserDistance(e.x,e.y,seg)<e.r+bolt.r&&
    weaponLineClear(ox,oy,e.x,e.y,2)).sort((a,b)=>(a.x-b.x)*dx+(a.y-b.y)*dy);
   for(const target of targets){
-   bolt.hit.add(target);mageHurt(target,bolt.damage,bolt.kind);
+   bolt.hit.add(target);
+   const landed=mageHurt(target,bolt.damage,bolt.kind);
+   if(bolt.onImpact)applyMageBoltImpact(bolt,target,landed);
    if(bolt.pierce>0){bolt.pierce--;bolt.damage*=.72}
    else{bolt.life=0;break}
   }
-  if(!travelling)bolt.life=0;
+  if(!travelling){
+   if(bolt.life>0&&bolt.onImpact==='cinderShot')burstCinderShot(bolt.x,bolt.y);
+   bolt.life=0;
+  }
  }
  mageBolts=mageBolts.filter(b=>b.life>0);
 }
@@ -3915,26 +4388,57 @@ function drawMageEffects(){
  if(hero!=='mage')return;
  g.save();
  for(const z of mageZones){
-  const meteor=z.type==='meteor'||z.type==='fireMeteor',fire=meteor||z.type==='trail';
+  if(z.life<=0)continue;
+  if(z.type==='orbit'){
+   g.globalAlpha=.88;g.fillStyle='#c4b7ff';
+   z.shields.forEach((active,i)=>{
+    if(!active)return;
+    const point=mageOrbPosition(z,i);g.beginPath();g.arc(point.x,point.y,9,0,Math.PI*2);g.fill();
+   });
+   continue;
+  }
+  if(z.type==='mirror'||z.type==='ray'){
+   const dx=z.type==='mirror'?Math.cos(z.angle)*z.r:0,dy=z.type==='mirror'?Math.sin(z.angle)*z.r:0;
+   g.globalAlpha=z.type==='ray'&&!z.fired?.5:.9;
+   g.strokeStyle=z.type==='ray'?'#ffac78':'#d6c2ff';g.lineWidth=z.fired?8:3;
+   g.beginPath();g.moveTo(z.x-dx,z.y-dy);g.lineTo(z.x2??z.x+dx,z.y2??z.y+dy);g.stroke();continue;
+  }
+  if(z.type==='arcFlash'){
+   g.globalAlpha=Math.min(1,z.life*3);g.strokeStyle=z.color;g.lineWidth=5;
+   g.beginPath();g.arc(z.x,z.y,z.r,z.angle-z.half,z.angle+z.half);g.stroke();continue;
+  }
+  const meteor=z.type==='meteor'||z.type==='fireMeteor',fire=meteor||z.type==='trail'||z.type==='firestorm'||
+   z.type==='phoenixGuard'||z.kind==='fire';
+  const follow=z.type==='boneGuard'||z.type==='phoenixGuard';
+  const x=follow?p.x:z.x,y=follow?p.y:z.y;
   g.globalAlpha=meteor?.6:z.type==='bind'||z.type==='decoy'?.45:.27;g.fillStyle=fire?'#fc744b':z.type==='blizzard'?'#89dfff':'#bd8bff';g.strokeStyle=fire?'#ffc78e':z.type==='blizzard'?'#baf2ff':'#e2b0ff';
-  g.lineWidth=2;g.beginPath();g.arc(z.x,z.y,z.r,0,Math.PI*2);g.fill();g.stroke();
+  if(z.type==='sanctuary'||z.type==='lure'){g.fillStyle='#8ee3bc';g.strokeStyle='#b5ffdd'}
+  if(z.type==='boneGuard'||z.type==='graveSnare'){g.fillStyle='#e1d3ef';g.strokeStyle='#f5e8ff'}
+  g.lineWidth=2;g.beginPath();g.arc(x,y,z.r,0,Math.PI*2);g.fill();g.stroke();
   if(meteor){g.strokeStyle='#fff0b1';g.lineWidth=3;g.beginPath();g.arc(z.x,z.y,z.r*clamp(1-z.delay/1.15,0,1),0,Math.PI*2);g.stroke()}
-  if(z.type==='decoy'){
+  if(z.type==='comboBurst'){
+   g.globalAlpha=.75;g.beginPath();g.arc(x,y,z.r*clamp(z.tick/z.delay,0,1),0,Math.PI*2);g.stroke();
+  }
+  if(z.type==='decoy'||z.type==='rift'||z.type==='anchor'||z.type==='lure'){
    g.strokeStyle='#d0bdff';g.lineWidth=3;g.beginPath();g.arc(z.x,z.y,9,0,Math.PI*2);g.stroke();
   }
+  if(z.type==='rift'){g.globalAlpha=.85;g.fillStyle='#efdeff';g.font='bold 9px monospace';g.textAlign='center';g.fillText(String(z.charges),x,y+3)}
  }
  for(const body of mageCorpses){
   g.globalAlpha=.65;g.strokeStyle='#dcc7e9';g.lineWidth=2;g.beginPath();
   g.moveTo(body.x-5,body.y-4);g.lineTo(body.x+5,body.y+4);g.moveTo(body.x+5,body.y-4);g.lineTo(body.x-5,body.y+4);g.stroke();
  }
  for(const unit of mageSummons){
-  g.globalAlpha=Math.min(1,unit.life*2);g.fillStyle=unit.type==='skeleton'?'#ece1ec':'#aff1d6';g.strokeStyle='#383449';g.lineWidth=2;
+  g.globalAlpha=Math.min(1,unit.life*2);g.fillStyle=unit.type==='skeleton'?'#ece1ec':unit.empoweredUntil>arenaTime?'#e7ff9b':'#aff1d6';g.strokeStyle='#383449';g.lineWidth=2;
   g.beginPath();g.arc(unit.x,unit.y,unit.r,0,Math.PI*2);g.fill();g.stroke();
   g.strokeStyle='#f9ffe7';g.beginPath();g.arc(unit.x,unit.y,unit.r*.46,0,Math.PI*2);g.stroke();
   if(unit.command&&unit.command.target.hp>0){g.globalAlpha=.42;g.strokeStyle='#c2ffd8';g.beginPath();g.moveTo(unit.x,unit.y);g.lineTo(unit.command.target.x,unit.command.target.y);g.stroke()}
  }
  for(const enemy of mageTargets())if(enemy.graveMarkUntil>arenaTime){
   g.globalAlpha=.75;g.strokeStyle='#e8b0df';g.lineWidth=2;g.beginPath();g.arc(enemy.x,enemy.y,enemy.r+4,0,Math.PI*2);g.stroke();
+ }
+ for(const enemy of mageTargets())if(enemy.spiritMarkUntil>arenaTime||enemy.mageStasisUntil>arenaTime){
+  g.globalAlpha=.67;g.strokeStyle=enemy.spiritMarkUntil>arenaTime?'#bdffd9':'#d7c5ff';g.lineWidth=2;g.beginPath();g.arc(enemy.x,enemy.y,enemy.r+4,0,Math.PI*2);g.stroke();
  }
  for(const b of mageBolts){g.globalAlpha=.9;g.fillStyle=b.kind==='fire'?'#ffac6e':b.kind==='ice'?'#b6edff':b.kind==='grave'?'#e8b0df':'#d7b5ff';g.shadowColor=g.fillStyle;g.shadowBlur=10;g.beginPath();g.arc(b.x,b.y,b.r,0,Math.PI*2);g.fill()}
  g.restore();
@@ -4857,7 +5361,7 @@ document.querySelector('#control-opacity').oninput=e=>{controls.opacity=Number(e
 document.querySelector('#floating-controls').onchange=e=>{controls.floating=e.target.checked;saveControls()};
 document.querySelector('#controls-reset').onclick=()=>{controls={...defaultControls,positions:defaultControls.positions.map(a=>[...a])};dashControl={x:.78,y:.76};syncControls();saveDashControl();saveControls()};async function goFullscreen(){try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock)await screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}document.querySelector('#fullscreen-toggle').onclick=goFullscreen;document.querySelector('#rotate-fullscreen').onclick=goFullscreen;
 function frame(t){const damageBefore=captureDamage(),oldPlayerHp=hp;const protectedPracticeHp=inSandbox()&&!sandbox.attacks?hp:null;pendingSplits=[];let dt=Math.min((t-last)/1000||0,.035);last=t;if(document.hidden||portraitLayout.matches||shieldPaused||!document.querySelector('#character-panel').hidden||persistencePaused()){requestAnimationFrame(frame);return}
-if(settings.hidden&&!editingControls&&document.querySelector('#sandbox-panel').hidden){recordVisibleEncounters();arenaTime+=dt;updateSynergies(dt);if(!over){updateItemEffects(dt);updateBiomeWorld(dt);updateCurses(dt);updateDungeonMechanics(dt);updateFloorTraps()}if(!over){shieldUpdate(dt);rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage)}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&(regenWhileBleeding||playerBleed.length===0)){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){const where=p.fallReturn||safeRespawn();p.x=where.x;p.y=where.y;p.safeX=p.x;p.safeY=p.y;p.kvx=p.kvy=p.vx=p.vy=0;p.sticky=null;p.wallContacts=new Set();p.wallCooldowns=new Map();p.portalCooldown=1;p.fallReturn=null;hp=Math.max(0,hp-25);inv=Math.max(inv,1.5);if(hp<=0)over=true;showItemNotice('FELL INTO THE ABYSS · -25 HP')}}
+if(settings.hidden&&!editingControls&&document.querySelector('#sandbox-panel').hidden){recordVisibleEncounters();arenaTime+=dt;updateSynergies(dt);if(!over){updateItemEffects(dt);updateBiomeWorld(dt);updateCurses(dt);updateDungeonMechanics(dt);updateFloorTraps()}if(!over){shieldUpdate(dt);rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage,true)}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&(regenWhileBleeding||playerBleed.length===0)){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){const where=p.fallReturn||safeRespawn();p.x=where.x;p.y=where.y;p.safeX=p.x;p.safeY=p.y;p.kvx=p.kvy=p.vx=p.vy=0;p.sticky=null;p.wallContacts=new Set();p.wallCooldowns=new Map();p.portalCooldown=1;p.fallReturn=null;hp=Math.max(0,hp-25);inv=Math.max(inv,1.5);if(hp<=0)over=true;showItemNotice('FELL INTO THE ABYSS · -25 HP')}}
 healFx=healFx.filter(f=>(f.life-=dt)>0);wallFx=wallFx.filter(f=>{f.life-=dt;if(f.type==='particle'){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.exp(-5*dt);f.vy*=Math.exp(-5*dt)}return f.life>0});elementFx=elementFx.filter(f=>(f.life-=dt)>0);puddles=puddles.filter(q=>(q.life-=dt)>0);poisonPuddles=poisonPuddles.filter(q=>(q.life-=dt)>0);
 if(!over&&!p.falling){let l=sticks[0],ox=p.x,oy=p.y;
 poisonPlayerTimer=Math.max(0,poisonPlayerTimer-dt);playerPoisonGlow=Math.max(0,playerPoisonGlow-dt);
@@ -4932,6 +5436,7 @@ if(e.isTreasure){
 navigationSeparation(e,dt);
 let puddleBoost=puddles.some(q=>Math.hypot(e.x-q.x,e.y-q.y)<q.r+e.r)?1.55:1;
 let damp=Math.exp((curseActive('float')?-.09:-.38)*dt);e.vx*=damp;e.vy*=damp;let speed=Math.hypot(e.vx,e.vy);if(speed>270){e.vx*=270/speed;e.vy*=270/speed}
+if(e.mageStasisUntil>arenaTime)e.vx=e.vy=0;
 let oldEX=e.x,oldEY=e.y;e.x+=e.vx*dt*puddleBoost*((e.slowUntil||0)>arenaTime?.6:1);e.y+=e.vy*dt*puddleBoost*((e.slowUntil||0)>arenaTime?.6:1);
 if(e.x<18+e.r){e.x=18+e.r;e.vx=Math.abs(e.vx)*.85}if(e.x>W-18-e.r){e.x=W-18-e.r;e.vx=-Math.abs(e.vx)*.85}
 if(e.y<18+e.r){e.y=18+e.r;e.vy=Math.abs(e.vy)*.85}if(e.y>F-18-e.r){e.y=F-18-e.r;e.vy=-Math.abs(e.vy)*.85}
@@ -5022,8 +5527,8 @@ for(let q of puddles){g.save();g.globalAlpha=Math.min(.65,q.life/.6*.55);g.fillS
 for(let q of portals){g.save();const linked=q.type==='linked',color=linked?'#5cf6fa':'#c792ff',pulse=1.5+Math.sin(arenaTime*3+q.x*.02)*1.5;g.strokeStyle=color;g.fillStyle=linked?'#1c6b7b':'#62358e';g.globalAlpha=.7;g.lineWidth=1.5;g.beginPath();g.arc(q.x,q.y,17+pulse,0,Math.PI*2);g.stroke();g.globalAlpha=.92;g.beginPath();g.arc(q.x,q.y,13,0,Math.PI*2);g.fill();g.lineWidth=3;g.beginPath();g.arc(q.x,q.y,10,0,Math.PI*2);g.stroke();g.font='bold 12px monospace';g.textAlign='center';g.fillStyle='#ffffff';g.fillText(linked?'↔':'?',q.x,q.y+4);g.font='bold 7px monospace';g.fillStyle=color;g.fillText(linked?'LINK':'RANDOM',q.x,q.y+28);g.restore()}
 for(let f of portalFx){g.save();g.globalAlpha=f.life/f.maxLife;g.strokeStyle=f.type==='linked'?'#5cf6fa':'#c48aff';g.lineWidth=3;g.beginPath();g.arc(f.x,f.y,13+(1-f.life/f.maxLife)*23,0,Math.PI*2);g.stroke();g.restore()}
 for(let w of walls){
-g.fillStyle=w.type==='bounce'?'#246bba':w.type==='spike'?'#a93245':w.type==='sticky'?'#8050a6':'#60616c';g.fillRect(w.x,w.y,w.w,w.h);
-g.fillStyle=w.type==='bounce'?'#79d7ff':w.type==='spike'?'#ff7c80':w.type==='sticky'?'#d9a1f5':'#989ba5';g.fillRect(w.x,w.y,w.w,3);
+g.fillStyle=w.mageBone?'#958ba8':w.type==='bounce'?'#246bba':w.type==='spike'?'#a93245':w.type==='sticky'?'#8050a6':'#60616c';g.fillRect(w.x,w.y,w.w,w.h);
+g.fillStyle=w.mageBone?'#f0dff9':w.type==='bounce'?'#79d7ff':w.type==='spike'?'#ff7c80':w.type==='sticky'?'#d9a1f5':'#989ba5';g.fillRect(w.x,w.y,w.w,3);
 if(w.moving){g.save();g.strokeStyle='#ffffff';g.lineWidth=1.5;g.setLineDash([3,3]);g.strokeRect(w.x-2,w.y-2,w.w+4,w.h+4);g.setLineDash([]);g.restore()}
 if(w.cracked){g.save();g.strokeStyle='#f8d17d';g.lineWidth=2;g.setLineDash([3,4]);g.strokeRect(w.x+2,w.y+2,w.w-4,w.h-4);g.setLineDash([]);g.restore()}
 if(w.type==='sticky'){g.fillStyle='#c58af0';if(w.w>w.h){for(let x=w.x+8;x<w.x+w.w-3;x+=13){g.beginPath();g.arc(x,w.y+8,2.5,0,Math.PI*2);g.fill()}}else{for(let y=w.y+8;y<w.y+w.h-3;y+=13){g.beginPath();g.arc(w.x+7,y,2.5,0,Math.PI*2);g.fill()}}}
@@ -5100,5 +5605,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.20';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.21';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>

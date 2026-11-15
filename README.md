@@ -2,6 +2,17 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.21 — Complete magic school spellbooks
+
+Every school now has all six two-rune and all six three-rune spells, plus the three Apprentice spells. The full school spellbook opens when you choose your evolution at level 3. The new spells appear in **Stats & Items** in existing school saves.
+
+- **Summoner:** **BA** Spirit Dart, **AC** Recall, **CA** Guardian Step, **CB** Twin Hunt. **ACB** Spirit Relay attacks from your summons’ positions, **BAC** Spirit Stampede clears lanes, **BCA** Sanctuary protects an area, **CAB** Astral Lure draws in enemies, and **CBA** Grand Conjuration empowers familiars.
+- **Necromancer:** **BA** Bone Spear, **AC** Grave Snare, **CA** Bone Guard, **CB** Soul Rend. **ACB** Grave Dominion detonates corpses, **BAC** Reaper’s Scythe cleaves marked targets, **BCA** Ossuary raises barricades, **CAB** Haunt sends a shade after one target, and **CBA** Soul Harvest marks a group and can collect a Soul.
+- **Pyromancer:** **BA** Cinder Shot, **AC** Wall of Fire, **CA** Backdraft, **CB** Flashpoint. **ACB** Firestorm consumes nearby flame patches, **BAC** Scorching Ray fires a single beam, **BCA** Phoenix Guard retaliates when hit, **CAB** Volcanic Fissure erupts in sequence, and **CBA** Wildfire spreads burns.
+- **Arcane Mage:** **BA** Prism Shot, **AC** Mirror Rune, **CA** Slow Field, **CB** Displace. **ACB** Rift Gate redirects three bolt casts, **BAC** Orbiting Shields intercepts shots, **BCA** Phase Anchor returns you to a safe starting point, **CAB** Arc Chain jumps between targets, and **CBA** Stasis Field restrains regular enemies.
+
+Run `node --test` from the repository root to verify the game, including the effects of all 36 new combinations.
+
 ## V8.20 — Level-up choice on short screens
 
 The level-up menu fits weapon and school choices across one row on short, wide screens so every card can be tapped. On narrower screens the menu can scroll within the viewport.
