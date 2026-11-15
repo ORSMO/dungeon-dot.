@@ -621,13 +621,101 @@ test('body armour absorbs a share, exhausts its durability on the breaking hit, 
   });
 });
 
-test('Mage level 3 and level 8 choices stay pending until distinct elements are selected', () => {
+test('legacy Mage level 3 and level 8 choices stay pending until distinct elements are selected', () => {
   const result = run([
-    'const hero="mage";let progress={level:3,elementPrimary:null,elementSecondary:null};',
+    'const hero="mage";let progress={level:3,legacyMage:true,elementPrimary:null,elementSecondary:null};',
     method('levelChoicePending'),
     'const atLevel3=levelChoicePending();progress.elementPrimary="fire";progress.level=8;const atLevel8=levelChoicePending();progress.elementSecondary="ice";const complete=levelChoicePending();'
   ], '{atLevel3,atLevel8,complete}');
   assert.deepEqual(result, {atLevel3:true,atLevel8:true,complete:false});
+});
+
+const schoolSpells=[
+  ...['APPRENTICE_SPELLS','MAGE_SCHOOLS','MAGE_SPELLS'].map(declaration),
+  method('mageSpell'),method('mageSpellbook')
+];
+
+test('Apprentice evolves once and receives only the three spells in the selected school', () => {
+  const result=run([
+    ...schoolSpells,method('levelChoicePending'),method('selectMageSchool'),
+    'const hero="mage",progress={level:2,mageSchool:null},document={querySelector:()=>({})};',
+    'const runHeroName=()=>progress.mageSchool,showItemNotice=()=>{},hud=()=>{},queueCheckpoint=()=>{},flushCheckpoint=()=>{};',
+    'const starter=Object.keys(mageSpellbook()),early=selectMageSchool("summoner");progress.level=3;',
+    'const choices=Object.keys(MAGE_SCHOOLS).map(school=>Object.values(MAGE_SCHOOLS[school].spells).map(spell=>spell.name));',
+    'const invalid=selectMageSchool("constructor"),chosen=selectMageSchool("necromancer");',
+    'progress.level=8;const later=selectMageSchool("arcane"),paths=Object.keys(mageSpellbook()),locked=mageSpell("BA")===null;',
+    'progress.legacyMage=true;const original=[Object.keys(mageSpellbook()).length,mageSpell("A").name];'
+  ],'{starter,early,choices,invalid,chosen,later,paths,locked,original}');
+  assert.deepEqual(result,{
+    starter:['A','B','C'],early:false,choices:[
+      ['Conjure Familiar','Pack Command','Guardian Pact'],['Grave Mark','Corpse Burst','Raise the Fallen'],
+      ['Fire Lance','Flame Trail','Meteor Drop'],['Ricochet Orb','Blink','Gravity Well']
+    ],invalid:false,chosen:true,later:false,paths:['A','B','C','AB','BC','ABC'],locked:true,original:[15,'Ember Bolt']
+  });
+});
+
+test('failed magic casts preserve mana and a successful cast enforces both cooldowns', () => {
+  const result=run([
+    ...schoolSpells,method('castMageSpell'),
+    'let mageMana=100,arenaTime=1,mageGlobalReady=0,mageCastCount=0,resource=false,feedback="";',
+    'const progress={mageSchool:"necromancer"},mageCooldowns={},mageInputEnabled=()=>true,mageAim=()=>({a:0});',
+    'const castSchoolSpell=()=>resource?undefined:"NEED A SOUL",itemCount=()=>0,upgradeCount=()=>0,playerStats=()=>({swing:1});',
+    'const refreshManaHud=()=>{},queueCheckpoint=()=>{},showMageFeedback=(kind,label)=>feedback=label;',
+    'const locked=castMageSpell("CBA"),failed=castMageSpell("ABC"),before={mageMana,mageGlobalReady,feedback};',
+    'resource=true;const applied=castMageSpell("ABC"),duringGlobal=castMageSpell("A");arenaTime=2;const duringSpell=castMageSpell("ABC");'
+  ],'{locked,failed,before,applied,duringGlobal,duringSpell,mageMana,mageCastCount,ready:mageCooldowns.ABC}');
+  assert.deepEqual(result,{
+    locked:false,failed:false,before:{mageMana:100,mageGlobalReady:0,feedback:'NEED A SOUL'},
+    applied:true,duringGlobal:false,duringSpell:false,mageMana:68,mageCastCount:1,ready:6.5
+  });
+});
+
+test('Grave Mark earns Souls from corpses and hits on a solo boss up to the cap', () => {
+  const result=run([
+    declaration('MAGE_SOUL_LIMIT'),method('gainMageSoul'),method('mageHurt'),method('rememberMageCorpse'),
+    'const progress={mageSchool:"necromancer"},itemCount=()=>0,canDamage=()=>true,refreshManaHud=()=>{},queueCheckpoint=()=>{},mageOnHit=()=>{};',
+    'let arenaTime=1,mageSouls=0;const mageCorpses=[],friendlyDamage=(enemy,amount)=>{enemy.hp=Math.max(0,enemy.hp-amount);return true};',
+    'const enemy={x:10,y:18,hp:2};mageHurt(enemy,2.8,"grave");rememberMageCorpse(enemy);const afterKill=mageSouls;',
+    'const boss={hp:90,kind:"gatekeeper"};mageHurt(boss,2.8,"grave");mageHurt(boss,1.85);mageHurt(boss,1.85);const fromBoss=mageSouls;',
+    'for(let i=0;i<9;i++)mageHurt(boss,1.85);'
+  ],'{afterKill,fromBoss,mageSouls,corpses:mageCorpses.length}');
+  assert.deepEqual(result,{afterKill:1,fromBoss:2,mageSouls:3,corpses:1});
+});
+
+test('Ricochet Orb reflects off a wall and can bounce only as many times as configured', () => {
+  const result=run([
+    method('nearRect'),method('moveMageBolt'),
+    'let sparks=0;const bossSpark=()=>sparks++,clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),W=300,F=300;',
+    'const walls=[{x:130,y:45,w:15,h:120},{x:70,y:45,w:15,h:120}];',
+    'const bolt={x:115,y:100,vx:460,vy:0,r:5,bounces:2};',
+    'const first=moveMageBolt(bolt,.05),reversed=bolt.vx<0,nearWall=bolt.x<125;',
+    'const second=moveMageBolt(bolt,.1),third=moveMageBolt(bolt,.1);'
+  ],'{first,second,third,reversed,nearWall,sparks,bounces:bolt.bounces}');
+  assert.deepEqual(result,{first:true,second:true,third:false,reversed:true,nearWall:true,sparks:2,bounces:0});
+});
+
+test('Blink follows the movement stick, respects barriers, and places its decoy at takeoff', () => {
+  const result=run([
+    method('mageMoveAim'),method('mageBlink'),
+    'const sticks=[{dx:1,dy:0}],p={x:100,y:100,kvx:30,kvy:20},zones=[],breakables=[],mageTargets=()=>[],bossSpark=()=>{};',
+    'const safeFloor=(x,y)=>x<144,mageZone=(type,x,y)=>zones.push({type,x,y});',
+    'const success=mageBlink(Math.PI),position={...p};p.x=136;const blocked=mageBlink(Math.PI);'
+  ],'{success,position,blocked,zones}');
+  assert.deepEqual(result,{
+    success:undefined,position:{x:140,y:100,kvx:0,kvy:0,sticky:null},blocked:'NO SAFE BLINK',zones:[{type:'decoy',x:100,y:100}]
+  });
+});
+
+test('a meteor ignites bystanders once even when multiple burning targets are nearby', () => {
+  const result=run([
+    method('detonateMageMeteor'),
+    'const arenaTime=1,first={x:145,y:100,r:10,hp:20,burnUntil:3},second={x:147,y:110,r:10,hp:20,burnUntil:3};',
+    'const neighbor={x:185,y:104,r:10,hp:20},covered={x:180,y:112,r:10,hp:20};',
+    'const mageTargets=()=>[first,second,neighbor,covered],bossSpark=()=>{},mageArea=()=>{};',
+    'const weaponLineClear=(x,y,tx)=>tx!==180,mageHurt=(enemy,damage)=>enemy.hp-=damage;',
+    'detonateMageMeteor({x:100,y:100,r:72,power:8.5});'
+  ],'{neighbor:neighbor.hp,covered:covered.hp}');
+  assert.deepEqual(result,{neighbor:17.9,covered:20});
 });
 
 test('weapon choices are class-specific, permanent, and available from level 3', () => {

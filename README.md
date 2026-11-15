@@ -2,6 +2,17 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.19 — Apprentice and magic schools
+
+New Mage runs begin as **Apprentice Dot** with **A** Magic Bolt, **B** Binding Rune, and **C** Force Pulse. Choose a school at level 3. Each school keeps the basic spells and unlocks these three recipes:
+
+- **Summoner Dot:** **AB** Conjure Familiar (18 mana), **BC** Pack Command (14), **ABC** Guardian Pact (40). Keep up to two familiars, coordinate their strikes, and place a projectile-blocking guardian.
+- **Necromancer Dot:** **AB** Grave Mark (14), **BC** Corpse Burst (18), **ABC** Raise the Fallen (32). Earn up to three Souls from marked kills or every three hits on a marked boss. Detonate a visible corpse or spend a Soul. Raise one skeleton per Soul spent.
+- **Pyromancer Dot:** **AB** Fire Lance (17), **BC** Flame Trail (20), **ABC** Meteor Drop (45). Burn enemies with piercing shots or fire left along your path, then detonate burning targets with the meteor.
+- **Arcane Mage Dot:** **AB** Ricochet Orb (17), **BC** Blink (19), **ABC** Gravity Well (42). Hold the movement stick to aim a bank shot or steer Blink. Blink stops at obstacles and leaves an explosive decoy.
+
+Open **Stats & Items** for the current spellbook and use **+100 XP** in the Test Room to try a school. New runs save the chosen school and stored Souls. Mage runs saved before this release keep their original 15 spells and element choices.
+
 ## V8.18 — Melee damage and body armour
 
 Stick, Sword, Bat, Mace and Spear gain 0.5 base damage on light and heavy hits against enemies and bosses. Spear's shaft still deals 45% of its tip damage.
