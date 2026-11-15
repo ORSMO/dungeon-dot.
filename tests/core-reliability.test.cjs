@@ -631,25 +631,27 @@ test('legacy Mage level 3 and level 8 choices stay pending until distinct elemen
 });
 
 const schoolSpells=[
-  ...['APPRENTICE_SPELLS','MAGE_SCHOOLS','MAGE_SPELLS'].map(declaration),
-  method('mageSpell'),method('mageSpellbook')
+  ...['APPRENTICE_SPELLS','APPRENTICE_COMBOS','MAGE_SCHOOLS','MAGE_SPELLS'].map(declaration),
+  method('mageComboSpells'),method('mageSpell'),method('mageSpellbook')
 ];
 
 test('Apprentice evolves once and receives the complete spellbook for the chosen school', () => {
   const result=run([
     ...schoolSpells,method('levelChoicePending'),method('selectMageSchool'),
-    'const hero="mage",progress={level:2,mageSchool:null},document={querySelector:()=>({})};',
+    'const hero="mage",progress={level:2,mageSchool:null},document={querySelector:()=>({})};let mageCooldowns={A:2,AB:4,ABC:7};',
     'const runHeroName=()=>progress.mageSchool,showItemNotice=()=>{},hud=()=>{},queueCheckpoint=()=>{},flushCheckpoint=()=>{};',
-    'const starter=Object.keys(mageSpellbook()),early=selectMageSchool("summoner");progress.level=3;',
+    'const starter=Object.keys(mageSpellbook()),starterAB=mageSpell("AB").name,starterABC=mageSpell("ABC").name,early=selectMageSchool("summoner");progress.level=3;',
     'const choices=Object.values(MAGE_SCHOOLS).map(school=>Object.keys(school.spells).sort());',
     'const invalid=selectMageSchool("constructor"),chosen=selectMageSchool("necromancer");',
-    'progress.level=8;const later=selectMageSchool("arcane"),paths=Object.keys(mageSpellbook()).sort(),boneSpear=mageSpell("BA").name;',
+    'progress.level=8;const later=selectMageSchool("arcane"),paths=Object.keys(mageSpellbook()).sort(),boneSpear=mageSpell("BA").name,schoolAB=mageSpell("AB").name,schoolABC=mageSpell("ABC").name;',
     'progress.legacyMage=true;const original=[Object.keys(mageSpellbook()).length,mageSpell("A").name];'
-  ],'{starter,early,choices,invalid,chosen,later,paths,boneSpear,original}');
+  ],'{starter,starterAB,starterABC,early,choices,invalid,chosen,later,paths,boneSpear,schoolAB,schoolABC,original,mageCooldowns}');
   const combinations=['AB','ABC','AC','ACB','BA','BAC','BC','BCA','CA','CAB','CB','CBA'];
   assert.deepEqual(result,{
-    starter:['A','B','C'],early:false,choices:Array(4).fill(combinations),
-    invalid:false,chosen:true,later:false,paths:['A','B','C',...combinations].sort(),boneSpear:'Bone Spear',original:[15,'Ember Bolt']
+    starter:['A','B','C','AB','AC','BA','BC','CA','CB','ABC'],starterAB:'Rune Burst',starterABC:'Arcane Wave',
+    early:false,choices:Array(4).fill(combinations),invalid:false,chosen:true,later:false,
+    paths:['A','B','C',...combinations].sort(),boneSpear:'Bone Spear',schoolAB:'Grave Mark',schoolABC:'Raise the Fallen',
+    original:[15,'Ember Bolt'],mageCooldowns:{A:2}
   });
 });
 
@@ -657,7 +659,7 @@ test('every level-three evolution card selects the option named on the card', ()
   const result=run([
     ...schoolSpells,declaration('WEAPON_PATHS'),
     ...['equippedWeapon','weaponChoices','validWeaponChoice','runHeroName','levelChoicePending','openElementChoice','selectMageSchool','selectWeapon'].map(method),
-    'let hero,progress,arrows=[],bowShotCooldown=0;const p={a:0};',
+    'let hero,progress,arrows=[],bowShotCooldown=0,mageCooldowns={};const p={a:0};',
     'const panel={hidden:true},title={},description={},options={children:[],set innerHTML(value){this.children=[]},appendChild(card){this.children.push(card)}};',
     'const nodes={"#element-choice":panel,"#element-title":title,"#element-explain":description,"#element-options":options};',
     'const document={querySelector:id=>nodes[id],createElement:()=>({})},inSandbox=()=>false,stopMenuControls=()=>{},showItemNotice=()=>{},updateHeroHud=()=>{},hud=()=>{},queueCheckpoint=()=>{},flushCheckpoint=()=>{};',

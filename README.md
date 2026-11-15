@@ -2,6 +2,14 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.22 — Apprentice rune combos
+
+Apprentice Dot starts with the basic **A**, **B**, and **C** spells, all six two-rune combos, and **ABC** as the only three-rune combo. Choosing a school at level 3 equips that school’s combos and keeps the three basic spells.
+
+- **AB Rune Burst** (16 mana) pushes back a group. **AC Twin Bolts** (14) fires two angled shots. **BA Force Lance** (16) pierces one enemy.
+- **BC Snare Field** (15) slows up to two enemies. **CA Ward Rune** (16) absorbs 25% of the next direct hit within 4.5 seconds. **CB Gathering Sigil** (17) pulls foes together.
+- **ABC Arcane Wave** (34) charges a ring around the casting point, then damages and knocks enemies back.
+
 ## V8.21 — Complete magic school spellbooks
 
 Every school now has all six two-rune and all six three-rune spells, plus the three Apprentice spells. The full school spellbook opens when you choose your evolution at level 3. The new spells appear in **Stats & Items** in existing school saves.

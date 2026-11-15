@@ -59,6 +59,40 @@ function runComboChecks(testSchool) {
     const enemy=makeEnemy('round',x,y);enemy.hp=enemy.maxHp=health;enemies.push(enemy);return enemy;
   }
   const combos={
+   apprentice:{
+    AB:({target,cast})=>{
+     cast();if(target.hp>=60||target.vx<=0||target.burnUntil)throw Error('Rune Burst did not hit and push with non-elemental magic');
+    },
+    AC:({target,cast,tick})=>{
+     target.x=p.x+105;
+     const left=dummy(p.x+127,p.y-30),right=dummy(p.x+127,p.y+30);
+     cast();tick(12);
+     if(left.hp>=20||right.hp>=20)throw Error('Twin Bolts did not hit the separate lanes');
+    },
+    BA:({target,cast,tick})=>{
+     const second=dummy(p.x+103,p.y),third=dummy(p.x+144,p.y);
+     cast();tick(15);
+     if(target.hp>=60||second.hp>=20||third.hp!==20)throw Error('Force Lance did not pierce exactly one enemy');
+    },
+    BC:({target,cast,tick})=>{
+     const second=dummy(target.x,target.y-16),third=dummy(target.x,target.y+16);
+     cast();tick(3);
+     if(!(target.slowUntil>arenaTime&&second.slowUntil>arenaTime)||third.slowUntil>arenaTime)throw Error('Snare Field did not slow exactly two enemies');
+    },
+    CA:({cast})=>{
+     cast();damagedHealth(2,true);
+     if(!mageActiveZone('apprenticeWard')||damagedHealth(10)!==43.25||damagedHealth(10)!==41)throw Error('Ward Rune did not reduce exactly one direct hit');
+    },
+    CB:({target,cast})=>{
+     const other=dummy(p.x+103,p.y);
+     cast();if(target.hp>=60||other.hp>=20||other.vx>=0)throw Error('Gathering Sigil did not pull the group toward the aim point');
+    },
+    ABC:({target,cast,tick})=>{
+     cast();tick(8);
+     if(target.hp!==60)throw Error('Arcane Wave hit before its warning');
+     tick(6);if(target.hp>=60||target.vx<=0)throw Error('Arcane Wave did not release a hit and knockback');
+    }
+   },
    summoner:{
     BA:({target,cast,tick})=>{cast();tick(9);if(!(target.spiritMarkUntil>arenaTime))throw Error('Spirit Dart did not mark')},
     AC:({target,cast,tick})=>{
@@ -217,7 +251,10 @@ function runComboChecks(testSchool) {
   let advancedCount=0;
   for(const [school,checks] of Object.entries(combos)){
    if(school!==testSchool)continue;
-   selectedHero='mage';beginNewSlot(1,true);enterSandbox();progress.level=3;openElementChoice();selectMageSchool(school);
+   selectedHero='mage';beginNewSlot(1,true);enterSandbox();
+   if(school!=='apprentice'){
+    progress.level=3;openElementChoice();selectMageSchool(school);
+   }
    document.querySelector('#sandbox-panel').hidden=true;
    for(const [path,check] of Object.entries(checks)){
     resetMageRoom();mageSouls=0;enemies=[];bossFight=null;walls.length=0;breakables.length=0;
@@ -233,11 +270,11 @@ function runComboChecks(testSchool) {
   return advancedCount;
 }
 
-for (const school of ['summoner','necromancer','pyromancer','arcane']) {
-  test(school+' casts and applies all nine new combinations in the game runtime', () => {
+for (const [school,total] of [['apprentice',7],['summoner',9],['necromancer',9],['pyromancer',9],['arcane',9]]) {
+  test(school+' casts and applies all '+total+' combinations in the game runtime', () => {
     let count;
     const probe = 'report((' + runComboChecks.toString() + ')(' + JSON.stringify(school) + '));';
     vm.runInNewContext(source.replace(startup, () => probe + startup), makeGameContext(value=>{count=value}), {timeout:5000});
-    assert.equal(count, 9);
+    assert.equal(count, total);
   });
 }
