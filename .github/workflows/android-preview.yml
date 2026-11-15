@@ -26,7 +26,10 @@ jobs:
         with:
           gradle-version: '8.13'
       - name: Install the Android build tools
-        run: sdkmanager "platforms;android-36" "build-tools;35.0.0"
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platforms;android-36 build-tools;35.0.0'
+          log-accepted-android-sdk-licenses: false
       - name: Lint and build Android
         run: gradle -p android --no-daemon :app:lintDebug :app:assembleDebug :app:bundleRelease
       - name: Verify the Android packages
