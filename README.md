@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.16 — Solid curved shield
+
+The melee path's curved guard stops enemy bodies across its front arc. Melee impacts and grounded boss contact wear down the shield. A blocked hit spares your health even when that hit breaks the guard. Enemies can still hit from an exposed angle. The guard refills when you enter another room.
+
 ## V8.15 — Stick and Sling weapon paths
 
 Pick one weapon at level 3 for the rest of the run.

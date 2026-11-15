@@ -197,7 +197,8 @@ test('Phoenix rebirth doubles the old rounded refill and split bosses conserve r
     declaration('BOSS_HEALTH_MULTIPLIER'),
     source.slice(source.indexOf('const BOSS_BLUEPRINTS ='), source.indexOf('function currentBiome(')),
     'let bossFight,dungeonDepth=1,victories=0;const currentRoom={kind:"boss"},W=720,F=640,p={x:30,y:30,vel:0},arenaTime=1;',
-    'const hero="classic",dashBatSweeps=()=>false,meleeIsSwinging=()=>false,inSandbox=()=>false,enemyAttacksEnabled=()=>false,enemies=[],elementFx=[];',
+    'const hero="classic",dashBatSweeps=()=>false,meleeIsSwinging=()=>false,inSandbox=()=>false,enemyAttacksEnabled=()=>false,blockShieldBody=()=>false,enemies=[],elementFx=[];',
+    declaration('BOSS_DAMAGE'),
     'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),bossSignatureRing=()=>{},bossSpiralShot=()=>{},showItemNotice=()=>{},updateBossZoneList=()=>{},updateBossShots=()=>{},updateBossSpecial=()=>{},finishBossFight=()=>victories++;',
     method('floorDifficulty'),method('bossMaxHealth'),method('bossRebirthHealth'),method('bossRadius'),method('bossArmour'),method('createBossUnit'),method('startBossFight'),
     method('handleBiomeBossPhase'), method('updateBossFight'),
@@ -509,11 +510,95 @@ test('capped item pickups convert into coins instead of silently wasting loot', 
   assert.deepEqual(result, {accepted:true,coins:14,count:3});
 });
 
+const shieldRig=[
+  ...['SHIELD_RADIUS','SHIELD_HALF_ARC','SHIELD_EDGE','RANGED','ENEMY_DAMAGE'].map(declaration),
+  'let hero="classic",shieldType="curved",shieldHp=100,shieldBroken=false,shieldCooldown=0,shieldLastHit=-99;',
+  'let hp=50,inv=0,over=false,arenaTime=1,dashing=false,bleeds=0,attacks=true;',
+  'const p={x:100,y:100,a:0,vx:0,vy:0,kvx:0,kvy:0},W=400,F=300,walls=[],breakables=[],PROP_DEFS={};',
+  'const clamp=(n,min,max)=>Math.min(max,Math.max(min,n)),playerStats=()=>({shieldProtection:0});',
+  'const classicDashProtected=()=>dashing,shieldUpdate=()=>{},queueCheckpoint=()=>{},enemyAttacksEnabled=()=>attacks;',
+  'const damagedHealth=amount=>hp-amount,addEnemyBleed=()=>bleeds++;',
+  ...['nearRect','shieldActive','shieldDamage','shieldBodyPoint','blockShieldBody','enemyContactDamage','resolveEnemyContact'].map(method),
+  'const mob=(x,y,shape="round")=>({x,y,r:10,vx:-260,vy:0,shape});'
+];
+
+test('the solid guard catches a melee charge even if its frame movement crosses the player', () => {
+  const result=run([
+    ...shieldRig,
+    'const enemy=mob(89,100);enemy.chargeUntil=2;',
+    'resolveEnemyContact(enemy,130,100,p);'
+  ],'{hp,shieldHp,enemyX:enemy.x,bounced:enemy.vx>0,inv,push:p.kvx}');
+  assert.deepEqual(result,{hp:50,shieldHp:82,enemyX:125.7,bounced:true,inv:0,push:0});
+});
+
+test('blocked bloodletter contact cannot bleed the player, even when the shield breaks', () => {
+  const result=run([
+    ...shieldRig,
+    'shieldHp=6;const enemy=mob(115,100,"bloodletter");resolveEnemyContact(enemy,128,100,p);',
+    'const blocked={hp,bleeds,shieldHp,shieldBroken};',
+    'enemy.x=115;resolveEnemyContact(enemy,128,100,p);'
+  ],'{blocked,hp,bleeds}');
+  assert.deepEqual(result,{blocked:{hp:50,bleeds:0,shieldHp:0,shieldBroken:true},hp:42,bleeds:1});
+});
+
+test('the guard follows aim and leaves the rear and side exposed', () => {
+  const result=run([
+    ...shieldRig,
+    'p.a=Math.PI/2;const enemy=mob(100,116);resolveEnemyContact(enemy,100,129,p);',
+    'const afterFront={hp,shieldHp};const rear=mob(100,83);resolveEnemyContact(rear,100,70,p);',
+    'const afterRear={hp,shieldHp};inv=0;const side=mob(115,92);resolveEnemyContact(side,130,84,p);'
+  ],'{afterFront,afterRear,hp,shieldHp}');
+  assert.deepEqual(result,{afterFront:{hp:50,shieldHp:86},afterRear:{hp:36,shieldHp:86},hp:22,shieldHp:86});
+});
+
+test('repeated pressure has a per-enemy durability cooldown and a dash preserves durability', () => {
+  const result=run([
+    ...shieldRig,
+    'const enemy=mob(122,100),second=mob(122,100);',
+    'const block=target=>{target.x=122;resolveEnemyContact(target,129,100,p)};',
+    'block(enemy);arenaTime+=.3;block(enemy);block(second);const crowded=shieldHp;',
+    'arenaTime+=.4;dashing=true;block(enemy);const duringDash=shieldHp;',
+    'dashing=false;block(enemy);const afterDash=shieldHp;',
+    'arenaTime+=.7;attacks=false;block(enemy);'
+  ],'{crowded,duringDash,afterDash,shieldHp,hp}');
+  assert.deepEqual(result,{crowded:72,duringDash:72,afterDash:58,shieldHp:58,hp:50});
+});
+
+test('collision correction cannot push enemies through the curved guard or into a wall', () => {
+  const result=run([
+    ...shieldRig,
+    'const enemy=mob(95,100);const across=blockShieldBody(enemy,126,100,p,14);',
+    'walls.push({x:135,y:70,w:15,h:70});enemy.x=120;',
+    'const atWall=blockShieldBody(enemy,124,100,p,14);'
+  ],'{across,atWall,enemyX:enemy.x,shieldHp,hp}');
+  assert.deepEqual(result,{across:true,atWall:true,enemyX:124,shieldHp:86,hp:50});
+});
+
+test('a boss charge stops at the guard and the impact that breaks it spares the player', () => {
+  const result=run([
+    ...shieldRig,declaration('BOSS_DAMAGE'),
+    'const currentRoom={kind:"boss"},unit={x:151,y:100,r:30,state:"charge",hp:60,maxHp:60,hitCooldown:0};',
+    'const bossFight={units:[unit]},enemies=[],inSandbox=()=>false,dashBatSweeps=()=>false,meleeIsSwinging=()=>false;',
+    'const updateBossSpecial=()=>{},updateBossZoneList=()=>{},updateBossShots=()=>{},updateBossSignature=()=>{},handleBiomeBossPhase=()=>{};',
+    'const updateBiomeBossUnit=unit=>{unit.x-=14;return true};',
+    ...['bossDamageAmount','hurtBossPlayer','updateBossFight'].map(method),
+    'updateBossFight(.035,0);const first={hp,shieldHp,bossX:unit.x,playerX:p.x};',
+    'arenaTime+=.7;updateBossFight(.035,0);const broken={hp,shieldHp,shieldBroken};',
+    'arenaTime+=.7;updateBossFight(.035,0);'
+  ],'{first,broken,hp}');
+  assert.deepEqual(result,{
+    first:{hp:50,shieldHp:28,bossX:145.7,playerX:100},
+    broken:{hp:50,shieldHp:0,shieldBroken:true},hp:10
+  });
+});
+
 test('healer enemies support allies without granting free player healing on contact', () => {
-  assert.doesNotMatch(source, /PLAYER_HEALING_ENABLED/);
-  const contact = source.slice(source.indexOf('if(e.shape!==\'healer\'&&enemyAttacksEnabled()'), source.indexOf('\n', source.indexOf('if(e.shape!==\'healer\'&&enemyAttacksEnabled()')));
-  assert.ok(contact.length > 0, 'healer contact should use the non-healer damage branch');
-  assert.doesNotMatch(contact, /healPlayer|playerStats\(\)\.maxHealth/);
+  const result=run([
+    ...shieldRig,
+    'hp=30;const healer=mob(117,100,"healer");resolveEnemyContact(healer,128,100,p);',
+    'hero="mage";resolveEnemyContact(healer,128,100,p);'
+  ],'{hp,shieldHp,inv}');
+  assert.deepEqual(result,{hp:30,shieldHp:100,inv:0});
   assert.match(method('executeEnemyAbility'), /if\(kind==='heal'\)\{ally\.hp=Math\.min\(ally\.maxHp,ally\.hp\+\(e\.elite\?4:2\)\)/);
 });
 

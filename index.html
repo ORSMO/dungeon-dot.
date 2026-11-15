@@ -66,13 +66,13 @@ footer #restart{display:none}
 #mana-hud.low-mana #mana-fill{background:linear-gradient(90deg,#8c579c,#fa8bc0)}
 #mana-label{font-size:10px;color:#d8c8ff}
 @media(max-width:750px){#mana-hud .mana-track{width:48px}#mana-hud{gap:3px;font-size:9px}#mana-label{font-size:9px}header{gap:6px!important}}
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.15</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · SWING</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span></div><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.16</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · SWING</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
  <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
  <small id="character-coins"></small>
  <div id="character-stats"></div>
  <h3>Collected items</h3><div id="item-inventory"></div>
  <h3>Stat upgrades</h3><small id="run-upgrades"></small>
- <p class="character-note">CURVED SHIELD: a compact guard attached to your character, facing your weapon aim. Starts every room at 100 durability. No regeneration or repairs within a room; a broken guard returns on the next room entry.</p>
+ <p class="character-note">CURVED SHIELD: enemies bounce off the guard in front of you. Melee hits and boss charges wear it down. Keep the guard aimed at the threat. It refills on the next room entry.</p>
  <h3>Item synergies <small id="synergy-count"></small></h3><div id="synergy-list"></div>
  <p class="character-note">DASH: move + tap Dash for a short protected burst. With no movement input, dash toward your current aim. Cooldown: 1.8 seconds. Drag its button in Settings → Controls → Edit positions. Keyboard: Space.</p>
  <p class="character-note">Items and upgrades last for this run and carry into every biome. The game pauses while this menu is open.</p>
@@ -84,7 +84,7 @@ footer #restart{display:none}
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
-<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.15</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
+<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.16</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button></div></div>
   <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true">⚪ STICK DOT<br>MELEE PATH</button><button id="hero-archer" type="button" aria-pressed="false">🏹 SLING DOT<br>RANGED PATH</button><button id="hero-mage" type="button" aria-pressed="false">🔮 MAGE DOT<br>DRAW RUNES</button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
@@ -113,6 +113,9 @@ footer #restart{display:none}
 <div id="edit-hint" hidden>DRAG JOYSTICKS + DASH <button id="edit-done">DONE ✓</button></div></main><script>
 (()=>{const c=document.querySelector('#game'),g=c.getContext('2d');let viewW=640,W=480,F=480;const H=360,VIEW_F=304,R=35;const arena=document.querySelector('#arena');function resizeArena(){const r=arena.getBoundingClientRect();if(!r.width||!r.height)return;const oldW=viewW;viewW=Math.max(360,Math.round(H*r.width/r.height));c.width=viewW;c.height=H;try{if(oldW!==viewW&&typeof controls!=='undefined'){controls.positions=controls.positions.map(p=>[p[0]*viewW/oldW,p[1]]);sticks.forEach((s,i)=>{s.x=controls.positions[i][0];s.y=controls.positions[i][1]})}}catch(err){}}resizeArena();window.addEventListener('resize',resizeArena);window.visualViewport?.addEventListener('resize',resizeArena);
 const PLAYER_REGEN=.6;
+const SHIELD_RADIUS=14;
+const SHIELD_HALF_ARC=Math.PI/3;
+const SHIELD_EDGE=1.5;
 let shieldType='curved',shieldPaused=false,shieldHp=100,shieldBroken=false,shieldCooldown=0,shieldLastHit=-99,shieldLaserTick=0;
 // A compact body-mounted guard. Durability only refills on a genuine room entry.
 function shieldDamage(amount){
@@ -128,15 +131,66 @@ function shieldUpdate(dt){
 function refillRoomShield(){
  shieldType='curved';shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;shieldUpdate(0);
 }
-function shieldLength(){return 14*2*Math.PI/3}
+function shieldActive(){return hero==='classic'&&!shieldBroken&&shieldHp>0}
 function shieldSegments(includeBroken=false){
- if(hero!=='classic'||!p||!includeBroken&&(shieldBroken||shieldHp<=0))return [];
- const radius=14,half=Math.PI/3,segments=[],count=10;
+ if(hero!=='classic'||!p||!includeBroken&&!shieldActive())return [];
+ const segments=[],count=10,half=SHIELD_HALF_ARC,radius=SHIELD_RADIUS;
  for(let i=0;i<count;i++){
   const a1=p.a-half+i*half*2/count,a2=p.a-half+(i+1)*half*2/count;
   segments.push({x1:p.x+Math.cos(a1)*radius,y1:p.y+Math.sin(a1)*radius,x2:p.x+Math.cos(a2)*radius,y2:p.y+Math.sin(a2)*radius});
  }
  return segments;
+}
+
+// Contact point on the outside of the curved guard, including its rounded ends.
+function shieldBodyPoint(x,y,r){
+ const distance=Math.hypot(x,y),edge=r+SHIELD_EDGE;
+ if(distance>SHIELD_RADIUS+edge)return null;
+ const angle=distance>0?Math.atan2(y,x):p.a;
+ const offset=Math.atan2(Math.sin(angle-p.a),Math.cos(angle-p.a));
+ if(Math.abs(offset)<=SHIELD_HALF_ARC){
+  const nx=Math.cos(angle),ny=Math.sin(angle),reach=SHIELD_RADIUS+edge+.2;
+  return {x:nx*reach,y:ny*reach,nx,ny};
+ }
+ // A body which already reached an exposed side can still hit the player.
+ if(distance<r+9)return null;
+ const tipAngle=p.a+Math.sign(offset)*SHIELD_HALF_ARC;
+ const tx=SHIELD_RADIUS*Math.cos(tipAngle),ty=SHIELD_RADIUS*Math.sin(tipAngle);
+ const dx=x-tx,dy=y-ty,d=Math.hypot(dx,dy);
+ if(d>=edge)return null;
+ const nx=dx/d,ny=dy/d;
+ return {x:tx+nx*(edge+.2),y:ty+ny*(edge+.2),nx,ny};
+}
+function blockShieldBody(body,oldX,oldY,playerStart,damage){
+ if(!shieldActive())return false;
+ const fromX=oldX-playerStart.x,fromY=oldY-playerStart.y,toX=body.x-p.x,toY=body.y-p.y;
+ const reach=SHIELD_RADIUS+SHIELD_EDGE+body.r;
+ if(Math.min(fromX,toX)>reach||Math.max(fromX,toX)<-reach||
+    Math.min(fromY,toY)>reach||Math.max(fromY,toY)<-reach)return false;
+ const dx=toX-fromX,dy=toY-fromY,steps=Math.max(1,Math.ceil(Math.hypot(dx,dy)/2.5));
+ for(let i=0;i<=steps;i++){
+  const x=fromX+dx*i/steps,y=fromY+dy*i/steps;
+  const hit=shieldBodyPoint(x,y,body.r);
+  if(!hit){
+   if(Math.hypot(x,y)<body.r+9)return false;
+   continue;
+  }
+  const ex=clamp(p.x+hit.x,18+body.r,W-18-body.r),ey=clamp(p.y+hit.y,18+body.r,F-18-body.r);
+  if(walls.some(w=>nearRect(ex,ey,body.r,w))||breakables.some(o=>!o.broken&&Math.hypot(ex-o.x,ey-o.y)<body.r+PROP_DEFS[o.kind].r)){
+   body.x=oldX;body.y=oldY;
+  }else{body.x=ex;body.y=ey}
+  const inward=(body.vx||0)*hit.nx+(body.vy||0)*hit.ny;
+  if(inward<0){
+   body.vx-=1.35*inward*hit.nx;
+   body.vy-=1.35*inward*hit.ny;
+  }
+  if(damage>0&&!classicDashProtected()&&arenaTime>=(body.shieldImpactReady||0)){
+   body.shieldImpactReady=arenaTime+.65;
+   shieldDamage(damage);
+  }
+  return true;
+ }
+ return false;
 }
 
 function shieldHit(x,y,r=4){return shieldSegments().some(seg=>laserDistance(x,y,seg)<r+3)}
@@ -147,6 +201,26 @@ function pickShield(){showShieldChoice()}
 document.querySelector('#choose-flat').onclick=()=>pickShield('flat');document.querySelector('#choose-curved').onclick=()=>pickShield('curved');
 const RANGED=['laser','shooter','scatter','frostcaster','spitter','cannon','seeker','bloodcaster','emberling','thornling','icewisp'];
 const ENEMY_DAMAGE={contact:14,charge:18,bloodContact:8,laser:6,artillery:22,poisonTick:5,shard:6,fireImpact:10,electricImpact:9,fireTick:2,electricTick:1};
+function enemyContactDamage(enemy){
+ if(enemy.shape==='healer'||enemy.isTreasure||RANGED.includes(enemy.shape))return 0;
+ if(enemy.shape==='bloodletter')return ENEMY_DAMAGE.bloodContact;
+ return enemy.chargeUntil>arenaTime?ENEMY_DAMAGE.charge:ENEMY_DAMAGE.contact;
+}
+function resolveEnemyContact(enemy,oldX,oldY,playerStart){
+ const damage=enemyContactDamage(enemy),attacks=enemyAttacksEnabled();
+ if(blockShieldBody(enemy,oldX,oldY,playerStart,attacks?damage:0))return;
+ const dx=enemy.x-p.x,dy=enemy.y-p.y,distance=Math.hypot(dx,dy),reach=enemy.r+9;
+ if(distance>=reach)return;
+ const nx=distance>0?dx/distance:-Math.cos(p.a),ny=distance>0?dy/distance:-Math.sin(p.a);
+ const depth=reach-distance;
+ enemy.x+=nx*depth;enemy.y+=ny*depth;enemy.vx+=nx*42;enemy.vy+=ny*42;
+ if(!damage||classicDashProtected())return;
+ const push=Math.min(240,Math.max(65,Math.hypot(enemy.vx-p.vx,enemy.vy-p.vy)*.8));
+ p.kvx-=nx*push;p.kvy-=ny*push;
+ if(!attacks||inv>0)return;
+ if(enemy.shape==='bloodletter')addEnemyBleed('bloodContact');
+ hp=damagedHealth(damage);inv=1.1;if(hp<=0)over=true;
+}
 const ENEMY_SPECIAL_DAMAGE={slam:[18,22],blood:[9,9],fire:[12,12],electric:[10,10],magnet:[10,10],mirror:[11,11],sponge:[13,13],bomb:[16,22]};
 const ENEMY_BLEED={bloodContact:[12,2],bloodSpecial:[6,1.5],bloodcaster:[7,1.4],emberbolt:[3,1.2],bossFire:[3,1.2],bossPoison:[4,1.2]};
 const ENEMY_PROJECTILES={
@@ -2310,10 +2384,9 @@ function bossSpark(x,y,color='#ffe4a3'){
 }
 const BOSS_DAMAGE={contact:8,charge:16,cannonball:12,crystal:7,quake:14,landing:15,splitLanding:11,beam:4,tether:3};
 function bossDamageAmount(amount){return Math.ceil(amount*2.5)}
-function hurtBossPlayer(amount,x,y,blockable=false,radius=0){
+function hurtBossPlayer(amount,x,y){
  if(!enemyAttacksEnabled()||inv>0||over||p.falling||classicDashProtected())return;
  const strike=bossDamageAmount(amount);
- if(blockable&&shieldHit(x,y,radius)){shieldDamage(strike*1.8);inv=.45;bossSpark(p.x,p.y,'#8ceaff');return}
  hp=damagedHealth(strike);inv=.8;
  const dx=p.x-x,dy=p.y-y,d=Math.hypot(dx,dy)||1;
  p.kvx=(p.kvx||0)+dx/d*135;p.kvy=(p.kvy||0)+dy/d*135;
@@ -2465,11 +2538,12 @@ function finishBossFight(){
  const oldKills=kills;kills++;if(!shieldType&&oldKills<10&&kills>=10)showShieldChoice();
  elementFx.push({type:'fusion',x:W/2,y:F/2,life:1,maxLife:1});
 }
-function updateBossFight(dt,previousAngle,previousLag=0){
+function updateBossFight(dt,previousAngle,previousLag=0,playerStart=p){
  if(!bossFight||bossFight.done||(currentRoom.kind!=='boss'&&!inSandbox()))return;
  updateBossSpecial(dt);
  for(const unit of bossFight.units){
   if(unit.hp<=0)continue;
+  const oldX=unit.x,oldY=unit.y,wasAirborne=unit.state==='jump';
   unit.hitCooldown=Math.max(0,unit.hitCooldown-dt);unit.flash=Math.max(0,(unit.flash||0)-dt);
   unit.phase2=unit.enraged||unit.part||unit.hp<=unit.maxHp/2;
   if(unit.phase2&&!unit.enrageWarned&&!unit.part&&enemyAttacksEnabled()&&!bossFight.special){
@@ -2495,9 +2569,12 @@ function updateBossFight(dt,previousAngle,previousLag=0){
     runStats.swingsHit++;runStats.biggestImpact=Math.max(runStats.biggestImpact,Math.abs(p.vel)*40);
    }
    if(unit.hp<=0)continue;
+   const strike=unit.state==='charge'?BOSS_DAMAGE.charge:BOSS_DAMAGE.contact;
+   const shieldWear=unit.state!=='stunned'&&enemyAttacksEnabled()?bossDamageAmount(strike)*1.8:0;
+   if(blockShieldBody(unit,wasAirborne?unit.x:oldX,wasAirborne?unit.y:oldY,wasAirborne?p:playerStart,shieldWear))continue;
    const dx=p.x-unit.x,dy=p.y-unit.y,dist=Math.hypot(dx,dy),reach=unit.r+9;
    if(dist<reach){const nx=dist>.001?dx/dist:1,ny=dist>.001?dy/dist:0;
-    if(unit.state!=='stunned')hurtBossPlayer(unit.state==='charge'?BOSS_DAMAGE.charge:BOSS_DAMAGE.contact,unit.x,unit.y,true,unit.r);
+    if(unit.state!=='stunned')hurtBossPlayer(strike,unit.x,unit.y);
     p.x=clamp(unit.x+nx*(reach+1),23,W-23);p.y=clamp(unit.y+ny*(reach+1),23,F-23);
    }
   }
@@ -4055,6 +4132,7 @@ body.x=destination.x;body.y=destination.y;body.portalCooldown=.9;body.portalRead
 if(body.wallContacts)body.wallContacts.clear();body.sticky=null;
 portalFx.push({x:source.x,y:source.y,life:.38,maxLife:.38,type:source.type});
 portalFx.push({x:destination.x,y:destination.y,life:.38,maxLife:.38,type:destination.type});
+return true;
 }
 function collideWall(e,w,dt=.016){
 let cx=clamp(e.x,w.x,w.x+w.w),cy=clamp(e.y,w.y,w.y+w.h),dx=e.x-cx,dy=e.y-cy,d=Math.hypot(dx,dy);
@@ -4392,7 +4470,7 @@ p.kvx=(p.kvx||0)*Math.exp(-(curseActive('float')?2:groundSlideFactor()>1?3:6)*dt
 if(!moveDash(dt)){p.x=clamp(p.x+(l.dx*playerStats().moveSpeed*(arenaTime<(p.slowUntil||0)?.58:1)*slideBoost+p.kvx)*dt,23,W-23);p.y=clamp(p.y+(l.dy*playerStats().moveSpeed*(arenaTime<(p.slowUntil||0)?.58:1)*slideBoost+p.kvy)*dt,23,F-23);}
 let playerBody={x:p.x,y:p.y,vx:l.dx*playerStats().moveSpeed*slideBoost+p.kvx,vy:l.dy*playerStats().moveSpeed*slideBoost+p.kvy,r:9,isPlayer:true,knockbackSpeed:Math.hypot(p.kvx,p.kvy),sticky:p.sticky||null,wallCooldowns:p.wallCooldowns||new Map(),wallContacts:p.wallContacts||new Set(),portalCooldown:p.portalCooldown||0,portalReady:!!p.portalReady};
 for(let w of walls){let impact=collideWall(playerBody,w,dt);if(w.type==='spike'&&impact>90&&Math.hypot(p.kvx,p.kvy)>95&&inv<=0&&!classicDashProtected()){let damage=impact>180?16:impact>130?10:5;hp=damagedHealth(damage);inv=.7;if(hp<=0)over=true}}
-collideProps(playerBody,true);if(!collideGap(playerBody,ox,oy,true))collideHole(playerBody,ox,oy,Math.hypot(playerBody.vx,playerBody.vy),true);if(!p.falling)teleportBody(playerBody,dt);p.portalCooldown=playerBody.portalCooldown;p.portalReady=playerBody.portalReady;p.x=playerBody.x;p.y=playerBody.y;p.sticky=playerBody.sticky;p.wallCooldowns=playerBody.wallCooldowns;p.wallContacts=playerBody.wallContacts;p.vx=(p.x-ox)/Math.max(dt,.001);p.vy=(p.y-oy)/Math.max(dt,.001);if(!p.falling&&safeFloor(p.x,p.y,19)){p.safeX=p.x;p.safeY=p.y}
+collideProps(playerBody,true);if(!collideGap(playerBody,ox,oy,true))collideHole(playerBody,ox,oy,Math.hypot(playerBody.vx,playerBody.vy),true);const playerTeleported=!p.falling&&teleportBody(playerBody,dt);p.portalCooldown=playerBody.portalCooldown;p.portalReady=playerBody.portalReady;p.x=playerBody.x;p.y=playerBody.y;p.sticky=playerBody.sticky;p.wallCooldowns=playerBody.wallCooldowns;p.wallContacts=playerBody.wallContacts;p.vx=(p.x-ox)/Math.max(dt,.001);p.vy=(p.y-oy)/Math.max(dt,.001);if(!p.falling&&safeFloor(p.x,p.y,19)){p.safeX=p.x;p.safeY=p.y}
 if(hero==='archer'&&bowDrawStage(bowPower())!=='idle'){
  const aim=sticks[1];
  p.target=Math.atan2(aim.dy,aim.dx);
@@ -4409,7 +4487,9 @@ else{
  hitPropsWithBat(previousBatAngle,previousFlailLag);hitNestsWithBat(previousBatAngle,previousFlailLag);
  hitTrapLevers(previousBatAngle,previousFlailLag);hitCrackedWallsWithBat(previousBatAngle,previousFlailLag);
 }
-updateBossFight(dt,previousBatAngle,previousFlailLag);updateArrows(dt);updateMage(dt);
+const playerStart=playerTeleported?p:{x:ox,y:oy};
+updateBossFight(dt,previousBatAngle,previousFlailLag,playerStart);updateArrows(dt);updateMage(dt);
+const shieldPositions=shieldActive()?new Map():null;
 // Magnetic force is distance-limited and capped to keep the arena playable.
 for(let m of enemies){if(!enemyAttacksEnabled()||m.shape!=='magnet'||m.hp<=0)continue;
 let radius=m.elite?115:88,strength=m.elite?185:135,mode=m.magnetMode||1;
@@ -4458,10 +4538,12 @@ let oldEX=e.x,oldEY=e.y;e.x+=e.vx*dt*puddleBoost*((e.slowUntil||0)>arenaTime?.6:
 if(e.x<18+e.r){e.x=18+e.r;e.vx=Math.abs(e.vx)*.85}if(e.x>W-18-e.r){e.x=W-18-e.r;e.vx=-Math.abs(e.vx)*.85}
 if(e.y<18+e.r){e.y=18+e.r;e.vy=Math.abs(e.vy)*.85}if(e.y>F-18-e.r){e.y=F-18-e.r;e.vy=-Math.abs(e.vy)*.85}
 for(let w of walls)collideWall(e,w,dt);
-collideProps(e);if(collideGap(e,oldEX,oldEY)||collideHole(e,oldEX,oldEY,Math.hypot(e.vx,e.vy)))continue;teleportBody(e,dt);
+collideProps(e);if(collideGap(e,oldEX,oldEY)||collideHole(e,oldEX,oldEY,Math.hypot(e.vx,e.vy)))continue;
+const enemyTeleported=teleportBody(e,dt);
 hitEnemyWithDashBat(e,previousBatAngle);
 if(e.hp<=0)continue;
-let pd=Math.hypot(p.x-e.x,p.y-e.y)||1;if(pd<e.r+9){let nx=(e.x-p.x)/pd,ny=(e.y-p.y)/pd,depth=e.r+9-pd;e.x+=nx*depth;e.y+=ny*depth;e.vx+=nx*42;e.vy+=ny*42;if(!classicDashProtected()&&e.shape!=='healer'&&!e.isTreasure&&!RANGED.includes(e.shape)){let push=Math.min(240,Math.max(65,Math.hypot(e.vx-p.vx,e.vy-p.vy)*.8));p.kvx-=nx*push;p.kvy-=ny*push;}if(e.shape!=='healer'&&enemyAttacksEnabled()&&!e.isTreasure&&!RANGED.includes(e.shape)&&inv===0&&!classicDashProtected()){if(e.shape==='bloodletter'){addEnemyBleed('bloodContact');hp=damagedHealth(ENEMY_DAMAGE.bloodContact);inv=1.1;if(hp<=0)over=true}else{hp=damagedHealth(e.chargeUntil>arenaTime?ENEMY_DAMAGE.charge:ENEMY_DAMAGE.contact);inv=1.1;if(hp<=0)over=true}}}
+resolveEnemyContact(e,enemyTeleported?e.x:oldEX,enemyTeleported?e.y:oldEY,enemyTeleported?p:playerStart);
+shieldPositions?.set(e,{x:e.x,y:e.y});
 // The melee weapon uses the same swept shape it draws on screen.
 if(hero==='classic')resolveMeleeContact(e,previousBatAngle,previousFlailLag,dt);
 }
@@ -4504,6 +4586,11 @@ a.impactCooldown=.3;b.impactCooldown=.3;a.cool=Math.max(a.cool,.15);b.cool=Math.
 }
 let restitution=Math.max(enemyStats(a).elasticity,enemyStats(b).elasticity,curseActive('pinball')?1.65:0);let jimp=-(1+restitution)*rel/tot;a.vx-=jimp*nx*invA;a.vy-=jimp*ny*invA;b.vx+=jimp*nx*invB;b.vy+=jimp*ny*invB;
 }}
+// A weapon swing or a neighboring body can push a mob back into the guard.
+if(shieldPositions&&shieldActive())for(const [enemy,old] of shieldPositions){
+ if(enemy.hp>0&&(enemy.x!==old.x||enemy.y!==old.y))
+  blockShieldBody(enemy,old.x,old.y,p,enemyAttacksEnabled()?enemyContactDamage(enemy):0);
+}
 shards=shards.filter(q=>{q.life-=dt;if(q.life<=0)return false;q.x+=q.vx*dt;q.y+=q.vy*dt;if(q.x<17||q.x>W-17||q.y<17||q.y>F-17||blocked(q.x,q.y,2))return false;for(let e of enemies){if(e===q.owner||e.hp<=0||q.hit.has(e))continue;if(Math.hypot(e.x-q.x,e.y-q.y)<e.r+3){q.hit.add(e);if(canDamage(e,130))e.hp-=1;e.vx+=q.vx*.35/e.mass;e.vy+=q.vy*.35/e.mass;return false}}if(Math.hypot(p.x-q.x,p.y-q.y)<11){if(inv<=0&&!classicDashProtected()){hp=damagedHealth(ENEMY_DAMAGE.shard);inv=.45;if(hp<=0)over=true}return false}return true});
 let defeated=collectDefeatedEnemies();for(let e of defeated)if(e.shape==='gravity'&&enemyAttacksEnabled())gravityWells.push({x:e.x,y:e.y,life:2.4,maxLife:2.4,range:e.elite?105:85,elite:e.elite});
 for(const fallen of defeated)if(fallen.elite||fallen.shape==='armored')for(const ally of enemies){
@@ -4526,7 +4613,7 @@ drawEnemyAttackWarnings();
 for(let h of holes){g.save();g.fillStyle='#08070d';g.shadowColor='#000';g.shadowBlur=14;g.beginPath();g.ellipse(h.x,h.y,h.r,h.r*.82,0,0,Math.PI*2);g.fill();g.shadowBlur=0;g.strokeStyle='#74617b';g.lineWidth=4;g.beginPath();g.ellipse(h.x,h.y,h.r,h.r*.82,0,0,Math.PI*2);g.stroke();g.restore()}
 for(let a of artillery){let t=1-a.life/a.maxLife;g.save();g.strokeStyle='#ff7058';g.lineWidth=2+t*2;g.globalAlpha=.45+.5*t;g.beginPath();g.arc(a.x,a.y,a.r*(.6+.4*t),0,Math.PI*2);g.stroke();g.beginPath();g.moveTo(a.x-6,a.y);g.lineTo(a.x+6,a.y);g.moveTo(a.x,a.y-6);g.lineTo(a.x,a.y+6);g.stroke();g.fillStyle='#e8bd8b';g.beginPath();g.arc(a.startX+(a.x-a.startX)*t,a.startY+(a.y-a.startY)*t-55*Math.sin(Math.PI*t),6+3*Math.sin(Math.PI*t),0,Math.PI*2);g.fill();g.restore()}
 for(let e of enemies){if(e.shape!=='laser'||e.hp<=0||(e.laserState!=='charge'&&e.laserState!=='fire'))continue;let firing=e.laserState==='fire';g.save();g.lineCap='round';g.strokeStyle=firing?'#ff2879':'#ff8cae';g.lineWidth=firing?6:1.5;g.globalAlpha=firing?.82:.4;g.shadowColor='#ff3580';g.shadowBlur=firing?14:0;for(let seg of shieldLaserLines(laserPath(e.x,e.y,e.laserAngle))){g.beginPath();g.moveTo(seg.x1,seg.y1);g.lineTo(seg.x2,seg.y2);g.stroke()}if(firing){g.shadowBlur=0;g.strokeStyle='#fff4fb';g.lineWidth=2;for(let seg of laserPath(e.x,e.y,e.laserAngle)){g.beginPath();g.moveTo(seg.x1,seg.y1);g.lineTo(seg.x2,seg.y2);g.stroke()}}g.restore()}
-for(let sh of shieldSegments(true)){g.save();g.globalAlpha=shieldBroken?.2:1;g.lineCap='round';g.lineWidth=3;g.strokeStyle='#74eaff';g.shadowColor=g.strokeStyle;g.shadowBlur=shieldBroken?0:5;g.beginPath();g.moveTo(sh.x1,sh.y1);g.lineTo(sh.x2,sh.y2);g.stroke();g.restore()}
+for(let sh of shieldSegments(true)){g.save();g.globalAlpha=shieldBroken?.2:1;g.lineCap='round';g.lineWidth=SHIELD_EDGE*2;g.strokeStyle=arenaTime-shieldLastHit<.14?'#e5fbff':'#74eaff';g.shadowColor=g.strokeStyle;g.shadowBlur=shieldBroken?0:5;g.beginPath();g.moveTo(sh.x1,sh.y1);g.lineTo(sh.x2,sh.y2);g.stroke();g.restore()}
 for(let q of projectiles){g.save();g.fillStyle=q.reflected?'#f7fff5':RANGED_COLOR[q.kind];g.shadowColor=g.fillStyle;g.shadowBlur=8;g.beginPath();g.arc(q.x,q.y,q.r,0,Math.PI*2);g.fill();g.restore()}
 drawArrows();drawMageEffects();
 for(let f of fallingFx){let t=1-f.life/f.maxLife,scale=(1-t)*(1-t);g.save();g.globalAlpha=1-t*.85;g.fillStyle=f.color;g.beginPath();g.arc(f.x+(f.tx-f.x)*t,f.y+(f.ty-f.y)*t+t*5,Math.max(.3,f.r*scale),0,Math.PI*2);g.fill();g.strokeStyle='#d3b6ed';g.lineWidth=2*(1-t);g.beginPath();g.arc(f.tx,f.ty,7+t*14,0,Math.PI*2);g.stroke();g.restore()}
@@ -4615,5 +4702,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.15';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.16';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
