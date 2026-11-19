@@ -42,6 +42,38 @@ function run(parts, result) {
 }
 const evolutionMethods=[declaration('EVOLUTION_LEVEL'),method('hasEvolved'),method('evolutionAttackRate')];
 
+test('only the third live dungeon boss opens the run victory recap', () => {
+  const result = run([
+    declaration('VICTORY_DEPTH'), method('victoryRecapPending'),
+    'let practice=false,dungeonDepth=3,lives=2,currentRoom={kind:"boss",bossDefeated:true};',
+    'const inSandbox=()=>practice;',
+    'const bossCheckpoint=JSON.stringify(currentRoom);',
+    'const first= victoryRecapPending(); currentRoom=JSON.parse(bossCheckpoint);',
+    'const reloaded=victoryRecapPending(); currentRoom.bossDefeated=false;',
+    'const undefeated=victoryRecapPending(); currentRoom.bossDefeated=true;',
+    'practice=true;const sandbox=victoryRecapPending();practice=false;',
+    'lives=0;const ended=victoryRecapPending();lives=2;',
+    'dungeonDepth=2;const early=victoryRecapPending();dungeonDepth=4;const deeper=victoryRecapPending();'
+  ], '{first,reloaded,undefeated,sandbox,ended,early,deeper}');
+  assert.deepEqual(result, {
+    first:true, reloaded:true, undefeated:false, sandbox:false, ended:false, early:false, deeper:false
+  });
+});
+
+test('the victory recap gates room exits and its dismissal persists at the checkpoint', () => {
+  const result = run([
+    declaration('VICTORY_DEPTH'), method('victoryRecapPending'), method('acknowledgeVictory'), method('checkRoomDoors'),
+    'let dungeonDepth=3,lives=2,currentRoom={kind:"boss",bossDefeated:true,cleared:true},doorCooldown=0,over=false,p={x:13,y:200},shieldPaused=false,editingControls=false;',
+    'const settings={hidden:true},sticks=[{dx:-1,dy:0}],DIRECTIONS={west:{dx:-1,dy:0}};',
+    'let checkpoint,queued=false,closed=0,exits=0;',
+    'const inSandbox=()=>false,queueCheckpoint=()=>{queued=true},flushCheckpoint=()=>{if(queued)checkpoint=JSON.stringify(currentRoom)};',
+    'const document={querySelector:()=>({close(){closed++}})},roomDoors=()=>[{kind:"biome",side:"west",x:13,y:200,biome:"test"}],nextDungeon=()=>exits++;',
+    'checkRoomDoors(0.016);const exitsBefore=exits;acknowledgeVictory();',
+    'currentRoom=JSON.parse(checkpoint);const pendingAfterReload=victoryRecapPending();checkRoomDoors(0.016);acknowledgeVictory();'
+  ], '{exitsBefore,exits,closed,pendingAfterReload}');
+  assert.deepEqual(result, {exitsBefore:0,exits:1,closed:1,pendingAfterReload:false});
+});
+
 test('standalone game script parses without syntax errors', () => {
   assert.doesNotThrow(() => new Function(source));
 });
