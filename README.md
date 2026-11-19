@@ -2,6 +2,12 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.25 — Four Worlds
+
+Each biome has its own floor materials, architecture, boss-room seal and HUD accents. The Old Dungeon is a torchlit keep, Ember Crucible an iron foundry, Verdant Hollow an overgrown abbey, and Frostbound Vault an ice cathedral. The menus, enemy index and victory recap take their style from medieval manuscripts. Hero portraits show clothing and gear for their path.
+
+Existing saves select their world art from the saved biome.
+
 ## V8.24 — Dungeon victory
 
 Defeat the third dungeon boss to win the run. The recap records your current hero path, deepest dungeon, remaining lives, biggest impact, and biggest damage burst (the most HP one enemy lost in a single frame). Choose **Continue deeper** to use the boss room exits and enter Dungeon 4, or **Save and return to menu** to keep the run for later.
