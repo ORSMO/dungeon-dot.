@@ -15,6 +15,8 @@ The Android app bundles the same `index.html` and opens in landscape. Its save s
 
 ## V8.23 — Automatic level 8 evolution
 
+The Android closed beta includes an offline privacy policy accessible from the start menu and Settings. The public policy is in [PRIVACY.md](PRIVACY.md). This build has no advertising or analytics. Release bundles use the private upload key retained outside this repository, with Google Play App Signing handling distribution signatures.
+
 At level 8, your current form evolves automatically and the HUD shows **EVOLVED**. The boost is +5 maximum HP, +15% damage, +8% movement speed, +10% swing, reload or cast speed, +10% knockback, +0.15 HP per second and +5 percentage points of damage reduction. Mage also gains +10 maximum mana and +1 mana per second. Existing stat caps apply.
 
 The level 8 reward no longer opens a choice. Saved runs at level 8 or above receive the boost on load and retain previously acquired elements. The Test Room’s XP button can trigger the evolution in practice.
