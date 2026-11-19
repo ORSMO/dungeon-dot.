@@ -13,6 +13,12 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.25 — Four Worlds
+
+Each biome has its own floor materials, architecture, boss-room seal and HUD accents. The Old Dungeon is a torchlit keep, Ember Crucible an iron foundry, Verdant Hollow an overgrown abbey, and Frostbound Vault an ice cathedral. The menus, enemy index and victory recap take their style from medieval manuscripts. Hero portraits show clothing and gear for their path.
+
+Existing saves select their world art from the saved biome.
+
 ## V8.24 — Dungeon victory
 
 Defeat the third dungeon boss to win the run. The recap records your current hero path, deepest dungeon, remaining lives, biggest impact, and biggest damage burst (the most HP one enemy lost in a single frame). Choose **Continue deeper** to use the boss room exits and enter Dungeon 4, or **Save and return to menu** to keep the run for later.
