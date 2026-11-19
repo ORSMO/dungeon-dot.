@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#191724"><title>Dungeon Dot — Four Worlds</title><style>*{box-sizing:border-box}body{margin:0;background:#11101a;color:#eee;font:14px system-ui;display:flex;align-items:center;justify-content:center;min-height:100dvh}main{width:min(100vw,470px);padding:8px}header{display:flex;justify-content:space-between;margin:4px 4px 8px}canvas{width:100%;height:auto;display:block;touch-action:none;border-radius:12px}footer{display:flex;align-items:center;justify-content:space-between;padding:10px 4px}button{border:0;background:#504365;color:white;border-radius:8px;padding:10px 16px}small{color:#bdb3cc}.health{display:flex;align-items:center;gap:8px;min-width:170px;font-weight:700}.hp-track{width:116px;height:13px;border:2px solid #756782;border-radius:4px;background:#382938;overflow:hidden}#hp-fill{height:100%;width:100%;background:#69d58a;transition:width .16s ease}#hp-bleed{position:absolute;right:0;top:0;height:100%;width:0;background:#ec3855;transition:width .12s linear}.hp-track{position:relative}#hp-label{font-size:11px;color:#d5cadc}main{width:100vw;height:100dvh;padding:0;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}body{overflow:hidden;min-height:100dvh;background:#080812}#arena{position:relative;width:100vw;height:100dvh;flex:none}#game{width:100%;height:100%;border-radius:0}header{position:absolute;z-index:4;top:0;left:0;right:0;margin:0;padding:8px 12px;background:linear-gradient(#0d0b1ce8,#0d0b1c88);align-items:center;pointer-events:none;gap:12px}header .health{min-width:0}header .hp-track{width:clamp(65px,12vw,160px)}header #kills{font:800 12px monospace;white-space:nowrap}header #shield-durability{max-width:180px!important}footer{position:absolute;z-index:4;right:clamp(95px,17vw,145px);bottom:7px;gap:6px;padding:0;display:flex;flex-wrap:wrap;justify-content:flex-end;pointer-events:none}footer small{display:none}footer button{pointer-events:auto;background:#3a3057dd;border:1px solid #8e76b0;border-radius:8px;padding:7px 10px;font:600 10px monospace;white-space:nowrap}#stats-panel{position:absolute;right:8px;top:44px;z-index:6;background:#161226f0;border:1px solid #77629c;border-radius:10px;max-width:240px;max-height:calc(100dvh - 70px);overflow:auto}#shield-choice{font-size:13px!important}#rotate-overlay{display:none;position:fixed;inset:0;z-index:100;background:radial-gradient(circle at center,#31204b,#0a0914);color:white;align-items:center;justify-content:center;flex-direction:column;gap:18px;text-align:center;padding:24px;font:700 19px system-ui}#rotate-overlay .turn-icon{font-size:64px;animation:turnphone 2s ease-in-out infinite alternate}@keyframes turnphone{to{transform:rotate(90deg)}}#rotate-overlay button{font-size:16px;padding:14px 22px;background:#7654bc}@media(orientation:portrait){#rotate-overlay{display:flex}main{visibility:hidden}}@media(max-height:380px){header{padding:3px 9px}footer button{padding:5px 7px;font-size:9px}}@media(orientation:landscape){#rotate-overlay{display:none}} #settings-panel{position:absolute;right:10px;top:42px;z-index:15;background:#1c1532f5;color:white;border:1px solid #a58bdb;border-radius:12px;padding:12px;width:min(280px,72vw);max-height:calc(100dvh - 50px);overflow:auto;font:12px system-ui}#settings-panel[hidden],#controls-settings[hidden],#edit-hint[hidden]{display:none!important}#settings-panel button{margin:4px;background:#53416f;border:1px solid #8d75ae;padding:7px;border-radius:6px;color:white}#controls-settings{display:grid;gap:6px}#controls-settings label{display:grid;gap:4px}#controls-settings input[type=range]{width:100%;accent-color:#ac83ef}#edit-hint{position:absolute;top:42px;left:50%;transform:translateX(-50%);z-index:15;background:#271b45;padding:8px;border:1px solid #b59aea;border-radius:8px;color:white;font:700 12px monospace} #room-status{position:absolute;top:43px;left:12px;z-index:4;max-width:calc(100vw - 140px);padding:5px 8px;background:#100e1ddd;border:1px solid #6d5b87;border-radius:6px;pointer-events:none;font:700 10px monospace;color:#d7eedf} #boss-hud{position:absolute;z-index:5;top:76px;left:50%;transform:translateX(-50%);width:min(360px,52vw);padding:7px 10px;background:#1a1025ed;border:1px solid #bd8858;border-radius:8px;pointer-events:none;font:10px monospace}#boss-hud[hidden]{display:none!important}.boss-heading{display:flex;justify-content:space-between;gap:8px;color:#f4dba2}.boss-track{height:9px;background:#3d2638;border:1px solid #90677c;margin:4px 0;overflow:hidden;border-radius:3px}#boss-fill{height:100%;background:linear-gradient(90deg,#bb405d,#fa9871);width:100%}#boss-hint{display:block;color:#d6c0e9;font-size:9px} #sandbox-toggle[hidden],#sandbox-panel[hidden],#sandbox-start[hidden],#sandbox-tools[hidden]{display:none!important}#sandbox-panel{position:absolute;z-index:20;right:10px;top:42px;width:min(302px,44vw);max-height:calc(100dvh - 100px);overflow:auto;padding:9px;background:#171c2ff5;border:1px solid #79b6dc;border-radius:10px;font:11px system-ui;color:#e0edfa}.sandbox-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;color:#b5e8ff}#sandbox-panel button{border:1px solid #6886a9;border-radius:6px;background:#334260;padding:6px 7px;font:600 10px system-ui;color:#fff}.sandbox-switches,.sandbox-actions{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}.sandbox-switches button{flex:1}.sandbox-switches button[aria-pressed=true]{background:#245648!important;border-color:#86e6b5!important}#sandbox-panel small{display:block;color:#b4c5dd;font:9px system-ui;line-height:1.35}#sandbox-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;max-height:calc(100dvh - 240px);min-height:72px;overflow:auto;margin:7px 0;padding:2px}.spawn-tile{aspect-ratio:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;min-width:0;padding:4px!important;background:#252d43!important}.spawn-tile svg{width:70%;max-height:52px;flex:1;min-height:28px}.spawn-tile span{font:9px system-ui;line-height:1.1;overflow-wrap:anywhere}.spawn-tile[aria-pressed=true]{border:2px solid #ffe1a0!important;background:#433d4d!important} #sandbox-panel{display:flex;flex-direction:column;overflow:hidden}#sandbox-tools{display:flex;flex-direction:column;min-height:0;flex:1}#sandbox-tools>.sandbox-switches,#sandbox-tools>.sandbox-actions,#sandbox-tools>small{flex-shrink:0}#sandbox-grid{min-height:0;flex:1 1 auto;max-height:calc(100dvh - 260px)} #character-panel[hidden],#loot-panel[hidden],#item-notice[hidden]{display:none!important}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#191724"><title>Dungeon Dot — Painted Realms</title><style>*{box-sizing:border-box}body{margin:0;background:#11101a;color:#eee;font:14px system-ui;display:flex;align-items:center;justify-content:center;min-height:100dvh}main{width:min(100vw,470px);padding:8px}header{display:flex;justify-content:space-between;margin:4px 4px 8px}canvas{width:100%;height:auto;display:block;touch-action:none;border-radius:12px}footer{display:flex;align-items:center;justify-content:space-between;padding:10px 4px}button{border:0;background:#504365;color:white;border-radius:8px;padding:10px 16px}small{color:#bdb3cc}.health{display:flex;align-items:center;gap:8px;min-width:170px;font-weight:700}.hp-track{width:116px;height:13px;border:2px solid #756782;border-radius:4px;background:#382938;overflow:hidden}#hp-fill{height:100%;width:100%;background:#69d58a;transition:width .16s ease}#hp-bleed{position:absolute;right:0;top:0;height:100%;width:0;background:#ec3855;transition:width .12s linear}.hp-track{position:relative}#hp-label{font-size:11px;color:#d5cadc}main{width:100vw;height:100dvh;padding:0;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}body{overflow:hidden;min-height:100dvh;background:#080812}#arena{position:relative;width:100vw;height:100dvh;flex:none}#game{width:100%;height:100%;border-radius:0}header{position:absolute;z-index:4;top:0;left:0;right:0;margin:0;padding:8px 12px;background:linear-gradient(#0d0b1ce8,#0d0b1c88);align-items:center;pointer-events:none;gap:12px}header .health{min-width:0}header .hp-track{width:clamp(65px,12vw,160px)}header #kills{font:800 12px monospace;white-space:nowrap}header #shield-durability{max-width:180px!important}footer{position:absolute;z-index:4;right:clamp(95px,17vw,145px);bottom:7px;gap:6px;padding:0;display:flex;flex-wrap:wrap;justify-content:flex-end;pointer-events:none}footer small{display:none}footer button{pointer-events:auto;background:#3a3057dd;border:1px solid #8e76b0;border-radius:8px;padding:7px 10px;font:600 10px monospace;white-space:nowrap}#stats-panel{position:absolute;right:8px;top:44px;z-index:6;background:#161226f0;border:1px solid #77629c;border-radius:10px;max-width:240px;max-height:calc(100dvh - 70px);overflow:auto}#shield-choice{font-size:13px!important}#rotate-overlay{display:none;position:fixed;inset:0;z-index:100;background:radial-gradient(circle at center,#31204b,#0a0914);color:white;align-items:center;justify-content:center;flex-direction:column;gap:18px;text-align:center;padding:24px;font:700 19px system-ui}#rotate-overlay .turn-icon{font-size:64px;animation:turnphone 2s ease-in-out infinite alternate}@keyframes turnphone{to{transform:rotate(90deg)}}#rotate-overlay button{font-size:16px;padding:14px 22px;background:#7654bc}@media(orientation:portrait){#rotate-overlay{display:flex}main{visibility:hidden}}@media(max-height:380px){header{padding:3px 9px}footer button{padding:5px 7px;font-size:9px}}@media(orientation:landscape){#rotate-overlay{display:none}} #settings-panel{position:absolute;right:10px;top:42px;z-index:15;background:#1c1532f5;color:white;border:1px solid #a58bdb;border-radius:12px;padding:12px;width:min(280px,72vw);max-height:calc(100dvh - 50px);overflow:auto;font:12px system-ui}#settings-panel[hidden],#controls-settings[hidden],#edit-hint[hidden]{display:none!important}#settings-panel button{margin:4px;background:#53416f;border:1px solid #8d75ae;padding:7px;border-radius:6px;color:white}#controls-settings{display:grid;gap:6px}#controls-settings label{display:grid;gap:4px}#controls-settings input[type=range]{width:100%;accent-color:#ac83ef}#edit-hint{position:absolute;top:42px;left:50%;transform:translateX(-50%);z-index:15;background:#271b45;padding:8px;border:1px solid #b59aea;border-radius:8px;color:white;font:700 12px monospace} #room-status{position:absolute;top:43px;left:12px;z-index:4;max-width:calc(100vw - 140px);padding:5px 8px;background:#100e1ddd;border:1px solid #6d5b87;border-radius:6px;pointer-events:none;font:700 10px monospace;color:#d7eedf} #boss-hud{position:absolute;z-index:5;top:76px;left:50%;transform:translateX(-50%);width:min(360px,52vw);padding:7px 10px;background:#1a1025ed;border:1px solid #bd8858;border-radius:8px;pointer-events:none;font:10px monospace}#boss-hud[hidden]{display:none!important}.boss-heading{display:flex;justify-content:space-between;gap:8px;color:#f4dba2}.boss-track{height:9px;background:#3d2638;border:1px solid #90677c;margin:4px 0;overflow:hidden;border-radius:3px}#boss-fill{height:100%;background:linear-gradient(90deg,#bb405d,#fa9871);width:100%}#boss-hint{display:block;color:#d6c0e9;font-size:9px} #sandbox-toggle[hidden],#sandbox-panel[hidden],#sandbox-start[hidden],#sandbox-tools[hidden]{display:none!important}#sandbox-panel{position:absolute;z-index:20;right:10px;top:42px;width:min(302px,44vw);max-height:calc(100dvh - 100px);overflow:auto;padding:9px;background:#171c2ff5;border:1px solid #79b6dc;border-radius:10px;font:11px system-ui;color:#e0edfa}.sandbox-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;color:#b5e8ff}#sandbox-panel button{border:1px solid #6886a9;border-radius:6px;background:#334260;padding:6px 7px;font:600 10px system-ui;color:#fff}.sandbox-switches,.sandbox-actions{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}.sandbox-switches button{flex:1}.sandbox-switches button[aria-pressed=true]{background:#245648!important;border-color:#86e6b5!important}#sandbox-panel small{display:block;color:#b4c5dd;font:9px system-ui;line-height:1.35}#sandbox-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;max-height:calc(100dvh - 240px);min-height:72px;overflow:auto;margin:7px 0;padding:2px}.spawn-tile{aspect-ratio:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;min-width:0;padding:4px!important;background:#252d43!important}.spawn-tile svg{width:70%;max-height:52px;flex:1;min-height:28px}.spawn-tile span{font:9px system-ui;line-height:1.1;overflow-wrap:anywhere}.spawn-tile[aria-pressed=true]{border:2px solid #ffe1a0!important;background:#433d4d!important} #sandbox-panel{display:flex;flex-direction:column;overflow:hidden}#sandbox-tools{display:flex;flex-direction:column;min-height:0;flex:1}#sandbox-tools>.sandbox-switches,#sandbox-tools>.sandbox-actions,#sandbox-tools>small{flex-shrink:0}#sandbox-grid{min-height:0;flex:1 1 auto;max-height:calc(100dvh - 260px)} #character-panel[hidden],#loot-panel[hidden],#item-notice[hidden]{display:none!important}
 #coin-count{color:#f7d581;font:800 12px monospace;white-space:nowrap}
 #character-panel{position:absolute;z-index:35;left:10px;top:42px;width:min(370px,60vw);max-height:calc(100dvh - 66px);overflow:auto;padding:12px;background:#191628f5;border:1px solid #aa91cb;border-radius:12px;color:#ece4f8;font:12px system-ui}
 .character-heading{display:flex;justify-content:space-between;align-items:center;gap:10px}.character-heading button{padding:5px 11px;font-size:17px}
@@ -118,7 +118,41 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
 #victory-recap #victory-title{color:#412419}
 #victory-recap button{background:#4c3124;border:1px solid #805333;color:#ffebc3;border-radius:4px}
 
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.25</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · SWING</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><button id="settings-privacy">Privacy policy ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-xp" type="button">+100 XP</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
+
+/* Painted environment plates and sprite atlases are packaged with both builds. */
+#start-screen{background:#14100d}
+#start-screen::before{position:fixed;inset:0;opacity:1;background:center 54%/cover no-repeat url('art/cover.webp')}
+#start-screen::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:linear-gradient(90deg,#0b0a08ab,#0b0a0855 35%,#0b0a08ed 76%),linear-gradient(0deg,#0a0807dd,transparent 70%)}
+.start-layout{z-index:1;max-width:1380px;grid-template-columns:1fr minmax(310px,1fr);gap:clamp(22px,5vw,88px);width:100%;padding:clamp(14px,4vw,55px);border:0;box-shadow:none}
+.start-brand h1{font:bold clamp(36px,7.8vw,116px)/.91 Georgia,serif;letter-spacing:-.07em;margin:0 0 13px;text-wrap:balance;color:#fff1d2;text-shadow:0 4px 24px #000}
+.start-brand>small{color:#d8b784;font-weight:700;letter-spacing:.15em}
+.start-brand p{font:clamp(11px,1.6vw,17px)/1.43 Georgia,serif;color:#f5e4c4}
+.start-brand .brand-line{font-size:clamp(14px,2.3vw,27px);font-weight:bold;color:#ece0c7;margin-top:5px}
+.start-actions{gap:6px;margin-top:12px}
+.save-area{padding:clamp(11px,2vw,27px);background:linear-gradient(155deg,#1c1813f5,#0d0d0df7);border:1px solid #9b754d84;box-shadow:inset 0 0 0 3px #0a0807bc,0 11px 56px #0009}
+.save-area>h2{margin:0 0 6px;color:#f0dfbf;font-size:clamp(13px,2vw,23px)}
+#hero-picker{margin:0 0 7px;gap:5px}
+#hero-picker button{min-width:0;padding:4px 3px 6px;font-size:clamp(9px,1.2vw,13px);background:radial-gradient(ellipse at center,#66503777,#292119),#191512;border-color:#665340}
+#hero-picker button[aria-pressed=true]{border-color:#dbb478;background:radial-gradient(ellipse at center,#af774f85,#4a3223),#211611;box-shadow:inset 0 0 0 2px #261814}
+#hero-picker strong{display:block;color:#fff0cf;font:700 clamp(10px,1.4vw,15px)/1.1 Georgia,serif}
+#hero-picker small{display:block;margin-top:3px;color:#dfc6a7;font:9px/1.18 system-ui}
+.plate-icon{display:inline-block;aspect-ratio:1;background-repeat:no-repeat;background-position:var(--sprite-col) var(--sprite-row);background-size:400% 300%;vertical-align:middle}
+.plate-heroes{background-image:url('art/heroes.webp')}.plate-beasts{background-image:url('art/beasts.webp')}.plate-mobs{background-image:url('art/mobs.webp');background-size:400% 400%}
+#hero-picker .plate-icon{width:clamp(40px,11vh,110px);filter:drop-shadow(0 4px 3px #000a)}
+.save-slot{min-height:105px;padding:10px;background:linear-gradient(155deg,#34261d,#201916);box-shadow:inset 0 0 0 2px #100c0cb3;border-color:#6e563c}
+.save-slot h2{margin:0 0 7px;color:#d7b680}
+.save-slot p{margin:0 0 6px;color:#f4e4cc}
+.save-slot button{margin-top:4px}
+#start-message{min-height:0;margin-bottom:0}
+.save-slot .secondary{background:#392c23;border-color:#8c6c4d}
+.index-tile .plate-icon{width:58px}
+.index-entry-heading .plate-icon{width:54px}
+.spawn-tile .plate-icon{width:min(73%,52px)}
+.index-tile,.index-stat,#bestiary-detail{background:linear-gradient(145deg,#3b2b21,#211b17)}
+@media(max-height:430px){.start-layout{padding:12px 3vw;gap:3vw}.start-brand h1{font-size:clamp(28px,8vh,70px)}.save-area{padding:7px 9px}.save-slot{min-height:78px;padding:7px}.save-slot button{padding:5px}.save-slot h2{margin-bottom:4px}#hero-choice-hint{margin:2px 0 6px}.start-brand p{font-size:11px;margin-bottom:6px}.index-tile .plate-icon{width:49px}}
+@media(orientation:landscape) and (max-width:670px){.start-layout{grid-template-columns:minmax(120px,.7fr) minmax(235px,1fr)}}
+
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.26</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · SWING</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><button id="settings-privacy">Privacy policy ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-xp" type="button">+100 XP</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
  <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
  <small id="character-coins"></small>
  <div id="character-stats"></div>
@@ -137,8 +171,8 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot start screen">
  <div class="start-layout">
-<div class="start-brand"><div class="start-emblem" aria-hidden="true"><i></i><b></b></div><small>DUNGEON DOT · V8.24</small><h1>Three lives.<br>No mercy.</h1><p>50 HP. Brutal enemies. Rare hearts and extra lives. Lose all three lives and the run ends.</p><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button><button id="start-privacy">Privacy policy</button></div></div>
-  <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true">⚪ STICK DOT<br>MELEE PATH</button><button id="hero-archer" type="button" aria-pressed="false">🏹 SLING DOT<br>RANGED PATH</button><button id="hero-mage" type="button" aria-pressed="false">🔮 APPRENTICE DOT<br>DRAW RUNES</button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
+<div class="start-brand"><h1>Dungeon Dot</h1><p class="brand-line">Three lives. No mercy.</p><p>Fight through the dungeons, evolve your hero, and defeat the third boss.</p><small>V8.26</small><div class="start-actions"><button id="resume-current" hidden>Resume current game</button><button id="start-index">Enemy index</button><button id="start-sound">Sound settings</button><button id="start-privacy">Privacy policy</button></div></div>
+  <div class="save-area"><h2>Choose your hero</h2><div id="hero-picker" role="group" aria-label="Hero for new games"><button id="hero-classic" type="button" aria-pressed="true"><span class="plate-icon plate-heroes" aria-hidden="true" style="--sprite-col:0%;--sprite-row:0%"></span><strong>Stick Dot</strong><small>Melee</small></button><button id="hero-archer" type="button" aria-pressed="false"><span class="plate-icon plate-heroes" aria-hidden="true" style="--sprite-col:0%;--sprite-row:50%"></span><strong>Sling Dot</strong><small>Ranged</small></button><button id="hero-mage" type="button" aria-pressed="false"><span class="plate-icon plate-heroes" aria-hidden="true" style="--sprite-col:0%;--sprite-row:100%"></span><strong>Apprentice Dot</strong><small>Rune magic</small></button></div><small id="hero-choice-hint">Classic keeps the original bat.</small><h2>Choose a save slot</h2><div id="save-slots"></div><p id="start-message"></p></div>
  </div>
 </section>
 <section id="bestiary-panel" hidden aria-label="Enemy index">
@@ -188,7 +222,7 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
 <section id="element-choice" hidden role="dialog" aria-modal="true" aria-labelledby="element-title"><div class="element-dialog"><strong id="element-title">ELEMENT UNLOCKED</strong><p id="element-explain">Choose your first elemental power.</p><div id="element-options"></div></div></section>
 <small id="save-indicator" hidden></small>
 <div id="edit-hint" hidden>DRAG JOYSTICKS + DASH <button id="edit-done">DONE ✓</button></div></main><script>
-(()=>{const c=document.querySelector('#game'),g=c.getContext('2d');let viewW=640,W=480,F=480;const H=360,VIEW_F=304,R=35;const arena=document.querySelector('#arena');function resizeArena(){const r=arena.getBoundingClientRect();if(!r.width||!r.height)return;const oldW=viewW;viewW=Math.max(360,Math.round(H*r.width/r.height));c.width=viewW;c.height=H;try{if(oldW!==viewW&&typeof controls!=='undefined'){controls.positions=controls.positions.map(p=>[p[0]*viewW/oldW,p[1]]);sticks.forEach((s,i)=>{s.x=controls.positions[i][0];s.y=controls.positions[i][1]})}}catch(err){}}resizeArena();window.addEventListener('resize',resizeArena);window.visualViewport?.addEventListener('resize',resizeArena);
+(()=>{const c=document.querySelector('#game'),g=c.getContext('2d');let viewW=640,W=480,F=480,renderScale=1;const H=360,VIEW_F=304,R=35;const arena=document.querySelector('#arena');function resizeArena(){const r=arena.getBoundingClientRect();if(!r.width||!r.height)return;const oldW=viewW;viewW=Math.max(360,Math.round(H*r.width/r.height));renderScale=Math.max(1,Math.min(2,r.height*(window.devicePixelRatio||1)/H));c.width=Math.round(viewW*renderScale);c.height=Math.round(H*renderScale);try{if(oldW!==viewW&&typeof controls!=='undefined'){controls.positions=controls.positions.map(p=>[p[0]*viewW/oldW,p[1]]);sticks.forEach((s,i)=>{s.x=controls.positions[i][0];s.y=controls.positions[i][1]})}}catch(err){}}resizeArena();window.addEventListener('resize',resizeArena);window.visualViewport?.addEventListener('resize',resizeArena);
 const PLAYER_REGEN=.6;
 const SHIELD_RADIUS=14;
 const SHIELD_HALF_ARC=Math.PI/3;
@@ -415,153 +449,109 @@ function artPath(ctx,points,fill,stroke,width=1){
 function artOval(ctx,x,y,rx,ry,color,angle=0){
  ctx.beginPath();ctx.ellipse(x,y,rx,ry,angle,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
 }
-function artGlow(ctx,x,y,rx,ry,color){
- ctx.save();ctx.translate(x,y);ctx.scale(rx,ry);
- const light=ctx.createRadialGradient(0,0,0,0,0,1);
- light.addColorStop(0,color);light.addColorStop(1,'#0000');
- ctx.fillStyle=light;ctx.fillRect(-1,-1,2,2);ctx.restore();
-}
-function drawWorldFloor(ctx,id,w,h,random){
- if(id==='basic'){
-  for(let y=17,row=0;y<h-15;y+=27,row++){
-   for(let x=16-(row%2)*26;x<w-14;x+=52){
-    const left=Math.max(14,x),width=Math.min(x+49,w-14)-left;
-    if(width<3)continue;
-    ctx.fillStyle=random()<.36?'#392f2a':'#3e3630';ctx.fillRect(left,y,width,24);
-    ctx.fillStyle='#8e725448';ctx.fillRect(left+1,y+1,width-2,1);
-    artPath(ctx,[[left+3,y+19],[left+width*.46,y+16],[left+width*.65,y+22]],null,'#251c1a82');
-   }
-  }
- }else if(id==='red'){
-  ctx.lineWidth=2;
-  for(let x=18;x<w-17;x+=74){
-   ctx.fillStyle='#0e0b10';ctx.fillRect(x,12,6,h-24);
-   ctx.fillStyle='#b0633d68';ctx.fillRect(x+2,13,2,h-26);
-   for(let y=14;y<h-14;y+=38){
-    const width=Math.min(63,w-x-15);
-    ctx.fillStyle=random()<.4?'#3a2b2a':'#493330';ctx.fillRect(x+8,y,Math.max(0,width-6),35);
-    ctx.strokeStyle='#20191a';ctx.strokeRect(x+8,y,Math.max(0,width-6),35);
-    for(const dx of [12,width-2])artOval(ctx,x+dx,y+5,1.6,1.6,'#8d6956');
-   }
-  }
- }else if(id==='green'){
-  for(let y=26;y<h-25;y+=24){
-   for(let x=29;x<w-25;x+=27){
-    const cx=x+(random()-.5)*13,cy=y+(random()-.5)*10;
-    artOval(ctx,cx,cy,8+random()*10,4+random()*6,random()<.24?'#4d5842':'#384637',random()*2);
-   }
-  }
-  for(const x of [22,w-22])for(let y=34;y<h-23;y+=26){
-   artPath(ctx,[[x,y-25],[x+(w/2-x)*.045,y-7],[x,y+13]],null,'#171f17',6);
-   artOval(ctx,x+(w/2-x)*.045,y,4,9,'#586341',.65);
-  }
- }else{
-  for(let y=22,row=0;y<h-10;y+=48,row++)for(let x=22-(row%2)*25;x<w-13;x+=50){
-   const cx=x+(random()-.5)*12,cy=y+(random()-.5)*11;
-   artPath(ctx,[[cx-25,cy],[cx,cy-27],[cx+26,cy],[cx+3,cy+24]],random()<.27?'#344961':'#283a51','#7fa7bf31');
-   artPath(ctx,[[cx-24,cy],[cx+3,cy+24],[cx+4,cy+10],[cx+26,cy]],'#182a3e43');
-  }
+
+const WORLD_PAINTINGS={basic:'keep',red:'forge',green:'hollow',blue:'vault'};
+const HERO_PLATES={stick:0,sword:1,bat:2,flail:3,sling:4,bow:5,crossbow:6,javelin:7,apprentice:8,summoner:9,necromancer:10,pyromancer:11};
+const BOSS_PLATES={gatekeeper:0,crystal:1,slime:2,furnace:3,hydra:4,phoenix:5,briar:6,matriarch:7,mire:8,glacier:9,oracle:10,avalanche:11};
+const ENEMY_PLATES={
+ square:0,round:1,healer:2,merge:3,splitter:4,mini:4,armored:5,fire:6,water:7,electric:8,
+ rubber:1,poison:9,magnet:10,crystal:10,bomb:12,mirror:10,sponge:2,regenerator:2,bloodletter:0,gravity:3,
+ laser:10,shooter:11,scatter:11,frostcaster:14,spitter:9,cannon:11,seeker:8,bloodcaster:11,
+ emberling:6,cinderknight:12,thornling:9,rootguard:13,icewisp:14,frostguard:5,royalSlime:1
+};
+const ART_ROWS={heroes:3,beasts:3,mobs:4};
+const paintings={};
+function loadArtwork(){
+ if(typeof Image!=='function')return;
+ for(const name of [...Object.values(WORLD_PAINTINGS),...Object.keys(ART_ROWS)]){
+  const image=new Image();image.decoding='async';image.src='art/'+name+'.webp';paintings[name]=image;
  }
 }
-function drawWorldFixture(ctx,id,color){
- if(id==='basic'){
-  artPath(ctx,[[-21,2],[-19,-20],[-7,-34],[0,-39],[7,-34],[19,-20],[21,2]],'#211a1a','#70604e',4);
-  for(const x of [-10,0,10]){ctx.fillStyle='#54463d';ctx.fillRect(x-1,-21,2,21)}
-  artPath(ctx,[[-5,-2],[7,-2],[6,9],[-3,9]],'#8e5c34','#181415',1.5);
-  artGlow(ctx,1,-13,37,31,'#ff9e3b41');
-  artPath(ctx,[[-5,-5],[-8,-13],[-1,-18],[2,-25],[8,-13],[6,-5]],'#ffc474','#bd693a');
- }else if(id==='red'){
-  ctx.fillStyle='#171416';ctx.fillRect(-25,-24,50,32);
-  ctx.strokeStyle='#865444';ctx.lineWidth=3;ctx.strokeRect(-25,-24,50,32);
-  artGlow(ctx,0,-10,43,28,'#ff703a4a');
-  for(let x=-19;x<20;x+=8){
-   ctx.fillStyle='#be5834';ctx.fillRect(x,-19,6,21);
-   ctx.fillStyle='#372326';ctx.fillRect(x+3,-20,3,24);
-   ctx.fillStyle='#f69e5e';ctx.fillRect(x,-8,2,5);
-  }
-  for(const x of [-28,28])artPath(ctx,[[x,11],[x,-21],[x,-34]],null,'#584041',5);
- }else if(id==='green'){
-  artPath(ctx,[[-26,5],[-24,-20],[-13,-34],[0,-45],[13,-34],[24,-20],[26,5]],'#243129','#6a7860',5);
-  artPath(ctx,[[-8,3],[-11,-12],[-3,-18],[3,-29],[15,-39]],null,'#789354',3);
-  for(const [x,y,angle] of [[-15,-21,.8],[-5,-13,-.9],[4,-31,.9],[13,-32,-.8],[15,-11,.5]]){
-   artOval(ctx,x,y,3,8,'#829863',angle);
-  }
-  artGlow(ctx,-18,-3,22,17,'#d1cf723c');
-  for(const x of [-23,-17,-12])artOval(ctx,x,-4-(x%4),3,2,'#ddd18b');
- }else{
-  artPath(ctx,[[-23,5],[-18,-18],[0,-44],[18,-18],[23,5]],'#17243a','#8a9fb1',3);
-  artPath(ctx,[[0,-39],[13,-17],[0,3],[-13,-17]],'#496882','#17243a',2);
-  artPath(ctx,[[0,-35],[0,2],[-11,-17]],'#84a9c3','#2a3b56');
-  artPath(ctx,[[0,-28],[9,-16],[0,-5],[-8,-16]],'#a38bbb','#e1c1da');
-  artGlow(ctx,0,-11,31,23,'#a1caf139');
- }
- artPath(ctx,[[-28,7],[28,7]],null,color,2);
+function readyPainting(name){
+ const image=paintings[name];
+ return image?.complete&&image.naturalWidth>0?image:null;
 }
-function drawWorldBorder(ctx,id,w,h,art){
- ctx.fillStyle='#151419';ctx.fillRect(0,0,w,15);ctx.fillRect(0,h-15,w,15);
- ctx.fillRect(0,0,15,h);ctx.fillRect(w-15,0,15,h);
- ctx.strokeStyle=art.trim;ctx.lineWidth=2;ctx.strokeRect(13,13,w-26,h-26);
- for(const [x,y,angle,span] of [[0,15,0,w],[w-15,0,Math.PI/2,h],[w,h-15,Math.PI,w],[15,h,-Math.PI/2,h]]){
-  ctx.save();ctx.translate(x,y);ctx.rotate(angle);
-  for(let offset=37;offset<span-32;offset+=32){
-   ctx.fillStyle=art.metal;ctx.fillRect(offset,-11,28,8);
-   ctx.fillStyle=art.trim;ctx.fillRect(offset,-11,28,1);
-  }
-  for(const fraction of [.20,.80]){
-   ctx.save();ctx.translate(span*fraction,43);drawWorldFixture(ctx,id,art.trim);ctx.restore();
-  }
-  ctx.restore();
+function paintRoomPlate(ctx,image,w,h){
+ // Keep the masonry at the edges in proportion while scaling the walkable floor.
+ const sourceX=image.naturalWidth,sourceY=image.naturalHeight;
+ const x= [0,sourceX*.12,sourceX*.88,sourceX],y=[0,sourceY*.12,sourceY*.88,sourceY];
+ const edge=Math.min(w,h)*.12;
+ const xx=[0,edge,w-edge,w],yy=[0,edge,h-edge,h];
+ for(let row=0;row<3;row++)for(let col=0;col<3;col++){
+  ctx.drawImage(image,x[col],y[row],x[col+1]-x[col],y[row+1]-y[row],xx[col],yy[row],xx[col+1]-xx[col],yy[row+1]-yy[row]);
  }
+}
+function drawPlate(atlas,cell,x,y,size){
+ const image=readyPainting(atlas);
+ if(!image||!Number.isInteger(cell))return false;
+ const col=cell%4,row=Math.floor(cell/4),width=image.naturalWidth/4,height=image.naturalHeight/ART_ROWS[atlas];
+ g.drawImage(image,col*width,row*height,width,height,x-size/2,y-size/2,size,size);
+ return true;
+}
+function plateIcon(atlas,cell){
+ const style='--sprite-col:'+(cell%4*100/3)+'%;--sprite-row:'+(Math.floor(cell/4)*100/(ART_ROWS[atlas]-1))+'%';
+ return '<span class="plate-icon plate-'+atlas+'" aria-hidden="true" style="'+style+'"></span>';
+}
+function drawPaintedHero(){
+ const atlas=progress?.mageSchool==='arcane'?'mobs':'heroes';
+ let path=hero==='mage'?progress?.mageSchool||'apprentice':equippedWeapon();
+ if(path==='spear')path='javelin';
+ const cell=atlas==='mobs'?15:HERO_PLATES[path]??HERO_PLATES.stick;
+ const moving=Math.hypot(p.vx||0,p.vy||0)>25&&!reducedWorldMotion.matches;
+ const lift=moving?Math.sin(arenaTime*21)*1.05:0;
+ artOval(g,p.x,p.y+5,12,7,'#090b0de0');
+ g.save();g.strokeStyle=playerPoisonGlow>0?'#aaff63':'#f8dfac';g.lineWidth=1.4;
+ g.beginPath();g.ellipse(p.x,p.y+3,11,7,0,0,Math.PI*2);g.stroke();
+ g.translate(p.x,p.y-2-lift);
+ if(Math.cos(p.a)<0)g.scale(-1,1);
+ const drawn=drawPlate(atlas,cell,0,0,29);
+ g.restore();
+ return drawn;
+}
+function drawPaintedEnemy(enemy,color){
+ const id=enemy.bossMinion?'royalSlime':enemy.shape,cell=ENEMY_PLATES[id];
+ if(!Number.isInteger(cell)||!readyPainting('mobs')||enemy.isTreasure)return false;
+ const {x,y,r}=enemy;
+ const moving=Math.hypot(enemy.vx||0,enemy.vy||0)>33&&!reducedWorldMotion.matches;
+ const lift=moving?Math.sin(arenaTime*17+x*.05)*Math.min(1.5,r*.1):0;
+ artOval(g,x,y+r*.45,r+1,r*.64,'#080a0ce0');
+ g.save();
+ g.lineWidth=1.35;g.strokeStyle=color;g.beginPath();g.ellipse(x,y+r*.3,r*.92,r*.67,0,0,Math.PI*2);g.stroke();
+ g.translate(x,y-r*.12-lift);if(enemy.vx<-.4)g.scale(-1,1);
+ drawPlate('mobs',cell,0,0,r*2.65);
+ g.restore();
+ if(enemy.origins?.length===2){
+  enemy.origins.forEach((origin,i)=>artOval(g,x+(i?3:-3),y+r+3,2,2,HYBRID_COLORS[origin]||color));
+ }
+ return true;
+}
+function drawPaintedBoss(unit,flash){
+ const cell=BOSS_PLATES[unit.variant||unit.kind];
+ if(!readyPainting('beasts')||!Number.isInteger(cell))return false;
+ const r=unit.r,paint=BOSS_BLUEPRINTS[unit.variant||unit.kind];
+ const size=r*(unit.variant==='phoenix'?3.05:2.68);
+ g.save();
+ if(flash)g.filter='brightness(1.55)';
+ const float=unit.kind==='crystal'&&!reducedWorldMotion.matches?Math.sin(arenaTime*3)*2:0;
+ drawPlate('beasts',cell,0,-r*.13-float,size);
+ g.restore();
+ if(unit.kind==='crystal'){
+  for(let i=0;i<unit.armour;i++){
+   const a=arenaTime*.85+i*Math.PI/2,x=Math.cos(a)*(r+10),y=Math.sin(a)*(r+10);
+   artPath(g,[[x,y-5],[x+4,y],[x,y+5],[x-4,y]],paint?.color||'#b5ddf9','#e9f6ff');
+  }
+ }
+ if(unit.state==='stunned'){g.fillStyle='#fff2b8';g.textAlign='center';g.font='bold 11px monospace';g.fillText('STUNNED',0,-size/2-4)}
+ return true;
 }
 
-function drawWorldArchitecture(ctx,id,w,h,art){
- for(const side of [-1,1]){
-  ctx.save();ctx.translate(side<0?44:w-44,h/2);ctx.scale(-side,1);
-  if(id==='basic'){
-   for(const y of [-95,95]){
-    artPath(ctx,[[-31,y-15],[5,y-15],[23,y-10],[23,y+10],[5,y+15],[-31,y+15]],'#2b2422','#6a5540',2);
-    artPath(ctx,[[3,y-12],[3,y+12],[18,y+8]],null,'#846b4f');
-   }
-   artGlow(ctx,24,-79,77,57,'#da8f4a25');
-   artGlow(ctx,24,79,77,57,'#da8f4a25');
-  }else if(id==='red'){
-   for(const y of [-99,99]){
-    artGlow(ctx,10,y,70,40,'#cd512f41');
-    artPath(ctx,[[-31,y-7],[5,y-7],[26,y-20],[57,y-20]],null,'#18131a',13);
-    artPath(ctx,[[-31,y-7],[5,y-7],[26,y-20],[57,y-20]],null,'#70463c',7);
-    artPath(ctx,[[-25,y-9],[4,y-9],[25,y-22],[56,y-22]],null,'#a8684f',1);
-   }
-  }else if(id==='green'){
-   for(const y of [-100,100]){
-    const arch=[[-30,y+24],[-30,y-4],[-17,y-22],[0,y-30],[17,y-22],[30,y-4],[30,y+24]];
-    artPath(ctx,arch,null,'#222b24',11);
-    artPath(ctx,arch,null,'#67715c',5);
-    artPath(ctx,[[-27,y+23],[-9,y+15],[5,y+17],[18,y+6],[31,y+8],[43,y-3]],null,'#3d4930',6);
-    for(let i=0;i<4;i++)artOval(ctx,-11+i*15,y+14-i*4,5,9,'#74815a',.8+i*.3);
-   }
-   artGlow(ctx,33,1,109,57,'#b9bf6526');
-  }else{
-   for(const y of [-108,108]){
-    const points=[[-18,y],[-2,y-37],[6,y-18],[16,y-28],[27,y+9],[7,y+20]];
-    artGlow(ctx,14,y,90,56,'#8db9da37');
-    artPath(ctx,points,'#54718b','#6d8aa2',2);
-    artPath(ctx,[points[1],points[2],points[5],points[0]],'#719bb5');
-    artPath(ctx,[points[3],points[4],points[5]],'#3d546e');
-   }
-   artPath(ctx,[[14,-42],[126,-24],[138,4],[107,22],[14,39]],'#af98be16');
-   artPath(ctx,[[14,-24],[102,-13],[115,0],[94,13],[14,23]],'#97c4d31c');
-  }
-  artPath(ctx,[[-24,-29],[-24,29]],null,art.trim,2);
-  ctx.restore();
- }
-}
 function drawWorldSeal(ctx,id,w,h,kind,art){
  const boss=kind==='boss';
  if(!boss&&kind!=='start'&&kind!=='cursed')return;
  ctx.save();ctx.translate(w/2,h/2);
  const size=boss?95:kind==='start'?66:74;
  const color=kind==='cursed'?'#bc83e8':art.light;
- ctx.globalAlpha=boss?.55:.47;
+ ctx.globalAlpha=boss?.27:.19;
  if(id==='red'){
   ctx.fillStyle='#211719';ctx.fillRect(-size,-size,size*2,size*2);
   for(let x=-size;x<=size;x+=9)artPath(ctx,[[x,-size],[x,size]],null,'#603b31',2);
@@ -594,31 +584,28 @@ function drawWorldSeal(ctx,id,w,h,kind,art){
 }
 function drawWorldScenery(){
  const {kind,id:roomId}=currentRoom;
- const id=worldArtId(selectedBiome,kind),key=[id,kind,roomId,W,F].join(':');
+ const id=worldArtId(selectedBiome,kind),painting=readyPainting(WORLD_PAINTINGS[id]);
+ const key=[id,kind,roomId,W,F,!!painting,renderScale].join(':');
  const art=WORLD_ART[id];
  if(worldScenery?.key!==key){
-  const layer=document.createElement('canvas');layer.width=W;layer.height=F;
-  const ctx=layer.getContext('2d');
-  let seed=(Number(roomId)||0)+1987;
-  const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296};
-  const ground=ctx.createLinearGradient(0,0,W*.35,F);
-  art.ground.forEach((color,i)=>ground.addColorStop(i/2,color));
-  ctx.fillStyle=ground;ctx.fillRect(0,0,W,F);
-  ctx.save();ctx.beginPath();ctx.rect(14,14,W-28,F-28);ctx.clip();drawWorldFloor(ctx,id,W,F,random);ctx.restore();
-  drawWorldArchitecture(ctx,id,W,F,art);
-  drawWorldSeal(ctx,id,W,F,kind,art);
-  for(let i=0;i<W*F/160;i++){
-   const x=14+random()*(W-28),y=14+random()*(F-28);
-   ctx.fillStyle=random()<.62?'#100c121e':'#fff8da12';ctx.fillRect(x,y,1+random()*2,1);
+  const layer=document.createElement('canvas');layer.width=Math.ceil(W*renderScale);layer.height=Math.ceil(F*renderScale);
+  const ctx=layer.getContext('2d');ctx.scale(layer.width/W,layer.height/F);
+  if(painting){
+   paintRoomPlate(ctx,painting,W,F);
+   const shade=ctx.createRadialGradient(W/2,F/2,Math.min(W,F)*.12,W/2,F/2,Math.hypot(W,F)*.55);
+   shade.addColorStop(0,id==='green'?'#0b130d4f':'#080b101c');
+   shade.addColorStop(1,'#08070aaa');
+   ctx.fillStyle=shade;ctx.fillRect(0,0,W,F);
+  }else{
+   const ground=ctx.createLinearGradient(0,0,W*.35,F);
+   art.ground.forEach((color,i)=>ground.addColorStop(i/2,color));
+   ctx.fillStyle=ground;ctx.fillRect(0,0,W,F);
   }
-  const atmosphere=ctx.createRadialGradient(W/2,F/2,Math.min(W,F)*.18,W/2,F/2,Math.hypot(W,F)*.54);
-  atmosphere.addColorStop(0,'#0000');atmosphere.addColorStop(1,'#090712d9');
-  ctx.fillStyle=atmosphere;ctx.fillRect(0,0,W,F);
-  drawWorldBorder(ctx,id,W,F,art);
+  drawWorldSeal(ctx,id,W,F,kind,art);
   worldScenery={key,layer};
   document.querySelector('main').dataset.world=id;
  }
- g.drawImage(worldScenery.layer,0,0);
+ g.drawImage(worldScenery.layer,0,0,W,F);
  // Decorative particles stay dim and close to the perimeter, behind combat.
  const ambienceTime=reducedWorldMotion.matches?0:arenaTime;
  const particleColor={basic:'#edb675',red:'#ef9a63',green:'#b8cb83',blue:'#a8d2eb'}[id];
@@ -634,6 +621,7 @@ function drawWorldScenery(){
  return art;
 }
 function drawHeroPortrait(){
+ if(drawPaintedHero())return;
  const path=equippedWeapon();
  const aimingLeft=Math.cos(p.a)<0;
  g.save();g.translate(p.x,p.y);if(aimingLeft)g.scale(-1,1);
@@ -798,7 +786,11 @@ function updateBiomeWorld(dt){
 }
 function drawZone(zone){
  const color=zone.type==='fire'?'#fa9754':zone.type==='poison'?'#9cd16a':zone.type==='roots'?'#a9bd6a':'#9cd8ff';
- g.save();g.globalAlpha=zone.active?.5:.24+.12*Math.sin(arenaTime*16);g.fillStyle=color;g.strokeStyle=color;g.lineWidth=2;g.beginPath();g.arc(zone.x,zone.y,zone.r,0,Math.PI*2);g.fill();g.stroke();g.restore();
+ g.save();g.beginPath();g.arc(zone.x,zone.y,zone.r,0,Math.PI*2);
+ g.globalAlpha=zone.active?.42:.17;g.fillStyle=color;g.fill();
+ g.globalAlpha=.88;g.strokeStyle='#100e14';g.lineWidth=5;g.stroke();
+ g.globalAlpha=zone.active?.95:.68+.25*Math.sin(arenaTime*14);g.setLineDash(zone.active?[]:[5,3]);
+ g.strokeStyle=color;g.lineWidth=2;g.stroke();g.restore();
 }
 function drawBiomeWorld(){
  g.save();const biome=currentBiome();
@@ -2193,7 +2185,6 @@ function enemyDescription(entry){
  return descriptions[entry.id]||'A dungeon enemy. Watch its movement and use the bat to control the fight.';
 }
 function bestiaryPortrait(entry){
- if(entry.id==='royalSlime')return sandboxEnemyIcon({id:'round',color:entry.color,name:entry.name});
  return sandboxEnemyIcon(entry);
 }
 function bestiaryDepthLabel(depth){
@@ -3111,7 +3102,7 @@ function drawBossFight(){
   g.save();g.translate(unit.x,unit.y);
   g.globalAlpha=.3;g.fillStyle='#000';g.beginPath();g.ellipse(0,unit.r*.5,unit.r*1.2,unit.r*.45,0,0,Math.PI*2);g.fill();g.globalAlpha=1;g.translate(0,-lift);
   const flash=unit.flash>0;
-  if(drawBiomeBossBody(unit,flash)){g.restore();continue}
+  if(drawPaintedBoss(unit,flash)||drawBiomeBossBody(unit,flash)){g.restore();continue}
   if(unit.kind==='gatekeeper'){
    g.fillStyle=flash?'#ffe9b3':unit.state==='chargeWarn'?'#c44e47':unit.state==='stunned'?'#8d8194':'#5b5267';g.fillRect(-unit.r,-unit.r,unit.r*2,unit.r*2);
    g.strokeStyle='#e1bc78';g.lineWidth=4;g.strokeRect(-unit.r,-unit.r,unit.r*2,unit.r*2);
@@ -3222,6 +3213,9 @@ function spawnSandboxEnemy(id){
  sandbox.selected=id;sandbox.notice=item.name+' spawned.';for(const tile of sandboxTiles)tile.button.setAttribute('aria-pressed',String(tile.id===id));hud();return true;
 }
 function sandboxEnemyIcon(item){
+ const atlas=item.id.startsWith('boss:')?'beasts':'mobs';
+ const cell=atlas==='beasts'?BOSS_PLATES[item.id.slice(5)]:ENEMY_PLATES[item.id];
+ if(Number.isInteger(cell))return plateIcon(atlas,cell);
  if(BIOME_ENEMIES[item.id]||item.id.startsWith('boss:')&&BOSS_BLUEPRINTS[item.id.slice(5)]?.biome!=='basic')return biomeCatalogIcon(item);
  const id=item.id,color=item.color;
  let body=id==='square'?'<rect x="14" y="14" width="36" height="36" rx="2"/>':id==='crystal'||id==='boss:crystal'?'<path d="M32 8L53 32 32 56 11 32Z"/>':'<circle cx="32" cy="33" r="20"/>';
@@ -5374,7 +5368,7 @@ function updateFloorTraps(){
 }
 function drawRoomTerrain(){
  g.save();
- if(roomTiles){g.strokeStyle='#ffffff0d';g.lineWidth=.7;for(let x=TILE_SIZE;x<W;x+=TILE_SIZE){g.beginPath();g.moveTo(x,14);g.lineTo(x,F-14);g.stroke()}for(let y=TILE_SIZE;y<F;y+=TILE_SIZE){g.beginPath();g.moveTo(14,y);g.lineTo(W-14,y);g.stroke()}}
+ if(roomTiles){g.strokeStyle='#ffffff06';g.lineWidth=.7;for(let x=TILE_SIZE;x<W;x+=TILE_SIZE){g.beginPath();g.moveTo(x,14);g.lineTo(x,F-14);g.stroke()}for(let y=TILE_SIZE;y<F;y+=TILE_SIZE){g.beginPath();g.moveTo(14,y);g.lineTo(W-14,y);g.stroke()}}
  for(const a of floorGaps){g.fillStyle='#090812';g.fillRect(a.x,a.y,a.w,a.h);g.strokeStyle='#6b586d';g.lineWidth=3;g.strokeRect(a.x,a.y,a.w,a.h)}
  for(const a of floorBridges){g.fillStyle='#5b5264';g.fillRect(a.x,a.y,a.w,a.h);g.strokeStyle='#c3b6af';g.lineWidth=2;g.strokeRect(a.x,a.y,a.w,a.h)}
  for(const a of floorTraps){const {active,warning}=trapPhase(a);g.fillStyle=active?'#b24353':warning?'#a37843':'#342839';g.fillRect(a.x,a.y,a.w,a.h);g.strokeStyle=active?'#ffb0a5':'#816478';g.lineWidth=2;g.strokeRect(a.x,a.y,a.w,a.h)}
@@ -5893,7 +5887,8 @@ checkRoomDoors(dt);}
 resolvePlayerDeath();
 showVictoryRecap();
 // Keep the camera centered on the player; clip the world above the fixed controls.
-g.fillStyle='#080812';g.fillRect(0,0,viewW,H);
+g.setTransform(c.width/viewW,0,0,c.height/H,0,0);
+g.fillStyle='#0a090a';g.fillRect(0,0,viewW,H);
 g.save();g.beginPath();g.rect(0,0,viewW,VIEW_F);g.clip();
 g.translate(viewW/2-p.x,VIEW_F/2-p.y);
 const worldArt=drawWorldScenery();
@@ -5939,24 +5934,25 @@ for(let e of enemies){
 let phasing=(e.phaseIn||0)>0;if(phasing){g.save();g.globalAlpha=.12+.88*(1-e.phaseIn/1.15);}
 if(e.healGlow>0){g.save();g.globalAlpha=.36*e.healGlow/.75;g.fillStyle='#5eff83';g.beginPath();g.arc(e.x,e.y,e.r+10,0,Math.PI*2);g.fill();g.restore()}
 g.fillStyle=e.isTreasure?'#ffe07b':BIOME_ENEMIES[e.shape]?BIOME_ENEMIES[e.shape].color:e.bossMinion?'#8ce68b':e.poisonGlow>0?'#8dff45':e.cool>0?'#ffb2a9':e.shape==='square'?'#ec5274':e.shape==='round'?'#55c9ce':e.shape==='healer'?'#60df79':e.shape==='splitter'?'#ff9e48':e.shape==='mini'?'#ffca73':e.shape==='armored'?'#d9ad50':e.shape==='fire'?'#ff6b2f':e.shape==='water'?'#4aabff':e.shape==='electric'?'#ffe75c':e.shape==='rubber'?'#7ce77c':e.shape==='poison'?'#9bdc38':e.shape==='magnet'?(e.magnetMode===-1?'#ff6079':'#5cbcff'):e.shape==='crystal'?'#86f5f7':e.shape==='bomb'?'#ef6646':e.shape==='mirror'?'#d9e5f4':e.shape==='sponge'?'#e2d469':e.shape==='regenerator'?'#ff82c4':e.shape==='bloodletter'?'#b5284b':e.shape==='gravity'?'#a36bff':RANGED_COLOR[e.shape]||'#b388fa';
-g.beginPath();if(e.shape==='square')g.rect(e.x-e.r,e.y-e.r,e.r*2,e.r*2);else g.arc(e.x,e.y,e.r,0,Math.PI*2);g.fill();g.strokeStyle='#18141c';g.lineWidth=2;g.stroke();
-if(e.origins&&e.origins.length===2){g.save();g.beginPath();g.arc(e.x,e.y,e.r,0,Math.PI*2);g.clip();g.fillStyle=HYBRID_COLORS[e.origins[0]]||'#b388fa';g.fillRect(e.x-e.r,e.y-e.r,e.r,e.r*2);g.fillStyle=HYBRID_COLORS[e.origins[1]]||'#55c9ce';g.fillRect(e.x,e.y-e.r,e.r,e.r*2);g.strokeStyle='#f4e9ff';g.globalAlpha=.65;g.lineWidth=1.5;g.beginPath();g.moveTo(e.x,e.y-e.r);g.lineTo(e.x,e.y+e.r);g.stroke();g.restore()}
+const painted=drawPaintedEnemy(e,g.fillStyle);
+if(!painted){g.beginPath();if(e.shape==='square')g.rect(e.x-e.r,e.y-e.r,e.r*2,e.r*2);else g.arc(e.x,e.y,e.r,0,Math.PI*2);g.fill();g.strokeStyle='#18141c';g.lineWidth=2;g.stroke();}
+if(!painted&&e.origins&&e.origins.length===2){g.save();g.beginPath();g.arc(e.x,e.y,e.r,0,Math.PI*2);g.clip();g.fillStyle=HYBRID_COLORS[e.origins[0]]||'#b388fa';g.fillRect(e.x-e.r,e.y-e.r,e.r,e.r*2);g.fillStyle=HYBRID_COLORS[e.origins[1]]||'#55c9ce';g.fillRect(e.x,e.y-e.r,e.r,e.r*2);g.strokeStyle='#f4e9ff';g.globalAlpha=.65;g.lineWidth=1.5;g.beginPath();g.moveTo(e.x,e.y-e.r);g.lineTo(e.x,e.y+e.r);g.stroke();g.restore()}
 if(e.swordBleedUntil>arenaTime){g.save();g.globalAlpha=.45;g.strokeStyle='#ff244b';g.lineWidth=3;g.beginPath();g.arc(e.x,e.y,e.r+3,0,Math.PI*2);g.stroke();g.restore()}
 if(e.shape==='gravity'){g.save();g.strokeStyle='#e6c6ff';g.lineWidth=2;g.beginPath();g.arc(e.x,e.y,6,0,Math.PI*1.5);g.stroke();g.fillStyle='#170d29';g.beginPath();g.arc(e.x,e.y,3,0,Math.PI*2);g.fill();g.restore()}
 if(e.shape==='laser'){g.save();g.strokeStyle='#fff';g.lineWidth=2;g.beginPath();g.arc(e.x,e.y,5,0,Math.PI*2);g.stroke();g.fillStyle='#390a24';g.beginPath();g.arc(e.x,e.y,2.5,0,Math.PI*2);g.fill();g.restore()}
-if(RANGED.includes(e.shape)){g.save();g.fillStyle='#181524';g.beginPath();g.arc(e.x,e.y,4,0,Math.PI*2);g.fill();g.strokeStyle='#ffffff';g.lineWidth=1.5;g.beginPath();g.moveTo(e.x-6,e.y);g.lineTo(e.x+6,e.y);g.stroke();g.restore()}
+if(!painted&&RANGED.includes(e.shape)){g.save();g.fillStyle='#181524';g.beginPath();g.arc(e.x,e.y,4,0,Math.PI*2);g.fill();g.strokeStyle='#ffffff';g.lineWidth=1.5;g.beginPath();g.moveTo(e.x-6,e.y);g.lineTo(e.x+6,e.y);g.stroke();g.restore()}
 if(e.shape==='bloodletter'){g.save();g.fillStyle='#ffb4c5';g.beginPath();g.moveTo(e.x,e.y-7);g.lineTo(e.x+5,e.y+2);g.arc(e.x,e.y+2,5,0,Math.PI);g.closePath();g.fill();g.restore()}
 if(e.shape==='regenerator'){g.save();g.strokeStyle='#ffe0f1';g.lineWidth=2;g.beginPath();g.moveTo(e.x-5,e.y);g.lineTo(e.x+5,e.y);g.moveTo(e.x,e.y-5);g.lineTo(e.x,e.y+5);g.stroke();if(e.regenPulse>0){g.globalAlpha=e.regenPulse/.35*.5;g.beginPath();g.arc(e.x,e.y,e.r+4,0,Math.PI*2);g.stroke()}g.restore()}
 if(e.shape==='bomb'&&e.bombTimer>0){g.save();g.strokeStyle=Math.floor(e.bombTimer*8)%2?'#ffea70':'#ff4433';g.lineWidth=3;g.beginPath();g.arc(e.x,e.y,e.r+6,0,Math.PI*2);g.stroke();g.restore()}
 if(e.shape==='sponge'&&e.spongeEnergy>0){g.save();g.strokeStyle='#fff49d';g.lineWidth=3;g.beginPath();g.arc(e.x,e.y,e.r+5,-Math.PI/2,-Math.PI/2+Math.PI*2*e.spongeEnergy/(e.elite?450:340));g.stroke();g.restore()}
-if(e.shape==='crystal'){g.save();g.strokeStyle='#e7ffff';g.lineWidth=2;g.beginPath();g.moveTo(e.x,e.y-e.r+3);g.lineTo(e.x+e.r-3,e.y);g.lineTo(e.x,e.y+e.r-3);g.lineTo(e.x-e.r+3,e.y);g.closePath();g.stroke();g.restore()}
+if(!painted&&e.shape==='crystal'){g.save();g.strokeStyle='#e7ffff';g.lineWidth=2;g.beginPath();g.moveTo(e.x,e.y-e.r+3);g.lineTo(e.x+e.r-3,e.y);g.lineTo(e.x,e.y+e.r-3);g.lineTo(e.x-e.r+3,e.y);g.closePath();g.stroke();g.restore()}
 if(e.shape==='mirror'){g.save();g.strokeStyle='#ffffff';g.lineWidth=2;g.beginPath();g.moveTo(e.x-5,e.y+5);g.lineTo(e.x+5,e.y-5);g.stroke();g.restore()}
 if(e.shape==='magnet'){g.save();g.strokeStyle=e.magnetMode===-1?'#ff6079':'#5cbcff';g.globalAlpha=.35;g.lineWidth=1.5;g.setLineDash([4,5]);g.beginPath();g.arc(e.x,e.y,e.elite?32:26,0,Math.PI*2);g.stroke();g.setLineDash([]);g.fillStyle='#132239';g.font='bold 13px monospace';g.textAlign='center';g.fillText(e.magnetMode===-1?'-':'+',e.x,e.y+4);g.restore()}
 if(e.elite||e.shape==='armored'){g.save();g.strokeStyle=e.elite?'#f6d66f':'#fff0a6';g.lineWidth=e.elite?3:2.5;g.shadowColor=e.elite?'#f8c954':'#ffdf8a';g.shadowBlur=e.elite?10:5;g.beginPath();g.arc(e.x,e.y,e.r+4,0,Math.PI*2);g.stroke();g.restore()}
-if(e.shape==='healer'){g.fillStyle='#174e29';g.fillRect(e.x-2,e.y-7,4,14);g.fillRect(e.x-7,e.y-2,14,4)}
-else{g.fillStyle='#231c32';g.fillRect(e.x-5,e.y-3,3,3);g.fillRect(e.x+3,e.y-3,3,3)}
-if(e.shape==='splitter'){g.strokeStyle='#ffe0a5';g.lineWidth=2;g.beginPath();g.moveTo(e.x-6,e.y-6);g.lineTo(e.x+6,e.y+6);g.moveTo(e.x+6,e.y-6);g.lineTo(e.x-6,e.y+6);g.stroke()}
-if(e.shape==='merge'){g.strokeStyle='#e3caff';g.lineWidth=1.5;g.beginPath();g.arc(e.x,e.y,e.r-3,0,Math.PI*2);g.stroke()}
+if(!painted&&e.shape==='healer'){g.fillStyle='#174e29';g.fillRect(e.x-2,e.y-7,4,14);g.fillRect(e.x-7,e.y-2,14,4)}
+else if(!painted){g.fillStyle='#231c32';g.fillRect(e.x-5,e.y-3,3,3);g.fillRect(e.x+3,e.y-3,3,3)}
+if(!painted&&e.shape==='splitter'){g.strokeStyle='#ffe0a5';g.lineWidth=2;g.beginPath();g.moveTo(e.x-6,e.y-6);g.lineTo(e.x+6,e.y+6);g.moveTo(e.x+6,e.y-6);g.lineTo(e.x-6,e.y+6);g.stroke()}
+if(!painted&&e.shape==='merge'){g.strokeStyle='#e3caff';g.lineWidth=1.5;g.beginPath();g.arc(e.x,e.y,e.r-3,0,Math.PI*2);g.stroke()}
 if(phasing)g.restore();
 }
 for(const enemy of enemies)drawBiomeEnemyDetails(enemy);
@@ -5991,5 +5987,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.25';setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.26';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>

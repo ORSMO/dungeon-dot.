@@ -48,6 +48,10 @@ jobs:
           fi
           unzip -p "$apk" assets/index.html | cmp index.html -
           unzip -p "$bundle" base/assets/index.html | cmp index.html -
+          for art in art/*.webp; do
+            unzip -p "$apk" "assets/$art" | cmp "$art" -
+            unzip -p "$bundle" "base/assets/$art" | cmp "$art" -
+          done
           mkdir release-files
           cp "$apk" release-files/Dungeon-Dot-Android-Preview.apk
           cp "$bundle" release-files/Dungeon-Dot-Unsigned.aab
