@@ -1,6 +1,10 @@
 # Dungeon Dot
 
-Landscape-first physics dungeon crawler. The game runs from `index.html`.
+Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
+
+## V8.26 — Painted Realms
+
+Original painted environments replace the procedural floors in all four biomes. The game draws painted hero, enemy and boss sprites, and the title screen has illustrated key art. Animated movement, impact flashes and ground markers help keep characters readable as you fight. The Android packages bundle and verify the same artwork as the browser version. Existing runs load from the same saves.
 
 ## V8.25 — Four Worlds
 
