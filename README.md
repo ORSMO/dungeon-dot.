@@ -2,7 +2,15 @@
 
 Landscape-first physics dungeon crawler. The game runs from `index.html`.
 
+## V8.24 — Dungeon victory
+
+Defeat the third dungeon boss to win the run. The recap records your current hero path, deepest dungeon, remaining lives, biggest impact, and biggest damage burst (the most HP one enemy lost in a single frame). Choose **Continue deeper** to use the boss room exits and enter Dungeon 4, or **Save and return to menu** to keep the run for later.
+
+The victory uses the existing save slots. A saved run past Dungeon 3 already counts as a victory. A saved run in the cleared Dungeon 3 boss room can see the recap on load. Test Room bosses do not count.
+
 ## V8.23 — Automatic level 8 evolution
+
+The Android closed beta includes an offline privacy policy accessible from the start menu and Settings. The public policy is in [PRIVACY.md](PRIVACY.md). This build has no advertising or analytics. Release bundles use the private upload key retained outside this repository, with Google Play App Signing handling distribution signatures.
 
 At level 8, your current form evolves automatically and the HUD shows **EVOLVED**. The boost is +5 maximum HP, +15% damage, +8% movement speed, +10% swing, reload or cast speed, +10% knockback, +0.15 HP per second and +5 percentage points of damage reduction. Mage also gains +10 maximum mana and +1 mana per second. Existing stat caps apply.
 
