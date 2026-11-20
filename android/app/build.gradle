@@ -5,7 +5,7 @@ plugins {
 def gameAssets = layout.buildDirectory.dir('generated/gameAssets')
 def copyGame = tasks.register('copyGame', Sync) {
     from(rootProject.file('..')) {
-        include 'index.html', 'art/*.webp'
+        include 'index.html', 'art/*.webp', 'audio/*.mp3'
     }
     into gameAssets
 }
@@ -18,8 +18,8 @@ android {
         applicationId 'com.orsmo.dungeondot'
         minSdk 26
         targetSdk 36
-        versionCode 849
-        versionName '8.49'
+        versionCode 850
+        versionName '8.50'
         resValue 'string', 'app_name', 'Dungeon Dot'
     }
 

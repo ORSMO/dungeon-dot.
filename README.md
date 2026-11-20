@@ -13,6 +13,10 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.50 — Beyond the Torchlight
+
+The title screen plays an original 58-second stereo instrumental arranged for flute, plucked strings, low bowed strings and bells. The track loops after the first interaction and fades into dungeon audio when a run begins. The Music and ambience slider controls it, and the soundtrack is bundled for offline Android play.
+
 ## V8.49 — Monster defeat sounds
 
 Regular, stone-armored and spectral monsters have different defeat sounds. Elites use a heavier hit, and pit or lava falls have their own cues. Simultaneous defeats share a cue so the feedback stays clear during crowded fights.

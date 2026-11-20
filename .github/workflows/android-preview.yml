@@ -48,9 +48,9 @@ jobs:
           fi
           unzip -p "$apk" assets/index.html | cmp index.html -
           unzip -p "$bundle" base/assets/index.html | cmp index.html -
-          for art in art/*.webp; do
-            unzip -p "$apk" "assets/$art" | cmp "$art" -
-            unzip -p "$bundle" "base/assets/$art" | cmp "$art" -
+          for asset in art/*.webp audio/*.mp3; do
+            unzip -p "$apk" "assets/$asset" | cmp "$asset" -
+            unzip -p "$bundle" "base/assets/$asset" | cmp "$asset" -
           done
           mkdir release-files
           cp "$apk" release-files/Dungeon-Dot-Android-Preview.apk
