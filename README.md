@@ -2,6 +2,12 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.48 — Title music, boss phases and danger cues
+
+The main menu has a quiet title theme that starts after the first interaction and fades into the current dungeon's music when play begins. Each biome has a separate boss arrangement. Boss fights have entrance and phase cues, with extra percussion added in the final phase without restarting the track.
+
+The victory recap, a lost life, and the end of a run each have their own cue. Boss windups, nearby artillery and traps have short warning sounds that briefly lower the music. Shield blocks and damage taken have distinct sounds. The existing Master, Sound effects, Music and ambience, and Mute settings control the new audio.
+
 ## V8.47 — Combat audio, dungeon feedback and music
 
 Each melee weapon has its own swing and impact cues. Bows, crossbows, slings and javelins have distinct releases, and the five Mage paths have different cast sounds. Gates, portals, breakable props, coins, item pickups, level-ups and room clears have their own audio feedback.
