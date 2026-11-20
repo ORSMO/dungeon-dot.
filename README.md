@@ -13,6 +13,12 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.41 — Portal and rune effects
+
+Room portals sit in painted stone and bronze rings. Linked and random portals have distinct sigils and colors. Stepping through sends a pulse from the entrance and gathers sparks at the exit.
+
+Mage rune buttons use engraved bronze medallions. Tracing a spell lights each rune and draws a glowing line between them. Successful casts send a gold pulse through the chosen runes, and an invalid trace flashes red. Reduced-motion mode uses steady glows and fades. Portal destinations, gesture timing, spell costs and save compatibility follow the existing game rules.
+
 ## V8.40 — Dungeon maps and room details
 
 The floor map has distinct symbols for the start, boss, cursed, treasure and shop rooms. The room map uses each world's colors and shows walls, bridge decks, pits, lava and portals. Door signs show the destination and a padlock while the route is locked.

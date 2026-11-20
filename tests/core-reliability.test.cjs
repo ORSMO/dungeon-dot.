@@ -821,17 +821,17 @@ test('every level-three evolution card selects the option named on the card', ()
 
 test('failed magic casts preserve mana and a successful cast enforces both cooldowns', () => {
   const result=run([
-    ...schoolSpells,method('castMageSpell'),
-    'let mageMana=100,arenaTime=1,mageGlobalReady=0,mageCastCount=0,resource=false,feedback="";',
+    ...schoolSpells,method('castMageSpell'),method('pulseMageRunes'),
+    'let mageMana=100,arenaTime=1,mageGlobalReady=0,mageCastCount=0,mageRuneFx=[],resource=false,feedback="";',
     'const progress={mageSchool:"necromancer"},mageCooldowns={},mageInputEnabled=()=>true,mageAim=()=>({a:0});',
     'const castSchoolSpell=()=>resource?undefined:"NEED A SOUL",itemCount=()=>0,upgradeCount=()=>0,playerStats=()=>({swing:1});',
     'const refreshManaHud=()=>{},queueCheckpoint=()=>{},showMageFeedback=(kind,label)=>feedback=label;',
     'const locked=castMageSpell("AA"),failed=castMageSpell("ABC"),before={mageMana,mageGlobalReady,feedback};',
     'resource=true;const applied=castMageSpell("ABC"),duringGlobal=castMageSpell("A");arenaTime=2;const duringSpell=castMageSpell("ABC");'
-  ],'{locked,failed,before,applied,duringGlobal,duringSpell,mageMana,mageCastCount,ready:mageCooldowns.ABC}');
+  ],'{locked,failed,before,applied,duringGlobal,duringSpell,mageMana,mageCastCount,ready:mageCooldowns.ABC,flashes:mageRuneFx.map(f=>f.id+":"+f.kind)}');
   assert.deepEqual(result,{
     locked:false,failed:false,before:{mageMana:100,mageGlobalReady:0,feedback:'NEED A SOUL'},
-    applied:true,duringGlobal:false,duringSpell:false,mageMana:68,mageCastCount:1,ready:6.5
+    applied:true,duringGlobal:false,duringSpell:false,mageMana:68,mageCastCount:1,ready:6.5,flashes:['A:cast','B:cast','C:cast']
   });
 });
 
@@ -1066,13 +1066,13 @@ test('Mage rune tracing detects a fast edge pass and rejects returning to a used
   const result = run([
     declaration('RUNE_TOUCH_RADIUS'),
     'const mageRunes=()=>[{id:"A",x:0,y:0},{id:"B",x:104,y:0},{id:"C",x:52,y:64}];',
-    'const mageGesture={path:["A"],last:{x:0,y:0}};',
-    method('runeEntryTime'), method('mageGesturePoint'),
+    'const mageGesture={path:["A"],last:{x:0,y:0}};let mageRuneFx=[],arenaTime=1;',
+    method('runeEntryTime'), method('mageGesturePoint'), method('pulseMageRunes'),
     'mageGesturePoint({x:134,y:-29});const path=mageGesture.path.join("");',
     'mageGesturePoint({x:104,y:0});const lingerInvalid=!!mageGesture.invalid;',
     'mageGesturePoint({x:0,y:0});'
-  ], '{path,lingerInvalid,repeatInvalid:mageGesture.invalid}');
-  assert.deepEqual(result, {path:'AB',lingerInvalid:false,repeatInvalid:true});
+  ], '{path,lingerInvalid,repeatInvalid:mageGesture.invalid,lit:mageRuneFx.map(f=>f.id)}');
+  assert.deepEqual(result, {path:'AB',lingerInvalid:false,repeatInvalid:true,lit:['B']});
 });
 
 test('Interrupting controls clears both sticks, the rune trace and any bat momentum', () => {
@@ -1098,4 +1098,19 @@ test('the floor map hides undiscovered room types and distinguishes cleared enco
     'const rooms=[{kind:"boss"},{kind:"boss",discovered:true},{kind:"cursed",visited:true},{kind:"shop",discovered:true},{kind:"combat",discovered:true},{kind:"combat",visited:true,cleared:true}];'
   ],'rooms.map(mapRoomKind)');
   assert.deepEqual(kinds,['unknown','boss','cursed','shop','combat','clear']);
+});
+
+test('portal transfers queue an effect at both ends and cannot loop while occupied', () => {
+  const result=run([
+    method('teleportBody'),
+    'const portalFx=[],portals=[{x:20,y:40,pair:1,type:"linked"},{x:110,y:75,pair:0,type:"linked"}];',
+    'const body={x:19,y:40,r:9,portalReady:true};const first=teleportBody(body,.016);',
+    'const wait=Array.from({length:150},()=>teleportBody(body,.016)).some(Boolean);',
+    'const firstPosition=[body.x,body.y]; body.x=180;teleportBody(body,.016);',
+    'body.x=110;body.y=75;const returned=teleportBody(body,.016);'
+  ],'{first,wait,firstPosition,returned,ends:portalFx.map(f=>[f.stage,f.x,f.y,f.type])}');
+  assert.deepEqual(result,{first:true,wait:false,firstPosition:[110,75],returned:true,ends:[
+    ['departure',20,40,'linked'],['arrival',110,75,'linked'],
+    ['departure',110,75,'linked'],['arrival',20,40,'linked']
+  ]});
 });
