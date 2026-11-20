@@ -13,6 +13,12 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.34 — Distinct enemy artwork
+
+Every enemy in the 47-entry Enemy Index has its own painted sprite, including all 12 bosses. Combat, practice and the Enemy Index use the same artwork for each creature. Minions, hybrids and elite enemies still use their existing combat indicators.
+
+This completes the visual pass for weapons, dungeon props, combat HUD and enemy portraits.
+
 ## V8.33 — Floating combat controls
 
 The dungeon status strip is replaced by a painted enemy icon and a live count, including living boss units. The arena extends behind the controls, and Map, Character and Pause sit together in the upper corner. Fullscreen, the Test Room, and Main Menu are in Pause.
@@ -22,8 +28,6 @@ Passive health regeneration pauses while bleeding and resumes when it ends. Exis
 ## V8.32 — Combat HUD and minimaps
 
 The HUD groups health, lives, class resources, and run counters. Bosses have portraits beside their health and attack hints. The floor map highlights the current room, and the local map shows player facing. Use **Map** to hide or show both maps. For Mage, the local map stays on the left to keep rune controls clear.
-
-The remaining visual pass is distinct artwork for enemy variants that share portraits.
 
 ## V8.31 — Painted doors, traps and loot
 
