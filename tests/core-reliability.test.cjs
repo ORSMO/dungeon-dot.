@@ -133,16 +133,17 @@ test('all 40 tile layout orientations keep the four entry points connected', () 
 
 test('pit knockouts grant exactly one kill and one XP reward', () => {
   const result = run([
-    'let fallingFx=[],p={},kills=0,records=0,xp=0;',
+    'let fallingFx=[],p={},kills=0,records=0,xp=0;const falls=[],selectedBiome=null,queueEnemyDefeatAudio=(_,terrain)=>falls.push(terrain);',
     'const recordEnemyKill=()=>records++;const earnXp=amount=>xp+=amount;const inSandbox=()=>false;',
     method('fallIntoPit'),
     'const enemy={hp:4,x:45,y:80,r:7,shape:"square"};',
     'fallIntoPit(enemy,50,80,false);fallIntoPit(enemy,50,80,false);'
-  ], '{kills,records,xp,rewarded:enemy.rewarded}');
+  ], '{kills,records,xp,rewarded:enemy.rewarded,falls}');
   assert.equal(result.kills, 1);
   assert.equal(result.records, 1);
   assert.equal(result.xp, 2); // earnXp() applies the global XP-halving rule.
   assert.equal(result.rewarded, true);
+  assert.deepEqual(result.falls,['pit']);
 });
 
 test('ordinary walls share the same response and only apply impact effects once', () => {
@@ -1200,4 +1201,19 @@ test('final-phase boss music adds percussion without resetting the beat', () => 
   'scheduleDungeonBeat(normal);const first=calls.splice(0);scheduleDungeonBeat(frenzy);'
  ],'{more:calls.length>first.length,rhythm:calls.some(c=>c.filter==="highpass"),sameStep:normal.step===frenzy.step,sameTime:normal.next===frenzy.next,distinct:Object.values(BOSS_SCORE).every(score=>score.notes.length===16)&&new Set(Object.values(BOSS_SCORE).map(score=>score.notes.join(","))).size===4}');
  assert.deepEqual(result,{more:true,rhythm:true,sameStep:true,sameTime:true,distinct:true});
+});
+
+test('monster defeat audio prioritizes elites and rate-limits simultaneous defeats', () => {
+ const result=run([
+  declaration('ELITE_DEFEAT_PRIORITY'),declaration('MONSTER_DEFEAT_STONE'),declaration('MONSTER_DEFEAT_SPIRIT'),
+  method('enemyDefeatSound'),method('queueEnemyDefeatAudio'),method('flushEnemyDefeatAudio'),
+  'let queuedEnemyDefeat=null,nextEnemyDefeatAt=0;const cues=[],playSoundCue=id=>cues.push(id);',
+  'const combatAudio={state:"running",currentTime:2},profile={audio:{effects:80,master:80,muted:false}};',
+  'const types=[enemyDefeatSound({shape:"round"}).cue,enemyDefeatSound({shape:"crystal"}).cue,enemyDefeatSound({shape:"gravity"}).cue,enemyDefeatSound({shape:"round"},"lava").cue];',
+  'queueEnemyDefeatAudio({shape:"round"});queueEnemyDefeatAudio({shape:"armored",elite:true});queueEnemyDefeatAudio({shape:"crystal"});flushEnemyDefeatAudio();',
+  'queueEnemyDefeatAudio({shape:"round"},"pit");flushEnemyDefeatAudio();const during=cues.slice();',
+  'combatAudio.currentTime=2.2;flushEnemyDefeatAudio();',
+  'profile.audio.muted=true;queueEnemyDefeatAudio({shape:"round"});flushEnemyDefeatAudio();'
+ ],'{types,during,cues,cleared:queuedEnemyDefeat===null}');
+ assert.deepEqual(result,{types:['fall-monster','fall-stone','fall-spirit','fall-lava'],during:['fall-elite'],cues:['fall-elite','fall-abyss'],cleared:true});
 });
