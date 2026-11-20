@@ -273,7 +273,45 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
  .victory-stats{margin:7px 0}
 }
 
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.31</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · SWING</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><button id="settings-privacy">Privacy policy ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-xp" type="button">+100 XP</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
+
+/* The combat HUD and maps share the title screen's ink and bronze palette. */
+header{padding:5px 11px;min-height:37px;align-items:center;gap:8px;background:linear-gradient(180deg,#10141a,var(--world-hud));box-shadow:0 2px 12px #0008}
+header .health{display:grid;grid-template-columns:auto minmax(33px,clamp(39px,10vw,148px)) auto;gap:2px 5px;align-items:center;flex:none}
+header .health>span:first-child{color:#f4dfb7;font:700 10px monospace}
+header .hp-track{width:100%;height:10px;border:1px solid var(--world-edge);border-radius:2px;background:#251824}
+#hp-fill{box-shadow:inset 0 1px #fff5}
+#hp-bleed{opacity:.85}
+#hp-label{color:#fff2d2;font:700 10px monospace;white-space:nowrap}
+#lives-count{grid-column:2/4;color:#f3bcad;font:700 9px monospace;white-space:nowrap}
+#mana-hud{gap:4px;color:#e5d5ff}
+#mana-hud .mana-track{width:clamp(30px,8vw,110px);border-radius:2px;border-color:#8e78ae}
+#mana-label{color:#f1ddff}
+#mage-souls{font-size:9px}
+#melee-defences{width:clamp(74px,14vw,147px);min-width:0;flex:none}
+#melee-defences small{font-size:8px!important}
+.hud-counters{display:flex;align-items:center;gap:9px;min-width:0;margin-left:auto}
+#level-hud{min-width:0;color:#efdfba;text-overflow:ellipsis;overflow:hidden}
+#level-hud.evolved{color:#ffe2a5}
+#coin-count{color:#ffdea0;white-space:nowrap;font:700 10px monospace}
+header #kills{color:#f0e4cf;font-size:10px}
+#map-toggle{padding:4px 7px;pointer-events:auto;flex:none;border:1px solid var(--world-edge);border-radius:2px;background:#1e2029;color:#efdbb3;font:700 10px monospace}
+#map-toggle[aria-pressed=true]{background:#5e4a33;border-color:#aa8757}
+#room-status{top:42px;padding:5px 8px;border-radius:2px;color:#ffe9c5}
+#boss-hud{width:min(410px,54vw);top:72px;border-radius:3px;padding:5px 8px;background:linear-gradient(145deg,#141721f5,var(--world-hud));box-shadow:0 4px 15px #0009;display:grid;grid-template-columns:auto minmax(0,1fr);gap:7px;align-items:center}
+#boss-portrait .plate-icon{width:33px;display:block}
+.boss-heading{align-items:center;color:#f8dca8}
+#boss-name{font:700 clamp(10px,1.6vw,15px)/1.1 Georgia,serif}
+#boss-health{white-space:nowrap}
+.boss-track{height:8px;border:1px solid #a56a59;background:#2e1921;border-radius:2px}
+#boss-fill{background:linear-gradient(90deg,#b64c49,#f29a6f);box-shadow:inset 0 1px #ffb6a9}
+#boss-hint{color:#f5d5b5;line-height:1.2}
+footer button{border-radius:2px}
+#dash-button{background:radial-gradient(circle at 50% 40%,#354253,#18212b);border-color:#d7b583;color:#fff2d1;box-shadow:0 0 0 3px #11172395}
+#dash-button.cooling{background:#20242c;border-color:#827d74;color:#e1d2bc}
+#dash-button.editing{background:#483927;border-color:#ffe0a3}
+@media(max-width:710px){.hud-counters{gap:5px}#version{display:none}#melee-defences{width:83px}#boss-portrait .plate-icon{width:27px}}
+
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.32</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps">Map</button></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · SWING</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><button id="settings-privacy">Privacy policy ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-xp" type="button">+100 XP</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
  <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
  <small id="character-coins"></small>
  <div id="character-stats"></div>
@@ -308,7 +346,7 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.31</small>
+   <small>V8.32</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -2051,6 +2089,8 @@ function toggleCharacterMenu(){
  if(!panel.hidden){stopMenuControls();closeSettings();document.querySelector('#sandbox-panel').hidden=true;statsPanel.hidden=true;updateCharacterMenu()}
 }
 function setupExpansionUI(){
+ const mapButton=document.querySelector('#map-toggle');
+ mapButton.onclick=()=>{mapVisible=!mapVisible;mapButton.setAttribute('aria-pressed',String(mapVisible));};
  setupSandboxEconomyUI();
  document.querySelector('#stats-toggle').onclick=toggleCharacterMenu;
  document.querySelector('#character-close').onclick=()=>{document.querySelector('#character-panel').hidden=true};
@@ -2385,6 +2425,7 @@ function renderHeroPicker(){
  document.querySelector('#hero-choice-hint').textContent=HERO_DEFS[selectedHero].hint;
 }
 function updateHeroHud(){
+ if(dashUIReady)syncDashControl();
  document.querySelector('#mage-cast-status').textContent='';
  document.querySelector('footer small').textContent=hero==='mage'?'LEFT · MOVE   RIGHT · TRACE RUNES':hero==='archer'?'LEFT · MOVE   RIGHT · AIM & RELEASE':'LEFT · MOVE   RIGHT · SWING';
 }
@@ -2939,7 +2980,13 @@ function clampDashControl(x,y){
 }
 function syncDashControl(){
  dashControl=clampDashControl(dashControl.x,dashControl.y);
- const button=document.querySelector('#dash-button');button.style.left=dashControl.x*100+'%';button.style.top=dashControl.y*100+'%';button.style.width=button.style.height=Math.max(44,Math.min(76,56*controls.size/100))+'px';button.style.opacity=controls.opacity/100;
+ let position=dashControl;
+ if(hero==='mage'&&dashControl.x===.78&&dashControl.y===.76){
+  const runeA=mageRunes()[0],rect=c.getBoundingClientRect();
+  const clearance=26+(Math.max(44,Math.min(76,56*controls.size/100))/2+8)*viewW/Math.max(1,rect.width);
+  position=clampDashControl((runeA.x-clearance)/viewW,runeA.y/H);
+ }
+ const button=document.querySelector('#dash-button');button.style.left=position.x*100+'%';button.style.top=position.y*100+'%';button.style.width=button.style.height=Math.max(44,Math.min(76,56*controls.size/100))+'px';button.style.opacity=controls.opacity/100;
 }
 function saveDashControl(){try{localStorage.setItem(DASH_CONTROL_KEY,JSON.stringify(dashControl))}catch(error){}}
 function updateDashButton(){
@@ -3365,6 +3412,11 @@ function updateBossHud(){
  const panel=document.querySelector('#boss-hud');
  panel.hidden=(currentRoom?.kind!=='boss'&&!inSandbox())||!bossFight;
  if(panel.hidden)return;
+ const portrait=document.querySelector('#boss-portrait');
+ if(portrait.dataset.boss!==bossFight.variant){
+  portrait.dataset.boss=bossFight.variant;
+  portrait.innerHTML=plateIcon('beasts',BOSS_PLATES[bossFight.variant]);
+ }
  const remaining=bossFight.units.reduce((sum,unit)=>sum+Math.max(0,unit.hp),0);
  document.querySelector('#boss-name').textContent=bossFight.name+(bossFight.reborn?' · REBORN':bossFight.split?' · SPLIT':'');
  document.querySelector('#boss-fill').style.width=(Math.max(0,Math.min(1,remaining/bossFight.totalMax))*100)+'%';
@@ -3831,12 +3883,12 @@ function drawRoomDecor(){
  }else{
   const art=WORLD_ART[worldArtId(selectedBiome,currentRoom.kind)];
   const boss=currentRoom.kind==='boss',cursed=currentRoom.kind==='cursed';
-  const title=boss?'BOSS CHAMBER':cursed?currentRoom.cleared?'CURSE BROKEN':'CURSED CHAMBER':currentRoom.kind==='start'?'SAFE START':'';
-  const hint=boss?currentRoom.cleared?'CHOOSE A WORLD':'DEFEAT THE BOSS':cursed?currentRoom.cleared?'CLAIM REWARDS \u00b7 DOORS OPEN':(currentRoom.curses||[]).map(id=>CURSE_TYPES[id]?.name||id).join(' + '):'NO ENEMIES';
+  const title=boss?currentRoom.cleared?'CHOOSE A WORLD':'':cursed?currentRoom.cleared?'CURSE BROKEN':'CURSED CHAMBER':currentRoom.kind==='start'?'SAFE START':'';
+  const hint=boss?'':cursed?currentRoom.cleared?'CLAIM REWARDS \u00b7 DOORS OPEN':(currentRoom.curses||[]).map(id=>CURSE_TYPES[id]?.name||id).join(' + '):'NO ENEMIES';
   if(title){
    const y=F/2-(boss?116:cursed?102:86);
    g.fillStyle=cursed?'#e5c3f4':art.paper;g.font='bold 18px Georgia, serif';g.fillText(title,W/2,y);
-   g.font='bold 9px monospace';g.fillText(hint,W/2,y+16);
+   if(hint){g.font='bold 9px monospace';g.fillText(hint,W/2,y+16)}
   }
  }
  g.restore();
@@ -3860,41 +3912,51 @@ function drawRoomDoors(){
   drawDoorMarker(locked?'LOCKED':label,door.x-inward.dx*offset,door.y-inward.dy*offset,color,locked);
  }
 }
+
+let mapVisible=true;
+function drawMapFrame(x,y,w,h,title){
+ g.fillStyle='#111721ed';g.fillRect(x,y,w,h);
+ g.strokeStyle='#94734b';g.lineWidth=1;g.strokeRect(x+.5,y+.5,w-1,h-1);
+ g.fillStyle='#252733';g.fillRect(x+1,y+1,w-2,15);
+ g.strokeStyle='#665238';g.beginPath();g.moveTo(x+1,y+16);g.lineTo(x+w-1,y+16);g.stroke();
+ g.fillStyle='#ffe0a7';g.font='bold 9px Georgia';g.textAlign='center';g.fillText(title,x+w/2,y+11);
+}
+
 function drawDungeonMap(){
- const x=viewW-148,y=52,boxW=136,boxH=124;
+ const boxW=139,boxH=115,x=viewW-boxW-12,y=52;
  const minCol=Math.min(...dungeon.map(room=>room.col)),maxCol=Math.max(...dungeon.map(room=>room.col));
  const minRow=Math.min(...dungeon.map(room=>room.row)),maxRow=Math.max(...dungeon.map(room=>room.row));
- const step=Math.min(25,(boxW-22)/(maxCol-minCol+1),78/(maxRow-minRow+1));
- const ox=x+boxW/2-(minCol+maxCol)*step/2,oy=y+58-(minRow+maxRow)*step/2;
+ const step=Math.min(25,(boxW-22)/(maxCol-minCol+1),75/(maxRow-minRow+1));
+ const ox=x+boxW/2-(minCol+maxCol)*step/2,oy=y+55-(minRow+maxRow)*step/2;
  const pos=room=>({x:ox+room.col*step,y:oy+room.row*step});
- g.save();g.fillStyle='#100e1def';g.fillRect(x,y,boxW,boxH);g.strokeStyle='#6d5b87';g.lineWidth=1;g.strokeRect(x,y,boxW,boxH);
- g.textAlign='center';g.font='bold 9px monospace';g.fillStyle='#eee4ff';g.fillText(inSandbox()?'SANDBOX · START':('DUNGEON '+dungeonDepth),x+boxW/2,y+12);
+ g.save();drawMapFrame(x,y,boxW,boxH,inSandbox()?'Practice room':'Dungeon '+dungeonDepth);
  for(const room of dungeon)for(const door of room.doors)if(door.to>room.id){
-  const a=pos(room),b=pos(dungeon[door.to]);g.strokeStyle=room.visited&&dungeon[door.to].visited?'#82b59b':'#53465f';g.lineWidth=2;g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke();
+  const a=pos(room),b=pos(dungeon[door.to]);g.strokeStyle=room.visited&&dungeon[door.to].visited?'#9d8969':'#4b4d54';g.lineWidth=2;g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke();
  }
  for(const room of dungeon){
   const at=pos(room),ratio=room.w/room.h,size=Math.min(16,step*.63);
   const w=ratio>=1?size:size*ratio,h=ratio>=1?size/ratio:size;
   const known=room.discovered||room.visited,isBoss=known&&room.kind==='boss',isCursed=known&&room.kind==='cursed';
-  g.fillStyle=isCursed?'#482061':isBoss?'#643448':room.visited?(room.cleared?'#28533f':'#543543'):'#2c2638';g.fillRect(at.x-w/2,at.y-h/2,w,h);
-  g.strokeStyle=room.id===(inSandbox()?0:currentRoom.id)?'#ffe2a0':isCursed?'#c080ff':isBoss?'#dbad68':room.visited?'#8dd4ad':'#776187';g.lineWidth=room.id===(inSandbox()?0:currentRoom.id)?2:1;g.strokeRect(at.x-w/2,at.y-h/2,w,h);
+  g.fillStyle=room.id===(inSandbox()?0:currentRoom.id)?'#926a40':isCursed?'#51375e':isBoss?'#633631':room.visited?(room.cleared?'#29493c':'#533136'):'#212733';g.fillRect(at.x-w/2,at.y-h/2,w,h);
+  g.strokeStyle=room.id===(inSandbox()?0:currentRoom.id)?'#ffe4ac':isCursed?'#cf98e7':isBoss?'#efae7a':room.visited?'#8abb9e':'#697380';g.lineWidth=room.id===(inSandbox()?0:currentRoom.id)?2:1;g.strokeRect(at.x-w/2,at.y-h/2,w,h);
   const label=room.kind==='start'?'S':isBoss?'B':known&&room.kind==='treasure'?'T':known&&room.kind==='shop'?'$':isCursed?'C':room.visited?'':'?';
   if(label){g.fillStyle='#f0e5cf';g.font='bold 8px monospace';g.fillText(label,at.x,at.y+3)}
   if(room.id===(inSandbox()?0:currentRoom.id)){g.fillStyle='#fff5cc';g.beginPath();g.arc(at.x,at.y+Math.min(h/2+4,step/2-1),1.7,0,Math.PI*2);g.fill()}
  }
- g.font='8px monospace';g.fillStyle='#cfbfdf';g.fillText('S START · B BOSS · C CURSE',x+boxW/2,y+108);
- g.fillStyle='#ecd29a';g.fillText('T/$ LOOT · GOLD: YOU',x+boxW/2,y+119);g.restore();
+ g.font='8px monospace';g.fillStyle='#e0caa4';g.fillText('S START  B BOSS  C CURSE',x+boxW/2,y+101);
+ g.fillStyle='#ecd29a';g.fillText('T TREASURE  $ SHOP',x+boxW/2,y+111);g.restore();
 }
 function drawRoomMap(){
- const x=hero==='mage'?12:viewW-116,y=186,boxW=104,boxH=82,scale=Math.min((boxW-14)/W,(boxH-14)/F);
- const ox=x+(boxW-W*scale)/2,oy=y+(boxH-F*scale)/2;
- g.save();g.fillStyle='#100e1de8';g.fillRect(x,y,boxW,boxH);
- g.fillStyle=currentRoom.kind==='boss'?'#492536':'#312b43';g.fillRect(ox,oy,W*scale,F*scale);g.strokeStyle='#88779d';g.lineWidth=1;g.strokeRect(ox,oy,W*scale,F*scale);g.fillStyle='#aaa7b2';for(const w of walls)g.fillRect(ox+w.x*scale,oy+w.y*scale,Math.max(1,w.w*scale),Math.max(1,w.h*scale));g.fillStyle='#08070f';for(const a of floorGaps)g.fillRect(ox+a.x*scale,oy+a.y*scale,a.w*scale,a.h*scale);g.fillStyle='#9d9298';for(const a of floorBridges)g.fillRect(ox+a.x*scale,oy+a.y*scale,a.w*scale,a.h*scale);
+ const boxW=139,boxH=84,x=hero==='mage'?12:viewW-boxW-12,y=175,scale=Math.min((boxW-18)/W,(boxH-25)/F);
+ const ox=x+(boxW-W*scale)/2,oy=y+17+(boxH-17-F*scale)/2;
+ g.save();drawMapFrame(x,y,boxW,boxH,'Room');
+ g.fillStyle=currentRoom.kind==='boss'?'#462d31':'#282c32';g.fillRect(ox,oy,W*scale,F*scale);g.strokeStyle='#93816c';g.lineWidth=1;g.strokeRect(ox,oy,W*scale,F*scale);g.fillStyle='#a59b8a';for(const w of walls)g.fillRect(ox+w.x*scale,oy+w.y*scale,Math.max(1,w.w*scale),Math.max(1,w.h*scale));g.fillStyle='#08070f';for(const a of floorGaps)g.fillRect(ox+a.x*scale,oy+a.y*scale,a.w*scale,a.h*scale);g.fillStyle='#c1a57d';for(const a of floorBridges)g.fillRect(ox+a.x*scale,oy+a.y*scale,a.w*scale,a.h*scale);
  for(const door of roomDoors()){const biome=BIOME_PATHS.find(path=>path.id===door.biome);g.fillStyle=door.kind==='sandbox'||door.kind==='sandboxExit'?'#79ddff':biome?biome.color:currentRoom.cleared?'#75f2bd':'#f58b99';g.fillRect(ox+door.x*scale-3,oy+door.y*scale-3,6,6)}
  g.fillStyle='#ed7a98';for(const enemy of enemies){if(enemy.hp>0){g.beginPath();g.arc(ox+enemy.x*scale,oy+enemy.y*scale,1.5,0,Math.PI*2);g.fill()}}
  if(bossFight&&!bossFight.done){g.fillStyle='#ffbc70';for(const unit of bossFight.units)if(unit.hp>0){g.beginPath();g.arc(ox+unit.x*scale,oy+unit.y*scale,3,0,Math.PI*2);g.fill()}}
  drawSandboxLootMap(ox,oy,scale);
- g.fillStyle='#fff';g.beginPath();g.arc(ox+p.x*scale,oy+p.y*scale,2.5,0,Math.PI*2);g.fill();g.restore();
+ g.translate(ox+p.x*scale,oy+p.y*scale);g.rotate(p.target||0);
+ artPath(g,[[4,0],[-2.4,-2.7],[-1.3,0],[-2.4,2.7]],'#fff0c7','#131821',1);g.restore();
 }
 
 let arenaTime=0;
@@ -6023,7 +6085,7 @@ let child={...e,x:clamp(oldX-ux*(r+2),19+r,W-19-r),y:clamp(oldY-uy*(r+2),19+r,F-
 pendingSplits.push(child);runStats.splits++;
 elementFx.push({type:'split',x:oldX,y:oldY,life:.38,maxLife:.38});
 }
-const lifeDisplay=document.createElement('span');lifeDisplay.id='lives-count';lifeDisplay.style.cssText='font:700 10px monospace;color:#ffb2bc;white-space:nowrap';document.querySelector('header .health').appendChild(lifeDisplay);
+const lifeDisplay=document.createElement('span');lifeDisplay.id='lives-count';document.querySelector('header .health').appendChild(lifeDisplay);
 function hud(){
  refreshElementHud();refreshManaHud();
  document.querySelector('#hp-fill').style.width=(Math.max(0,hp)/playerStats().maxHealth*100)+'%';document.querySelector('#hp-bleed').style.width=(Math.min(Math.max(0,hp),pendingBleed())/playerStats().maxHealth*100)+'%';
@@ -6390,7 +6452,7 @@ if(!p.falling){
 }
 if(FOG_OF_WAR_ENABLED)drawFog();
 g.restore(); // Joysticks, minimap and game-over text stay in screen coordinates.
-drawDungeonMap();drawRoomMap();
+if(mapVisible){drawDungeonMap();drawRoomMap()}
 g.fillStyle=worldArt.ink;g.fillRect(0,VIEW_F,viewW,H-VIEW_F);g.fillStyle=worldArt.trim;g.fillRect(0,VIEW_F,viewW,1);g.save();g.globalAlpha=controls.opacity/100;for(let i=0;i<2;i++){if(hero==='mage'&&i===1&&!editingControls)continue;let s=sticks[i],radius=R*controls.size/100;g.beginPath();g.arc(s.x,s.y,radius,0,Math.PI*2);g.fillStyle=worldArt.ink;g.fill();g.strokeStyle=editingControls?'#ffe17e':worldArt.trim;g.lineWidth=editingControls?4:2;g.stroke();g.beginPath();g.arc(s.x+s.dx*radius,s.y+s.dy*radius,19*controls.size/100,0,Math.PI*2);g.fillStyle=i?worldArt.light:worldArt.metal;g.fill()}g.restore()
 if(hero==='archer'&&!editingControls){
  const stick=sticks[1],power=bowPower(),weapon=equippedWeapon(),radius=R*controls.size/100;
@@ -6409,5 +6471,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.31';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.32';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
