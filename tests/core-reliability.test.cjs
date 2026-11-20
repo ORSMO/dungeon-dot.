@@ -1142,3 +1142,17 @@ test('enemy bullet art covers every fired type and keeps body vertices within th
   extras:['cannonball','emberbolt','frostcaster','spitter','crystal'],fits:true,unique:7
  });
 });
+
+test('door artwork tracks the room lock and opens without replaying on entry', () => {
+ const result=run([
+  method('gateOpening'),
+  'const room={cleared:false};const locked=gateOpening(null,room,4,false);',
+  'room.cleared=true;const unlock=gateOpening(locked,room,5,false);',
+  'const moving=gateOpening(unlock,room,5.16,false);',
+  'const settled=gateOpening(moving,room,6,false);',
+  'const reduced=gateOpening(locked,room,5,true);',
+  'const reentry=gateOpening(locked,{cleared:true},5,false);',
+  'room.cleared=false;const relocked=gateOpening(settled,room,6.1,false);'
+ ],'{locked:locked.amount,unlock:unlock.amount,moving:moving.amount,settled:settled.amount,reduced:reduced.amount,reentry:reentry.amount,relocked:relocked.amount}');
+ assert.deepEqual({...result,moving:Math.round(result.moving*100)/100},{locked:0,unlock:0,moving:.5,settled:1,reduced:1,reentry:1,relocked:0});
+});

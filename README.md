@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.44 — Open and closed gates
+
+Dungeon gates use their painted frames without bright rectangular outlines. Locked routes show closed doors and a padlock on the destination sign. When a route unlocks, the panels slide apart to reveal the passage. Cleared rooms show their gates already open on return, and reduced-motion mode opens them immediately.
+
 ## V8.43 — Enemy projectiles
 
 Enemy shots and boss volleys have distinct silhouettes: sharp ice shards, smoky embers, poison globes, blood fangs, homing eyes, bolts and iron cannonballs. Reflected shots keep their shape and gain a gold outline. Artillery has a landing marker that fills as the shell approaches.
