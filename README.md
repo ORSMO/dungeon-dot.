@@ -13,6 +13,12 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.43 — Enemy projectiles
+
+Enemy shots and boss volleys have distinct silhouettes: sharp ice shards, smoky embers, poison globes, blood fangs, homing eyes, bolts and iron cannonballs. Reflected shots keep their shape and gain a gold outline. Artillery has a landing marker that fills as the shell approaches.
+
+The colored projectile bodies are sized to their existing hit radii. Trails are short, faint, and hidden in reduced-motion mode. Damage, projectile movement, and reflection follow the existing rules.
+
 ## V8.42 — Spell and impact effects
 
 Rune Apprentice spells use etched seals. Summoner magic uses spirit trails, Necromancer spells use bone shards and grave markings, Pyromancer casts use embers, and Arcane spells use geometric lines. Icy spells retain their own markings. Friendly spell fields draw beneath hostile warnings, and the shorter boss panel leaves more room on phones.

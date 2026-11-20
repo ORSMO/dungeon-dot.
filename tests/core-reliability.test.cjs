@@ -1130,3 +1130,15 @@ test('combat art resolves to the correct school and weapon without affecting com
   valid:true,length:56,first:14,last:{kind:'sword',x:69,y:2,angle:.5,strong:true,at:2}
  });
 });
+
+test('enemy bullet art covers every fired type and keeps body vertices within the hit radius', () => {
+ const result=run([
+  declaration('ENEMY_PROJECTILES'),declaration('HOSTILE_SHOT_ART'),declaration('HOSTILE_SHOT_FACETS'),method('hostileShotAppearance'),
+  'const kinds=Object.keys(ENEMY_PROJECTILES);',
+  'const variations=[{kind:"cannonball",element:"fire"},{kind:"crystal",element:"fire"},{kind:"crystal",element:"frost"},{kind:"crystal",element:"poison"},{kind:"unknown"}];'
+ ],'{all:kinds.map(kind=>hostileShotAppearance({kind})),extras:variations.map(hostileShotAppearance),fits:Object.values(HOSTILE_SHOT_FACETS).flat().every(([x,y])=>Math.hypot(x,y)<1),unique:new Set(kinds.map(kind=>HOSTILE_SHOT_ART[kind].shape)).size}');
+ assert.deepEqual(result,{
+  all:['shooter','scatter','frostcaster','spitter','seeker','bloodcaster','emberbolt'],
+  extras:['cannonball','emberbolt','frostcaster','spitter','crystal'],fits:true,unique:7
+ });
+});
