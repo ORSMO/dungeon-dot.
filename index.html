@@ -7019,7 +7019,7 @@ elementFx.push({type:'split',x:oldX,y:oldY,life:.38,maxLife:.38});
 }
 const lifeDisplay=document.createElement('span');lifeDisplay.id='lives-count';document.querySelector('header .health').appendChild(lifeDisplay);
 const combatHeader=document.querySelector('.combat-info header');
-const combatHud=combatHeader.closest('main');
+const combatHud=document.querySelector('main');
 function syncBossPanelTop(){
  const top=combatHeader.getBoundingClientRect().bottom-combatHud.getBoundingClientRect().top+4;
  combatHud.style.setProperty('--boss-top',Math.ceil(top)+'px');
