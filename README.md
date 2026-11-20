@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.38 — Textured walls
+
+Walls now use weathered stone, soot-darkened iron, mossy limestone or frost-covered slate to match each biome. Bounce, spike, sticky and bone walls have their own material textures. Beveled edges and soft shadows distinguish walls from the floor, and the textures continue across connected pieces.
+
 ## V8.37 — Continuous walls and bridges
 
 Touching walls of the same material share masonry and a single outer edge. Bridges use planks and rails that continue across adjoining tiles. Art is clipped to the original footprints, and moving, breakable and special walls retain distinct markings.
