@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.35 — Painted combat HUD
+
+Floating HUD panels now use painted bronze trim, gemstone resource icons and engraved controls. The enemy count keeps its icon and number, and Map, Character and Pause have their own illustrations. Boss portraits, map headings and touch controls share the same metalwork.
+
 ## V8.34 — Distinct enemy artwork
 
 Every enemy in the 47-entry Enemy Index has its own painted sprite, including all 12 bosses. Combat, practice and the Enemy Index use the same artwork for each creature. Minions, hybrids and elite enemies still use their existing combat indicators.
