@@ -2,6 +2,12 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.30 — Painted weapons and combat effects
+
+Each melee and ranged weapon has painted art sized to its combat geometry. Flail links follow the moving head, ranged weapons show their current draw, and players can see swing trails and brief impact sparks. Attack ranges, damage and timing use the existing gameplay rules.
+
+The remaining visual passes are doors, traps and loot, then the minimap and combat HUD, then distinct artwork for enemy variants that share portraits.
+
 ## V8.29 — Hero and enemy names
 
 The three starter heroes are Squire, Scout and Rune Apprentice. Their evolutions and the original enemies use names that match their painted designs. Hero paths, weapon IDs and creature records are still stored under the same keys, so older runs and discovered enemies carry forward.

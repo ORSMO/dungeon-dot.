@@ -273,7 +273,7 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
  .victory-stats{margin:7px 0}
 }
 
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.29</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · SWING</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><button id="settings-privacy">Privacy policy ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-xp" type="button">+100 XP</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.30</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · SWING</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><button id="settings-privacy">Privacy policy ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-xp" type="button">+100 XP</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
  <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
  <small id="character-coins"></small>
  <div id="character-stats"></div>
@@ -308,7 +308,7 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.29</small>
+   <small>V8.30</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -626,7 +626,7 @@ const ART_ROWS={heroes:3,beasts:3,mobs:4};
 const paintings={};
 function loadArtwork(){
  if(typeof Image!=='function')return;
- for(const name of [...Object.values(WORLD_PAINTINGS),...Object.keys(ART_ROWS)]){
+ for(const name of [...Object.values(WORLD_PAINTINGS),...Object.keys(ART_ROWS),'weapons']){
   const image=new Image();image.decoding='async';image.src='art/'+name+'.webp';paintings[name]=image;
  }
 }
@@ -1790,7 +1790,7 @@ function finishDamageCapture(before,oldPlayerHp,dt){
   if(lost>0&&e.hp!==-999&&old.maxHp===e.maxHp){
    if(!inSandbox())runStats.biggestDamageBurst=Math.max(runStats.biggestDamageBurst||0,lost);
    e.numberDamage=(e.numberDamage||0)+lost;e.numberTimer=(e.numberTimer||0)+dt;
-   if(lost>=.5||e.numberTimer>=.25||e.hp<=0){damageNumbers.push({x:e.x||old.x,y:(e.y||old.y)-e.r-6,amount:e.numberDamage,life:.75});e.numberDamage=e.numberTimer=0}
+   if(lost>=.5||e.numberTimer>=.25||e.hp<=0){damageNumbers.push({x:e.x||old.x,y:(e.y||old.y)-e.r-6,amount:e.numberDamage,life:.75,impact:lost>=1?{x:e.x||old.x,y:e.y||old.y,r:e.r,color:e.lastHitBy==='mage'?'#c8b4ef':e.lastHitBy==='arrow'?'#f0c68a':'#f8d9a0'}:null});e.numberDamage=e.numberTimer=0}
   }
  }
  damageNumbers=damageNumbers.filter(n=>{n.life-=dt;n.y-=19*dt;return n.life>0}).slice(-80);
@@ -3940,10 +3940,119 @@ function updateArrows(dt){
  }
  arrows=arrows.filter(a=>a.life>0);
 }
+
+// Crops are the alpha bounds of each painted weapon in the 720 by 540 atlas.
+const WEAPON_ART={"stick":[15,88,152,22],"bat":[191,76,152,43],"sword":[366,67,160,61],"spear":[548,86,161,24],"sling":[16,240,150,58],"bow":[250,184,51,167],"crossbow":[364,198,161,138],"javelin":[547,259,161,18],"flailGrip":[13,426,156,36],"flailHead":[215,393,110,99],"focus":[395,395,94,94],"arrow":[546,427,162,33]};
+function drawWeaponArt(name,left,y,length,height){
+ const image=readyPainting('weapons'),crop=WEAPON_ART[name];
+ if(!image||!crop||length<=0)return false;
+ const [sx,sy,w,h]=crop;
+ const size=height??length*h/w;
+ g.drawImage(image,sx,sy,w,h,left,y-size/2,length,size);
+ return true;
+}
+function drawWeaponSweep(travel,reach,width,color,weapon){
+ if(reducedWorldMotion.matches||Math.abs(travel)<.025||!meleeIsSwinging())return;
+ const tail=clamp(travel,-.62,.62);
+ const radius=reach-(weapon==='sword'?width*.2:0);
+ g.save();g.lineCap='round';
+ for(let i=0;i<5;i++){
+  g.globalAlpha=(i+1)*.05;g.lineWidth=width*(.27+.065*i);g.strokeStyle=color;
+  g.beginPath();g.arc(0,0,radius,tail*(1-i/5),tail*(.8-i/5),tail>0);g.stroke();
+ }
+ g.globalAlpha=.66;g.lineWidth=1;g.strokeStyle='#ffefd3';
+ g.beginPath();g.arc(0,0,radius,tail*.23,0,tail>0);g.stroke();
+ g.restore();
+}
+function drawPaintedChain(ball){
+ const length=Math.hypot(ball.x-30,ball.y),angle=Math.atan2(ball.y,ball.x-30);
+ g.save();g.translate(30,0);g.rotate(angle);
+ for(let x=2;x<length-3;x+=3.9){
+  const narrow=Math.round((x-2)/3.9)%2;
+  g.beginPath();g.ellipse(x,0,2.6,narrow?.65:1.25,0,0,Math.PI*2);
+  g.strokeStyle='#201822';g.lineWidth=2;g.stroke();
+  g.strokeStyle=narrow?'#977e68':'#d7c5a5';g.lineWidth=.8;g.stroke();
+ }
+ g.restore();
+}
+function drawPaintedMelee(weapon,reach,width,travel,color){
+ if(!readyPainting('weapons'))return false;
+ if(weapon==='flail'){
+  const ball=flailHead(0,p.flailLag||0);
+  drawWeaponArt('flailGrip',16,0,15,5);
+  drawPaintedChain(ball);
+  g.save();g.translate(ball.x,ball.y);g.rotate(Math.atan2(ball.y,ball.x-30)+Math.PI);
+  // The asymmetric eyelet attaches to the chain. The spiked body stays centered on the hit point.
+  drawWeaponArt('flailHead',-width*.92,0,width*2.35,width*2);
+  g.restore();
+  return true;
+ }
+ drawWeaponSweep(travel,reach,width,color,weapon);
+ const artHeight=weapon==='sword'?width*1.85:weapon==='spear'?12:weapon==='bat'?width*2.4:width*1.33;
+ drawWeaponArt(weapon,16,0,reach-16,artHeight);
+ return true;
+}
+function drawNockedString(x,height,nock,color){
+ g.strokeStyle='#241b16';g.lineWidth=2.7;
+ g.beginPath();g.moveTo(x,-height);g.lineTo(nock,0);g.lineTo(x,height);g.stroke();
+ g.strokeStyle=color;g.lineWidth=1.15;g.stroke();
+}
+function drawPaintedRanged(weapon,charge){
+ if(!readyPainting('weapons'))return false;
+ const loaded=charge>BOW_MIN_DRAW;
+ if(weapon==='bow'){
+  drawWeaponArt('bow',13,0,16,37);
+  drawNockedString(14,18,14-12*charge,'#f4dcb1');
+  if(loaded)drawWeaponArt('arrow',13-12*charge,0,24+12*charge,4.5);
+ }else if(weapon==='crossbow'){
+  drawWeaponArt('crossbow',12,0,26,29);
+  drawNockedString(25,13,bowShotCooldown>0?26:15,'#f4dcb1');
+  if(loaded&&bowShotCooldown<=0)drawWeaponArt('arrow',14,0,27,4);
+ }else if(weapon==='javelin'){
+  drawWeaponArt('javelin',11-5*charge,4,35,6);
+ }else{
+  g.save();g.translate(12,0);g.scale(1-charge*.38,1);
+  drawWeaponArt('sling',0,0,17,14);g.restore();
+  artOval(g,26-charge*7,0,3.3,2.8,loaded?'#e4b382':'#c19169');
+  artOval(g,25-charge*7,-.8,1.7,1.35,'#f3d8a8');
+ }
+ return true;
+}
+function drawPaintedShot(arrow,weapon,angle){
+ if(weapon==='sling'||!readyPainting('weapons'))return false;
+ const length=weapon==='javelin'?31:weapon==='crossbow'?16:21;
+ g.save();g.translate(arrow.x,arrow.y);g.rotate(angle);
+ if(!reducedWorldMotion.matches&&arrow.power>.45){
+  const light=g.createLinearGradient(-length-10,0,0,0);
+  light.addColorStop(0,'#e4b56600');light.addColorStop(1,weapon==='javelin'?'#b9f2dc70':'#f9ca7c70');
+  g.fillStyle=light;g.fillRect(-length-10,-1,length+10,2);
+ }
+ drawWeaponArt(weapon==='javelin'?'javelin':'arrow',4-length,0,length,weapon==='javelin'?5:4.2);
+ g.restore();
+ return true;
+}
+function drawImpactSparks(){
+ if(reducedWorldMotion.matches)return;
+ g.save();g.lineCap='round';
+ for(const hit of damageNumbers.slice(-20)){
+  if(!hit.impact||hit.life<.54)continue;
+  const {x,y,r,color}=hit.impact,age=clamp((.75-hit.life)/.21,0,1);
+  const spread=r+age*(8+Math.min(hit.amount,16)*.5);
+  g.globalAlpha=(1-age)*.83;g.strokeStyle=color;g.lineWidth=1.2+1.4*(1-age);g.beginPath();
+  for(let i=0;i<5;i++){
+   const a=i*2.4+x*.037+y*.014,dx=Math.cos(a),dy=Math.sin(a);
+   g.moveTo(x+dx*spread,y+dy*spread);g.lineTo(x+dx*(spread+6*(1-age)),y+dy*(spread+6*(1-age)));
+  }
+  g.stroke();
+ }
+ g.restore();
+}
+
 function drawArrows(){
  g.save();g.lineCap='round';
  for(const arrow of arrows){const a=Math.atan2(arrow.vy,arrow.vx),ux=Math.cos(a),uy=Math.sin(a);
   const weapon=arrow.weapon||'bow';
+  if(drawPaintedShot(arrow,weapon,a))continue;
   if(weapon==='sling'){
    g.fillStyle='#e8bb8d';g.beginPath();g.arc(arrow.x,arrow.y,arrow.r,0,Math.PI*2);g.fill();continue;
   }
@@ -3956,6 +4065,7 @@ function drawArrows(){
 }
 function drawRangedWeapon(){
  const weapon=equippedWeapon(),charge=bowPower();
+ if(drawPaintedRanged(weapon,charge))return;
  if(weapon==='bow'){
   g.strokeStyle='#deb87a';g.lineWidth=3;g.beginPath();g.moveTo(14,-18);g.quadraticCurveTo(32,0,14,18);g.stroke();
   g.strokeStyle='#f9ead0';g.lineWidth=1.5;g.beginPath();g.moveTo(14,-18);g.lineTo(14-12*charge,0);g.lineTo(14,18);g.stroke();
@@ -3972,8 +4082,9 @@ function drawRangedWeapon(){
   g.fillStyle='#b5eadf';g.beginPath();g.moveTo(46-5*charge,4);g.lineTo(36-5*charge,0);g.lineTo(36-5*charge,8);g.closePath();g.fill();
  }
 }
-function drawMeleeWeapon(){
+function drawMeleeWeapon(travel=0){
  const weapon=equippedWeapon(),{reach,width,color}=weaponForm();
+ if(drawPaintedMelee(weapon,reach,width,travel,color))return;
  if(weapon==='stick'||weapon==='bat'){
   g.fillStyle=color;g.fillRect(17,-width/1.5,reach-17,width*1.33);
   g.fillStyle=weapon==='bat'?'#c0abd9':'#957456';g.fillRect(17,1,reach-17,2);
@@ -5977,7 +6088,7 @@ document.querySelector('#control-size').oninput=e=>{controls.size=Number(e.targe
 document.querySelector('#control-opacity').oninput=e=>{controls.opacity=Number(e.target.value);syncControls();saveControls()};
 document.querySelector('#floating-controls').onchange=e=>{controls.floating=e.target.checked;saveControls()};
 document.querySelector('#controls-reset').onclick=()=>{controls={...defaultControls,positions:defaultControls.positions.map(a=>[...a])};dashControl={x:.78,y:.76};syncControls();saveDashControl();saveControls()};async function goFullscreen(){try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock)await screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}document.querySelector('#fullscreen-toggle').onclick=goFullscreen;document.querySelector('#rotate-fullscreen').onclick=goFullscreen;
-function frame(t){const damageBefore=captureDamage(),oldPlayerHp=hp;const protectedPracticeHp=inSandbox()&&!sandbox.attacks?hp:null;pendingSplits=[];let dt=Math.min((t-last)/1000||0,.035);last=t;if(document.hidden||portraitLayout.matches||shieldPaused||!document.querySelector('#character-panel').hidden||persistencePaused()){requestAnimationFrame(frame);return}
+function frame(t){const previousRenderAngle=p.a;const damageBefore=captureDamage(),oldPlayerHp=hp;const protectedPracticeHp=inSandbox()&&!sandbox.attacks?hp:null;pendingSplits=[];let dt=Math.min((t-last)/1000||0,.035);last=t;if(document.hidden||portraitLayout.matches||shieldPaused||!document.querySelector('#character-panel').hidden||persistencePaused()){requestAnimationFrame(frame);return}
 if(settings.hidden&&!editingControls&&document.querySelector('#sandbox-panel').hidden){recordVisibleEncounters();arenaTime+=dt;updateSynergies(dt);if(!over){updateItemEffects(dt);updateBiomeWorld(dt);updateCurses(dt);updateDungeonMechanics(dt);updateFloorTraps()}if(!over){shieldUpdate(dt);rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage,true)}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&(regenWhileBleeding||playerBleed.length===0)){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){const where=p.fallReturn||safeRespawn();p.x=where.x;p.y=where.y;p.safeX=p.x;p.safeY=p.y;p.kvx=p.kvy=p.vx=p.vy=0;p.sticky=null;p.wallContacts=new Set();p.wallCooldowns=new Map();p.portalCooldown=1;p.fallReturn=null;hp=Math.max(0,hp-25);inv=Math.max(inv,1.5);if(hp<=0)over=true;showItemNotice('FELL INTO THE ABYSS · -25 HP')}}
 healFx=healFx.filter(f=>(f.life-=dt)>0);wallFx=wallFx.filter(f=>{f.life-=dt;if(f.type==='particle'){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.exp(-5*dt);f.vy*=Math.exp(-5*dt)}return f.life>0});elementFx=elementFx.filter(f=>(f.life-=dt)>0);puddles=puddles.filter(q=>(q.life-=dt)>0);poisonPuddles=poisonPuddles.filter(q=>(q.life-=dt)>0);
 if(!over&&!p.falling){let l=sticks[0],ox=p.x,oy=p.y;
@@ -6193,13 +6304,13 @@ if(phasing)g.restore();
 }
 for(const enemy of enemies)drawBiomeEnemyDetails(enemy);
 for(let f of healFx){let progress=1-f.life/.85,alpha=Math.min(1,f.life/.25);g.save();g.globalAlpha=alpha;g.fillStyle='#70ff90';let x=f.x+12+progress*7,y=f.y-14-progress*21;g.fillRect(x-2,y-8,4,16);g.fillRect(x-8,y-2,16,4);g.restore()}
-drawBossFight();drawSynergies();drawDashTrail();drawDamageNumbers();
+drawBossFight();drawSynergies();drawDashTrail();drawImpactSparks();drawDamageNumbers();
 if(!p.falling&&(inv===0||Math.floor(t/110)%2===0))drawHeroPortrait();
 if(!p.falling){
  g.save();g.translate(p.x,p.y);g.rotate(p.a);
  if(hero==='archer')drawRangedWeapon();
- else if(hero==='classic')drawMeleeWeapon();
- else{g.strokeStyle='#d8adff';g.lineWidth=2;g.shadowColor='#b386ff';g.shadowBlur=8;g.beginPath();g.arc(0,0,13,0,Math.PI*2);g.stroke();g.fillStyle='#ffe1a6';g.beginPath();g.arc(20,0,4,0,Math.PI*2);g.fill()}
+ else if(hero==='classic')drawMeleeWeapon(previousRenderAngle-p.a);
+ else{g.strokeStyle='#d8adff';g.lineWidth=2;g.shadowColor='#b386ff';g.shadowBlur=8;g.beginPath();g.arc(0,0,13,0,Math.PI*2);g.stroke();if(!drawWeaponArt('focus',14,0,12)){g.fillStyle='#ffe1a6';g.beginPath();g.arc(20,0,4,0,Math.PI*2);g.fill()}}
  g.restore();
 }
 if(FOG_OF_WAR_ENABLED)drawFog();
@@ -6223,5 +6334,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.29';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.30';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
