@@ -657,6 +657,7 @@ const shieldRig=[
   'const clamp=(n,min,max)=>Math.min(max,Math.max(min,n)),playerStats=()=>({shieldProtection:0});',
   'const classicDashProtected=()=>dashing,shieldUpdate=()=>{},queueCheckpoint=()=>{},enemyAttacksEnabled=()=>attacks;',
   'const damagedHealth=amount=>hp-amount,addEnemyBleed=()=>bleeds++;',
+  'const shieldCues=[],playSoundCue=id=>shieldCues.push(id);',
   ...['nearRect','shieldActive','shieldDamage','shieldBodyPoint','blockShieldBody','enemyContactDamage','resolveEnemyContact'].map(method),
   'const mob=(x,y,shape="round")=>({x,y,r:10,vx:-260,vy:0,shape});'
 ];
@@ -666,8 +667,8 @@ test('the solid guard catches a melee charge even if its frame movement crosses 
     ...shieldRig,
     'const enemy=mob(89,100);enemy.chargeUntil=2;',
     'resolveEnemyContact(enemy,130,100,p);'
-  ],'{hp,shieldHp,enemyX:enemy.x,bounced:enemy.vx>0,inv,push:p.kvx}');
-  assert.deepEqual(result,{hp:50,shieldHp:82,enemyX:125.7,bounced:true,inv:0,push:0});
+  ],'{hp,shieldHp,enemyX:enemy.x,bounced:enemy.vx>0,inv,push:p.kvx,shieldCues}');
+  assert.deepEqual(result,{hp:50,shieldHp:82,enemyX:125.7,bounced:true,inv:0,push:0,shieldCues:['shield-block']});
 });
 
 test('blocked bloodletter contact cannot bleed the player, even when the shield breaks', () => {
@@ -1174,8 +1175,29 @@ test('music, effects, mute and pause have separate mix rules and biome scores', 
  const result=run([
   declaration('DUNGEON_SCORE'),method('dungeonMusicKey'),method('dungeonMixLevels'),
   'const audio={master:75,effects:40,music:80,muted:false};',
-  'const scores=[dungeonMusicKey(null,false,true),dungeonMusicKey("red",true,true),dungeonMusicKey("green",false,true),dungeonMusicKey("blue",true,true),dungeonMusicKey("green",false,false)];',
-  'const active=dungeonMixLevels(audio,false),paused=dungeonMixLevels(audio,true);audio.muted=true;const muted=dungeonMixLevels(audio,false);'
- ],'{scores,master:active.master,ducked:paused.music<active.music,effectsUnaffected:paused.effects===active.effects,muted:muted.master}');
- assert.deepEqual(result,{scores:['basic','red-boss','green','blue-boss',null],master:.75,ducked:true,effectsUnaffected:true,muted:0});
+  'const scores=[dungeonMusicKey(null,false,true),dungeonMusicKey("red",true,true),dungeonMusicKey("green",false,true),dungeonMusicKey("blue",true,true),dungeonMusicKey("green",false,false),dungeonMusicKey("green",false,false,true)];',
+  'const active=dungeonMixLevels(audio,false),paused=dungeonMixLevels(audio,true),warning=dungeonMixLevels(audio,false,true);audio.muted=true;const muted=dungeonMixLevels(audio,false);'
+ ],'{scores,master:active.master,ducked:paused.music<active.music,warningDucks:warning.music<active.music&&warning.effects===active.effects,effectsUnaffected:paused.effects===active.effects,muted:muted.master}');
+ assert.deepEqual(result,{scores:['basic','red-boss','green','blue-boss',null,'title'],master:.75,ducked:true,warningDucks:true,effectsUnaffected:true,muted:0});
+});
+
+test('boss warnings play once per windup and can sound again on a later attack', () => {
+ const result=run([
+  method('bossWarningSound'),method('audioWarningEdge'),
+  'const audioWarningEdges=new WeakMap(),cues=[],playSoundCue=id=>cues.push(id),unit={state:"recover"};',
+  'const step=state=>{unit.state=state;audioWarningEdge(unit,bossWarningSound(unit))};',
+  'step("chargeWarn");step("chargeWarn");step("charge");step("chargeWarn");',
+  'unit.prismState="warn";step("recover");step("recover");unit.prismState="fire";step("breathWarn");'
+ ],'cues');
+ assert.deepEqual(result,['warn-charge','warn-charge','warn-beam','warn-volley']);
+});
+
+test('final-phase boss music adds percussion without resetting the beat', () => {
+ const result=run([
+  declaration('DUNGEON_SCORE'),declaration('BOSS_SCORE'),method('musicPitch'),method('scheduleDungeonBeat'),
+  'const pitched=(wave,...args)=>({wave,args}),textured=(filter,...args)=>({filter,args}),calls=[],playDungeonVoice=voice=>calls.push(voice);',
+  'const normal={world:"red",boss:true,intense:false,step:10,next:8},frenzy={...normal,intense:true};',
+  'scheduleDungeonBeat(normal);const first=calls.splice(0);scheduleDungeonBeat(frenzy);'
+ ],'{more:calls.length>first.length,rhythm:calls.some(c=>c.filter==="highpass"),sameStep:normal.step===frenzy.step,sameTime:normal.next===frenzy.next,distinct:Object.values(BOSS_SCORE).every(score=>score.notes.length===16)&&new Set(Object.values(BOSS_SCORE).map(score=>score.notes.join(","))).size===4}');
+ assert.deepEqual(result,{more:true,rhythm:true,sameStep:true,sameTime:true,distinct:true});
 });

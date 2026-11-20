@@ -13,6 +13,12 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.48 — Title music, boss phases and danger cues
+
+The main menu has a quiet title theme that starts after the first interaction and fades into the current dungeon's music when play begins. Each biome has a separate boss arrangement. Boss fights have entrance and phase cues, with extra percussion added in the final phase without restarting the track.
+
+The victory recap, a lost life, and the end of a run each have their own cue. Boss windups, nearby artillery and traps have short warning sounds that briefly lower the music. Shield blocks and damage taken have distinct sounds. The existing Master, Sound effects, Music and ambience, and Mute settings control the new audio.
+
 ## V8.47 — Combat audio, dungeon feedback and music
 
 Each melee weapon has its own swing and impact cues. Bows, crossbows, slings and javelins have distinct releases, and the five Mage paths have different cast sounds. Gates, portals, breakable props, coins, item pickups, level-ups and room clears have their own audio feedback.

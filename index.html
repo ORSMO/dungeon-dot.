@@ -563,7 +563,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  .pause-body{grid-template-columns:minmax(100px,.66fr) minmax(0,1.6fr)}
  .controls-body{grid-template-columns:minmax(106px,.70fr) minmax(0,1.5fr)}
 }
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.47</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.48</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
  <div class="pause-home">
   <div class="menu-header"><h2>Paused</h2><button id="settings-close" type="button" class="menu-control primary-control">Resume</button></div>
   <div class="pause-body">
@@ -650,7 +650,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.47</small>
+   <small>V8.48</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -742,6 +742,7 @@ let armourHp=0;
 function shieldDamage(amount){
  if(hero!=='classic'||shieldBroken||shieldHp<=0||classicDashProtected())return;
  shieldType='curved';shieldHp=Math.max(0,shieldHp-Math.max(0,amount)*(1-playerStats().shieldProtection));
+ if(amount>0)playSoundCue('shield-block');
  shieldLastHit=arenaTime;shieldBroken=shieldHp<=0;shieldCooldown=0;shieldUpdate(0);queueCheckpoint();
 }
 function shieldUpdate(dt){
@@ -2197,7 +2198,7 @@ function finishDamageCapture(before,oldPlayerHp,dt){
  damageNumbers=damageNumbers.filter(n=>{n.life-=dt;n.y-=19*dt;return n.life>0}).slice(-80);
  if(oldPlayerHp>hp&&(!inSandbox()||sandbox.attacks)){
   if(hp>0)over=false;
-  if(oldPlayerHp-hp>=.8)playerHitAt=arenaTime;
+  if(oldPlayerHp-hp>=.8){playerHitAt=arenaTime;playSoundCue('hurt')}
  }
  if(itemNoticeTime>0){itemNoticeTime-=dt;if(itemNoticeTime<=0)document.querySelector('#item-notice').hidden=true}
 }
@@ -2246,7 +2247,9 @@ function rewardRoom(){
 }
 function rewardBoss(){
  if(inSandbox()||currentRoom.rewardGenerated)return;
- currentRoom.rewardGenerated=true;playSoundCue('boss-clear');coinDrops.push({x:W/2-42,y:F/2,amount:20});earnXp(32);
+ currentRoom.rewardGenerated=true;
+ if(dungeonDepth!==VICTORY_DEPTH||currentRoom.victoryRecapSeen)playSoundCue('boss-clear');
+ coinDrops.push({x:W/2-42,y:F/2,amount:20});earnXp(32);
  const fallen=bossFight?.units.find(unit=>unit.hp<=0);if(fallen)synergyEnemyDeath(fallen);synergyRoomClear();
  currentRoom.loot=[{id:'boss-reward',kind:'item',key:rollItem(),price:0,x:W/2+45,y:F/2,claimed:false}];
  if(itemCount('leechFang'))healPlayer(4*itemCount('leechFang'));
@@ -2621,15 +2624,36 @@ const DUNGEON_SOUND={
  'loot':[pitched('sine',523,510,.17,.14),pitched('sine',659,650,.20,.14,.064),pitched('triangle',784,752,.30,.16,.125,2100)],
  'level':[pitched('triangle',330,330,.21,.15),pitched('sine',440,440,.23,.15,.075),pitched('triangle',587,587,.39,.18,.155,2000),pitched('sine',880,880,.37,.10,.212)],
  'room-clear':[pitched('sine',247,247,.35,.135,0,0,.03),pitched('sine',370,370,.39,.12,.105,0,.03),pitched('triangle',494,494,.40,.12,.196,1300,.04)],
- 'boss-clear':[pitched('triangle',147,147,.49,.21,0,850,.03),pitched('sine',294,294,.40,.13,.10),pitched('sine',440,440,.42,.14,.20),pitched('triangle',587,587,.56,.14,.29,1800,.03)]
+ 'boss-clear':[pitched('triangle',147,147,.49,.21,0,850,.03),pitched('sine',294,294,.40,.13,.10),pitched('sine',440,440,.42,.14,.20),pitched('triangle',587,587,.56,.14,.29,1800,.03)],
+ 'boss-entrance':[pitched('triangle',98,73,.53,.24,0,710,.08),textured('lowpass',570,.42,.18,.04,.1),pitched('triangle',147,110,.47,.17,.12,990,.04)],
+ 'boss-phase':[pitched('triangle',82,51,.36,.23),textured('bandpass',1090,.28,.16,.05),pitched('sine',207,293,.31,.16,.14,0,.039)],
+ victory:[pitched('triangle',262,262,.55,.19,0,1700,.034),pitched('sine',330,330,.64,.16,.16),pitched('triangle',392,392,.78,.19,.30,1600),pitched('sine',523,523,1.10,.14,.48,0,.082),pitched('triangle',659,659,.95,.12,.56,1900,.045)],
+ 'life-lost':[pitched('triangle',293,240,.27,.18,0,1700,.020),pitched('sine',196,155,.42,.18,.13,0,.041)],
+ defeat:[pitched('triangle',247,138,.48,.18,0,1300,.035),pitched('sine',165,146,.65,.19,.30,0,.09),pitched('sine',98,73,.67,.17,.43,0,.14)],
+ 'warn-charge':[pitched('triangle',205,420,.16,.24,0,2000),pitched('triangle',350,590,.22,.23,.12,2150),textured('bandpass',1310,.16,.15,.12)],
+ 'warn-beam':[pitched('sine',565,980,.32,.22,0,0,.018),pitched('triangle',780,1400,.29,.13,.10,2250,.025)],
+ 'warn-volley':[textured('bandpass',1280,.065,.20),textured('bandpass',1840,.070,.19,.102),pitched('triangle',350,640,.21,.17,.09,1600)],
+ 'warn-area':[pitched('triangle',460,550,.13,.20),pitched('sine',620,740,.16,.18,.15)],
+ 'warn-artillery':[pitched('sine',1270,470,.54,.24,0,0,.025),textured('bandpass',1070,.41,.10,.060,.040)],
+ 'warn-trap':[textured('bandpass',1940,.07,.16),textured('bandpass',1560,.12,.16,.093),pitched('triangle',725,390,.15,.12,.075)],
+ 'shield-block':[pitched('triangle',990,560,.18,.19),textured('bandpass',2200,.076,.13),pitched('sine',1290,1150,.16,.10,.017)],
+ hurt:[pitched('triangle',160,68,.155,.20,0,690),textured('bandpass',560,.12,.14)]
 };
 const DUNGEON_SCORE={
+ title:{root:41,beat:.66,notes:[19,null,27,24,22,null,19,null,17,null,24,22,15,19,null,null],wave:'triangle',pad:12,air:750},
  basic:{root:38,beat:.76,notes:[12,null,19,null,15,null,22,19,12,null,17,null,19,null,15,null],wave:'triangle',pad:7,air:460},
  red:{root:36,beat:.66,notes:[12,null,null,13,19,null,15,null,12,null,null,19,22,null,15,13],wave:'triangle',pad:7,air:170},
  green:{root:43,beat:.82,notes:[19,null,24,22,17,null,15,null,19,24,null,22,26,null,22,17],wave:'sine',pad:12,air:930},
  blue:{root:40,beat:.86,notes:[24,null,31,null,27,24,null,22,31,null,34,null,27,null,24,null],wave:'sine',pad:7,air:1760}
 };
+const BOSS_SCORE={
+ basic:{root:38,beat:.40,notes:[12,null,12,17,null,15,13,null,12,10,null,13,17,null,15,10],wave:'triangle',air:340,drum:95},
+ red:{root:33,beat:.35,notes:[12,12,null,18,null,13,12,null,15,null,13,12,18,null,12,null],wave:'triangle',air:270,drum:83},
+ green:{root:42,beat:.43,notes:[19,null,15,19,null,22,20,null,15,19,null,17,15,22,null,20],wave:'sine',air:990,drum:109},
+ blue:{root:35,beat:.39,notes:[24,null,28,22,31,null,27,null,24,22,null,26,31,22,28,null],wave:'sine',air:1750,drum:122}
+};
 let combatAudio=null,audioMix=null,noiseForAudio=null,musicScene=null,meleeAudioSwing=false;
+let musicWarningUntil=0,musicRestUntil=0;
 const cuePlayedAt=new Map();
 function gainChannel(){
  const node=combatAudio.createGain();node.gain.value=0;return node;
@@ -2643,16 +2667,16 @@ function createDungeonMix(){
  music.connect(delay);delay.connect(wet);wet.connect(master);delay.connect(feedback);feedback.connect(delay);
  return {master,effects,music,volumeKey:''};
 }
-function dungeonMixLevels(profile,ducked){
+function dungeonMixLevels(profile,ducked,warning=false){
  return {
   master:profile.muted?0:profile.master/100,
   effects:profile.effects/100*.76,
-  music:profile.music/100*(ducked?.22:.56)
+  music:profile.music/100*(ducked?.22:warning?.30:.56)
  };
 }
 function syncDungeonMix(ducked=false){
  if(!audioMix)return;
- const volumes=dungeonMixLevels(profile.audio,ducked);
+ const volumes=dungeonMixLevels(profile.audio,ducked,combatAudio.currentTime<musicWarningUntil);
  const key=Object.values(volumes).join(':');
  if(key===audioMix.volumeKey)return;
  audioMix.volumeKey=key;
@@ -2709,9 +2733,11 @@ function playSoundCue(id){
  const audio=profile.audio,cue=DUNGEON_SOUND[id];
  if(!cue||audio.muted||!audio.master||!audio.effects||combatAudio?.state!=='running'||document.hidden)return;
  const time=combatAudio.currentTime;
- const repeat=id==='coin'?.12:id.startsWith('hit-')?.078:.10;
+ const warning=id.startsWith('warn-');
+ const repeat=warning?.44:id==='coin'?.12:id.startsWith('hit-')?.078:.10;
  if(time-(cuePlayedAt.get(id)??-Infinity)<repeat)return;
  cuePlayedAt.set(id,time);
+ if(warning){musicWarningUntil=Math.max(musicWarningUntil,time+.63);syncDungeonMix(audioPanelsOpen())}
  for(const voice of cue)playDungeonVoice(voice,audioMix.effects,time+.004);
 }
 function updateMeleeWhoosh(){
@@ -2719,55 +2745,108 @@ function updateMeleeWhoosh(){
  if(swinging&&!meleeAudioSwing)playSoundCue('swing-'+equippedWeapon());
  meleeAudioSwing=swinging;
 }
-function dungeonMusicKey(biome,activeBoss,inRun){
+function dungeonMusicKey(biome,activeBoss,inRun,showTitle=false){
+ if(showTitle)return 'title';
  if(!inRun)return null;
  const world=Object.hasOwn(DUNGEON_SCORE,biome)?biome:'basic';
  return world+(activeBoss?'-boss':'');
 }
 function musicPitch(note){return 440*Math.pow(2,(note-69)/12)}
 function scheduleDungeonBeat(scene){
- const world=scene.world,score=DUNGEON_SCORE[world],step=scene.step%16,time=scene.next,bus=scene.bus;
- const frequency=musicPitch(score.root),bass=frequency*(step>=8?.89:1);
- const note=score.notes[step];
- if(scene.boss){
+ const {world,boss,bus,step:counter,next:time}=scene;
+ const score=boss?BOSS_SCORE[world]:DUNGEON_SCORE[world],step=counter%16,intense=scene.intense;
+ const bass=musicPitch(score.root+(step>=8?-2:0)),note=score.notes[step];
+ if(boss){
   if(step%4!==3){
    const f=bass*(step%8===6?1.5:1);
    playDungeonVoice(pitched('triangle',f,f,.35,.145,0,1050,.013),bus,time);
   }
   if(step%4===0){
-   playDungeonVoice(pitched('sine',100,45,.26,.22),bus,time);
-   playDungeonVoice(textured('lowpass',490,.19,.13,0,.015),bus,time);
+   playDungeonVoice(pitched('sine',score.drum,40,.25,.21),bus,time);
+   playDungeonVoice(textured('lowpass',score.drum*5,.16,.10,0,.014),bus,time);
   }
-  if(step===6||step===14)playDungeonVoice(textured('bandpass',770,.22,.10),bus,time);
+  if(step%8===6||intense&&step%4===2)
+   playDungeonVoice(textured('bandpass',score.drum*9,.17,intense?.15:.08),bus,time);
+  if(intense){
+   playDungeonVoice(textured('highpass',3500,.063,.073,.16),bus,time);
+   if(step%4===3)playDungeonVoice(pitched('triangle',bass*1.5,bass,.22,.098,.20,900),bus,time);
+  }
  }else if(step%8===0){
   playDungeonVoice(pitched('triangle',bass,bass,score.beat*6.7,.12,0,710,.86),bus,time);
   const f=musicPitch(score.root+score.pad+(step===8?-2:0));
   playDungeonVoice(pitched('sine',f,f,score.beat*6.1,.08,0,0,1.12),bus,time);
  }
- if(note!==null&&(scene.boss?step%3!==1:true)){
-  const f=musicPitch(score.root+note+(scene.boss?-4:0));
-  playDungeonVoice(pitched(score.wave,f,f,scene.boss?.42:1.22,scene.boss?.069:.089,0,2100,world==='green'?.08:.033),bus,time);
-  if((world==='blue'||world==='green')&&step%4===0)
-   playDungeonVoice(pitched('sine',f*2,f*2,.69,.028,.031,0,.027),bus,time);
+ if(note!==null){
+  const f=musicPitch(score.root+note);
+  playDungeonVoice(pitched(score.wave,f,f,boss?.50:1.24,boss?.084:.094,0,2100,world==='green'?.08:.038),bus,time);
+  if(!boss&&(world==='blue'||world==='green'||world==='title')&&step%4===0)
+   playDungeonVoice(pitched('sine',f*2,f*2,.73,.036,.042,0,.028),bus,time);
  }
  if(step%4===0){
   const noisy=world==='red'?'lowpass':'bandpass';
-  playDungeonVoice(textured(noisy,score.air,.95,scene.boss?.04:.072,0,.22),bus,time);
-  if(world==='green'&&step===4)playDungeonVoice(pitched('sine',1020,721,.20,.058,.26),bus,time);
-  if(world==='blue'&&step===12)playDungeonVoice(textured('bandpass',670,.54,.057,.10,.035),bus,time);
+  playDungeonVoice(textured(noisy,score.air,.95,boss?.04:.072,0,.22),bus,time);
+  if(!boss&&world==='green'&&step===4)playDungeonVoice(pitched('sine',1020,721,.20,.058,.26),bus,time);
+  if(!boss&&world==='blue'&&step===12)playDungeonVoice(textured('bandpass',670,.54,.057,.10,.035),bus,time);
  }
  scene.step++;
- scene.next+=scene.boss?.39:score.beat;
+ scene.next+=score.beat;
+}
+const heardBossPhases=new WeakMap();
+const audioWarningEdges=new WeakMap();
+function bossWarningSound(unit){
+ if(unit.prismState==='warn')return 'warn-beam';
+ if(unit.state==='chargeWarn')return 'warn-charge';
+ if(unit.state==='shotWarn'||unit.state==='breathWarn')return 'warn-volley';
+ if(unit.state==='fieldWarn'||unit.state==='jumpWarn')return 'warn-area';
+ return null;
+}
+function audioWarningEdge(source,cue){
+ if((audioWarningEdges.get(source)??null)===cue)return;
+ if(cue){audioWarningEdges.set(source,cue);playSoundCue(cue)}
+ else audioWarningEdges.delete(source);
+}
+function updateDangerAudio(){
+ if(combatAudio?.state!=='running'||over||!enemyAttacksEnabled()||!profile.audio.effects)return;
+ const within=(x,y,r)=>Math.hypot(p.x-x,p.y-y)<r;
+ if(bossFight&&!bossFight.done){
+  for(const unit of bossFight.units)if(unit.hp>0)audioWarningEdge(unit,bossWarningSound(unit));
+  if(bossFight.special)audioWarningEdge(bossFight.special,'warn-volley');
+  for(const hazard of bossFight.hazards){
+   const near=within(hazard.x,hazard.y,hazard.r+120);
+   audioWarningEdge(hazard,!hazard.active&&hazard.warn>0&&near?'warn-area':null);
+  }
+ }
+ for(const shell of artillery)
+  audioWarningEdge(shell,shell.life<=.65&&within(shell.x,shell.y,shell.r+148)?'warn-artillery':null);
+ for(const trap of floorTraps)
+  audioWarningEdge(trap,trapPhase(trap).warning&&nearRect(p.x,p.y,95,trap)?'warn-trap':null);
+ for(const fixture of wallFixtures)
+  audioWarningEdge(fixture,fixture.warnUntil>arenaTime&&within(fixture.x,fixture.y,135)?'warn-trap':null);
 }
 function audioPanelsOpen(){
- return ['#settings-panel','#character-panel','#sound-panel','#bestiary-panel'].some(id=>!document.querySelector(id).hidden);
+ return ['#settings-panel','#character-panel','#sound-panel','#bestiary-panel'].some(id=>!document.querySelector(id).hidden)||
+  document.querySelector('#privacy-policy').open;
+}
+function playDungeonOutcome(cue,rest){
+ playSoundCue(cue);
+ if(combatAudio?.state==='running')musicRestUntil=combatAudio.currentTime+rest;
 }
 function updateDungeonAudio(){
  if(combatAudio?.state!=='running'||document.hidden)return;
- const now=combatAudio.currentTime,audio=profile.audio;
+ const now=combatAudio.currentTime,audio=profile.audio,menu=!document.querySelector('#start-screen').hidden;
+ const victorious=document.querySelector('#victory-recap').open,resting=now<musicRestUntil;
+ const boss=!menu&&!over&&!victorious&&!resting&&bossFight&&!bossFight.done?bossFight:null;
+ const intense=!!boss?.units.some(unit=>unit.hp>0&&unit.phase2);
+ if(boss){
+  if(!heardBossPhases.has(boss)){
+   heardBossPhases.set(boss,intense);playSoundCue('boss-entrance');
+  }else if(intense&&!heardBossPhases.get(boss)){
+   heardBossPhases.set(boss,true);playSoundCue('boss-phase');
+  }
+ }
  syncDungeonMix(audioPanelsOpen());
- const inRun=document.querySelector('#start-screen').hidden&&!over&&audio.master>0&&audio.music>0&&!audio.muted;
- const key=dungeonMusicKey(selectedBiome,!!bossFight&&!bossFight.done,inRun);
+ const permitted=audio.master>0&&audio.music>0&&!audio.muted&&!victorious&&!resting;
+ const key=permitted?dungeonMusicKey(selectedBiome,!!boss,!menu&&!over,menu):null;
  if(key!==(musicScene?.key??null)){
   if(musicScene){
    const old=musicScene.bus;
@@ -2778,10 +2857,11 @@ function updateDungeonAudio(){
   if(key){
    const world=key.replace('-boss',''),bus=gainChannel();
    bus.connect(audioMix.music);bus.gain.setTargetAtTime(1,now,.25);
-   musicScene={key,world,boss:key.endsWith('-boss'),bus,step:0,next:now+.06};
+   musicScene={key,world,boss:key.endsWith('-boss'),bus,step:0,next:now+(boss?.38:.06)};
   }
  }
  if(musicScene){
+  musicScene.intense=intense;
   if(musicScene.next<now)musicScene.next=now+.02;
   while(musicScene.next<=now+.13)scheduleDungeonBeat(musicScene);
  }
@@ -2927,7 +3007,7 @@ function showVictoryRecap(){
  document.querySelector('#victory-lives').textContent=lives;
  document.querySelector('#victory-impact').textContent=runStats.biggestImpact?Math.round(runStats.biggestImpact):'—';
  document.querySelector('#victory-damage').textContent=runStats.biggestDamageBurst?Number(runStats.biggestDamageBurst.toFixed(2))+' HP':'—';
- document.querySelector('#victory-recap').showModal();
+ document.querySelector('#victory-recap').showModal();playDungeonOutcome('victory',1.7);
 }
 function acknowledgeVictory(){
  if(!victoryRecapPending())return;
@@ -7647,6 +7727,7 @@ function hud(){
 function resolvePlayerDeath(){
  if(!over||hp>0||inSandbox()||lives<=0)return;
  lives=Math.max(0,lives-1);persistLifeCount();
+ playDungeonOutcome(lives>0?'life-lost':'defeat',lives>0?.68:1.25);
  if(lives===0){showItemNotice('RUN ENDED · ALL LIVES LOST');hud();return}
  // Clear uncollected fight rewards so repeating the same room cannot farm them.
  coinDrops=[];heartDrops=[];lifeDrops=[];currentRoom.coinDrops=[];currentRoom.heartDrops=[];currentRoom.lifeDrops=[];
@@ -7934,7 +8015,7 @@ for(const fallen of defeated)if(fallen.elite||fallen.shape==='armored')for(const
 }
 let newborn=[];for(let e of defeated){if(e.shape!=='splitter')continue;for(let n=0;n<3;n++){let a=n*Math.PI*2/3+Math.random()*.35,ux=Math.cos(a),uy=Math.sin(a),x=clamp(e.x+ux*15,26,W-26),y=clamp(e.y+uy*15,26,F-26);let child={x,y,vx:e.vx*.4+ux*125,vy:e.vy*.4+uy*125,r:7,shape:'mini',mass:.55,hp:2,maxHp:2,healGlow:0,cool:0,impactCooldown:.35,playerHealCooldown:0};for(let w of walls)collideWall(child,w);newborn.push(child)}}enemies=enemies.filter(e=>e.hp>0);enemies.push(...newborn,...pendingSplits);let previousKills=kills;if(!inSandbox())kills+=defeated.length;if(!inSandbox()&&!shieldType&&previousKills<10&&kills>=10)showShieldChoice();updateRoomProgress();hud()}
 if(protectedPracticeHp!==null){hp=Math.max(hp,protectedPracticeHp);if(hp>0)over=false;playerBleed=[];hud()}
-finishDamageCapture(damageBefore,oldPlayerHp,dt);updateEconomy(dt);updateDashVisuals(dt);flushCheckpoint();flushProfile();
+finishDamageCapture(damageBefore,oldPlayerHp,dt);updateDangerAudio();updateEconomy(dt);updateDashVisuals(dt);flushCheckpoint();flushProfile();
 checkRoomDoors(dt);}
 resolvePlayerDeath();
 showVictoryRecap();
@@ -8031,5 +8112,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.47';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.48';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
