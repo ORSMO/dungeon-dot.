@@ -1156,3 +1156,10 @@ test('door artwork tracks the room lock and opens without replaying on entry', (
  ],'{locked:locked.amount,unlock:unlock.amount,moving:moving.amount,settled:settled.amount,reduced:reduced.amount,reentry:reentry.amount,relocked:relocked.amount}');
  assert.deepEqual({...result,moving:Math.round(result.moving*100)/100},{locked:0,unlock:0,moving:.5,settled:1,reduced:1,reentry:1,relocked:0});
 });
+
+test('character pages preserve a stats fallback and only expose runes to Mage', () => {
+ const result=run([
+  declaration('CHARACTER_PAGES'),method('characterPage')
+ ],'[characterPage("stats",false),characterPage("run",false),characterPage("items",true),characterPage("runes",false),characterPage("runes",true),characterPage("unknown",true)]');
+ assert.deepEqual(result,['stats','run','items','stats','runes','stats']);
+});

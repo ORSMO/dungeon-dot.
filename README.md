@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.46 — In-run menus
+
+The Character window groups current stats, collected items, run records and the Mage spellbook into separate pages. The character portrait and menu backgrounds use the painted artwork. Pause, Controls and Sound use the same bronze-trimmed layout, with larger buttons and scrollable panels for short landscape screens. The Controls page previews joystick size and opacity as you adjust them. Existing control and audio settings continue to load from the same saved preferences.
+
 ## V8.45 — Painted pots and enemy nests
 
 Breakable clay pots have a painted terracotta sprite. Enemy nests show twisted roots and larger amber eggs that stand out on the dungeon floor. A nest's health bar appears nearby or when it takes damage. Pot breakage and nest behavior follow the existing rules.
