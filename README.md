@@ -2,11 +2,15 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.31 — Painted doors, traps and loot
+
+Each biome has painted gates with readable route or lock signs. Trap grates distinguish idle, warning and active states and show painted spikes when they can deal damage. Bridges, chests, crates, barrels, coins, hearts, extra lives and loot stands have painted sprites. Room topology, trap timing and pickup rules are unchanged.
+
+The next visual passes are the minimap and combat HUD, then distinct artwork for enemy variants that share portraits.
+
 ## V8.30 — Painted weapons and combat effects
 
 Each melee and ranged weapon has painted art sized to its combat geometry. Flail links follow the moving head, ranged weapons show their current draw, and players can see swing trails and brief impact sparks. Attack ranges, damage and timing use the existing gameplay rules.
-
-The remaining visual passes are doors, traps and loot, then the minimap and combat HUD, then distinct artwork for enemy variants that share portraits.
 
 ## V8.29 — Hero and enemy names
 
