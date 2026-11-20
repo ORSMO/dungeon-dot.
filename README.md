@@ -13,6 +13,10 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.28 — Illustrated journal and victory recap
+
+The Enemy Index uses the selected enemy's biome artwork behind its portrait and keeps the depth control, damage breakdown and discovery records. Victory has a new sunrise illustration. Sound, controls, character, privacy and evolution panels share the main menu's colors and typography.
+
 ## V8.27 — Main menu
 
 The title screen has new painted key art and quick access to continuing a run, starting a new one, the Enemy Index and sound settings. Hero selection and save slots have dedicated screens. Continue opens the last playable checkpoint when there is no active run. Replacing an occupied slot still requires confirmation.

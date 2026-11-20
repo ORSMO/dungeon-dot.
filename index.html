@@ -194,7 +194,86 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
  .save-slot button,#menu-back{padding:6px 8px}
 }
 
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.27</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · SWING</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><button id="settings-privacy">Privacy policy ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-xp" type="button">+100 XP</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
+
+/* Journal and overlays use the same dark blue, bronze and paper as the title. */
+#bestiary-panel{inset:clamp(7px,2vw,23px);padding:clamp(10px,2vw,24px);gap:11px;max-width:1440px;margin:auto;color:#f4e6ca;background:linear-gradient(125deg,#141923f7 27%,#231d1eea),url("art/keep.webp") center/cover;border:1px solid #aa8758;border-radius:3px;box-shadow:0 0 0 100vmax #08090fc9,inset 0 0 0 4px #0c0f16bf}
+.index-heading{align-items:center}
+.index-heading h1{font:700 clamp(28px,4.6vw,60px)/.96 Georgia,serif;margin:0;letter-spacing:-.04em}
+.index-heading p{color:#dfc79e;font:11px/1.3 system-ui;margin:6px 0 0}
+.index-heading>button,.sound-heading button{align-self:flex-start}
+.index-controls,.index-toolbar{margin:0}
+.index-toolbar button,.index-toolbar input,.index-controls{border-color:#715c45;color:#f6e6cb;background:#1b2029;border-radius:2px}
+.index-toolbar button[aria-pressed=true]{background:#d8ac73;border-color:#e9c28f;color:#20150e}
+.index-controls{padding:7px 9px;gap:8px}
+.index-depth output{color:#ffe3ac}
+.index-depth input,.index-reveal input{accent-color:#d9a972}
+.index-layout{grid-template-columns:minmax(0,1.17fr) minmax(230px,1fr);gap:12px}
+#bestiary-grid,#bestiary-detail{scrollbar-color:#8c6b49 #181b23}
+#bestiary-grid{grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:6px}
+.index-tile,.index-tile.locked{min-height:100px;gap:3px;background:radial-gradient(ellipse at 50% 32%,var(--realm-tint,#5c4835),#20232d 74%);border:1px solid #71614e;border-radius:2px;padding:5px;color:#fff0d4}
+.index-tile[data-realm=red],#bestiary-detail[data-realm=red]{--realm-tint:#6e382a;--realm-art:url("art/forge.webp")}
+.index-tile[data-realm=green],#bestiary-detail[data-realm=green]{--realm-tint:#38553d;--realm-art:url("art/hollow.webp")}
+.index-tile[data-realm=blue],#bestiary-detail[data-realm=blue]{--realm-tint:#344f65;--realm-art:url("art/vault.webp")}
+.index-tile.locked{background:#161b24;border-color:#4c4338}
+.index-tile[aria-pressed=true]{border-color:#e9bd7d;box-shadow:inset 0 0 0 2px #9d74449e}
+.index-tile:hover{border-color:#edc384}
+.index-tile strong{font:700 12px/1.15 Georgia,serif}
+.index-tile .index-tile-hp{color:#ffdca2}
+.index-tile .plate-icon{width:60px;filter:drop-shadow(0 3px 4px #08090b)}
+#bestiary-detail{--realm-art:url("art/keep.webp");display:block;padding:11px;background:#191e27;border:1px solid #8a704f;border-radius:3px}
+.index-entry-heading{position:relative;display:flex;align-items:center;min-height:102px;padding:7px 12px;margin:-11px -11px 11px;background:linear-gradient(90deg,#191b22b0,#191b22df 55%,#191b225c),var(--realm-art) center 26%/cover;border-bottom:1px solid #8a704f}
+.index-entry-heading h2{font:700 clamp(16px,2.6vw,29px)/1.02 Georgia,serif;color:#ffeac6;text-transform:none}
+.index-entry-heading small,#bestiary-detail .index-context{color:#debf98}
+.index-entry-heading .index-portrait{border:0;border-radius:0;background:none}
+.index-entry-heading .plate-icon{width:88px;filter:drop-shadow(0 4px 4px #08090c)}
+.index-stat-heading{font:700 15px Georgia,serif;color:#f6dba8}
+.index-stat{background:#242832;border-color:#514837;border-radius:3px}
+.index-stat.hp{background:#3b3025;border-color:#9e7a50}
+.index-stat.hp dd,.index-attacks dd{color:#ffdfa4}
+.index-attacks div{border-color:#504536}
+.index-footnote{color:#cdb58f}
+.index-empty{grid-column:1/-1;margin:0;padding:14px;color:#dfc79e;background:#191e27;border:1px solid #504536}
+#sound-panel,#privacy-policy,#character-panel,#settings-panel,#stats-panel,#element-choice .element-dialog{background:linear-gradient(148deg,#282832,#141821)!important;color:#f4e6cd!important;border:1px solid #9a7855!important;border-radius:3px!important}
+#sound-panel{width:min(435px,88vw);padding:18px;box-shadow:0 0 0 100vmax #070910b8,inset 0 0 0 4px #11131a}
+.sound-heading h2,#privacy-title,#element-title{font:700 26px Georgia,serif;color:#ffebc8}
+#sound-panel p,#sound-panel label{color:#e5d4ba}
+#sound-panel output{color:#ffd99b}
+#sound-panel input{accent-color:#d7a76d!important}
+#sound-panel .mute-label{padding:8px;background:#1a1d26;border:1px solid #766048}
+.index-heading>button,.sound-heading button,#privacy-policy button,#settings-panel button,#element-options button{background:linear-gradient(135deg,#423425,#2e2520);border:1px solid #997551;border-radius:3px;color:#ffebc7}
+#element-options button:hover,#settings-panel button:hover{border-color:#e9bb80}
+#victory-recap{width:min(760px,94vw);max-height:92dvh;overflow:auto;padding:0;background:#19202b!important;color:#f7e8cb!important;border:1px solid #d0a36c!important;border-radius:3px!important;color-scheme:dark}
+#victory-recap::backdrop{background:#090c14d4}
+.victory-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(145px,1fr)}
+.victory-content{padding:clamp(12px,3vw,29px);box-shadow:inset 0 0 0 4px #0e121e66}
+.victory-illustration{background:linear-gradient(90deg,#19202b50,transparent 40%),url("art/victory-dawn.webp") 75% center/cover;border-left:1px solid #97734f}
+#victory-recap #victory-title{margin:0;font:700 clamp(25px,4.4vw,54px)/.91 Georgia,serif;letter-spacing:-.05em;color:#ffedc8}
+.victory-content p{color:#e6d1b3;font:12px/1.4 system-ui;margin:9px 0}
+.victory-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:12px 0}
+.victory-stats>div{padding:6px 8px;background:#252b34;border:1px solid #60513d}
+.victory-stats>div:first-child{grid-column:1/-1}
+.victory-stats dt{color:#ddbf99;font-size:10px}
+.victory-stats dd{margin:2px 0 0;color:#ffdf9f;font:700 16px Georgia,serif}
+.victory-actions{display:flex;flex-wrap:wrap;gap:5px}
+#victory-recap button{min-height:30px;padding:5px 9px;background:#242935;border:1px solid #a58159;color:#f4e1bd;border-radius:2px;font-size:11px}
+#victory-recap #victory-continue{background:#ddb47b;color:#20160e;border-color:#edc890}
+@media(max-height:440px){
+ #bestiary-panel{gap:6px}
+ .index-heading h1{font-size:24px}
+ .index-heading p{font-size:10px;margin:4px 0 0}
+ #bestiary-grid{grid-template-columns:repeat(auto-fill,minmax(82px,1fr))}
+ .index-tile,.index-tile.locked{min-height:79px}
+ .index-tile .plate-icon{width:44px}
+ .index-entry-heading{min-height:60px;margin-bottom:6px;padding:4px 9px}
+ .index-entry-heading .plate-icon{width:57px}
+ #sound-panel{padding:10px 14px}
+ #sound-panel label{margin:7px 0}
+ .victory-content{padding:10px 12px}
+ .victory-content p{margin:6px 0}
+ .victory-stats{margin:7px 0}
+}
+
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><header><div class="health"><span>HP</span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span>MP</span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div style="display:flex;align-items:center;gap:10px"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.28</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="room-status" aria-live="polite"></div><section id="boss-hud" hidden><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><footer><small>LEFT · MOVE &nbsp; RIGHT · SWING</small><button id="regen-toggle" type="button">Regen while bleeding: OFF</button><button id="stats-toggle" type="button">Stats</button><button id="sandbox-toggle" type="button" hidden>Test room</button><button id="settings-toggle">⚙ Settings</button><button id="fullscreen-toggle" type="button">⛶ Fullscreen</button><button id="main-menu-toggle" type="button">Menu</button><button id="restart">Restart</button></footer><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><strong>⚙ SETTINGS</strong><button id="settings-close">✕</button><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><button id="settings-privacy">Privacy policy ›</button><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-xp" type="button">+100 XP</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
  <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
  <small id="character-coins"></small>
  <div id="character-stats"></div>
@@ -229,7 +308,7 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.27</small>
+   <small>V8.28</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -253,10 +332,10 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
  </div>
 </section>
 <section id="bestiary-panel" hidden aria-label="Enemy index">
- <div class="index-heading"><div><small>FIELD JOURNAL</small><h1>Enemy Index</h1><p id="index-summary"></p></div><button id="index-close" aria-label="Close enemy index">×</button></div>
+ <div class="index-heading"><div><h1>Enemy Index</h1><p id="index-summary"></p></div><button id="index-close" aria-label="Close enemy index">×</button></div>
  <div class="index-toolbar"><button id="index-all" aria-pressed="true">All</button><button id="index-enemies" aria-pressed="false">Enemies</button><button id="index-bosses" aria-pressed="false">Bosses</button><input id="index-search" type="search" placeholder="Search enemies or bosses" aria-label="Search enemy index"></div>
  <div class="index-controls">
-  <label class="index-depth" for="index-depth"><span>HP at <output id="index-depth-label" for="index-depth">Dungeon 1</output></span>
+  <label class="index-depth" for="index-depth"><span>Stats at <output id="index-depth-label" for="index-depth">Dungeon 1</output></span>
    <input id="index-depth" type="range" min="1" max="14" step="1" value="1">
   </label>
   <label class="index-reveal"><input id="index-reveal" type="checkbox"> Show undiscovered stats</label>
@@ -272,19 +351,26 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
  <label>Music <output id="sound-music-value">60%</output><input id="sound-music" type="range" min="0" max="100" value="60"></label>
  <label>Sound effects <output id="sound-effects-value">80%</output><input id="sound-effects" type="range" min="0" max="100" value="80"></label>
 </section>
-<dialog id="victory-recap" aria-labelledby="victory-title" style="width:min(460px,90vw);max-height:85dvh;overflow:auto;background:#211a30;color:#eee6f3;border:1px solid #d0af6b;border-radius:12px;padding:18px">
- <h2 id="victory-title">Dungeon conquered</h2>
- <p id="victory-boss"></p>
- <dl style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-  <dt>Hero path</dt><dd id="victory-hero"></dd>
-  <dt>Deepest dungeon</dt><dd id="victory-depth"></dd>
-  <dt>Lives remaining</dt><dd id="victory-lives"></dd>
-  <dt>Biggest impact</dt><dd id="victory-impact"></dd>
-  <dt>Biggest damage burst</dt><dd id="victory-damage"></dd>
- </dl>
- <p>Continue to pick a path into Dungeon 4, or save this run and return to the menu.</p>
- <button id="victory-continue" type="button">Continue deeper</button>
- <button id="victory-menu" type="button">Save and return to menu</button>
+<dialog id="victory-recap" aria-labelledby="victory-title">
+ <div class="victory-layout">
+  <div class="victory-content">
+   <h2 id="victory-title">Dungeon conquered</h2>
+   <p id="victory-boss"></p>
+   <dl class="victory-stats">
+    <div><dt>Hero path</dt><dd id="victory-hero"></dd></div>
+    <div><dt>Deepest dungeon</dt><dd id="victory-depth"></dd></div>
+    <div><dt>Lives remaining</dt><dd id="victory-lives"></dd></div>
+    <div><dt>Biggest impact</dt><dd id="victory-impact"></dd></div>
+    <div><dt>Biggest damage burst</dt><dd id="victory-damage"></dd></div>
+   </dl>
+   <p>Choose a path into Dungeon 4, or return to the menu with your progress saved.</p>
+   <div class="victory-actions">
+    <button id="victory-continue" type="button">Continue deeper</button>
+    <button id="victory-menu" type="button">Save and return to menu</button>
+   </div>
+  </div>
+  <div class="victory-illustration" aria-hidden="true"></div>
+ </div>
 </dialog>
 <dialog id="privacy-policy" aria-labelledby="privacy-title" style="max-width:min(620px,90vw);max-height:85dvh;overflow:auto;background:#211a30;color:#eee6f3;border:1px solid #8e769f;border-radius:12px;padding:20px">
  <h2 id="privacy-title">Dungeon Dot privacy policy</h2>
@@ -2447,12 +2533,13 @@ function bestiaryKnown(entry){
  return !!record&&record.encounters+record.kills>0;
 }
 function renderBestiaryDetail(){
- const panel=document.querySelector('#bestiary-detail');panel.innerHTML='';
+ const panel=document.querySelector('#bestiary-detail');panel.innerHTML='';panel.dataset.realm='';
  const entry=bestiaryCatalog().find(item=>item.id===selectedBestiary);
  if(!entry){panel.innerHTML='<div class="index-placeholder">Choose an enemy or boss to see its HP, attacks, and stats.</div>';return}
  const record=profile.bestiary[entry.id];
  const known=bestiaryKnown(entry);
  if(!known&&!bestiaryReveal){panel.innerHTML='<div class="unknown-portrait">?</div><h2>Undiscovered</h2><p>Encounter it in a dungeon or turn on Show undiscovered stats.</p>';return}
+ panel.dataset.realm=entry.biome;
  const stats=bestiaryStats(entry,bestiaryDepth);
  const records=known?record.encounters+' encounters · '+record.kills+' defeats':'Undiscovered in your runs';
  panel.innerHTML='<div class="index-entry-heading"><div class="index-portrait">'+bestiaryPortrait(entry)+'</div><div><h2>'+entry.name+'</h2><small>'+BIOME_DEFS[entry.biome].name+(entry.boss?' · Boss':'')+'</small></div></div>'
@@ -2468,11 +2555,21 @@ function renderBestiary(){
  const discovered=entries.filter(bestiaryKnown).length;
  const total=Object.values(profile.bestiary).reduce((sum,record)=>sum+record.kills,0);
  document.querySelector('#index-summary').textContent=discovered+' / '+entries.length+' discovered · '+total+' total defeats';
+ const matches=[];
  for(const entry of entries){
   if(bestiaryFilter==='bosses'&&!entry.boss||bestiaryFilter==='enemies'&&entry.boss)continue;
   const known=bestiaryKnown(entry),visible=known||bestiaryReveal,name=visible?entry.name:entry.boss?'Unknown boss':'Unknown enemy';
   if(query&&!name.toLowerCase().includes(query))continue;
+  matches.push({entry,visible,name});
+ }
+ if(!matches.some(({entry})=>entry.id===selectedBestiary))selectedBestiary=matches.find(({visible})=>visible)?.entry.id??null;
+ if(!matches.length){
+  const empty=document.createElement('p');empty.className='index-empty';empty.textContent='No enemies match this search.';
+  grid.appendChild(empty);
+ }
+ for(const {entry,visible,name} of matches){
   const button=document.createElement('button');button.type='button';button.className='index-tile'+(visible?' discovered':' locked');
+  if(visible)button.dataset.realm=entry.biome;
   button.setAttribute('aria-pressed',String(selectedBestiary===entry.id));
   button.innerHTML=(visible?bestiaryPortrait(entry):'<span class="unknown-icon">?</span>')+'<strong>'+name+'</strong>'
    +(visible?'<small class="index-tile-hp" data-index-hp="'+entry.id+'">'+bestiaryHealth(entry,bestiaryDepth)+' HP</small>':'<small>Not encountered</small>');
@@ -6126,5 +6223,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.27';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.28';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
