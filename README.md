@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.37 — Continuous walls and bridges
+
+Touching walls of the same material share masonry and a single outer edge. Bridges use planks and rails that continue across adjoining tiles. Art is clipped to the original footprints, and moving, breakable and special walls retain distinct markings.
+
 ## V8.36 — Painted character shield
 
 The melee shield now has curved blue enamel plates, bronze rivets, and a painted crest. Blocks catch the light, low durability shows cracks, and a broken shield shows only dim fragments. The combat HUD mirrors these states. Shield coverage, durability and refill rules use the existing mechanics.
