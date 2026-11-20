@@ -1091,3 +1091,11 @@ test('Interrupting controls clears both sticks, the rune trace and any bat momen
     captured:[]
   });
 });
+
+test('the floor map hides undiscovered room types and distinguishes cleared encounters', () => {
+  const kinds=run([
+    declaration('MAP_MARKS'),method('mapRoomKind'),
+    'const rooms=[{kind:"boss"},{kind:"boss",discovered:true},{kind:"cursed",visited:true},{kind:"shop",discovered:true},{kind:"combat",discovered:true},{kind:"combat",visited:true,cleared:true}];'
+  ],'rooms.map(mapRoomKind)');
+  assert.deepEqual(kinds,['unknown','boss','cursed','shop','combat','clear']);
+});
