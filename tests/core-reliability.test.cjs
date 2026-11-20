@@ -708,8 +708,8 @@ test('every level-three evolution card selects the option named on the card', ()
     'const name=runHeroName();if(!card.innerHTML.includes(">"+name+"</strong>"))throw Error("Wrong evolution selected");names.push(name)}}'
   ],'names');
   assert.deepEqual(result,[
-    'Sword Dot','Bat Dot','Mace Dot','Spear Dot','Bow Dot','Crossbow Dot','Javelin Dot',
-    'Summoner Dot','Necromancer Dot','Pyromancer Dot','Arcane Mage Dot'
+    'Duelist','Brawler','Flail Knight','Spearguard','Ranger','Crossbowman','Skirmisher',
+    'Summoner','Necromancer','Pyromancer','Arcanist'
   ]);
 });
 

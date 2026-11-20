@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.29 — Hero and enemy names
+
+The three starter heroes are Squire, Scout and Rune Apprentice. Their evolutions and the original enemies use names that match their painted designs. Hero paths, weapon IDs and creature records are still stored under the same keys, so older runs and discovered enemies carry forward.
+
 ## V8.28 — Illustrated journal and victory recap
 
 The Enemy Index uses the selected enemy's biome artwork behind its portrait and keeps the depth control, damage breakdown and discovery records. Victory has a new sunrise illustration. Sound, controls, character, privacy and evolution panels share the main menu's colors and typography.
