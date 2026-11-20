@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.36 — Painted character shield
+
+The melee shield now has curved blue enamel plates, bronze rivets, and a painted crest. Blocks catch the light, low durability shows cracks, and a broken shield shows only dim fragments. The combat HUD mirrors these states. Shield coverage, durability and refill rules use the existing mechanics.
+
 ## V8.35 — Painted combat HUD
 
 Floating HUD panels now use painted bronze trim, gemstone resource icons and engraved controls. The enemy count keeps its icon and number, and Map, Character and Pause have their own illustrations. Boss portraits, map headings and touch controls share the same metalwork.
