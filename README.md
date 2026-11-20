@@ -13,6 +13,12 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.47 — Combat audio, dungeon feedback and music
+
+Each melee weapon has its own swing and impact cues. Bows, crossbows, slings and javelins have distinct releases, and the five Mage paths have different cast sounds. Gates, portals, breakable props, coins, item pickups, level-ups and room clears have their own audio feedback.
+
+Each biome has an original procedural score and ambience, with faster music during boss fights. The Sound screen's Master, Sound effects, Music and ambience, and Mute settings control the mix. Audio starts after an interaction, and music softens while menus are open. The game generates sound locally both on the web and in the Android app.
+
 ## V8.46 — In-run menus
 
 The Character window groups current stats, collected items, run records and the Mage spellbook into separate pages. The character portrait and menu backgrounds use the painted artwork. Pause, Controls and Sound use the same bronze-trimmed layout, with larger buttons and scrollable panels for short landscape screens. The Controls page previews joystick size and opacity as you adjust them. Existing control and audio settings continue to load from the same saved preferences.
