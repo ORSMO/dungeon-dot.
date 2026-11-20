@@ -2,7 +2,13 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
-## V8.39 ? Wall fixtures and swimmable lava
+## V8.40 — Dungeon maps and room details
+
+The floor map has distinct symbols for the start, boss, cursed, treasure and shop rooms. The room map uses each world's colors and shows walls, bridge decks, pits, lava and portals. Door signs show the destination and a padlock while the route is locked.
+
+Pressure plates, levers, enemy nests and the local compass use painted art. Interaction prompts appear as you approach a ready plate or lever, and nest health becomes visible nearby or after taking a hit. The interaction and combat rules use the existing game logic.
+
+## V8.39 — Wall fixtures and swimmable lava
 
 Dungeon walls share ordinary collision behavior and the biome's masonry. Combat rooms can have exposed fixtures away from doorways and bridges. Permanent spikes apply 2 base HP of bleed over 2 seconds on contact, with one active spike bleed at a time. Hit a chain or knock an enemy into it to swing it through the room. Break a brazier to spill hot coals. Bolt launchers show their lane before firing, and weapon hits can fire them early or disable them. Cracked masonry opens a passage that stays open on reentry and in checkpoints.
 
