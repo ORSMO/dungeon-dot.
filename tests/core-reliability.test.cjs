@@ -42,6 +42,19 @@ function run(parts, result) {
 }
 const evolutionMethods=[declaration('EVOLUTION_LEVEL'),method('hasEvolved'),method('evolutionAttackRate')];
 
+test('joined wall and bridge artwork removes internal seams without filling gaps', () => {
+  const result = run([
+    method('buildSurfaceRegions'), method('surfaceRegion'), method('mergeSurfaceEdges'),
+    'const tile=(x,y)=>({x,y,w:40,h:40});',
+    'const crossing=Array.from({length:10},(_,i)=>tile(i*40,0));',
+    'const straight=buildSurfaceRegions(crossing);',
+    'const corner=buildSurfaceRegions([tile(0,0),tile(40,0),tile(0,40),tile(80,40)]);',
+    'const diagonal=buildSurfaceRegions([tile(0,0),tile(40,40)]);',
+    'const hasGapEdge=corner[0].edges.some(edge=>edge[4]==="south"&&edge[0]===40&&edge[1]===40&&edge[2]===80);'
+  ], '{straight:straight.map(r=>[r.w,r.h,r.edges.length]),corner:corner.map(r=>r.rectangles.length),diagonal:diagonal.length,hasGapEdge}');
+  assert.deepEqual(result,{straight:[[400,40,4]],corner:[3,1],diagonal:2,hasGapEdge:true});
+});
+
 test('only the third live dungeon boss opens the run victory recap', () => {
   const result = run([
     declaration('VICTORY_DEPTH'), method('victoryRecapPending'),
