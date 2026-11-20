@@ -13,11 +13,15 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.31 — Painted doors, traps and loot
+
+Each biome has painted gates with readable route or lock signs. Trap grates distinguish idle, warning and active states and show painted spikes when they can deal damage. Bridges, chests, crates, barrels, coins, hearts, extra lives and loot stands have painted sprites. Room topology, trap timing and pickup rules are unchanged.
+
+The next visual passes are the minimap and combat HUD, then distinct artwork for enemy variants that share portraits.
+
 ## V8.30 — Painted weapons and combat effects
 
 Each melee and ranged weapon has painted art sized to its combat geometry. Flail links follow the moving head, ranged weapons show their current draw, and players can see swing trails and brief impact sparks. Attack ranges, damage and timing use the existing gameplay rules.
-
-The remaining visual passes are doors, traps and loot, then the minimap and combat HUD, then distinct artwork for enemy variants that share portraits.
 
 ## V8.29 — Hero and enemy names
 
