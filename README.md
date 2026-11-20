@@ -13,6 +13,10 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.45 — Painted pots and enemy nests
+
+Breakable clay pots have a painted terracotta sprite. Enemy nests show twisted roots and larger amber eggs that stand out on the dungeon floor. A nest's health bar appears nearby or when it takes damage. Pot breakage and nest behavior follow the existing rules.
+
 ## V8.44 — Open and closed gates
 
 Dungeon gates use their painted frames without bright rectangular outlines. Locked routes show closed doors and a padlock on the destination sign. When a route unlocks, the panels slide apart to reveal the passage. Cleared rooms show their gates already open on return, and reduced-motion mode opens them immediately.
