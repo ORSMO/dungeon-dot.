@@ -2,6 +2,12 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.39 ? Wall fixtures and swimmable lava
+
+Dungeon walls share ordinary collision behavior and the biome's masonry. Combat rooms can have exposed fixtures away from doorways and bridges. Permanent spikes apply 2 base HP of bleed over 2 seconds on contact, with one active spike bleed at a time. Hit a chain or knock an enemy into it to swing it through the room. Break a brazier to spill hot coals. Bolt launchers show their lane before firing, and weapon hits can fire them early or disable them. Cracked masonry opens a passage that stays open on reentry and in checkpoints.
+
+In the Ember Crucible, pits contain lava. Walking or being knocked in applies burn damage while the player swims at 62% of normal movement speed. Lava deals 3 base HP on entry and every 0.65 seconds while submerged. Use the normal movement controls to reach a bank or bridge. Ordinary pits in the other biomes keep their existing behavior. Existing saves stay compatible.
+
 ## V8.38 — Textured walls
 
 Walls now use weathered stone, soot-darkened iron, mossy limestone or frost-covered slate to match each biome. Bounce, spike, sticky and bone walls have their own material textures. Beveled edges and soft shadows distinguish walls from the floor, and the textures continue across connected pieces.
