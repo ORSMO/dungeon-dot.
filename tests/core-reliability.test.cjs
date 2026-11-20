@@ -821,6 +821,7 @@ test('every level-three evolution card selects the option named on the card', ()
 
 test('failed magic casts preserve mana and a successful cast enforces both cooldowns', () => {
   const result=run([
+    declaration('SPELL_ZONE_ART'),method('spellArtKind'),'const soundCues=[],playSoundCue=id=>soundCues.push(id);',
     ...schoolSpells,method('castMageSpell'),method('pulseMageRunes'),
     'let mageMana=100,arenaTime=1,mageGlobalReady=0,mageCastCount=0,mageRuneFx=[],resource=false,feedback="";',
     'const progress={mageSchool:"necromancer"},mageCooldowns={},mageInputEnabled=()=>true,mageAim=()=>({a:0});',
@@ -828,15 +829,16 @@ test('failed magic casts preserve mana and a successful cast enforces both coold
     'const refreshManaHud=()=>{},queueCheckpoint=()=>{},showMageFeedback=(kind,label)=>feedback=label;',
     'const locked=castMageSpell("AA"),failed=castMageSpell("ABC"),before={mageMana,mageGlobalReady,feedback};',
     'resource=true;const applied=castMageSpell("ABC"),duringGlobal=castMageSpell("A");arenaTime=2;const duringSpell=castMageSpell("ABC");'
-  ],'{locked,failed,before,applied,duringGlobal,duringSpell,mageMana,mageCastCount,ready:mageCooldowns.ABC,flashes:mageRuneFx.map(f=>f.id+":"+f.kind)}');
+  ],'{locked,failed,before,applied,duringGlobal,duringSpell,mageMana,mageCastCount,ready:mageCooldowns.ABC,flashes:mageRuneFx.map(f=>f.id+":"+f.kind),soundCues}');
   assert.deepEqual(result,{
     locked:false,failed:false,before:{mageMana:100,mageGlobalReady:0,feedback:'NEED A SOUL'},
-    applied:true,duringGlobal:false,duringSpell:false,mageMana:68,mageCastCount:1,ready:6.5,flashes:['A:cast','B:cast','C:cast']
+    applied:true,duringGlobal:false,duringSpell:false,mageMana:68,mageCastCount:1,ready:6.5,flashes:['A:cast','B:cast','C:cast'],soundCues:['spell-grave']
   });
 });
 
 test('Grave Mark earns Souls from corpses and hits on a solo boss up to the cap', () => {
   const result=run([
+    'const playSoundCue=()=>{};',
     declaration('MAGE_SOUL_LIMIT'),method('gainMageSoul'),method('mageHurt'),method('rememberMageCorpse'),
     declaration('SPELL_ZONE_ART'),method('spellArtKind'),method('queueCombatHit'),
     'const progress={mageSchool:"necromancer"},itemCount=()=>0,canDamage=()=>true,refreshManaHud=()=>{},queueCheckpoint=()=>{},mageOnHit=()=>{};',
@@ -934,6 +936,7 @@ test('all three paths get the automatic level-eight stats with their existing ca
 
 test('crossing level eight once announces evolution, fills new capacity, and skips a reward modal', () => {
   const result=run([
+    'const playSoundCue=()=>{};',
     ...evolutionMethods,
     ...['xpRequirement','advanceRunLevels','gainRunXp','earnXp','levelChoicePending','levelSummary','mageMaxMana','restoreMageMana','healPlayer'].map(method),
     'const hero="mage",progress={level:7,xp:xpRequirement(7)-1,levelsThisDepth:0,mageSchool:"necromancer"};',
@@ -951,6 +954,7 @@ test('crossing level eight once announces evolution, fills new capacity, and ski
 
 test('practice XP bypasses the dungeon limit, opens rewards and stops at level 30', () => {
   const result=run([
+    'const playSoundCue=()=>{};',
     ...evolutionMethods,
     'let practice=false,choices=0;const progress={level:1,xp:0,levelsThisDepth:2},sandbox={};',
     'const inSandbox=()=>practice,hud=()=>{},levelChoicePending=()=>progress.level>=3,openElementChoice=()=>choices++;',
@@ -1039,14 +1043,15 @@ test('Archer uses the release position and never fires on a cancelled pointer', 
     'let bowShotCooldown=0,mageGesture=null,editPointer=null;const progress={level:7};',
     'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),pt=event=>event;',
     'const combatInputEnabled=()=>true,itemCount=()=>0,upgradeCount=()=>0,equippedWeapon=()=>"bow";',
+    'const soundCues=[],playSoundCue=id=>soundCues.push(id);',
     method('setStick'), method('bowPower'), method('bowDrawStage'), method('rangedWeaponShot'), method('fireArrow'), method('endCanvasPointer'),
     'endCanvasPointer({type:"pointerup",pointerId:7,x:100,y:200});',
     'sticks[1].id=7;endCanvasPointer({type:"pointercancel",pointerId:7,x:135,y:200});',
     'const afterCancels=arrows.length;',
     'sticks[1].id=7;endCanvasPointer({type:"pointerup",pointerId:7,x:100,y:229});',
     'const stage=bowDrawStage(arrows[0].power),angle=p.target,normalReload=bowShotCooldown;progress.level=8;bowShotCooldown=0;fireArrow(1,0);'
-  ], '{afterCancels,shots:arrows.length,stage,angle,normalReload,evolvedReload:bowShotCooldown}');
-  assert.deepEqual(result, {afterCancels:0,shots:2,stage:'strong',angle:Math.PI/2,normalReload:.48,evolvedReload:.48/1.1});
+  ], '{afterCancels,shots:arrows.length,stage,angle,normalReload,evolvedReload:bowShotCooldown,soundCues}');
+  assert.deepEqual(result, {afterCancels:0,shots:2,stage:'strong',angle:Math.PI/2,normalReload:.48,evolvedReload:.48/1.1,soundCues:['shot-bow','shot-bow']});
 });
 
 test('Classic ignores center drift and records a flick before the next frame', () => {
@@ -1118,6 +1123,7 @@ test('portal transfers queue an effect at both ends and cannot loop while occupi
 
 test('combat art resolves to the correct school and weapon without affecting combat', () => {
  const result=run([
+    'const playSoundCue=()=>{};',
   declaration('SPELL_ZONE_ART'),declaration('COMBAT_IMPACT_STYLE'),method('spellArtKind'),method('meleeImpactKind'),method('queueCombatHit'),
   'const arenaTime=2,combatHits=[];',
   'const schools=[undefined,"summoner","necromancer","pyromancer","arcane"].map(s=>spellArtKind("arc",s));',
@@ -1162,4 +1168,14 @@ test('character pages preserve a stats fallback and only expose runes to Mage', 
   declaration('CHARACTER_PAGES'),method('characterPage')
  ],'[characterPage("stats",false),characterPage("run",false),characterPage("items",true),characterPage("runes",false),characterPage("runes",true),characterPage("unknown",true)]');
  assert.deepEqual(result,['stats','run','items','stats','runes','stats']);
+});
+
+test('music, effects, mute and pause have separate mix rules and biome scores', () => {
+ const result=run([
+  declaration('DUNGEON_SCORE'),method('dungeonMusicKey'),method('dungeonMixLevels'),
+  'const audio={master:75,effects:40,music:80,muted:false};',
+  'const scores=[dungeonMusicKey(null,false,true),dungeonMusicKey("red",true,true),dungeonMusicKey("green",false,true),dungeonMusicKey("blue",true,true),dungeonMusicKey("green",false,false)];',
+  'const active=dungeonMixLevels(audio,false),paused=dungeonMixLevels(audio,true);audio.muted=true;const muted=dungeonMixLevels(audio,false);'
+ ],'{scores,master:active.master,ducked:paused.music<active.music,effectsUnaffected:paused.effects===active.effects,muted:muted.master}');
+ assert.deepEqual(result,{scores:['basic','red-boss','green','blue-boss',null],master:.75,ducked:true,effectsUnaffected:true,muted:0});
 });
