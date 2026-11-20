@@ -145,34 +145,127 @@ test('pit knockouts grant exactly one kill and one XP reward', () => {
   assert.equal(result.rewarded, true);
 });
 
-test('sticky-wall impact processes elemental and special reactions once', () => {
+test('ordinary walls share the same response and only apply impact effects once', () => {
   const result = run([
     'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));',
-    'let WALL_HIT_COOLDOWN=.18,arenaTime=1,inv=0,p={},hp=50,over=false,counts={element:0,magnet:0,special:0};',
-    'const enemyAttacksEnabled=()=>true,curseActive=()=>false,showWallHit=()=>{},elementalHit=()=>counts.element++,flipMagnet=()=>counts.magnet++,specialImpact=()=>counts.special++,damagedHealth=x=>hp-x;',
+    'let WALL_HIT_COOLDOWN=.18,pinball=false,element=0,magnet=0;',
+    'const curseActive=()=>pinball,showWallHit=()=>{},elementalHit=()=>element++,flipMagnet=()=>magnet++;',
     method('collideWall'),
-    'const wall={x:90,y:90,w:20,h:20,type:"sticky"};',
-    'const enemy={x:116,y:100,r:10,vx:-100,vy:0,shape:"square",mass:1,hp:4};',
-    'collideWall(enemy,wall);'
-  ], 'counts');
-  assert.equal(result.element, 1);
-  assert.equal(result.magnet, 1);
-  assert.equal(result.special, 1);
+    'const body=()=>({x:116,y:100,r:10,vx:-100,vy:0,shape:"square",mass:1,hp:4});',
+    'const wall={x:90,y:90,w:20,h:20,type:"neutral"};',
+    'const standard=body();collideWall(standard,wall);const rebound=standard.vx;',
+    'standard.x=116;standard.vx=-100;collideWall(standard,wall);const repeat=standard.vx;',
+    'const legacy=body();collideWall(legacy,{...wall,type:"bounce"});',
+    'pinball=true;const cursed=body();collideWall(cursed,wall);'
+  ], '{element,magnet,rebound,repeat,legacy:legacy.vx,cursed:cursed.vx}');
+  assert.equal(result.element, 3);
+  assert.equal(result.magnet, 3);
+  assert.equal(result.repeat, 0);
+  assert.equal(result.rebound, result.legacy);
+  assert.ok(result.cursed > result.rebound && result.rebound > 0);
 });
 
-test('neutral walls absorb impact and bounce walls return more speed', () => {
-  const result = run([
-    'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));',
-    'let WALL_HIT_COOLDOWN=.18,arenaTime=1,inv=0,p={},hp=50,over=false;',
-    'const enemyAttacksEnabled=()=>true,curseActive=()=>false,showWallHit=()=>{},elementalHit=()=>{},flipMagnet=()=>{},specialImpact=()=>{},damagedHealth=x=>hp-x;',
-    method('collideWall'),
-    'const neutral={x:116,y:100,r:10,vx:-100,vy:0,shape:"square",mass:1,hp:4};',
-    'const bounce={x:116,y:100,r:10,vx:-100,vy:0,shape:"square",mass:1,hp:4};',
-    'collideWall(neutral,{x:90,y:90,w:20,h:20,type:"neutral"});',
-    'collideWall(bounce,{x:90,y:90,w:20,h:20,type:"bounce"});'
-  ], '{neutral:neutral.vx,bounce:bounce.vx,finite:[neutral,bounce].every(e=>Number.isFinite(e.x)&&Number.isFinite(e.y)&&Number.isFinite(e.vx)&&Number.isFinite(e.vy))}');
-  assert.equal(result.finite, true);
-  assert.ok(result.bounce > result.neutral && result.neutral > 0);
+test('wall spikes leave one two-point bleed and ignore the back of the wall', () => {
+  const result=run([
+    declaration('ENEMY_BLEED'),method('addEnemyBleed'),method('fixtureSide'),method('updateWallSpikes'),
+    'let wallFixtures=[{kind:"spikes",x:100,y:120,nx:1,ny:0}],p={},over=false,playerBleed=[],checkpoints=0;',
+    'const classicDashProtected=()=>false,enemyAttacksEnabled=()=>true,queueCheckpoint=()=>checkpoints++;',
+    'const body={x:94,y:120,r:9};updateWallSpikes(body);const behind=playerBleed.length;',
+    'body.x=110;updateWallSpikes(body);updateWallSpikes(body);',
+    'body.x=130;updateWallSpikes(body);body.x=110;updateWallSpikes(body);const initial=playerBleed.slice();',
+    'playerBleed=[];updateWallSpikes(body);const whileTouching=playerBleed.length;',
+    'body.x=130;updateWallSpikes(body);body.x=110;updateWallSpikes(body);'
+  ],'{behind,initial,whileTouching,reentry:playerBleed.length}');
+  assert.deepEqual(result,{behind:0,initial:[{remaining:2,rate:1,kind:'wallSpike'}],whileTouching:0,reentry:1});
+});
+
+test('wall bolt warns, stops at the first enemy, and can be disabled', () => {
+  const result=run([
+    method('fixtureSide'),method('fixtureMountPoint'),method('fixtureBoltLane'),method('fireWallBolt'),
+    method('updateWallFixtures'),method('strikeWallFixture'),method('fixtureDamagePlayer'),
+    'let arenaTime=1,wallFixtures=[],walls=[],elementFx=[],W=400,F=400,inv=0,hp=50,over=false;',
+    'const p={x:85,y:80},currentRoom={cleared:false},enemies=[{x:60,y:80,r:8,hp:5,phaseIn:0}];',
+    'const enemyAttacksEnabled=()=>true,classicDashProtected=()=>false,damagedHealth=amount=>hp-amount;',
+    'const weaponLineClear=()=>true,shieldBlocksLaser=()=>null,nearRect=()=>false;',
+    'const f={kind:"bolt",x:20,y:80,nx:1,ny:0,hp:2,warnUntil:0,readyAt:0};wallFixtures=[f];',
+    'updateWallFixtures(.02);const warning=f.warnUntil;arenaTime=1.4;updateWallFixtures(.02);const before=enemies[0].hp;',
+    'arenaTime=1.7;updateWallFixtures(.02);const after=enemies[0].hp,stop=f.shot.x2;',
+    'arenaTime=3;f.warnUntil=3.5;strikeWallFixture(f,2);',
+    'arenaTime=4;updateWallFixtures(.02);'
+  ],'{warning,before,after,stop,hp,disabled:f.hp===0&&f.warnUntil===0}');
+  assert.deepEqual(result,{warning:1.6800000000000002,before:5,after:2,stop:50,hp:50,disabled:true});
+});
+
+test('chains and spilled coals hurt enemies without repeating damage every frame', () => {
+  const result=run([
+    method('fixtureMountPoint'),method('fixtureSide'),method('strikeWallFixture'),
+    method('chainFixtureSegment'),method('updateWallFixtures'),method('laserDistance'),method('fixtureDamagePlayer'),
+    'let arenaTime=1,wallFixtures=[],elementFx=[],inv=0,hp=50,over=false;',
+    'const p={x:300,y:300},currentRoom={cleared:false},e={x:111,y:100,r:8,hp:10,vx:-110,vy:0,phaseIn:0},enemies=[e];',
+    'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),enemyAttacksEnabled=()=>true,weaponLineClear=()=>true;',
+    'const chain={kind:"chain",x:90,y:100,nx:1,ny:0,hp:2,readyAt:0,warnUntil:0,activeUntil:0,hits:new Set()};',
+    'wallFixtures=[chain];updateWallFixtures(.02);const charge=chain.warnUntil;arenaTime=1.4;updateWallFixtures(.02);',
+    'arenaTime=1.43;updateWallFixtures(.02);const afterChain=e.hp,push=e.vx;',
+    'const brazier={kind:"brazier",x:90,y:100,nx:1,ny:0,hp:2};wallFixtures=[brazier];',
+    'strikeWallFixture(brazier,2);updateWallFixtures(.02);const firstCoal=e.hp;',
+    'arenaTime=1.45;updateWallFixtures(.02);const nextFrame=e.hp;',
+    'arenaTime=2;updateWallFixtures(.02);const nextTick=e.hp;'
+  ],'{charge,afterChain,push,firstCoal,nextFrame,nextTick}');
+  assert.equal(result.charge,1.38);
+  assert.equal(result.afterChain,8);
+  assert.ok(result.push>0);
+  assert.equal(result.firstCoal,result.nextFrame);
+  assert.ok(result.nextTick<result.nextFrame);
+});
+
+test('fixtures have safe mounts and a broken masonry passage stays open on reentry', () => {
+  const layout=source.slice(source.indexOf('const ROOM_LAYOUTS='),source.indexOf('// Portal layouts are generated'));
+  const result=run([
+    'let W=720,F=720,walls=[],holes=[],portals=[],wallFixtures=[],dungeonDepth=2,arenaTime=3,elementFx=[],currentRoom;',
+    'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),resetEnemyNavigation=()=>{},queueCheckpoint=()=>{};',
+    layout,method('portalRoomRandom'),method('nearRect'),method('mechanicSpot'),
+    method('buildSurfaceRegions'),method('surfaceRegion'),method('mergeSurfaceEdges'),
+    method('setupWallFixtures'),method('hitCrackedWall'),
+    'let rooms=0,cracks=0,safe=true,consistent=true;const seen=new Set();',
+    'for(const shape of ["square","big","wide","tall"])for(let layoutId=0;layoutId<10;layoutId++){',
+    ' W=shape==="square"?480:shape==="big"?720:shape==="wide"?760:440;',
+    ' F=shape==="square"?480:shape==="big"?720:shape==="wide"?440:760;',
+    ' currentRoom={kind:"combat",shape,id:layoutId,layoutId};',
+    ' walls=[];setupRoomVariant(currentRoom);setupWallFixtures(currentRoom);',
+    ' rooms++;for(const f of wallFixtures){seen.add(f.kind);safe&&=mechanicSpot(f.x+f.nx*30,f.y+f.ny*30,12)}',
+    ' const mounted=wallFixtures.map(f=>[f.kind,f.x,f.y]);const cracked=walls.find(w=>w.cracked);',
+    ' if(cracked){',
+    '  cracks++;hitCrackedWall(cracked,3);currentRoom=JSON.parse(JSON.stringify(currentRoom));',
+    '  walls=[];setupRoomVariant(currentRoom);setupWallFixtures(currentRoom);',
+    '  consistent&&=!walls.some(w=>w.x===cracked.x&&w.y===cracked.y)&&JSON.stringify(mounted)===JSON.stringify(wallFixtures.map(f=>[f.kind,f.x,f.y]));',
+    ' }',
+    '}'
+  ],'{rooms,cracks,safe,consistent,seen:[...seen].sort()}');
+  assert.equal(result.rooms,40);
+  assert.ok(result.cracks>=10);
+  assert.equal(result.safe,true);
+  assert.equal(result.consistent,true);
+  assert.deepEqual(result.seen,['bolt','brazier','chain','spikes']);
+});
+
+test('lava burns on entry and during swimming, with solid bridges and exits', () => {
+  const result=run([
+    method('lavaAt'),method('updateLavaSwim'),method('fixtureDamagePlayer'),
+    method('collideGap'),method('collideHole'),
+    'let selectedBiome="red",arenaTime=1,hp=50,inv=1,over=false;',
+    'const p={x:54,y:75,r:9,kvx:100,kvy:0,lavaTickAt:0,swimming:false};',
+    'const floorGaps=[{x:50,y:50,w:40,h:50},{x:90,y:50,w:40,h:50}],floorBridges=[{x:100,y:50,w:12,h:50}],holes=[{x:180,y:75,r:15}];',
+    'const enemyAttacksEnabled=()=>true,classicDashProtected=()=>false,damagedHealth=amount=>hp-amount;',
+    'const noFall=!collideGap(p,49,75,true)&&!collideHole(p,49,75,200,true);',
+    'updateLavaSwim(49,75,false);const entry=[hp,p.swimming,p.kvx];',
+    'arenaTime=1.4;p.x=90;updateLavaSwim(89,75,false);const seam=[hp,p.swimming];',
+    'arenaTime=1.7;updateLavaSwim(90,75,false);const stay=hp;',
+    'p.x=105;arenaTime=2.5;updateLavaSwim(90,75,false);const bridge=[hp,p.swimming];',
+    'p.x=180;updateLavaSwim(105,75,true);const round=[hp,p.swimming];',
+    'p.x=200;arenaTime=3.4;updateLavaSwim(180,75,false);const shore=[hp,p.swimming];',
+    'selectedBiome="blue";const oldPit=lavaAt(75,75);'
+  ],'{noFall,entry,seam,stay,bridge,round,shore,oldPit}');
+  assert.deepEqual(result,{noFall:true,entry:[47,true,45],seam:[47,true],stay:44,bridge:[44,false],round:[41,true],shore:[41,false],oldPit:false});
 });
 
 test('safe-floor checks include all four diagonal pit directions', () => {
@@ -757,6 +850,7 @@ test('Grave Mark earns Souls from corpses and hits on a solo boss up to the cap'
 test('Ricochet Orb reflects off a wall and can bounce only as many times as configured', () => {
   const result=run([
     method('nearRect'),method('moveMageBolt'),
+    'const projectileHitsWallFixture=()=>false;',
     'let sparks=0;const bossSpark=()=>sparks++,clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),W=300,F=300;',
     'const walls=[{x:130,y:45,w:15,h:120},{x:70,y:45,w:15,h:120}];',
     'const bolt={x:115,y:100,vx:460,vy:0,r:5,bounces:2};',
