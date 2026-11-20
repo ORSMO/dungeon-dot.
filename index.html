@@ -1,7 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#191724"><title>Dungeon Dot — Painted Realms</title><style>*{box-sizing:border-box}body{margin:0;background:#11101a;color:#eee;font:14px system-ui;display:flex;align-items:center;justify-content:center;min-height:100dvh}main{width:min(100vw,470px);padding:8px}header{display:flex;justify-content:space-between;margin:4px 4px 8px}canvas{width:100%;height:auto;display:block;touch-action:none;border-radius:12px}footer{display:flex;align-items:center;justify-content:space-between;padding:10px 4px}button{border:0;background:#504365;color:white;border-radius:8px;padding:10px 16px}small{color:#bdb3cc}.health{display:flex;align-items:center;gap:8px;min-width:170px;font-weight:700}.hp-track{width:116px;height:13px;border:2px solid #756782;border-radius:4px;background:#382938;overflow:hidden}#hp-fill{height:100%;width:100%;background:#69d58a;transition:width .16s ease}#hp-bleed{position:absolute;right:0;top:0;height:100%;width:0;background:#ec3855;transition:width .12s linear}.hp-track{position:relative}#hp-label{font-size:11px;color:#d5cadc}main{width:100vw;height:100dvh;padding:0;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}body{overflow:hidden;min-height:100dvh;background:#080812}#arena{position:relative;width:100vw;height:100dvh;flex:none}#game{width:100%;height:100%;border-radius:0}header{position:absolute;z-index:4;top:0;left:0;right:0;margin:0;padding:8px 12px;background:linear-gradient(#0d0b1ce8,#0d0b1c88);align-items:center;pointer-events:none;gap:12px}header .health{min-width:0}header .hp-track{width:clamp(65px,12vw,160px)}header #kills{font:800 12px monospace;white-space:nowrap}header #shield-durability{max-width:180px!important}footer{position:absolute;z-index:4;right:clamp(95px,17vw,145px);bottom:7px;gap:6px;padding:0;display:flex;flex-wrap:wrap;justify-content:flex-end;pointer-events:none}footer small{display:none}footer button{pointer-events:auto;background:#3a3057dd;border:1px solid #8e76b0;border-radius:8px;padding:7px 10px;font:600 10px monospace;white-space:nowrap}#stats-panel{position:absolute;right:8px;top:44px;z-index:6;background:#161226f0;border:1px solid #77629c;border-radius:10px;max-width:240px;max-height:calc(100dvh - 70px);overflow:auto}#shield-choice{font-size:13px!important}#rotate-overlay{display:none;position:fixed;inset:0;z-index:100;background:radial-gradient(circle at center,#31204b,#0a0914);color:white;align-items:center;justify-content:center;flex-direction:column;gap:18px;text-align:center;padding:24px;font:700 19px system-ui}#rotate-overlay .turn-icon{font-size:64px;animation:turnphone 2s ease-in-out infinite alternate}@keyframes turnphone{to{transform:rotate(90deg)}}#rotate-overlay button{font-size:16px;padding:14px 22px;background:#7654bc}@media(orientation:portrait){#rotate-overlay{display:flex}main{visibility:hidden}}@media(max-height:380px){header{padding:3px 9px}footer button{padding:5px 7px;font-size:9px}}@media(orientation:landscape){#rotate-overlay{display:none}} #settings-panel{position:absolute;right:10px;top:42px;z-index:15;background:#1c1532f5;color:white;border:1px solid #a58bdb;border-radius:12px;padding:12px;width:min(280px,72vw);max-height:calc(100dvh - 50px);overflow:auto;font:12px system-ui}#settings-panel[hidden],#controls-settings[hidden],#edit-hint[hidden]{display:none!important}#settings-panel button{margin:4px;background:#53416f;border:1px solid #8d75ae;padding:7px;border-radius:6px;color:white}#controls-settings{display:grid;gap:6px}#controls-settings label{display:grid;gap:4px}#controls-settings input[type=range]{width:100%;accent-color:#ac83ef}#edit-hint{position:absolute;top:42px;left:50%;transform:translateX(-50%);z-index:15;background:#271b45;padding:8px;border:1px solid #b59aea;border-radius:8px;color:white;font:700 12px monospace}  #boss-hud{position:absolute;z-index:5;top:76px;left:50%;transform:translateX(-50%);width:min(360px,52vw);padding:7px 10px;background:#1a1025ed;border:1px solid #bd8858;border-radius:8px;pointer-events:none;font:10px monospace}#boss-hud[hidden]{display:none!important}.boss-heading{display:flex;justify-content:space-between;gap:8px;color:#f4dba2}.boss-track{height:9px;background:#3d2638;border:1px solid #90677c;margin:4px 0;overflow:hidden;border-radius:3px}#boss-fill{height:100%;background:linear-gradient(90deg,#bb405d,#fa9871);width:100%}#boss-hint{display:block;color:#d6c0e9;font-size:9px} #sandbox-toggle[hidden],#sandbox-panel[hidden],#sandbox-start[hidden],#sandbox-tools[hidden]{display:none!important}#sandbox-panel{position:absolute;z-index:20;right:10px;top:42px;width:min(302px,44vw);max-height:calc(100dvh - 100px);overflow:auto;padding:9px;background:#171c2ff5;border:1px solid #79b6dc;border-radius:10px;font:11px system-ui;color:#e0edfa}.sandbox-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;color:#b5e8ff}#sandbox-panel button{border:1px solid #6886a9;border-radius:6px;background:#334260;padding:6px 7px;font:600 10px system-ui;color:#fff}.sandbox-switches,.sandbox-actions{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}.sandbox-switches button{flex:1}.sandbox-switches button[aria-pressed=true]{background:#245648!important;border-color:#86e6b5!important}#sandbox-panel small{display:block;color:#b4c5dd;font:9px system-ui;line-height:1.35}#sandbox-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;max-height:calc(100dvh - 240px);min-height:72px;overflow:auto;margin:7px 0;padding:2px}.spawn-tile{aspect-ratio:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;min-width:0;padding:4px!important;background:#252d43!important}.spawn-tile svg{width:70%;max-height:52px;flex:1;min-height:28px}.spawn-tile span{font:9px system-ui;line-height:1.1;overflow-wrap:anywhere}.spawn-tile[aria-pressed=true]{border:2px solid #ffe1a0!important;background:#433d4d!important} #sandbox-panel{display:flex;flex-direction:column;overflow:hidden}#sandbox-tools{display:flex;flex-direction:column;min-height:0;flex:1}#sandbox-tools>.sandbox-switches,#sandbox-tools>.sandbox-actions,#sandbox-tools>small{flex-shrink:0}#sandbox-grid{min-height:0;flex:1 1 auto;max-height:calc(100dvh - 260px)} #character-panel[hidden],#loot-panel[hidden],#item-notice[hidden]{display:none!important}
 #coin-count{color:#f7d581;font:800 12px monospace;white-space:nowrap}
 #character-panel{position:absolute;z-index:35;left:10px;top:42px;width:min(370px,60vw);max-height:calc(100dvh - 66px);overflow:auto;padding:12px;background:#191628f5;border:1px solid #aa91cb;border-radius:12px;color:#ece4f8;font:12px system-ui}
-.character-heading{display:flex;justify-content:space-between;align-items:center;gap:10px}.character-heading button{padding:5px 11px;font-size:17px}
 #character-coins{display:block;color:#f1d391;margin:5px 0 9px}
 #character-stats{display:grid;grid-template-columns:1fr 1fr;gap:5px}
 #character-stats>div{display:flex;justify-content:space-between;gap:7px;padding:6px;background:#2e263e;border-radius:5px;font-size:10px}
@@ -233,7 +232,7 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
 .index-attacks div{border-color:#504536}
 .index-footnote{color:#cdb58f}
 .index-empty{grid-column:1/-1;margin:0;padding:14px;color:#dfc79e;background:#191e27;border:1px solid #504536}
-#sound-panel,#privacy-policy,#character-panel,#settings-panel,#stats-panel,#element-choice .element-dialog{background:linear-gradient(148deg,#282832,#141821)!important;color:#f4e6cd!important;border:1px solid #9a7855!important;border-radius:3px!important}
+#sound-panel,#privacy-policy,#character-panel,#settings-panel,#element-choice .element-dialog{background:linear-gradient(148deg,#282832,#141821)!important;color:#f4e6cd!important;border:1px solid #9a7855!important;border-radius:3px!important}
 #sound-panel{width:min(435px,88vw);padding:18px;box-shadow:0 0 0 100vmax #070910b8,inset 0 0 0 4px #11131a}
 .sound-heading h2,#privacy-title,#element-title{font:700 26px Georgia,serif;color:#ffebc8}
 #sound-panel p,#sound-panel label{color:#e5d4ba}
@@ -327,9 +326,6 @@ header .health{grid-template-columns:auto minmax(30px,clamp(34px,8vw,119px)) aut
 .hud-accessible{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 #boss-hud{top:69px}
 #settings-panel{top:53px}
-#settings-panel .pause-main{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}
-#settings-panel .pause-main strong{font:700 20px Georgia,serif;color:#ffe2ad}
-.pause-primary,.pause-secondary{display:flex;flex-wrap:wrap}
 #settings-panel #main-menu-toggle{background:#594330;border-color:#aa8151}
 #save-indicator{top:109px;left:10px;background:#261b20;color:#ffe1ba;padding:5px}
 @media(max-width:740px){
@@ -419,17 +415,217 @@ header .hp-track,#mana-hud .mana-track{
 #shield-durability[data-state=cracked] #shield-durability-label{color:#f7af93!important}
 #shield-durability[data-state=broken] #shield-durability-label{color:#cfaaa2!important}
 
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.45</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><div class="pause-main"><strong>Paused</strong><button id="settings-close" type="button">Resume</button></div><div class="pause-primary"><button id="main-menu-toggle" type="button">Main Menu</button><button id="fullscreen-toggle" type="button">Fullscreen</button><button id="sandbox-toggle" type="button" hidden>Test Room</button></div><div class="pause-secondary"><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><button id="settings-privacy">Privacy policy ›</button></div><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-xp" type="button">+100 XP</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
- <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
- <small id="character-coins"></small>
- <div id="character-stats"></div>
- <section id="mage-spellbook" hidden><h3>Rune spells</h3><div id="mage-spell-list"></div></section>
- <h3>Collected items</h3><div id="item-inventory"></div>
- <h3>Stat upgrades</h3><small id="run-upgrades"></small>
- <p class="character-note">CURVED SHIELD: enemies bounce off the guard in front of you. Melee hits and boss charges wear it down. Keep the guard aimed at the threat. It refills on the next room entry.</p>
- <h3>Item synergies <small id="synergy-count"></small></h3><div id="synergy-list"></div>
- <p class="character-note">DASH: move + tap Dash for a short protected burst. With no movement input, dash toward your current aim. Cooldown: 1.8 seconds. Drag its button in Settings → Controls → Edit positions. Keyboard: Space.</p>
- <p class="character-note">Items and upgrades last for this run and carry into every biome. The game pauses while this menu is open.</p>
+/* In-run menus share the bronze trim and world colors used in combat. */
+main{--menu-scene:url("art/keep.webp")}
+main[data-world=red]{--menu-scene:url("art/forge.webp")}
+main[data-world=green]{--menu-scene:url("art/hollow.webp")}
+main[data-world=blue]{--menu-scene:url("art/vault.webp")}
+#character-panel,#settings-panel,#sound-panel{
+ position:fixed;left:50%;right:auto;top:50%;transform:translate(-50%,-50%);
+ box-sizing:border-box;width:min(90vw,880px);max-height:calc(100dvh - 28px);overflow:hidden;
+ font:13px/1.35 system-ui;color:#f9ead0!important;
+ border:1px solid #a78052!important;border-radius:5px!important;
+ background:radial-gradient(ellipse at 8% 0,#433024 0%,transparent 47%),linear-gradient(140deg,#211d1d,#15161c 69%)!important;
+ box-shadow:0 0 0 100vmax #08090bc7,0 18px 65px #08060caa,inset 0 0 0 3px #222027,inset 0 0 0 4px #74573b;
+ scrollbar-color:#a78154 #251e1e;
+}
+#character-panel[hidden],#settings-panel[hidden],#sound-panel[hidden],.menu-shell [hidden]{display:none!important}
+#character-panel,#settings-panel{z-index:70;padding:0}
+#sound-panel{width:min(86vw,560px);padding:0;overflow:auto}
+.menu-shell .menu-header{
+ display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:59px;padding:11px 18px;
+ background:linear-gradient(90deg,#614129b4,#271f1dd9 70%),url("art/wall-textures.webp") left top/560px auto;
+ border-bottom:1px solid #8d6743;
+}
+.menu-header h2{margin:0;color:#ffedcd;font:700 clamp(23px,3vw,34px)/1 Georgia,serif;letter-spacing:-.025em}
+.menu-shell .menu-control,#settings-panel .menu-control,#sound-panel .menu-control{
+ margin:0;border:1px solid #816143;border-radius:3px;color:#f5dec1;
+ background:linear-gradient(#443225,#2c2422);min-height:35px;padding:6px 12px;
+ font:700 12px system-ui;box-shadow:inset 0 1px #ead0a922;cursor:pointer;
+}
+.menu-shell .menu-control:hover,#settings-panel .menu-control:hover{border-color:#edc18d}
+.menu-shell .menu-control:focus-visible{outline:2px solid #ffe5a6;outline-offset:-3px}
+.menu-shell .primary-control,#settings-panel .primary-control{
+ background:linear-gradient(#efd095,#bc8b50);color:#2b1a16;border-color:#f6d698;
+}
+.menu-shell .close-control{width:37px;padding:0;font-size:22px;line-height:1}
+.character-layout{display:grid;grid-template-rows:minmax(0,1fr);grid-template-columns:minmax(146px,27%) minmax(0,1fr);min-height:0;overflow:hidden}
+.character-side{
+ min-height:0;padding:13px 15px 14px;overflow:auto;border-right:1px solid #6b5038;
+ background:linear-gradient(0deg,#151418 8%,#1b1719c9 52%,#1a161a8c),var(--menu-scene) center/cover;
+}
+#character-portrait{
+ width:clamp(74px,13vw,132px);height:auto;display:block;margin:0 auto 6px;
+ filter:drop-shadow(0 7px 7px #08070b);
+}
+#character-panel #character-name{margin:0;color:#ffedcb;font:700 clamp(17px,2.6vw,25px)/1 Georgia,serif}
+#character-progress,#character-coins{display:block;color:#e1c59d;margin:6px 0;font:11px/1.45 system-ui}
+#character-panel .character-note{margin:8px 0 0;color:#d1baa7;font-size:11px;line-height:1.45}
+.character-main{display:flex;flex-direction:column;min-width:0;min-height:0}
+.character-tabs{display:flex;gap:6px;padding:8px 11px;background:#1b181b;border-bottom:1px solid #654b35}
+.character-tabs .menu-control{flex:1;min-width:0}
+.character-tabs [aria-pressed=true]{color:#ffedc2;border-color:#e5b77a;background:linear-gradient(#674522,#392922)}
+.character-content{overflow:auto;overscroll-behavior:contain;padding:12px;min-width:0;min-height:0}
+#character-panel:not([hidden]){display:flex;flex-direction:column}
+#character-panel h3,.controls-list h3{margin:0 0 8px;color:#f8d9aa;font:700 18px/1.1 Georgia,serif}
+.stat-card-grid,#character-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:0}
+.stat-card-grid>div,#character-stats>div{
+ min-width:0;display:grid;gap:2px;padding:6px 8px;border:1px solid #5f4937;border-radius:3px;
+ background:linear-gradient(145deg,#362b256e,#2622298a);align-content:start;
+}
+.stat-card-grid span,#character-stats span{font-size:10px;color:#dac3a8}
+.stat-card-grid strong,#character-stats strong{font:700 15px/1.18 Georgia,serif;color:#ffdfa7;white-space:normal}
+.character-content section+section{margin-top:12px}
+.character-content [data-sheet]>section+section{margin-top:13px;padding-top:12px;border-top:1px solid #634a35}
+#character-panel .inventory-row{padding:5px 6px;border-color:#584637;border-radius:3px;background:#292125}
+#character-panel .inventory-row + .inventory-row{margin-top:4px}
+#character-panel .inventory-row svg{width:32px;height:32px}
+#character-panel .inventory-row small,#character-panel .synergy-row small{color:#cdb9a8}
+#character-panel .synergy-row{background:#211d23;border-color:#5c4736}
+#character-panel .synergy-row.active{background:#302a22;border-color:#b98a50}
+#character-panel #mage-spell-list{gap:7px;grid-template-columns:repeat(2,minmax(0,1fr))}
+#character-panel #mage-spell-list p{display:grid;gap:3px;min-width:0;padding:7px 8px;border:1px solid #634c41;background:#29232c}
+#character-panel #mage-spell-list strong{color:#eacdf5}
+#character-panel #mage-spell-list small{color:#ddc9bf;line-height:1.35}
+#settings-panel{width:min(86vw,680px)}
+#settings-panel:not([hidden]){display:flex;flex-direction:column}
+#settings-panel[data-view=controls] .pause-home{display:none}
+.pause-home,#controls-settings{min-height:0;overflow:auto;overscroll-behavior:contain}
+#settings-panel .menu-header,#sound-panel .menu-header{position:sticky;top:0;z-index:1}
+.pause-body{display:grid;grid-template-columns:minmax(130px,.85fr) minmax(0,1.8fr);min-height:0}
+.pause-image{
+ min-height:202px;background:linear-gradient(#241b191a,#241b19b0),var(--menu-scene) center/cover;
+ border-right:1px solid #755636;display:grid;place-items:center;padding:12px;
+}
+.pause-image::after{content:"";display:block;width:72px;aspect-ratio:1;background:url("art/hud-compass.webp") center/contain no-repeat;filter:drop-shadow(0 4px 7px #110d16);grid-area:1/1}
+.pause-image .hud-pause{z-index:1;grid-area:1/1;width:31px;height:31px}
+.pause-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:center;gap:7px;padding:16px}
+#settings-panel .pause-links .menu-control{min-height:40px;text-align:left;padding-left:10px}
+#settings-panel #main-menu-toggle{background:linear-gradient(#3c2c27,#28222a);border-color:#9b684d}
+.menu-shell .menu-header .menu-control{min-height:34px;flex:none}
+.controls-body{display:grid;grid-template-columns:minmax(140px,1fr) minmax(0,1.5fr);gap:13px;padding:13px 16px}
+.controls-preview{
+ min-height:156px;border:1px solid #695037;border-radius:3px;
+ background:linear-gradient(#23191c48,#19171aad),var(--menu-scene) center/cover;
+ display:grid;place-content:center;gap:8px;padding:9px;text-align:center;color:#ebd3ae;font-size:11px;
+}
+.control-diagram{display:flex;align-items:center;justify-content:center;gap:clamp(10px,3vw,28px);height:92px}
+#settings-panel[data-hero=mage] .control-demo-attack{display:none}
+.control-diagram>div{display:grid;justify-items:center;gap:4px;min-width:46px}
+.control-demo-stick{
+ display:grid;place-items:center;width:var(--demo-size,48px);aspect-ratio:1;opacity:var(--demo-opacity,.75);
+ background:url("art/hud-compass.webp") center/contain no-repeat;filter:drop-shadow(0 5px 5px #09080b);
+}
+.control-demo-stick::after{content:"";width:45%;aspect-ratio:1;border:1px solid #e8c68f;border-radius:50%;background:radial-gradient(at 38% 27%,#946649,#292833 75%)}
+.control-diagram small{color:#f0ddbd;font:700 11px Georgia,serif}
+#controls-settings .setting-range input[type=range]{accent-color:#e5b980}
+#controls-settings .menu-check,#sound-panel .menu-check{display:flex;align-items:center;justify-content:flex-start;gap:8px}
+.controls-preview p{margin:0}
+.controls-list{min-width:0;display:grid;align-content:start;gap:7px}
+.controls-list>p{margin:0;color:#dbc5ad;font-size:11px}
+.menu-shell .setting-range{
+ display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 8px;
+ min-height:43px;margin:0;padding:6px 8px;border:1px solid #5d493b;border-radius:3px;background:#262026;color:#f0dbc2;
+}
+.menu-shell .setting-range input{grid-column:1/-1;width:100%;margin:2px 0 0;accent-color:#e5b980}
+.menu-shell .setting-range output{color:#ffde9c;font-variant-numeric:tabular-nums}
+.menu-shell .menu-check{display:flex;align-items:center;gap:7px;margin:0;min-height:33px;color:#ecdac4;font-size:12px}
+.menu-shell .menu-check input{accent-color:#e5b980;width:16px;height:16px}
+.controls-buttons{display:flex;flex-wrap:wrap;gap:6px}
+.sound-body{padding:13px 17px 15px}
+.sound-body p{margin:8px 0;color:#d9bea8}
+.sound-grid{display:grid;gap:7px}
+#sound-panel .setting-range{margin:0;min-height:43px;padding:6px 8px}
+#sound-panel .menu-check{margin:0;padding:3px 5px}
+#sandbox-panel,#privacy-policy{
+ border-color:#a27a54!important;border-radius:4px!important;box-shadow:0 10px 34px #09070cc0,inset 0 0 0 3px #342721;
+}
+#sandbox-panel button{border-color:#8a6e51;background:linear-gradient(#413124,#29232a);color:#f4ddbd}
+#sandbox-panel .sandbox-heading{color:#f4dbad;font:700 18px Georgia,serif}
+@media(max-height:420px){
+ #character-panel,#settings-panel,#sound-panel{max-height:calc(100dvh - 14px)}
+ .menu-shell .menu-header{min-height:45px;padding:7px 12px}
+ .menu-header h2{font-size:23px}
+ .character-side{padding:9px 10px}
+ #character-portrait{width:min(19dvh,90px);margin-bottom:4px}
+ .character-tabs{padding:6px 8px}
+ .character-content{padding:8px}
+ .stat-card-grid,#character-stats{gap:5px}
+ .stat-card-grid>div,#character-stats>div{padding:5px 7px}
+ .stat-card-grid strong,#character-stats strong{font-size:14px}
+ .pause-links,.controls-body{padding:9px 10px}
+ .pause-image{min-height:171px}
+ .sound-body{padding:8px 12px}
+}
+@media(max-width:630px){
+ .stat-card-grid,#character-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .character-layout{grid-template-columns:minmax(110px,24%) minmax(0,1fr)}
+ .pause-body{grid-template-columns:minmax(100px,.66fr) minmax(0,1.6fr)}
+ .controls-body{grid-template-columns:minmax(106px,.70fr) minmax(0,1.5fr)}
+}
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.46</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
+ <div class="pause-home">
+  <div class="menu-header"><h2>Paused</h2><button id="settings-close" type="button" class="menu-control primary-control">Resume</button></div>
+  <div class="pause-body">
+   <div class="pause-image" aria-hidden="true"><span class="hud-pictogram hud-pause"></span></div>
+   <div class="pause-links">
+    <button id="controls-open" type="button" class="menu-control">Controls</button>
+    <button id="settings-sound" type="button" class="menu-control">Sound</button>
+    <button id="settings-index" type="button" class="menu-control">Enemy Index</button>
+    <button id="fullscreen-toggle" type="button" class="menu-control">Fullscreen</button>
+    <button id="sandbox-toggle" type="button" class="menu-control" hidden>Test Room</button>
+    <button id="settings-privacy" type="button" class="menu-control">Privacy policy</button>
+    <button id="main-menu-toggle" type="button" class="menu-control">Main Menu</button>
+   </div>
+  </div>
+ </div>
+ <div id="controls-settings" hidden>
+  <div class="menu-header"><h2>Controls</h2><button id="controls-back" type="button" class="menu-control">Back</button></div>
+  <div class="controls-body">
+   <div class="controls-preview">
+    <div id="control-preview" class="control-diagram" aria-hidden="true">
+     <div><span class="control-demo-stick"></span><small>Move</small></div>
+     <div class="control-demo-attack"><span class="control-demo-stick"></span><small>Attack</small></div>
+    </div>
+    <p>Move the joysticks and Dash button to fit your grip.</p>
+   </div>
+   <div class="controls-list">
+    <label class="setting-range">Joystick size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label>
+    <label class="setting-range">Control opacity <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label>
+    <label class="menu-check"><input id="floating-controls" type="checkbox"> Floating joysticks</label>
+    <div class="controls-buttons"><button id="edit-controls" type="button" class="menu-control primary-control">Edit positions</button><button id="controls-reset" type="button" class="menu-control">Reset defaults</button></div>
+   </div>
+  </div>
+ </div>
+</section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-xp" type="button">+100 XP</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-labelledby="character-heading">
+ <div class="menu-header"><h2 id="character-heading">Character</h2><button id="character-close" type="button" class="menu-control close-control" aria-label="Close character">&#215;</button></div>
+ <div class="character-layout">
+  <aside class="character-side">
+   <span id="character-portrait" class="plate-icon plate-heroes" aria-hidden="true"></span>
+   <h3 id="character-name"></h3>
+   <small id="character-progress"></small>
+   <small id="character-coins"></small>
+   <p id="character-class-note" class="character-note"></p>
+  </aside>
+  <div class="character-main">
+   <nav class="character-tabs" aria-label="Character pages">
+    <button id="character-tab-stats" type="button" class="menu-control" aria-controls="character-page-stats" aria-pressed="true">Stats</button>
+    <button id="character-tab-items" type="button" class="menu-control" aria-controls="character-page-items" aria-pressed="false">Items</button>
+    <button id="character-tab-runes" type="button" class="menu-control" aria-controls="character-page-runes" aria-pressed="false" hidden>Runes</button>
+    <button id="character-tab-run" type="button" class="menu-control" aria-controls="character-page-run" aria-pressed="false">Run</button>
+   </nav>
+   <div id="character-content" class="character-content">
+    <div id="character-page-stats" data-sheet><div id="character-stats" class="stat-card-grid"></div></div>
+    <div id="character-page-items" data-sheet hidden>
+     <section><h3>Collected items</h3><div id="item-inventory"></div></section>
+     <section><h3>Stat upgrades</h3><small id="run-upgrades"></small></section>
+     <section><h3>Item synergies <small id="synergy-count"></small></h3><div id="synergy-list"></div></section>
+    </div>
+    <div id="character-page-runes" data-sheet hidden><section id="mage-spellbook" hidden aria-label="Rune spells"><div id="mage-spell-list"></div></section></div>
+    <div id="character-page-run" data-sheet hidden><div id="run-records" class="stat-card-grid"></div></div>
+   </div>
+  </div>
+ </div>
 </section>
 <section id="loot-panel" hidden aria-label="Nearby item">
  <strong id="loot-name"></strong><small id="loot-description"></small>
@@ -454,7 +650,7 @@ header .hp-track,#mana-hud .mana-track{
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.45</small>
+   <small>V8.46</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -489,13 +685,17 @@ header .hp-track,#mana-hud .mana-track{
  <div class="index-layout"><div id="bestiary-grid" aria-label="Enemies and bosses"></div><aside id="bestiary-detail" aria-label="Selected enemy stats"></aside></div>
  <small class="index-footnote">Shared across both save slots. Dungeon encounters only; practice does not change these records.</small>
 </section>
-<section id="sound-panel" hidden aria-label="Sound settings">
- <div class="sound-heading"><h2>Sound settings</h2><button id="sound-close" aria-label="Close sound settings">×</button></div>
- <p>Adjust combat sound effects here. Music volume is saved for future tracks.</p>
- <label class="mute-label"><input id="sound-muted" type="checkbox"> Mute all audio</label>
- <label>Master volume <output id="sound-master-value">80%</output><input id="sound-master" type="range" min="0" max="100" value="80"></label>
- <label>Music <output id="sound-music-value">60%</output><input id="sound-music" type="range" min="0" max="100" value="60"></label>
- <label>Sound effects <output id="sound-effects-value">80%</output><input id="sound-effects" type="range" min="0" max="100" value="80"></label>
+<section id="sound-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-labelledby="sound-title">
+ <div class="menu-header"><h2 id="sound-title">Sound</h2><button id="sound-close" type="button" class="menu-control close-control" aria-label="Close sound settings">&#215;</button></div>
+ <div class="sound-body">
+  <label class="menu-check"><input id="sound-muted" type="checkbox"> Mute all audio</label>
+  <div class="sound-grid">
+   <label class="setting-range">Master volume <output id="sound-master-value">80%</output><input id="sound-master" type="range" min="0" max="100" value="80"></label>
+   <label class="setting-range">Sound effects <output id="sound-effects-value">80%</output><input id="sound-effects" type="range" min="0" max="100" value="80"></label>
+   <label class="setting-range">Music <output id="sound-music-value">60%</output><input id="sound-music" type="range" min="0" max="100" value="60"></label>
+  </div>
+  <p>Music volume is saved for future tracks.</p>
+ </div>
 </section>
 <dialog id="victory-recap" aria-labelledby="victory-title">
  <div class="victory-layout">
@@ -768,16 +968,17 @@ function applySwordBleed(target){
 }
 
 let runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};
-const statsPanel=document.querySelector("#stats-panel");document.querySelector("#stats-toggle").onclick=()=>{statsPanel.hidden=!statsPanel.hidden;updateStatsPanel()};
 function enemyStats(e){return {mass:e.mass,elasticity:e.shape==='rubber'?1.55:.92,toughness:e.elite?145:enemyDefinition(e.shape).armour||0,stability:e.shape==='square'?100:e.shape==='armored'?95:e.shape==='rubber'?75:60,regen:e.shape==='regenerator'?1.1:0}}
-function updateStatsPanel(){if(statsPanel.hidden)return;let t=Math.floor(arenaTime),maxMass=Math.max(0,...enemies.map(e=>e.mass));let nearest=enemies.filter(e=>e.hp>0).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0],es=nearest?enemyStats(nearest):null;statsPanel.textContent=`SWORD BLEEDS ${bleedStacks}  |  TIME ${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}  |  KILLS ${kills}  |  BIGGEST HIT ${Math.round(runStats.biggestImpact)}  |  WEAPON HITS ${runStats.swingsHit}  |  SPLITS ${runStats.splits}  |  FUSIONS ${runStats.fusions}  |  HEALED ${Math.round(runStats.healed)} HP  |  LARGEST MASS ${maxMass.toFixed(1)}  |  PLAYER REGEN ${PLAYER_REGEN} HP/s  |  ENEMIES ${enemies.length}${es?'  |  NEAREST '+nearest.shape.toUpperCase()+' — HP '+Math.ceil(nearest.hp)+'/'+nearest.maxHp+'  MASS '+es.mass.toFixed(1)+'  BOUNCE '+es.elasticity.toFixed(2)+'  TOUGHNESS '+es.toughness+'  STABILITY '+es.stability+'%  REGEN '+es.regen+'/s':''}`}
-
 const sticks=[{x:86,y:326,dx:0,dy:0,id:null},{x:554,y:326,dx:0,dy:0,id:null}];
 const defaultControls={positions:[[viewW*.135,326],[viewW*.865,326]],size:100,opacity:75,floating:false};
 let controls={...defaultControls,positions:defaultControls.positions.map(a=>[...a])},editingControls=false,editPointer=null;
 try{let v=JSON.parse(localStorage.getItem('dd-controls'));if(v&&Array.isArray(v.positions)&&v.positions.length===2){controls={...controls,...v};const oldW=Number(v.arenaWidth)||640;controls.positions=v.positions.map((a,i)=>{let x=Number(a[0])||defaultControls.positions[i][0];let half=oldW/2;let newX=i===0?(x/half)*(viewW/2):viewW/2+((x-half)/half)*(viewW/2);return [Math.max(i?viewW/2+30:30,Math.min(i?viewW-30:viewW/2-30,newX)),Math.max(30,Math.min(H-30,Number(a[1])||326))]})}}catch(err){}
 function saveControls(){try{localStorage.setItem('dd-controls',JSON.stringify({...controls,arenaWidth:viewW}))}catch(err){}}
-function syncControls(){if(dashUIReady)syncDashControl();sticks.forEach((s,i)=>{s.x=controls.positions[i][0];s.y=controls.positions[i][1]});document.querySelector('#control-size').value=controls.size;document.querySelector('#control-opacity').value=controls.opacity;document.querySelector('#floating-controls').checked=controls.floating;document.querySelector('#size-value').textContent=controls.size+'%';document.querySelector('#opacity-value').textContent=controls.opacity+'%'}
+function syncControls(){if(dashUIReady)syncDashControl();sticks.forEach((s,i)=>{s.x=controls.positions[i][0];s.y=controls.positions[i][1]});document.querySelector('#control-size').value=controls.size;document.querySelector('#control-opacity').value=controls.opacity;document.querySelector('#floating-controls').checked=controls.floating;document.querySelector('#size-value').textContent=controls.size+'%';document.querySelector('#opacity-value').textContent=controls.opacity+'%';syncControlsPreview()}
+function syncControlsPreview(){
+ const preview=document.querySelector('#control-preview');
+ preview.style.cssText='--demo-size:'+Math.round(controls.size*.42)+'px;--demo-opacity:'+(controls.opacity/100);
+}
 function moveStick(i,v){let m=R*controls.size/100+3;sticks[i].x=Math.max(i?viewW/2+m:m,Math.min(i?viewW-m:viewW/2-m,v.x));sticks[i].y=Math.max(m,Math.min(H-m,v.y));controls.positions[i]=[sticks[i].x,sticks[i].y]}
 syncControls();
 
@@ -851,11 +1052,15 @@ function plateIcon(atlas,cell){
  const style='--sprite-col:'+(cell%4*100/3)+'%;--sprite-row:'+(Math.floor(cell/4)*100/(ART_ROWS[atlas]-1))+'%';
  return '<span class="plate-icon plate-'+atlas+'" aria-hidden="true" style="'+style+'"></span>';
 }
-function drawPaintedHero(){
+function heroPortraitArtwork(){
  const atlas=progress?.mageSchool==='arcane'?'mobs':'heroes';
  let path=hero==='mage'?progress?.mageSchool||'apprentice':equippedWeapon();
  if(path==='spear')path='javelin';
  const cell=atlas==='mobs'?15:HERO_PLATES[path]??HERO_PLATES.stick;
+ return {atlas,cell};
+}
+function drawPaintedHero(){
+ const {atlas,cell}=heroPortraitArtwork();
  const moving=Math.hypot(p.vx||0,p.vy||0)>25&&!reducedWorldMotion.matches;
  const lift=moving?Math.sin(arenaTime*21)*1.05:0;
  artOval(g,p.x,p.y+5,12,7,'#090b0de0');
@@ -2222,10 +2427,38 @@ function drawEconomyRoomDecor(){
 function inventoryIcon(def){
  return '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="19" fill="'+def.color+'"/><text x="24" y="31" text-anchor="middle" fill="#241e30" font-size="25" font-family="system-ui">'+def.glyph+'</text></svg>';
 }
+const CHARACTER_PAGES=['stats','items','runes','run'];
+function characterPage(page,canCast){
+ return CHARACTER_PAGES.includes(page)&&(page!=='runes'||canCast)?page:'stats';
+}
+function showCharacterPage(requested){
+ const page=characterPage(requested,hero==='mage');
+ for(const id of CHARACTER_PAGES){
+  const button=document.querySelector('#character-tab-'+id);
+  const section=document.querySelector('#character-page-'+id);
+  button.setAttribute('aria-pressed',String(id===page));
+  section.hidden=id!==page;
+ }
+ document.querySelector('#character-content').scrollTop=0;
+}
+function renderStatCards(target,values){
+ document.querySelector(target).innerHTML=values.map(([name,value])=>'<div><span>'+name+'</span><strong>'+value+'</strong></div>').join('');
+}
+function updateRunRecords(){
+ const seconds=Math.floor(arenaTime),elapsed=Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0');
+ const values=[
+  ['Dungeon',dungeonDepth],['Rooms cleared',progress.roomsCleared],['Lives remaining',lives],
+  ['Enemies defeated',kills],['Combat time',elapsed],['Weapon hits',runStats.swingsHit||0],
+  ['Biggest impact',Math.round(runStats.biggestImpact||0)],['Biggest damage burst',(runStats.biggestDamageBurst||0).toFixed(1)],
+  ['Health restored',(runStats.healed||0).toFixed(1)],['Sword bleeds',bleedStacks],
+  ['Splits',runStats.splits||0],['Fusions',runStats.fusions||0]
+ ];
+ renderStatCards('#run-records',values);
+}
 function updateCharacterMenu(){
  const panel=document.querySelector('#character-panel');if(panel.hidden)return;
  const st=playerStats(),values=[
-  ['Maximum health',st.maxHealth],[hero==='mage'?'Spell damage':hero==='archer'?'Ranged damage':'Melee damage',st.damage.toFixed(2)+'×'],['Move speed',Math.round(st.moveSpeed)],[hero==='mage'?'Cast speed':hero==='archer'?'Reload speed':'Swing speed',Math.round(st.swing*100)+'%'],['Knockback',Math.round(st.knockback*100)+'%'],
+  ['Health',Math.ceil(hp)+' / '+st.maxHealth],[hero==='mage'?'Spell damage':hero==='archer'?'Ranged damage':'Melee damage',st.damage.toFixed(2)+'×'],['Move speed',Math.round(st.moveSpeed)],[hero==='mage'?'Cast speed':hero==='archer'?'Reload speed':'Swing speed',Math.round(st.swing*100)+'%'],['Knockback',Math.round(st.knockback*100)+'%'],
   ['Health regen',st.regen.toFixed(1)+'/s'],[hero==='mage'?'Magic recovery':hero==='archer'?'Bonus bow reload':'Shield damage reduction',hero==='mage'?Math.round(Math.min(.45,upgradeCount('shield')*.1+itemCount('shieldBloom')*.12)*100)+'%':hero==='archer'?Math.round(Math.min(.5,upgradeCount('shield')*.1)*100)+'%':Math.round(st.shieldProtection*100)+'%'],['Critical chance',Math.round(st.crit*100)+'%'],['Luck',st.luck],['Damage reduction',Math.round(st.armour*100)+'%'],[hero==='archer'?'Arrow slow zone':'Enemy shot speed',hero==='archer'?(itemCount('hourglass')?'ON':'OFF'):Math.round(st.bulletSpeed*100)+'%'],[hero==='archer'?'Coin pickup (arrows collect)':'Coin pickup range',st.pickup]
  ];
  if(hero==='mage')values.splice(1,0,['Mana',Math.floor(mageMana)+' / '+mageMaxMana()],['Mana regeneration',mageManaRegen().toFixed(1)+'/s']);
@@ -2233,11 +2466,18 @@ function updateCharacterMenu(){
   const armour=bodyArmourStats();
   values.push(['Body armour durability',Math.ceil(armourHp)+' / '+armour.capacity],['Body armour absorption',Math.round(armour.absorption*100)+'% while intact']);
  }
- document.querySelector('#character-stats').innerHTML=values.map(([name,value])=>'<div><span>'+name+'</span><strong>'+value+'</strong></div>').join('');
- document.querySelector('#character-panel .character-note').textContent=hero==='mage'?'Trace the runes in the order shown and release to cast. Mana regenerates automatically.':(weaponForm().desc||HERO_DEFS[hero].hint);
+ renderStatCards('#character-stats',values);
+ document.querySelector('#character-class-note').textContent=hero==='mage'?'Trace the runes in the order shown and release to cast. Mana regenerates automatically.':(weaponForm().desc||HERO_DEFS[hero].hint);
  document.querySelector('#mage-spellbook').hidden=hero!=='mage';
+ document.querySelector('#character-tab-runes').hidden=hero!=='mage';
  if(hero==='mage')document.querySelector('#mage-spell-list').innerHTML=Object.entries(mageSpellbook()).map(([path,spell])=>'<p><strong>'+path+' · '+spell.name+' · '+spell.mana+' MP</strong>'+(spell.desc?' <small>'+spell.desc+'</small>':'')+'</p>').join('');
- document.querySelector('#character-coins').textContent=runHeroName()+' · '+progress.coins+' coins · '+kills+' kills · Dungeon '+dungeonDepth+' · '+levelSummary()+(progress.elementPrimary?' · '+ELEMENTS[progress.elementPrimary].name:'')+(progress.elementSecondary?' + '+ELEMENTS[progress.elementSecondary].name:'');
+ const {atlas,cell}=heroPortraitArtwork(),portrait=document.querySelector('#character-portrait');
+ portrait.className='plate-icon plate-'+atlas;
+ portrait.style.cssText='--sprite-col:'+(cell%4*100/3)+'%;--sprite-row:'+(Math.floor(cell/4)*100/(ART_ROWS[atlas]-1))+'%';
+ document.querySelector('#character-name').textContent=runHeroName();
+ document.querySelector('#character-progress').textContent=levelSummary()+(progress.elementPrimary?' · '+ELEMENTS[progress.elementPrimary].name:'')+(progress.elementSecondary?' + '+ELEMENTS[progress.elementSecondary].name:'');
+ document.querySelector('#character-coins').textContent=progress.coins+' coins · Dungeon '+dungeonDepth;
+ updateRunRecords();
  const inventory=document.querySelector('#item-inventory');inventory.innerHTML='';
  for(const [id,count] of Object.entries(progress.items)){
   const def=heroItemDefinition(id),row=document.createElement('div');row.className='inventory-row';row.innerHTML=inventoryIcon(def)+'<div><strong>'+def.name+(count>1?' ×'+count:'')+'</strong><small>'+def.desc+'</small></div>';inventory.appendChild(row);
@@ -2246,16 +2486,23 @@ function updateCharacterMenu(){
  document.querySelector('#run-upgrades').textContent=Object.entries(progress.upgrades).map(([id,count])=>heroUpgradeDefinition(id).name+' ×'+count).join(' · ')||'No stat upgrades yet.';
  renderSynergies();
 }
+function closeCharacterMenu(){
+ document.querySelector('#character-panel').hidden=true;
+ document.querySelector('#stats-toggle').focus?.();
+}
 function toggleCharacterMenu(){
- const panel=document.querySelector('#character-panel');panel.hidden=!panel.hidden;
- if(!panel.hidden){stopMenuControls();closeSettings();document.querySelector('#sandbox-panel').hidden=true;statsPanel.hidden=true;updateCharacterMenu()}
+ const panel=document.querySelector('#character-panel');
+ if(!panel.hidden){closeCharacterMenu();return}
+ stopMenuControls();closeSettings();document.querySelector('#sandbox-panel').hidden=true;panel.hidden=false;
+ updateCharacterMenu();showCharacterPage('stats');document.querySelector('#character-close').focus?.();
 }
 function setupExpansionUI(){
  const mapButton=document.querySelector('#map-toggle');
  mapButton.onclick=()=>{mapVisible=!mapVisible;mapButton.setAttribute('aria-pressed',String(mapVisible));};
  setupSandboxEconomyUI();
  document.querySelector('#stats-toggle').onclick=toggleCharacterMenu;
- document.querySelector('#character-close').onclick=()=>{document.querySelector('#character-panel').hidden=true};
+ document.querySelector('#character-close').onclick=closeCharacterMenu;
+ for(const id of CHARACTER_PAGES)document.querySelector('#character-tab-'+id).onclick=()=>showCharacterPage(id);
  document.querySelector('#loot-take').onclick=takeNearbyLoot;
  for(const [id,def] of Object.entries(BIOME_ENEMIES))SANDBOX_CATALOG.push({id,name:def.name,color:def.color});
  for(const [id,def] of Object.entries(BOSS_BLUEPRINTS))if(!BOSS_TYPES.includes(id))SANDBOX_CATALOG.push({id:'boss:'+id,name:def.name,color:def.color});
@@ -2869,6 +3116,7 @@ function showSoundSettings(){
  stopMenuControls();document.querySelector('#bestiary-panel').hidden=true;document.querySelector('#character-panel').hidden=true;document.querySelector('#sound-panel').hidden=false;
  for(const key of ['master','music','effects']){document.querySelector('#sound-'+key).value=profile.audio[key];document.querySelector('#sound-'+key+'-value').textContent=profile.audio[key]+'%'}
  document.querySelector('#sound-muted').checked=profile.audio.muted;
+ document.querySelector('#sound-close').focus?.();
 }
 function initializePersistence(){
  readProfile();
@@ -2882,7 +3130,10 @@ function initializePersistence(){
  document.querySelector('#start-sound').onclick=showSoundSettings;document.querySelector('#settings-sound').onclick=showSoundSettings;
  for(const id of ['#start-privacy','#settings-privacy'])document.querySelector(id).onclick=()=>{stopMenuControls();document.querySelector('#privacy-policy').showModal()};
  document.querySelector('#index-close').onclick=()=>{document.querySelector('#bestiary-panel').hidden=true};
- document.querySelector('#sound-close').onclick=()=>{document.querySelector('#sound-panel').hidden=true};
+ document.querySelector('#sound-close').onclick=()=>{
+  document.querySelector('#sound-panel').hidden=true;
+  document.querySelector(settings.hidden?'#start-sound':'#settings-sound').focus?.();
+ };
  document.querySelector('#index-search').oninput=renderBestiary;
  document.querySelector('#index-depth').oninput=event=>updateBestiaryDepth(Number(event.target.value));
  document.querySelector('#index-reveal').onchange=event=>{bestiaryReveal=event.target.checked;renderBestiary()};
@@ -7311,11 +7562,36 @@ window.addEventListener('blur',cancelHeldInputs);
 window.addEventListener('pagehide',cancelHeldInputs);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelHeldInputs()});
 
-const settings=document.querySelector('#settings-panel'),sub=document.querySelector('#controls-settings');function closeSettings(){settings.hidden=true;sub.hidden=true}
-document.querySelector('#settings-toggle').onclick=()=>{if(settings.hidden)stopMenuControls();document.querySelector('#character-panel').hidden=true;document.querySelector('#sandbox-panel').hidden=true;settings.hidden=!settings.hidden;sub.hidden=true};
-document.querySelector('#settings-close').onclick=closeSettings;
-document.querySelector('#controls-open').onclick=()=>{sub.hidden=false};
-document.querySelector('#controls-back').onclick=()=>{sub.hidden=true};
+const settings=document.querySelector('#settings-panel'),sub=document.querySelector('#controls-settings');
+function setPausePage(controlsPage){
+ sub.hidden=!controlsPage;
+ settings.dataset.view=controlsPage?'controls':'home';
+ sub.scrollTop=0;
+}
+function closeSettings(){settings.hidden=true;setPausePage(false)}
+function resumeFromPause(){closeSettings();document.querySelector('#settings-toggle').focus?.()}
+document.querySelector('#settings-toggle').onclick=()=>{
+ if(!settings.hidden){resumeFromPause();return}
+ stopMenuControls();document.querySelector('#character-panel').hidden=true;document.querySelector('#sandbox-panel').hidden=true;
+ settings.hidden=false;settings.dataset.hero=hero;setPausePage(false);document.querySelector('#settings-close').focus?.();
+};
+document.querySelector('#settings-close').onclick=resumeFromPause;
+document.querySelector('#controls-open').onclick=()=>{setPausePage(true);document.querySelector('#controls-back').focus?.()};
+document.querySelector('#controls-back').onclick=()=>{setPausePage(false);document.querySelector('#controls-open').focus?.()};
+document.addEventListener('keydown',event=>{
+ if(document.querySelector('#privacy-policy').open||!document.querySelector('#bestiary-panel').hidden)return;
+ const panel=['#sound-panel','#character-panel','#settings-panel'].map(selector=>document.querySelector(selector)).find(node=>!node.hidden);
+ if(!panel)return;
+ if(event.key==='Escape'){
+  event.preventDefault();
+  if(panel===settings&&!sub.hidden)document.querySelector('#controls-back').click();
+  else panel.querySelector('#sound-close,#character-close,#settings-close').click();
+ }else if(event.key==='Tab'){
+  const controls=[...panel.querySelectorAll('button:not(:disabled),input:not(:disabled)')].filter(el=>el.offsetParent!==null);
+  const edge=event.shiftKey?controls[0]:controls.at(-1);
+  if(edge===document.activeElement){event.preventDefault();(event.shiftKey?controls.at(-1):controls[0]).focus()}
+ }
+});
 function endEditing(){cancelHeldInputs();saveDashControl();editingControls=false;updateDashButton();document.querySelector('#edit-hint').hidden=true;saveControls()}
 document.querySelector('#edit-controls').onclick=()=>{cancelHeldInputs();editingControls=true;updateDashButton();closeSettings();document.querySelector('#edit-hint').hidden=false};
 document.querySelector('#edit-done').onclick=endEditing;
@@ -7462,7 +7738,7 @@ let defeated=collectDefeatedEnemies();for(let e of defeated)if(e.shape==='gravit
 for(const fallen of defeated)if(fallen.elite||fallen.shape==='armored')for(const ally of enemies){
  if(ally!==fallen&&ally.hp>0&&['square','round','mini'].includes(ally.shape)&&Math.hypot(ally.x-fallen.x,ally.y-fallen.y)<140)ally.moraleUntil=arenaTime+1.5;
 }
-let newborn=[];for(let e of defeated){if(e.shape!=='splitter')continue;for(let n=0;n<3;n++){let a=n*Math.PI*2/3+Math.random()*.35,ux=Math.cos(a),uy=Math.sin(a),x=clamp(e.x+ux*15,26,W-26),y=clamp(e.y+uy*15,26,F-26);let child={x,y,vx:e.vx*.4+ux*125,vy:e.vy*.4+uy*125,r:7,shape:'mini',mass:.55,hp:2,maxHp:2,healGlow:0,cool:0,impactCooldown:.35,playerHealCooldown:0};for(let w of walls)collideWall(child,w);newborn.push(child)}}enemies=enemies.filter(e=>e.hp>0);enemies.push(...newborn,...pendingSplits);let previousKills=kills;if(!inSandbox())kills+=defeated.length;if(!inSandbox()&&!shieldType&&previousKills<10&&kills>=10)showShieldChoice();updateRoomProgress();hud();updateStatsPanel()}
+let newborn=[];for(let e of defeated){if(e.shape!=='splitter')continue;for(let n=0;n<3;n++){let a=n*Math.PI*2/3+Math.random()*.35,ux=Math.cos(a),uy=Math.sin(a),x=clamp(e.x+ux*15,26,W-26),y=clamp(e.y+uy*15,26,F-26);let child={x,y,vx:e.vx*.4+ux*125,vy:e.vy*.4+uy*125,r:7,shape:'mini',mass:.55,hp:2,maxHp:2,healGlow:0,cool:0,impactCooldown:.35,playerHealCooldown:0};for(let w of walls)collideWall(child,w);newborn.push(child)}}enemies=enemies.filter(e=>e.hp>0);enemies.push(...newborn,...pendingSplits);let previousKills=kills;if(!inSandbox())kills+=defeated.length;if(!inSandbox()&&!shieldType&&previousKills<10&&kills>=10)showShieldChoice();updateRoomProgress();hud()}
 if(protectedPracticeHp!==null){hp=Math.max(hp,protectedPracticeHp);if(hp>0)over=false;playerBleed=[];hud()}
 finishDamageCapture(damageBefore,oldPlayerHp,dt);updateEconomy(dt);updateDashVisuals(dt);flushCheckpoint();flushProfile();
 checkRoomDoors(dt);}
@@ -7561,5 +7837,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.45';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.46';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
