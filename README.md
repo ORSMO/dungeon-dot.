@@ -2,11 +2,15 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.32 — Combat HUD and minimaps
+
+The HUD groups health, lives, class resources, and run counters. Bosses have portraits beside their health and attack hints. The floor map highlights the current room, and the local map shows player facing. Use **Map** to hide or show both maps. For Mage, the local map stays on the left to keep rune controls clear.
+
+The remaining visual pass is distinct artwork for enemy variants that share portraits.
+
 ## V8.31 — Painted doors, traps and loot
 
 Each biome has painted gates with readable route or lock signs. Trap grates distinguish idle, warning and active states and show painted spikes when they can deal damage. Bridges, chests, crates, barrels, coins, hearts, extra lives and loot stands have painted sprites. Room topology, trap timing and pickup rules are unchanged.
-
-The next visual passes are the minimap and combat HUD, then distinct artwork for enemy variants that share portraits.
 
 ## V8.30 — Painted weapons and combat effects
 
