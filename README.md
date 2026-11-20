@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.27 — Main menu
+
+The title screen has new painted key art and quick access to continuing a run, starting a new one, the Enemy Index and sound settings. Hero selection and save slots have dedicated screens. Continue opens the last playable checkpoint when there is no active run. Replacing an occupied slot still requires confirmation.
+
 ## V8.26 — Painted Realms
 
 Original painted environments replace the procedural floors in all four biomes. The game draws painted hero, enemy and boss sprites, and the title screen has illustrated key art. Animated movement, impact flashes and ground markers help keep characters readable as you fight. The Android packages bundle and verify the same artwork as the browser version. Existing runs load from the same saves.
