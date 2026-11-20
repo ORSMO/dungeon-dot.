@@ -2,6 +2,12 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.42 — Spell and impact effects
+
+Rune Apprentice spells use etched seals. Summoner magic uses spirit trails, Necromancer spells use bone shards and grave markings, Pyromancer casts use embers, and Arcane spells use geometric lines. Icy spells retain their own markings. Friendly spell fields draw beneath hostile warnings, and the shorter boss panel leaves more room on phones.
+
+Sword hits show a quick slash and a bleed marker. Bat hits show the direction of impact, flail hits have a heavier burst, and spear tips and shafts have distinct effects. Ranged hits, guard blocks, and hits taken by the player have their own cues. Reduced-motion mode keeps the main hit shapes and omits moving impact particles. Combat stats, timing, and save data follow the existing rules.
+
 ## V8.41 — Portal and rune effects
 
 Room portals sit in painted stone and bronze rings. Linked and random portals have distinct sigils and colors. Stepping through sends a pulse from the entrance and gathers sparks at the exit.

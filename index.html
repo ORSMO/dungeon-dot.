@@ -407,13 +407,19 @@ header .hp-track,#mana-hud .mana-track{
 }
 
 
+@media(max-height:470px){
+ #boss-hud{top:max(63px,var(--boss-top,75px));padding:2px 8px;border-width:5px}
+ #boss-hud .boss-track{margin:2px 0}
+ #boss-portrait{width:33px;height:33px}
+ #boss-portrait .plate-icon{width:25px}
+}
 #shield-durability::before{content:"";display:block;flex:none;width:11px;height:13px;background:url("art/shield-crest.webp") center/contain no-repeat;filter:drop-shadow(0 1px 1px #000)}
 #shield-durability[data-state=broken]::before{filter:grayscale(1);opacity:.5}
 #shield-durability-label{color:#f7ddb1!important}
 #shield-durability[data-state=cracked] #shield-durability-label{color:#f7af93!important}
 #shield-durability[data-state=broken] #shield-durability-label{color:#cfaaa2!important}
 
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.41</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><div class="pause-main"><strong>Paused</strong><button id="settings-close" type="button">Resume</button></div><div class="pause-primary"><button id="main-menu-toggle" type="button">Main Menu</button><button id="fullscreen-toggle" type="button">Fullscreen</button><button id="sandbox-toggle" type="button" hidden>Test Room</button></div><div class="pause-secondary"><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><button id="settings-privacy">Privacy policy ›</button></div><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-xp" type="button">+100 XP</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.42</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="stats-panel" hidden style="padding:10px 14px;color:#dcd6ef;font:11px monospace;line-height:1.8;border-top:1px solid #514765"></section><section id="settings-panel" hidden><div class="pause-main"><strong>Paused</strong><button id="settings-close" type="button">Resume</button></div><div class="pause-primary"><button id="main-menu-toggle" type="button">Main Menu</button><button id="fullscreen-toggle" type="button">Fullscreen</button><button id="sandbox-toggle" type="button" hidden>Test Room</button></div><div class="pause-secondary"><button id="controls-open">🎮 Controls ›</button><button id="settings-index">Enemy index ›</button><button id="settings-sound">Sound ›</button><button id="settings-privacy">Privacy policy ›</button></div><div id="controls-settings" hidden><button id="controls-back">‹ Back</button><h3>Controls</h3><p>Drag joysticks and the Dash button to reposition them. Each joystick stays on its own half; Dash stays on the right. Size and transparency apply to all controls.</p><button id="edit-controls">✥ Edit positions</button><label>Size <output id="size-value">100%</output><input id="control-size" type="range" min="65" max="160" value="100"></label><label>Transparency <output id="opacity-value">75%</output><input id="control-opacity" type="range" min="15" max="100" value="75"></label><label><input id="floating-controls" type="checkbox"> Floating controls (appear where you touch)</label><button id="controls-reset">Reset to defaults</button></div></section><section id="sandbox-panel" hidden><div class="sandbox-heading"><strong>TEST ROOM</strong><button id="sandbox-close" aria-label="Close spawn menu">×</button></div><div id="sandbox-start"><p>Enter a large practice room. Your dungeon progress is restored when you return.</p><button id="sandbox-enter">Enter test room</button></div><div id="sandbox-tools" hidden><div class="sandbox-switches"><button id="sandbox-movement" aria-pressed="false">Movement: OFF</button><button id="sandbox-attacks" aria-pressed="false">Attacks: OFF</button></div><div class="sandbox-actions"><button id="sandbox-clear">Clear room</button><button id="sandbox-heal">Heal / revive</button><button id="sandbox-return">Return to start</button></div><div class="sandbox-actions"><button id="sandbox-coins">+100 coins</button><button id="sandbox-xp" type="button">+100 XP</button><button id="sandbox-restock">Restock</button><button id="sandbox-reset-build">Reset build</button></div><small>Tap a picture to spawn one. Movement controls chasing; bat knockback still works. Boss tiles replace the current test boss.</small><div id="sandbox-grid" role="group" aria-label="Choose an enemy to spawn"></div><small id="sandbox-notice" aria-live="polite"></small></div></section><section id="character-panel" hidden aria-label="Character stats and items">
  <div class="character-heading"><strong>STATS &amp; ITEMS</strong><button id="character-close" aria-label="Close stats">×</button></div>
  <small id="character-coins"></small>
  <div id="character-stats"></div>
@@ -448,7 +454,7 @@ header .hp-track,#mana-hud .mana-track{
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.41</small>
+   <small>V8.42</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -1980,12 +1986,13 @@ function finishDamageCapture(before,oldPlayerHp,dt){
   if(lost>0&&e.hp!==-999&&old.maxHp===e.maxHp){
    if(!inSandbox())runStats.biggestDamageBurst=Math.max(runStats.biggestDamageBurst||0,lost);
    e.numberDamage=(e.numberDamage||0)+lost;e.numberTimer=(e.numberTimer||0)+dt;
-   if(lost>=.5||e.numberTimer>=.25||e.hp<=0){damageNumbers.push({x:e.x||old.x,y:(e.y||old.y)-e.r-6,amount:e.numberDamage,life:.75,impact:lost>=1?{x:e.x||old.x,y:e.y||old.y,r:e.r,color:e.lastHitBy==='mage'?'#c8b4ef':e.lastHitBy==='arrow'?'#f0c68a':'#f8d9a0'}:null});e.numberDamage=e.numberTimer=0}
+   if(lost>=.5||e.numberTimer>=.25||e.hp<=0){damageNumbers.push({x:e.x||old.x,y:(e.y||old.y)-e.r-6,amount:e.numberDamage,life:.75});e.numberDamage=e.numberTimer=0}
   }
  }
  damageNumbers=damageNumbers.filter(n=>{n.life-=dt;n.y-=19*dt;return n.life>0}).slice(-80);
  if(oldPlayerHp>hp&&(!inSandbox()||sandbox.attacks)){
   if(hp>0)over=false;
+  if(oldPlayerHp-hp>=.8)playerHitAt=arenaTime;
  }
  if(itemNoticeTime>0){itemNoticeTime-=dt;if(itemNoticeTime<=0)document.querySelector('#item-notice').hidden=true}
 }
@@ -3067,15 +3074,17 @@ function meleeHitDamage(weapon,boss,tip,heavy){
  return !tip&&weapon==='spear'?damage*.45:damage;
 }
 function meleeHeavy(){return equippedWeapon()==='flail'?(p.flailTipSpeed||0)>240:Math.abs(p.vel)>4.4}
-function damageClassicBatEnemy(enemy,kick,tip=true){
+function damageClassicBatEnemy(enemy,kick,tip=true,angle=p.a){
  const cleanHit=canDamage(enemy,kick);
  playBatImpact(cleanHit);
- if(!cleanHit){enemy.cool=.12;return false}
+ if(!cleanHit){queueCombatHit('guard',enemy.x,enemy.y,angle);enemy.cool=.12;return false}
  if(enemy.ability&&kick>115){
   enemy.ability=null;enemy.abilityCooldown=Math.max(enemy.abilityCooldown,2.2);
   elementFx.push({type:'shock',x:enemy.x,y:enemy.y,radius:22,life:.28,maxLife:.28});
  }
- friendlyDamage(enemy,meleeHitDamage(equippedWeapon(),false,tip,meleeHeavy()),'bat');
+ const weapon=equippedWeapon(),heavy=meleeHeavy();
+ friendlyDamage(enemy,meleeHitDamage(weapon,false,tip,heavy),'bat');
+ queueCombatHit(meleeImpactKind(weapon,tip),enemy.x,enemy.y,angle,heavy);
  enemy.cool=weaponForm().cooldown;
  return true;
 }
@@ -3110,13 +3119,13 @@ function resolveMeleeContact(enemy,previousAngle,previousLag,dt){
  }
  const dashing=classicDashBatActive();
  if(enemy.cool===0&&swinging&&!(dashing&&dash.batHits.has(enemy))){
-  if(damageClassicBatEnemy(enemy,kick,tip)&&dashing)dash.batHits.add(enemy);
+  if(damageClassicBatEnemy(enemy,kick,tip,Math.atan2(ty,tx))&&dashing)dash.batHits.add(enemy);
  }
 }
 function hitEnemyWithDashBat(enemy,previousAngle){
  if(enemy.cool>0||!dashBatSweeps(enemy,previousAngle))return;
  const impact=175;
- if(!damageClassicBatEnemy(enemy,impact))return;
+ if(!damageClassicBatEnemy(enemy,impact,true,Math.atan2(dash.dy,dash.dx)))return;
  dash.batHits.add(enemy);
  runStats.swingsHit++;
  runStats.biggestImpact=Math.max(runStats.biggestImpact,impact);
@@ -3504,7 +3513,10 @@ function updateBossFight(dt,previousAngle,previousLag=0,playerStart=p){
    const dashHit=unit.hitCooldown===0&&dashBatSweeps(unit,previousAngle);
    const swingHit=hero==='classic'&&unit.hitCooldown===0&&meleeIsSwinging()&&meleeSweep(unit.x,unit.y,unit.r,previousAngle,previousLag);
    if((dashHit||swingHit)&&!(classicDashBatActive()&&dash.batHits.has(unit))){
-    const hit=damageBoss(unit,meleeHitDamage(equippedWeapon(),true,dashHit||swingHit.tip,meleeHeavy()),'bat');
+    const weapon=equippedWeapon(),tip=dashHit||swingHit.tip,heavy=meleeHeavy();
+    const hit=damageBoss(unit,meleeHitDamage(weapon,true,tip,heavy),'bat');
+    const angle=dashHit?Math.atan2(dash.dy,dash.dx):swingHit.a+Math.sign(p.vel||1)*Math.PI/2;
+    queueCombatHit(hit?meleeImpactKind(weapon,tip):'guard',unit.x,unit.y,angle,heavy);
     if(hit&&classicDashBatActive())dash.batHits.add(unit);
     playBatImpact(hit);unit.hitCooldown=weaponForm().cooldown+.02;
     runStats.swingsHit++;runStats.biggestImpact=Math.max(runStats.biggestImpact,Math.abs(p.vel)*40);
@@ -3997,7 +4009,7 @@ function enterRoom(id,entry=null){
  currentRoom=id==='sandbox'?sandboxRoom:dungeon[id];currentRoom.visited=currentRoom.discovered=true;W=currentRoom.w;F=currentRoom.h;
  roomEntrySide=entry;
  for(const door of currentRoom.doors)dungeon[door.to].discovered=true;
- makeRoomLayout(currentRoom);decorateBiomeLayout(currentRoom);makeBiomeTerrain(currentRoom);curseTimers={};initRoomProps(currentRoom);setupDungeonMechanics(currentRoom);setupWallFixtures(currentRoom);resetEnemyNavigation();prepareRoomLoot(currentRoom);coinDrops=currentRoom.coinDrops||[];heartDrops=currentRoom.heartDrops||[];lifeDrops=currentRoom.lifeDrops||[];damageNumbers=[];nearestLoot=null;document.querySelector('#loot-panel').hidden=true;
+ makeRoomLayout(currentRoom);decorateBiomeLayout(currentRoom);makeBiomeTerrain(currentRoom);curseTimers={};initRoomProps(currentRoom);setupDungeonMechanics(currentRoom);setupWallFixtures(currentRoom);resetEnemyNavigation();prepareRoomLoot(currentRoom);coinDrops=currentRoom.coinDrops||[];heartDrops=currentRoom.heartDrops||[];lifeDrops=currentRoom.lifeDrops||[];damageNumbers=[];combatHits=[];spellBursts=[];playerHitAt=-Infinity;nearestLoot=null;document.querySelector('#loot-panel').hidden=true;
  const x=entry==='west'?62:entry==='east'?W-62:W/2;
  const y=entry==='north'?62:entry==='south'?F-62:F/2;
  p={...p,x,y,safeX:x,safeY:y,fallReturn:null,vx:0,vy:0,kvx:0,kvy:0,sticky:null,wallContacts:new Set(),wallCooldowns:new Map(),portalCooldown:0,portalReady:false,falling:0,slowUntil:0,swimming:false,lavaTickAt:0,wallSpikeContact:false};
@@ -4273,17 +4285,24 @@ function updateArrows(dt){
    if(enemy.hp<=0)continue;
    if(canDamage(enemy,arrow.impact)){
     enemy.lastArrowPower=arrow.power;arrow.hitTargets.add(enemy);friendlyDamage(enemy,arrow.damage,'arrow');
+    queueCombatHit(arrow.weapon,enemy.x,enemy.y,Math.atan2(arrow.vy,arrow.vx),arrow.power>=BOW_STRONG_DRAW);
     runStats.swingsHit++;runStats.biggestImpact=Math.max(runStats.biggestImpact,arrow.impact);
     const d=Math.hypot(arrow.vx,arrow.vy)||1;enemy.vx+=arrow.vx/d*arrow.impact*playerStats().knockback/Math.max(.5,enemy.mass);enemy.vy+=arrow.vy/d*arrow.impact*playerStats().knockback/Math.max(.5,enemy.mass);
     if(enemy.bossMinion&&arrow.power>.65)enemy.batKnockedUntil=arenaTime+1.5;
     elementalHit(enemy,arrow.impact);
     if(arrow.pierce>0){arrow.pierce--;arrow.damage*=.74}else arrow.life=0;
-   }else{bossSpark(enemy.x,enemy.y,'#f5dd9c');arrow.life=0}
+   }else{queueCombatHit('guard',enemy.x,enemy.y,Math.atan2(arrow.vy,arrow.vx));arrow.life=0}
   }
   if(arrow.life<=0)continue;
   if(bossFight&&!bossFight.done){
    const unit=bossFight.units.find(u=>u.hp>0&&u.state!=='jump'&&!arrow.hitTargets.has(u)&&laserDistance(u.x,u.y,segment)<u.r+arrow.r);
-   if(unit){unit.lastArrowPower=arrow.power;arrow.hitTargets.add(unit);if(damageBoss(unit,arrow.damage,'arrow')){runStats.swingsHit++;runStats.biggestImpact=Math.max(runStats.biggestImpact,arrow.impact)}arrow.life=0}
+   if(unit){
+    unit.lastArrowPower=arrow.power;arrow.hitTargets.add(unit);
+    const hit=damageBoss(unit,arrow.damage,'arrow');
+    queueCombatHit(hit?arrow.weapon:'guard',unit.x,unit.y,Math.atan2(arrow.vy,arrow.vx),arrow.power>=BOW_STRONG_DRAW);
+    if(hit){runStats.swingsHit++;runStats.biggestImpact=Math.max(runStats.biggestImpact,arrow.impact)}
+    arrow.life=0;
+   }
   }
  }
  arrows=arrows.filter(a=>a.life>0);
@@ -4379,23 +4398,76 @@ function drawPaintedShot(arrow,weapon,angle){
  g.restore();
  return true;
 }
-function drawImpactSparks(){
- if(reducedWorldMotion.matches)return;
+const COMBAT_IMPACT_STYLE={
+ stick:['#f1c88d',16,.17],sword:['#fff0ca',19,.22],bat:['#fbbf77',24,.25],flail:['#ffd897',30,.31],
+ spearTip:['#fff5bc',23,.23],spearShaft:['#d4b58b',12,.16],
+ sling:['#ddc49a',13,.18],bow:['#ffdda0',17,.19],crossbow:['#e6f0e8',19,.22],javelin:['#c4e8c6',24,.24],
+ guard:['#add8fa',17,.22],arcane:['#dec5ff',14,.20],apprentice:['#ded3ff',13,.19],
+ spirit:['#b9f3dc',15,.24],grave:['#f7e4ca',17,.25],fire:['#ffc27b',16,.25],ice:['#bceaff',15,.22]
+};
+let combatHits=[],spellBursts=[],playerHitAt=-Infinity;
+function queueCombatHit(kind,x,y,angle=0,strong=false){
+ combatHits.push({kind,x,y,angle,strong,at:arenaTime});
+ if(combatHits.length>56)combatHits.shift();
+}
+function meleeImpactKind(weapon,tip){
+ return weapon==='spear'?(tip?'spearTip':'spearShaft'):weapon;
+}
+function drawCombatHits(){
+ const calm=reducedWorldMotion.matches;
  g.save();g.lineCap='round';
- for(const hit of damageNumbers.slice(-20)){
-  if(!hit.impact||hit.life<.54)continue;
-  const {x,y,r,color}=hit.impact,age=clamp((.75-hit.life)/.21,0,1);
-  const spread=r+age*(8+Math.min(hit.amount,16)*.5);
-  g.globalAlpha=(1-age)*.83;g.strokeStyle=color;g.lineWidth=1.2+1.4*(1-age);g.beginPath();
-  for(let i=0;i<5;i++){
-   const a=i*2.4+x*.037+y*.014,dx=Math.cos(a),dy=Math.sin(a);
-   g.moveTo(x+dx*spread,y+dy*spread);g.lineTo(x+dx*(spread+6*(1-age)),y+dy*(spread+6*(1-age)));
+ for(const hit of combatHits){
+  const [color,size,duration]=COMBAT_IMPACT_STYLE[hit.kind],t=clamp((arenaTime-hit.at)/duration,0,1);
+  if(t===1)continue;
+  const reach=size*(hit.strong?1.15:1),length=reach*(calm?.65:.64+.42*t);
+  g.save();g.translate(hit.x,hit.y);g.rotate(hit.angle);
+  g.globalAlpha=(1-t)*.85;g.strokeStyle=color;g.lineWidth=1.25+1.2*(1-t);
+  if(hit.kind==='sword'){
+   g.beginPath();g.ellipse(-8,0,length*.95,length*.78,0,-1.15,1.15);g.stroke();
+   g.lineWidth=1.3;g.strokeStyle='#f78094';g.beginPath();g.ellipse(-6,0,length*.72,length*.60,0,-.8,.8);g.stroke();
+  }else if(hit.kind==='bat'||hit.kind==='guard'){
+   g.beginPath();g.ellipse(-4,0,length,length*.60,0,-.78,.78);g.stroke();
+   g.lineWidth=1.2;g.beginPath();g.ellipse(-4,0,length*.70,length*.46,0,-.70,.70);g.stroke();
+  }else if(hit.kind==='flail'){
+   g.beginPath();g.ellipse(0,0,length,length*.72,0,0,Math.PI*2);g.stroke();
+   artOval(g,0,0,6*(1-t),6*(1-t),'#fff0c2');
+  }else if(['spearTip','javelin','crossbow','bow'].includes(hit.kind)){
+   artPath(g,[[-length*.65,0],[length*.9,0]],null,color,2);
+   artPath(g,[[-length*.2,-length*.26],[length*.35,0],[-length*.2,length*.26]],null,'#fff1c9',1.2);
+  }else{
+   artPath(g,[[length*.55,0],[0,length*.43],[-length*.55,0],[0,-length*.43],[length*.55,0]],null,color,1.6);
   }
-  g.stroke();
+  if(!calm){
+   const count=hit.kind==='flail'?8:hit.strong?5:3;
+   for(let i=0;i<count;i++){
+    const angle=hit.kind==='flail'?i*Math.PI/4:(i-(count-1)/2)*.40;
+    const [dx,dy]=[Math.cos(angle),Math.sin(angle)],end=length*(1.04+t*.50);
+    const start=end-(1-t)*4;
+    artPath(g,[[dx*start,dy*start],[dx*end,dy*end]],null,i%2?color:'#fff4d3',1.4);
+   }
+  }
+  g.restore();
+ }
+ for(const target of [...enemies,...(bossFight&&!bossFight.done?bossFight.units:[])]){
+  if(target.hp<=0||!(target.swordBleedUntil>arenaTime))continue;
+  g.save();g.translate(target.x+target.r*.7,target.y-target.r*.65);
+  const offset=calm?0:(Math.sin(arenaTime*3+target.x*.1)+1)*1.2;
+  artPath(g,[[0,-4],[2.7,0],[1.6,2.9],[-1.6,2.9],[-2.7,0]],'#ef7c90','#3a1d29',.8);
+  artOval(g,4,3+offset,1.35,1.7,'#fba1a6');
+  g.restore();
+ }
+ if(arenaTime-shieldLastHit<.24&&hero==='classic'){
+  const t=(arenaTime-shieldLastHit)/.24;
+  g.globalAlpha=(1-t)*.82;g.strokeStyle='#d8f3ff';g.lineWidth=2;
+  g.beginPath();g.arc(p.x,p.y,SHIELD_RADIUS+(calm?3:t*10),p.a-SHIELD_HALF_ARC,p.a+SHIELD_HALF_ARC);g.stroke();
+ }
+ if(arenaTime-playerHitAt<.24){
+  const t=(arenaTime-playerHitAt)/.24,r=calm?14:14+t*7;
+  g.globalAlpha=(1-t)*.96;g.strokeStyle='#ffb0a3';g.lineWidth=2;
+  for(let i=0;i<4;i++){const a=i*Math.PI/2+.48;g.beginPath();g.arc(p.x,p.y,r,a,a+.55);g.stroke()}
  }
  g.restore();
 }
-
 function drawArrows(){
  g.save();g.lineCap='round';
  for(const arrow of arrows){const a=Math.atan2(arrow.vy,arrow.vx),ux=Math.cos(a),uy=Math.sin(a);
@@ -4664,6 +4736,7 @@ function mageHurt(target,base,kind='arc'){
   }
  }
  if(done&&target.hp<before){mageOnHit(target);
+  if(before-target.hp>=.7)queueCombatHit(spellArtKind(kind,progress?.mageSchool),target.x,target.y,Math.atan2(target.y-p.y,target.x-p.x));
   if(kind==='fire'){target.burnUntil=Math.max(target.burnUntil||0,arenaTime+2.4);target.burnPower=Math.max(target.burnPower||0,.6)}
   if(kind==='ice')target.slowUntil=Math.max(target.slowUntil||0,arenaTime+2);
   if(kind==='poison'){target.toxicUntil=Math.max(target.toxicUntil||0,arenaTime+3);target.toxicPower=.6}
@@ -4671,7 +4744,8 @@ function mageHurt(target,base,kind='arc'){
  return done;
 }
 function mageArea(x,y,r,damage,kind='arc',push=0,cover=false){
- elementFx.push({type:'shock',x,y,radius:r,life:.38,maxLife:.38});
+ spellBursts.push({kind:spellArtKind(kind,progress?.mageSchool),x,y,r,at:arenaTime});
+ if(spellBursts.length>24)spellBursts.shift();
  for(const target of mageTargets()){
   const dx=target.x-x,dy=target.y-y,d=Math.hypot(dx,dy);
   if(d>=r+(target.r||8)||cover&&!weaponLineClear(x,y,target.x,target.y,2))continue;
@@ -5461,56 +5535,139 @@ function updateMage(dt){
  }
  mageBolts=mageBolts.filter(b=>b.life>0);
 }
+const SPELL_ART={
+ apprentice:['#b8b6f1','#544a7730'],spirit:['#a5f9dc','#28665329'],grave:['#f4dcc4','#60504d2c'],
+ fire:['#ffb262','#cc442b35'],arcane:['#d6bdff','#5540862d'],ice:['#b9e8ff','#2f638e2e']
+};
+const SPELL_ZONE_ART={
+ sanctuary:'spirit',lure:'spirit',graveSnare:'grave',boneGuard:'grave',haunt:'grave',
+ meteor:'fire',fireMeteor:'fire',firestorm:'fire',trail:'fire',ray:'fire',phoenixGuard:'fire',
+ blizzard:'ice',arcGravity:'arcane',mirror:'arcane',rift:'arcane',orbit:'arcane',anchor:'arcane',stasis:'arcane',slowShot:'arcane'
+};
+function spellArtKind(kind,school,type){
+ const zone=Object.hasOwn(SPELL_ZONE_ART,type)?SPELL_ZONE_ART[type]:null;
+ if(zone)return zone;
+ if(kind==='fire'||kind==='ice'||kind==='grave'||kind==='spirit')return kind;
+ return school==='summoner'?'spirit':school==='necromancer'?'grave':school==='pyromancer'?'fire':school==='arcane'?'arcane':'apprentice';
+}
+function spellPolygon(x,y,r,sides,angle,stroke,width=1.4){
+ g.beginPath();
+ for(let i=0;i<sides;i++){
+  const a=angle+i*Math.PI*2/sides,px=x+Math.cos(a)*r,py=y+Math.sin(a)*r;
+  if(i)g.lineTo(px,py);else g.moveTo(px,py);
+ }
+ g.closePath();g.strokeStyle=stroke;g.lineWidth=width;g.stroke();
+}
+function drawSpellPattern(kind,x,y,r,alpha,phase){
+ const [color,fill]=SPELL_ART[kind],calm=reducedWorldMotion.matches;
+ g.save();g.translate(x,y);g.globalAlpha=alpha;g.lineCap='round';
+ artOval(g,0,0,r,r,fill);
+ if(kind==='arcane'||kind==='apprentice'){
+  spellPolygon(0,0,r,kind==='arcane'?6:4,phase,color);
+  spellPolygon(0,0,r*.66,kind==='arcane'?3:4,-phase+.6,color,.85);
+ }else{
+  g.strokeStyle=color;
+  for(let i=0;i<6;i++){
+   const angle=phase+i*Math.PI/3,radius=r*(i%2?.88:.97);
+   g.lineWidth=kind==='spirit'?2.2:1.6;
+   g.beginPath();g.arc(0,0,radius,angle,angle+.69);g.stroke();
+   if(kind==='grave'){
+    const px=Math.cos(angle)*radius*.82,py=Math.sin(angle)*radius*.82;
+    artPath(g,[[px,py-4],[px+2,py],[px,py+4],[px-2,py]],color);
+   }else if(kind==='spirit'){
+    const px=Math.cos(angle+.40)*radius*.73,py=Math.sin(angle+.40)*radius*.73;
+    artOval(g,px,py,2.5,1.6,'#e1fff1',angle+.8);
+   }else if(kind==='fire'&&!calm){
+    const px=Math.cos(angle+.17)*radius*.74,py=Math.sin(angle+.17)*radius*.74;
+    artPath(g,[[px-3*Math.cos(angle),py-3*Math.sin(angle)],[px,py],[px+7*Math.cos(angle+.21),py+7*Math.sin(angle+.21)]],null,'#e57d3f',1.4);
+    artOval(g,px,py,2.25,1.25,'#fff1ad',angle);
+   }else if(kind==='ice'){
+    artPath(g,[[Math.cos(angle)*r*.61,Math.sin(angle)*r*.61],[Math.cos(angle)*r*.92,Math.sin(angle)*r*.92]],null,color,1.25);
+   }
+  }
+ }
+ g.restore();
+}
+function drawMageFields(){
+ if(hero!=='mage')return;
+ const phase=reducedWorldMotion.matches?0:arenaTime*.68;
+ for(const z of mageZones){
+  if(z.life<=0||z.type==='orbit')continue;
+  const kind=spellArtKind(z.kind,progress.mageSchool,z.type),[color]=SPELL_ART[kind];
+  g.save();g.lineCap='round';
+  if(z.type==='mirror'||z.type==='ray'){
+   const mirror=z.type==='mirror',dx=mirror?Math.cos(z.angle)*z.r:0,dy=mirror?Math.sin(z.angle)*z.r:0;
+   const points=[[z.x-dx,z.y-dy],[z.x2??z.x+dx,z.y2??z.y+dy]];
+   if(!mirror&&!z.fired)g.setLineDash([7,5]);
+   artPath(g,points,null,kind==='fire'?'#803c34':'#514370',z.fired?12:6);
+   artPath(g,points,null,color,z.fired?3:1.65);
+  }else if(z.type==='arcFlash'){
+   g.globalAlpha=Math.min(.85,z.life*3);g.strokeStyle=z.color;g.lineWidth=3;
+   g.beginPath();g.arc(z.x,z.y,z.r,z.angle-z.half,z.angle+z.half);g.stroke();
+  }else{
+   const follows=['boneGuard','phoenixGuard','apprenticeWard'].includes(z.type),x=follows?p.x:z.x,y=follows?p.y:z.y;
+   const meteor=z.type==='meteor'||z.type==='fireMeteor',charging=meteor||z.type==='comboBurst';
+   drawSpellPattern(kind,x,y,z.r,meteor?.91:.67,phase+z.x*.025);
+   if(charging){
+    const charge=meteor?clamp(1-z.delay/1.15,0,1):clamp(z.tick/z.delay,0,1);
+    g.strokeStyle=color;g.lineWidth=2;
+    g.beginPath();g.arc(x,y,z.r*charge,0,Math.PI*2);g.stroke();
+    if(meteor)artPath(g,[[x-7,y],[x+7,y],[x,y],[x,y-7],[x,y+7]],null,color,1.2);
+   }
+   if(z.type==='rift'){
+    g.fillStyle='#fff1df';g.font='bold 10px Georgia';g.textAlign='center';g.fillText(String(z.charges),x,y+3);
+   }
+  }
+  g.restore();
+ }
+ for(const burst of spellBursts){
+  const t=clamp((arenaTime-burst.at)/.36,0,1),r=burst.r*(reducedWorldMotion.matches?.88:.5+t*.49);
+  if(t<1)drawSpellPattern(burst.kind,burst.x,burst.y,r,(1-t)*.83,phase);
+ }
+}
+function drawSpellProjectile(bolt){
+ const kind=spellArtKind(bolt.kind,progress.mageSchool),[color]=SPELL_ART[kind],r=bolt.r;
+ g.save();g.translate(bolt.x,bolt.y);g.rotate(Math.atan2(bolt.vy,bolt.vx));
+ if(kind==='spirit'){
+  artPath(g,[[-r*3,0],[-r*.4,-r*.7],[r,0],[-r*.4,r*.7]],color);
+  artOval(g,0,0,r*.5,r*.43,'#f1ffdb');
+ }else if(kind==='fire'){
+  artPath(g,[[-r*3,0],[-r,-r],[r,0],[-r,r]],'#b54b35');
+  artOval(g,0,0,r,r*.72,color);artOval(g,r*.22,0,r*.45,r*.4,'#fff2c5');
+ }else if(kind==='grave'){
+  artPath(g,[[-r*1.6,-r*.45],[-r*.7,-r],[r*1.1,0],[-r*.7,r],[-r*1.6,r*.45]],color,'#694d52',1.1);
+ }else{
+  artPath(g,[[-r*2,0],[-r*.45,-r*.66],[r*1.3,0],[-r*.45,r*.66]],color);
+  artPath(g,[[-r*.75,0],[r*.8,0]],null,'#fffaf0',1.1);
+ }
+ g.restore();
+}
 function drawMageEffects(){
  if(hero!=='mage')return;
  g.save();
- for(const z of mageZones){
-  if(z.life<=0)continue;
-  if(z.type==='orbit'){
-   g.globalAlpha=.88;g.fillStyle='#c4b7ff';
-   z.shields.forEach((active,i)=>{
-    if(!active)return;
-    const point=mageOrbPosition(z,i);g.beginPath();g.arc(point.x,point.y,9,0,Math.PI*2);g.fill();
-   });
-   continue;
-  }
-  if(z.type==='mirror'||z.type==='ray'){
-   const dx=z.type==='mirror'?Math.cos(z.angle)*z.r:0,dy=z.type==='mirror'?Math.sin(z.angle)*z.r:0;
-   g.globalAlpha=z.type==='ray'&&!z.fired?.5:.9;
-   g.strokeStyle=z.type==='ray'?'#ffac78':'#d6c2ff';g.lineWidth=z.fired?8:3;
-   g.beginPath();g.moveTo(z.x-dx,z.y-dy);g.lineTo(z.x2??z.x+dx,z.y2??z.y+dy);g.stroke();continue;
-  }
-  if(z.type==='arcFlash'){
-   g.globalAlpha=Math.min(1,z.life*3);g.strokeStyle=z.color;g.lineWidth=5;
-   g.beginPath();g.arc(z.x,z.y,z.r,z.angle-z.half,z.angle+z.half);g.stroke();continue;
-  }
-  const meteor=z.type==='meteor'||z.type==='fireMeteor',fire=meteor||z.type==='trail'||z.type==='firestorm'||
-   z.type==='phoenixGuard'||z.kind==='fire';
-  const follow=z.type==='boneGuard'||z.type==='phoenixGuard'||z.type==='apprenticeWard';
-  const x=follow?p.x:z.x,y=follow?p.y:z.y;
-  g.globalAlpha=meteor?.6:z.type==='bind'||z.type==='decoy'?.45:.27;g.fillStyle=fire?'#fc744b':z.type==='blizzard'?'#89dfff':'#bd8bff';g.strokeStyle=fire?'#ffc78e':z.type==='blizzard'?'#baf2ff':'#e2b0ff';
-  if(z.type==='sanctuary'||z.type==='lure'){g.fillStyle='#8ee3bc';g.strokeStyle='#b5ffdd'}
-  if(z.type==='boneGuard'||z.type==='graveSnare'){g.fillStyle='#e1d3ef';g.strokeStyle='#f5e8ff'}
-  if(z.type==='apprenticeWard'||z.type==='apprenticeSnare'){g.fillStyle='#a0e7c9';g.strokeStyle='#d1f7e5'}
-  g.lineWidth=2;g.beginPath();g.arc(x,y,z.r,0,Math.PI*2);g.fill();g.stroke();
-  if(meteor){g.strokeStyle='#fff0b1';g.lineWidth=3;g.beginPath();g.arc(z.x,z.y,z.r*clamp(1-z.delay/1.15,0,1),0,Math.PI*2);g.stroke()}
-  if(z.type==='comboBurst'){
-   g.globalAlpha=.75;g.beginPath();g.arc(x,y,z.r*clamp(z.tick/z.delay,0,1),0,Math.PI*2);g.stroke();
-  }
-  if(z.type==='decoy'||z.type==='rift'||z.type==='anchor'||z.type==='lure'){
-   g.strokeStyle='#d0bdff';g.lineWidth=3;g.beginPath();g.arc(z.x,z.y,9,0,Math.PI*2);g.stroke();
-  }
-  if(z.type==='rift'){g.globalAlpha=.85;g.fillStyle='#efdeff';g.font='bold 9px monospace';g.textAlign='center';g.fillText(String(z.charges),x,y+3)}
+ for(const z of mageZones)if(z.life>0&&z.type==='orbit'){
+  z.shields.forEach((active,i)=>{if(active){const point=mageOrbPosition(z,i);spellPolygon(point.x,point.y,8,6,i*.6,'#d9c5fa',2)}});
  }
  for(const body of mageCorpses){
   g.globalAlpha=.65;g.strokeStyle='#dcc7e9';g.lineWidth=2;g.beginPath();
   g.moveTo(body.x-5,body.y-4);g.lineTo(body.x+5,body.y+4);g.moveTo(body.x+5,body.y-4);g.lineTo(body.x-5,body.y+4);g.stroke();
  }
  for(const unit of mageSummons){
-  g.globalAlpha=Math.min(1,unit.life*2);g.fillStyle=unit.type==='skeleton'?'#ece1ec':unit.empoweredUntil>arenaTime?'#e7ff9b':'#aff1d6';g.strokeStyle='#383449';g.lineWidth=2;
-  g.beginPath();g.arc(unit.x,unit.y,unit.r,0,Math.PI*2);g.fill();g.stroke();
-  g.strokeStyle='#f9ffe7';g.beginPath();g.arc(unit.x,unit.y,unit.r*.46,0,Math.PI*2);g.stroke();
-  if(unit.command&&unit.command.target.hp>0){g.globalAlpha=.42;g.strokeStyle='#c2ffd8';g.beginPath();g.moveTo(unit.x,unit.y);g.lineTo(unit.command.target.x,unit.command.target.y);g.stroke()}
+  const skeleton=unit.type==='skeleton',energy=unit.empoweredUntil>arenaTime?'#d7ffab':'#a3e8d3',r=unit.r;
+  g.save();g.globalAlpha=clamp(unit.life*2,0,1);g.translate(unit.x,unit.y);
+  if(skeleton){
+   artOval(g,0,1,r*.85,r*.8,'#5a414b');artOval(g,0,-1,r*.65,r*.68,'#f0dcbb');
+   g.fillStyle='#261c29';g.fillRect(-r*.39,-r*.22,r*.23,r*.20);g.fillRect(r*.16,-r*.22,r*.23,r*.20);
+   artPath(g,[[-r*.31,r*.33],[r*.31,r*.33]],null,'#5a414b',1.15);
+  }else{
+   const speed=Math.hypot(unit.vx||0,unit.vy||0);
+   const a=speed>4?Math.atan2(unit.vy,unit.vx):0;
+   g.rotate(a);
+   artPath(g,[[-r*1.42,r*.52],[-r*.76,0],[-r*1.4,-r*.57],[r*.2,-r*.68],[r*.84,0],[r*.2,r*.68]],energy);
+   artOval(g,r*.17,0,r*.41,r*.37,'#ebfff5');
+  }
+  g.restore();
+  if(unit.command&&unit.command.target.hp>0)artPath(g,[[unit.x,unit.y],[unit.command.target.x,unit.command.target.y]],null,'#c2ffd85e',1.1);
  }
  for(const enemy of mageTargets())if(enemy.graveMarkUntil>arenaTime){
   g.globalAlpha=.75;g.strokeStyle='#e8b0df';g.lineWidth=2;g.beginPath();g.arc(enemy.x,enemy.y,enemy.r+4,0,Math.PI*2);g.stroke();
@@ -5518,8 +5675,8 @@ function drawMageEffects(){
  for(const enemy of mageTargets())if(enemy.spiritMarkUntil>arenaTime||enemy.mageStasisUntil>arenaTime){
   g.globalAlpha=.67;g.strokeStyle=enemy.spiritMarkUntil>arenaTime?'#bdffd9':'#d7c5ff';g.lineWidth=2;g.beginPath();g.arc(enemy.x,enemy.y,enemy.r+4,0,Math.PI*2);g.stroke();
  }
- for(const b of mageBolts){g.globalAlpha=.9;g.fillStyle=b.kind==='fire'?'#ffac6e':b.kind==='ice'?'#b6edff':b.kind==='grave'?'#e8b0df':'#d7b5ff';g.shadowColor=g.fillStyle;g.shadowBlur=10;g.beginPath();g.arc(b.x,b.y,b.r,0,Math.PI*2);g.fill()}
  g.restore();
+ for(const b of mageBolts)drawSpellProjectile(b);
 }
 const RUNE_TOUCH_RADIUS=33,RUNE_REPEAT_RADIUS=21;
 function mageRuneAt(x,y){
@@ -6861,6 +7018,13 @@ pendingSplits.push(child);runStats.splits++;
 elementFx.push({type:'split',x:oldX,y:oldY,life:.38,maxLife:.38});
 }
 const lifeDisplay=document.createElement('span');lifeDisplay.id='lives-count';document.querySelector('header .health').appendChild(lifeDisplay);
+const combatHeader=document.querySelector('.combat-info header');
+const combatHud=combatHeader.closest('main');
+function syncBossPanelTop(){
+ const top=combatHeader.getBoundingClientRect().bottom-combatHud.getBoundingClientRect().top+4;
+ combatHud.style.setProperty('--boss-top',Math.ceil(top)+'px');
+}
+if(typeof ResizeObserver==='function')new ResizeObserver(syncBossPanelTop).observe(combatHeader);
 function hud(){
  refreshElementHud();refreshManaHud();
  document.querySelector('#hp-fill').style.width=(Math.max(0,hp)/playerStats().maxHealth*100)+'%';document.querySelector('#hp-bleed').style.width=(Math.min(Math.max(0,hp),pendingBleed())/playerStats().maxHealth*100)+'%';
@@ -7148,8 +7312,7 @@ g.fillStyle='#0a090a';g.fillRect(0,0,viewW,H);
 g.save();g.beginPath();g.rect(0,0,viewW,H);g.clip();
 g.translate(viewW/2-p.x,VIEW_F/2-p.y);
 const worldArt=drawWorldScenery();
-drawRoomTerrain();drawRoomDecor();drawRoomProps();drawDungeonMechanics();drawEconomyRoomDecor();drawSandboxEconomySigns();drawBiomeWorld();drawLoot();drawBossHazards();drawRoomDoors();
-drawEnemyAttackWarnings();
+drawRoomTerrain();drawRoomDecor();drawRoomProps();drawDungeonMechanics();drawEconomyRoomDecor();drawSandboxEconomySigns();drawBiomeWorld();drawLoot();drawMageFields();drawBossHazards();drawEnemyAttackWarnings();drawRoomDoors();
 if(selectedBiome!=='red')for(let h of holes){g.save();g.fillStyle='#08070d';g.shadowColor='#000';g.shadowBlur=14;g.beginPath();g.ellipse(h.x,h.y,h.r,h.r*.82,0,0,Math.PI*2);g.fill();g.shadowBlur=0;g.strokeStyle='#74617b';g.lineWidth=4;g.beginPath();g.ellipse(h.x,h.y,h.r,h.r*.82,0,0,Math.PI*2);g.stroke();g.restore()}
 for(let a of artillery){let t=1-a.life/a.maxLife;g.save();g.strokeStyle='#ff7058';g.lineWidth=2+t*2;g.globalAlpha=.45+.5*t;g.beginPath();g.arc(a.x,a.y,a.r*(.6+.4*t),0,Math.PI*2);g.stroke();g.beginPath();g.moveTo(a.x-6,a.y);g.lineTo(a.x+6,a.y);g.moveTo(a.x,a.y-6);g.lineTo(a.x,a.y+6);g.stroke();g.fillStyle='#e8bd8b';g.beginPath();g.arc(a.startX+(a.x-a.startX)*t,a.startY+(a.y-a.startY)*t-55*Math.sin(Math.PI*t),6+3*Math.sin(Math.PI*t),0,Math.PI*2);g.fill();g.restore()}
 for(let e of enemies){if(e.shape!=='laser'||e.hp<=0||(e.laserState!=='charge'&&e.laserState!=='fire'))continue;let firing=e.laserState==='fire';g.save();g.lineCap='round';g.strokeStyle=firing?'#ff2879':'#ff8cae';g.lineWidth=firing?6:1.5;g.globalAlpha=firing?.82:.4;g.shadowColor='#ff3580';g.shadowBlur=firing?14:0;for(let seg of shieldLaserLines(laserPath(e.x,e.y,e.laserAngle))){g.beginPath();g.moveTo(seg.x1,seg.y1);g.lineTo(seg.x2,seg.y2);g.stroke()}if(firing){g.shadowBlur=0;g.strokeStyle='#fff4fb';g.lineWidth=2;for(let seg of laserPath(e.x,e.y,e.laserAngle)){g.beginPath();g.moveTo(seg.x1,seg.y1);g.lineTo(seg.x2,seg.y2);g.stroke()}}g.restore()}
@@ -7184,7 +7347,6 @@ g.fillStyle=e.isTreasure?'#ffe07b':BIOME_ENEMIES[e.shape]?BIOME_ENEMIES[e.shape]
 const painted=drawPaintedEnemy(e,g.fillStyle);
 if(!painted){g.beginPath();if(e.shape==='square')g.rect(e.x-e.r,e.y-e.r,e.r*2,e.r*2);else g.arc(e.x,e.y,e.r,0,Math.PI*2);g.fill();g.strokeStyle='#18141c';g.lineWidth=2;g.stroke();}
 if(!painted&&e.origins&&e.origins.length===2){g.save();g.beginPath();g.arc(e.x,e.y,e.r,0,Math.PI*2);g.clip();g.fillStyle=HYBRID_COLORS[e.origins[0]]||'#b388fa';g.fillRect(e.x-e.r,e.y-e.r,e.r,e.r*2);g.fillStyle=HYBRID_COLORS[e.origins[1]]||'#55c9ce';g.fillRect(e.x,e.y-e.r,e.r,e.r*2);g.strokeStyle='#f4e9ff';g.globalAlpha=.65;g.lineWidth=1.5;g.beginPath();g.moveTo(e.x,e.y-e.r);g.lineTo(e.x,e.y+e.r);g.stroke();g.restore()}
-if(e.swordBleedUntil>arenaTime){g.save();g.globalAlpha=.45;g.strokeStyle='#ff244b';g.lineWidth=3;g.beginPath();g.arc(e.x,e.y,e.r+3,0,Math.PI*2);g.stroke();g.restore()}
 if(e.shape==='gravity'){g.save();g.strokeStyle='#e6c6ff';g.lineWidth=2;g.beginPath();g.arc(e.x,e.y,6,0,Math.PI*1.5);g.stroke();g.fillStyle='#170d29';g.beginPath();g.arc(e.x,e.y,3,0,Math.PI*2);g.fill();g.restore()}
 if(e.shape==='laser'){g.save();g.strokeStyle='#fff';g.lineWidth=2;g.beginPath();g.arc(e.x,e.y,5,0,Math.PI*2);g.stroke();g.fillStyle='#390a24';g.beginPath();g.arc(e.x,e.y,2.5,0,Math.PI*2);g.fill();g.restore()}
 if(!painted&&RANGED.includes(e.shape)){g.save();g.fillStyle='#181524';g.beginPath();g.arc(e.x,e.y,4,0,Math.PI*2);g.fill();g.strokeStyle='#ffffff';g.lineWidth=1.5;g.beginPath();g.moveTo(e.x-6,e.y);g.lineTo(e.x+6,e.y);g.stroke();g.restore()}
@@ -7204,7 +7366,7 @@ if(phasing)g.restore();
 }
 for(const enemy of enemies)drawBiomeEnemyDetails(enemy);
 for(let f of healFx){let progress=1-f.life/.85,alpha=Math.min(1,f.life/.25);g.save();g.globalAlpha=alpha;g.fillStyle='#70ff90';let x=f.x+12+progress*7,y=f.y-14-progress*21;g.fillRect(x-2,y-8,4,16);g.fillRect(x-8,y-2,16,4);g.restore()}
-drawBossFight();drawSynergies();drawDashTrail();drawImpactSparks();drawDamageNumbers();
+drawBossFight();drawSynergies();drawDashTrail();drawCombatHits();drawDamageNumbers();
 if(!p.falling&&(inv===0||Math.floor(t/110)%2===0))drawHeroPortrait();
 if(!p.falling){
  g.save();g.translate(p.x,p.y);g.rotate(p.a);
@@ -7237,5 +7399,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.41';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.42';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>

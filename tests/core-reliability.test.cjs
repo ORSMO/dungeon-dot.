@@ -838,8 +838,9 @@ test('failed magic casts preserve mana and a successful cast enforces both coold
 test('Grave Mark earns Souls from corpses and hits on a solo boss up to the cap', () => {
   const result=run([
     declaration('MAGE_SOUL_LIMIT'),method('gainMageSoul'),method('mageHurt'),method('rememberMageCorpse'),
+    declaration('SPELL_ZONE_ART'),method('spellArtKind'),method('queueCombatHit'),
     'const progress={mageSchool:"necromancer"},itemCount=()=>0,canDamage=()=>true,refreshManaHud=()=>{},queueCheckpoint=()=>{},mageOnHit=()=>{};',
-    'let arenaTime=1,mageSouls=0;const mageCorpses=[],friendlyDamage=(enemy,amount)=>{enemy.hp=Math.max(0,enemy.hp-amount);return true};',
+    'let arenaTime=1,mageSouls=0;const p={x:0,y:0},combatHits=[],mageCorpses=[],friendlyDamage=(enemy,amount)=>{enemy.hp=Math.max(0,enemy.hp-amount);return true};',
     'const enemy={x:10,y:18,hp:2};mageHurt(enemy,2.8,"grave");rememberMageCorpse(enemy);const afterKill=mageSouls;',
     'const boss={hp:90,kind:"gatekeeper"};mageHurt(boss,2.8,"grave");mageHurt(boss,1.85);mageHurt(boss,1.85);const fromBoss=mageSouls;',
     'for(let i=0;i<9;i++)mageHurt(boss,1.85);'
@@ -1113,4 +1114,19 @@ test('portal transfers queue an effect at both ends and cannot loop while occupi
     ['departure',20,40,'linked'],['arrival',110,75,'linked'],
     ['departure',110,75,'linked'],['arrival',20,40,'linked']
   ]});
+});
+
+test('combat art resolves to the correct school and weapon without affecting combat', () => {
+ const result=run([
+  declaration('SPELL_ZONE_ART'),declaration('COMBAT_IMPACT_STYLE'),method('spellArtKind'),method('meleeImpactKind'),method('queueCombatHit'),
+  'const arenaTime=2,combatHits=[];',
+  'const schools=[undefined,"summoner","necromancer","pyromancer","arcane"].map(s=>spellArtKind("arc",s));',
+  'const overrides=[spellArtKind("arc","arcane","sanctuary"),spellArtKind("fire","summoner"),spellArtKind("arc",null,"blizzard")];',
+  'const spear=[meleeImpactKind("spear",true),meleeImpactKind("spear",false)];',
+  'for(let i=0;i<70;i++)queueCombatHit("sword",i,2,.5,true);'
+ ],'{schools,overrides,spear,valid:[...schools,...overrides,...spear].every(style=>!!COMBAT_IMPACT_STYLE[style]),length:combatHits.length,first:combatHits[0].x,last:combatHits.at(-1)}');
+ assert.deepEqual(result,{
+  schools:['apprentice','spirit','grave','fire','arcane'],overrides:['spirit','fire','ice'],spear:['spearTip','spearShaft'],
+  valid:true,length:56,first:14,last:{kind:'sword',x:69,y:2,angle:.5,strong:true,at:2}
+ });
 });
