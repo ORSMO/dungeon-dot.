@@ -1217,3 +1217,11 @@ test('monster defeat audio prioritizes elites and rate-limits simultaneous defea
  ],'{types,during,cues,cleared:queuedEnemyDefeat===null}');
  assert.deepEqual(result,{types:['fall-monster','fall-stone','fall-spirit','fall-lava'],during:['fall-elite'],cues:['fall-elite','fall-abyss'],cleared:true});
 });
+
+test('the original menu theme is shipped as a local audio asset', () => {
+  const asset=run([declaration('MENU_THEME_PATH')],'MENU_THEME_PATH');
+  const bytes=fs.readFileSync(path.join(__dirname,'..',asset));
+  assert.equal(asset,'audio/beyond-the-torchlight.mp3');
+  assert.ok(bytes.length>250000);
+  assert.ok(bytes.subarray(0,3).toString()==='ID3'||(bytes[0]===0xff&&(bytes[1]&0xe0)===0xe0));
+});
