@@ -2,6 +2,12 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.33 — Floating combat controls
+
+The dungeon status strip is replaced by a painted enemy icon and a live count, including living boss units. The arena extends behind the controls, and Map, Character and Pause sit together in the upper corner. Fullscreen, the Test Room, and Main Menu are in Pause.
+
+Passive health regeneration pauses while bleeding and resumes when it ends. Existing save files load without applying their old regeneration toggle.
+
 ## V8.32 — Combat HUD and minimaps
 
 The HUD groups health, lives, class resources, and run counters. Bosses have portraits beside their health and attack hints. The floor map highlights the current room, and the local map shows player facing. Use **Map** to hide or show both maps. For Mage, the local map stays on the left to keep rune controls clear.
