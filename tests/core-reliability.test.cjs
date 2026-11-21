@@ -1271,16 +1271,19 @@ test('the Old Dungeon art is scoped to its boss arena and its gate leaves clear 
  assert.deepEqual(result.open,[[-39,-14,78,28]]);
 });
 
-test('shops omit exhausted upgrade stock while keeping their other items and sold state',()=>{
+test('shops stock four spaced offers and use a relic if no upgrade is available',()=>{
  const result=run([
-  method('prepareRoomLoot'),
+  method('prepareRoomLoot'),method('prepareShopLoot'),
   'const W=520,F=360,UPGRADE_DEFS={power:{}};let canBuy=true;',
-  'const rollItem=()=>"emberHeart",upgradeAvailable=()=>canBuy;',
+  'const rollItem=(...excluded)=>["emberHeart","mossCharm","glassEye"].find(id=>!excluded.includes(id)),upgradeAvailable=()=>canBuy;',
   'const stocked={kind:"shop"},exhausted={kind:"shop"};',
   'prepareRoomLoot(stocked);stocked.loot[0].claimed=true;canBuy=false;',
   'prepareRoomLoot(stocked);prepareRoomLoot(exhausted);'
- ],'{stocked:stocked.loot.map(x=>[x.id,x.price,x.claimed]),exhausted:exhausted.loot.map(x=>x.id)}');
- assert.deepEqual(result,{stocked:[['shop-item',20,true],['shop-stat',12,false],['shop-heal',8,false]],exhausted:['shop-item','shop-heal']});
+ ],'{stocked:stocked.loot.map(x=>[x.id,x.key,x.price,x.claimed,x.x]),exhausted:exhausted.loot.map(x=>x.key)}');
+ assert.deepEqual(result,{
+  stocked:[['shop-item','emberHeart',20,true,80],['shop-stat','power',12,false,200],['shop-item-2','mossCharm',20,false,320],['shop-heal','heal',8,false,440]],
+  exhausted:['emberHeart','mossCharm','glassEye','heal']
+ });
 });
 
 test('treasure offers distinct relics, preserves old offers and grants a single free choice',()=>{

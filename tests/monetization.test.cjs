@@ -106,3 +106,22 @@ test('shop grants ad gold once and spends only Test Diamonds on the fixed reward
     check(JSON.parse(localStorage.getItem(PREVIEW_WALLET_KEY)).gilded,'cosmetic was not stored');
   `);
 });
+
+test('a saved three-slot shop gains one distinct relic without changing existing purchases', {timeout: 5000}, async () => {
+  await play(`
+    beginNewSlot(1,true);
+    const shop=dungeon.find(room=>room.kind==='shop');enterRoom(shop.id,shop.doors[0].side);
+    shop.loot=shop.loot.filter(loot=>loot.id!=='shop-item-2');
+    shop.loot[0].claimed=true;progress.coins=13;shop.adRewardClaimed=true;
+    const original=shop.loot.map(({id,key,price,claimed})=>({id,key,price,claimed}));
+    queueCheckpoint();flushCheckpoint();check(continueSlot(1),'old three-slot shop did not load');
+    const saved=readSlot(1).data.dungeon[shop.id],newRelic=saved.loot[2];
+    check(saved.loot.length===4&&newRelic.id==='shop-item-2'&&newRelic.kind==='item'&&newRelic.price===20&&!newRelic.claimed,'second relic was not saved immediately');
+    check(newRelic.key!==original[0].key&&progress.coins===13&&saved.adRewardClaimed,'stock repeated an item or reset the balance or ad reward');
+    for(const record of original){
+      const {id,key,price,claimed}=saved.loot.find(loot=>loot.id===record.id);
+      check(JSON.stringify({id,key,price,claimed})===JSON.stringify(record),'migration replaced a shop offer or reopened a sold item');
+    }
+    check(continueSlot(1)&&currentRoom.loot[2].key===newRelic.key,'reloading rerolled the stock');
+  `);
+});
