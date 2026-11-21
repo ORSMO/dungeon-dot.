@@ -2,6 +2,12 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.54 — Boss and trap feedback
+
+Boss charges, crashes, landings, volleys, beams, lightning and other signatures now sound as they go off. Dashed aim lines show the actual projectile fan just before the Gatekeeper family, Crystal Eye, Spore Matriarch or Prism Oracle fires. Cinder Hydra keeps its three breath lanes.
+
+Wall bolts, swinging chains, spilled embers and rising floor spikes now have distinct activation sounds. The existing danger warnings still play before the attacks. Damage and attack timings are unchanged.
+
 ## V8.53 — Enemy attack audio
 
 Regular enemies now have sound cues for charge and spell windups, ranged shots, laser warmup and fire, and bomb fuses and explosions. The seven projectile families have distinct launch sounds. Cannon fire, artillery impacts, and Root Guard patches also have cues. Nearby windups sound once per attack and repeated cues are rate-limited in crowds. The Sound Effects setting controls these cues.
