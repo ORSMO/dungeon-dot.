@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.59 — Old Dungeon showcase
+
+The Old Dungeon boss arena has new painted slate flooring, cut-stone walls, and an ironbound entrance gate. The Gatekeeper uses a new high-resolution sprite and matching boss portrait. The gate follows the existing unlock animation, and the arena uses the existing room layout and combat rules.
+
 ## V8.58 — Floor and wall detail
 
 The four biomes now have finer surface detail, with warm chips in the Keep, ash-colored cuts in the Forge, moss-toned grain in the Hollow, and cool highlights in the Vault. Wall materials use higher-resolution cached tiles with fine-grain texture. Floor details are baked into the existing room cache, and joined walls retain their continuous edges.
