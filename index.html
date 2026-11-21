@@ -505,6 +505,10 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
 #loot-name{display:block;font-size:17px;line-height:1.15;overflow-wrap:anywhere}
 #loot-description{display:block;color:#ddc7b0;font-size:11px;line-height:1.35;margin-top:3px}
 .loot-footer{grid-column:2;display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:6px}
+.loot-actions{display:grid;gap:4px;min-width:0}
+#loot-watch-ad{padding:5px 8px;border:1px solid #b5915a;border-radius:3px;background:#28221e;color:#ffe2a5;font:700 11px/1.2 system-ui;min-height:35px}
+#loot-watch-ad[hidden],#loot-ad-status:empty{display:none}
+#loot-ad-status{font:10px/1.25 system-ui;color:#f4d3a5;max-width:155px}
 #loot-price{color:#f6d28a;font-size:11px;font-weight:700}
 .loot-change{display:block;color:#ffdfa0;font:600 11px/1.35 system-ui;white-space:pre-line;margin-top:4px}
 .loot-change:empty{display:none}
@@ -522,11 +526,9 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
 }
 #loot-panel[data-choice=true][hidden]{display:none}
 #loot-panel[data-choice=true]>:not(#treasure-choices),#treasure-choices[hidden]{display:none}
-#shop-preview-actions{position:absolute;z-index:8;left:10px;top:72px;display:grid;gap:4px;max-width:150px}
-#shop-preview-actions[hidden]{display:none}
-#shop-preview-actions button,.preview-offer button{padding:7px 10px;border:1px solid #a28458;border-radius:4px;background:#28211def;color:#ffe9c4;font:700 11px system-ui;min-height:36px}
-#shop-preview-actions button:disabled,.preview-offer button:disabled{opacity:.6}
-#shop-preview-status{color:#ffe0aa;font:11px system-ui;text-shadow:0 1px 3px #000}
+#shop-diamond-chest{position:absolute;z-index:8;left:10px;top:72px;max-width:150px}
+#shop-diamond-chest,.preview-offer button{padding:7px 10px;border:1px solid #a28458;border-radius:4px;background:#28211def;color:#ffe9c4;font:700 11px system-ui;min-height:36px}
+.preview-offer button:disabled{opacity:.6}
 .preview-offer{width:min(430px,84vw);max-height:90dvh;overflow:auto;padding:16px;background:#201a19;color:#f8e6c8;border:5px solid #a28458;border-image:var(--brass-frame) 31 / 7px / 0 stretch}
 .preview-offer::backdrop{background:#0a0808ac}
 .preview-offer h2{margin:0;color:#ffebc5;font:700 23px Georgia,serif}
@@ -681,7 +683,11 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
 <section id="loot-panel" hidden aria-label="Nearby item">
  <canvas id="loot-preview" width="92" height="92" aria-hidden="true"></canvas>
  <div><strong id="loot-name"></strong><small id="loot-description"></small><small id="loot-change" class="loot-change"></small></div>
- <div class="loot-footer"><span id="loot-price"></span><button id="loot-take" type="button">Take item</button></div>
+ <div class="loot-footer"><span id="loot-price"></span><div class="loot-actions">
+  <button id="loot-take" type="button">Take item</button>
+  <button id="loot-watch-ad" type="button" hidden>Get free · Watch 1 test ad</button>
+  <small id="loot-ad-status" role="status"></small>
+ </div></div>
  <div id="treasure-choices" hidden>
   <h2>Choose one relic</h2>
   <div class="treasure-options">
@@ -690,11 +696,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
   </div>
  </div>
 </section>
-<section id="shop-preview-actions" hidden aria-label="Shop offers">
- <button id="shop-ad" type="button">Watch 1 test ad · +5 coins</button>
- <button id="shop-diamond-chest" type="button" hidden>Inspect Diamond Chest</button>
- <span id="shop-preview-status" role="status"></span>
-</section>
+<button id="shop-diamond-chest" type="button" hidden>Inspect Diamond Chest</button>
 <dialog id="revive-offer" class="preview-offer" aria-labelledby="revive-title">
  <h2 id="revive-title">One last chance</h2>
  <p>Complete two test ads to restore one life and retry. One ad revive per run. Ad length can vary.</p>
@@ -727,7 +729,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.70</small>
+   <small>V8.71</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -2602,6 +2604,14 @@ function bankClearedRoomCoins(){
  // Save before the next fight, so taking a door cannot lose or duplicate flying coins.
  queueCheckpoint();flushCheckpoint();
 }
+function lootInReach(loot){
+ return !over&&!p.falling&&loot&&!loot.claimed&&(currentRoom.loot||[]).includes(loot)&&Math.hypot(loot.x-p.x,loot.y-p.y)<58;
+}
+function lootUnavailableReason(loot){
+ if(loot.kind==='heal'&&hp>=playerStats().maxHealth)return 'Health full';
+ if(loot.kind==='stat'&&!upgradeAvailable(loot.key))return 'Upgrade unavailable';
+ return '';
+}
 function updateEconomy(dt){
  const homing=roomCoinsHome(),pickup=playerStats().pickup;
  for(const coin of coinDrops){
@@ -2620,7 +2630,9 @@ function updateEconomy(dt){
   lifeDrops=lifeDrops.filter(drop=>{if(lives>=5||Math.hypot(p.x-drop.x,p.y-drop.y)>pickup)return true;lives++;gainedLife=true;playSoundCue('loot');showItemNotice('EXTRA LIFE · '+lives+' LIVES');return false});
   if(gainedLife)persistLifeCount();
  }
+ const previousLoot=nearestLoot;
  nearestLoot=(currentRoom.loot||[]).filter(loot=>!loot.claimed&&Math.hypot(loot.x-p.x,loot.y-p.y)<58).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0]||null;
+ if(previousLoot!==nearestLoot)document.querySelector('#loot-ad-status').textContent='';
  const panel=document.querySelector('#loot-panel');panel.hidden=!nearestLoot||over||!!p.falling;
  panel.className=inSandbox()&&!document.querySelector('#sandbox-panel').hidden?'practice-with-menu':'';
  if(!panel.hidden){
@@ -2628,29 +2640,31 @@ function updateEconomy(dt){
   if(lootDetailsKey!==key){renderLootDetails(loot);lootDetailsKey=key}
   if(!loot.alternative){
    drawLootPreview(loot,lootDefinition(loot));
-   const button=document.querySelector('#loot-take'),full=loot.kind==='heal'&&hp>=playerStats().maxHealth;
-   const maxed=loot.kind==='stat'&&!upgradeAvailable(loot.key);
-   button.disabled=full||maxed||progress.coins<loot.price;
-   button.textContent=full?'Health full':maxed?'Upgrade unavailable':progress.coins<loot.price?'Need more coins':loot.price?'Buy':loot.kind==='stat'?'Take upgrade':'Take item';
+   const button=document.querySelector('#loot-take'),unavailable=lootUnavailableReason(loot);
+   const short=progress.coins<loot.price;
+   button.disabled=shopAdPending||!!unavailable||short;
+   button.textContent=unavailable||(loot.price?'Buy':loot.kind==='stat'?'Take upgrade':'Take item');
   }
  }
- showShopPreviewActions();
+ updateShopItemAd();
+ document.querySelector('#shop-diamond-chest').hidden=!previewMarketEnabled()||currentRoom.kind!=='shop'||over||!!nearestLoot||Math.hypot(p.x-W/2,p.y-F/2-100)>60;
 }
 function takeNearbyLoot(relic=null){
  const loot=nearestLoot;
- if(over||p.falling||!loot||loot.claimed||!(currentRoom.loot||[]).includes(loot)||Math.hypot(loot.x-p.x,loot.y-p.y)>=58||progress.coins<loot.price)return false;
+ if(shopAdPending||!lootInReach(loot)||progress.coins<loot.price||lootUnavailableReason(loot))return false;
  if(loot.alternative){
   if(relic!==loot.key&&relic!==loot.alternative)return false;
   loot.key=relic;delete loot.alternative;
  }else if(relic!==null)return false;
- if(loot.kind==='heal'&&hp>=playerStats().maxHealth)return false;
- if(loot.kind==='stat'&&!upgradeAvailable(loot.key))return false;
- progress.coins-=loot.price;loot.claimed=true;
+ progress.coins-=loot.price;grantLoot(loot);return true;
+}
+function grantLoot(loot){
+ loot.claimed=true;
  if(loot.kind==='item')giveItem(loot.key);else if(loot.kind==='stat')giveUpgrade(loot.key);else{healPlayer(20);showItemNotice('Healing Flask · Restored health')}
- playSoundCue('loot');nearestLoot=null;updateEconomy(0);hud();queueCheckpoint();flushCheckpoint();return true;
+ playSoundCue('loot');nearestLoot=null;updateEconomy(0);hud();queueCheckpoint();flushCheckpoint();
 }
 
-const SHOP_AD_GOLD=5,REVIVE_ADS_REQUIRED=2,DIAMOND_CHEST_PRICE=3;
+const REVIVE_ADS_REQUIRED=2,DIAMOND_CHEST_PRICE=3;
 const PREVIEW_WALLET_KEY='dd-test-wallet-v1';
 let previewAdRequest=null,previewAdId=0,shopAdPending=false,revivePending=false;
 let previewWallet={diamonds:0,gilded:false};
@@ -2670,29 +2684,28 @@ function cancelPreviewAd(){
  try{window.DungeonDotPreview.postMessage('cancel:'+request.id)}catch(error){}
  request.resolve('skipped');
 }
-function showShopPreviewActions(){
- const panel=document.querySelector('#shop-preview-actions');
- panel.hidden=!previewMarketEnabled()||currentRoom?.kind!=='shop'||over;
- if(panel.hidden)return;
- const button=document.querySelector('#shop-ad');
- button.disabled=currentRoom.adRewardClaimed===true;
- button.textContent=currentRoom.adRewardClaimed?'Ad reward collected':shopAdPending?'Cancel test ad':'Watch 1 test ad · +'+SHOP_AD_GOLD+' coins';
- const chest=document.querySelector('#shop-diamond-chest');
- chest.hidden=!!nearestLoot||Math.hypot(p.x-W/2,p.y-F/2-100)>60;
+function adCanBuyLoot(loot){
+ return previewMarketEnabled()&&currentRoom?.kind==='shop'&&currentRoom.cleared&&!currentRoom.adRewardClaimed&&lootInReach(loot)&&loot.price>0&&!lootUnavailableReason(loot)&&
+  (loot.kind!=='item'||itemCount(loot.key)<(ITEM_STACK_LIMITS[loot.key]??1));
+}
+function updateShopItemAd(){
+ const button=document.querySelector('#loot-watch-ad');
+ button.hidden=!adCanBuyLoot(nearestLoot);
+ if(!button.hidden)button.textContent=shopAdPending?'Cancel test ad':'Get free · Watch 1 test ad';
 }
 async function claimShopAd(){
- if(!previewMarketEnabled()||currentRoom?.kind!=='shop'||!currentRoom.cleared||over||shopAdPending||currentRoom.adRewardClaimed)return;
- const room=currentRoom,run=progress;
- const status=document.querySelector('#shop-preview-status');status.textContent='';
- stopMenuControls();shopAdPending=true;showShopPreviewActions();
+ const loot=nearestLoot;
+ if(shopAdPending||!adCanBuyLoot(loot))return;
+ const room=currentRoom,run=progress,status=document.querySelector('#loot-ad-status');status.textContent='';
+ stopMenuControls();shopAdPending=true;updateEconomy(0);
  const result=await requestPreviewAd();shopAdPending=false;
  if(room!==currentRoom||run!==progress)return;
- if(result==='earned'&&!room.adRewardClaimed){
-  room.adRewardClaimed=true;progress.coins+=SHOP_AD_GOLD;
-  queueCheckpoint();flushCheckpoint();playSoundCue('coin');
-  showItemNotice('+'+SHOP_AD_GOLD+' COINS');
- }else status.textContent=result==='skipped'?'Ad skipped. You can try again.':'Test ad unavailable. Try again later.';
- showShopPreviewActions();
+ if(result==='earned'&&adCanBuyLoot(loot)){
+  room.adRewardClaimed=true;grantLoot(loot);
+ }else{
+  updateEconomy(0);
+  if(nearestLoot===loot)status.textContent=result==='skipped'?'Ad skipped. Try again when ready.':'Test ad unavailable. Try again later.';
+ }
 }
 function saveTestWallet(wallet){
  try{localStorage.setItem(PREVIEW_WALLET_KEY,JSON.stringify(wallet));previewWallet=wallet;return true}
@@ -2721,7 +2734,7 @@ function setupPreviewMarket(){
   if(wallet&&Number.isSafeInteger(wallet.diamonds)&&wallet.diamonds>=0)previewWallet={diamonds:wallet.diamonds,gilded:wallet.gilded===true};
  }catch(error){}
  document.querySelector('#preview-data-notice').hidden=false;
- document.querySelector('#shop-ad').onclick=()=>shopAdPending?cancelPreviewAd():claimShopAd();
+ document.querySelector('#loot-watch-ad').onclick=()=>shopAdPending?cancelPreviewAd():claimShopAd();
  const diamondChest=document.querySelector('#diamond-chest');
  document.querySelector('#shop-diamond-chest').onclick=()=>{
   if(currentRoom?.kind!=='shop'||over||shopAdPending)return;

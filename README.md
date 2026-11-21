@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.71 — Redeem a shop item with a rewarded ad
+
+In Android Preview, complete one test ad to claim the selected item for free. The option appears beneath Buy and is limited to one redemption per shop. Cancelling preserves the item and the offer. A previous shop ad claim still counts toward the limit.
+
 ## V8.70 — Higher shop prices
 
 The Traveller Shop and practice shop charge 50 gold per relic, 28 per stat upgrade, and 14 per healing flask on Dungeon 1. Prices increase by 25% of the starting price per dungeon, rounded to whole gold and capped at double from Dungeon 5 onward. Existing shops keep their inventory and sold records, and unsold stock updates to the new price when you enter or resume the room. Earned gold, free room rewards, and Preview ad and Diamond prices carry over.

@@ -1297,9 +1297,9 @@ test('shop prices rise with dungeon depth and cap at double',()=>{
 
 test('treasure offers distinct relics, preserves old offers and grants a single free choice',()=>{
  const result=run([
-  method('itemCount'),method('rollItem'),method('prepareRoomLoot'),method('takeNearbyLoot'),
+  method('itemCount'),method('rollItem'),method('prepareRoomLoot'),method('lootInReach'),method('lootUnavailableReason'),method('takeNearbyLoot'),method('grantLoot'),
   'const W=520,F=360,ITEM_DEFS={emberHeart:{},mossCharm:{},glassEye:{}},ITEM_STACK_LIMITS={emberHeart:3,mossCharm:3,glassEye:2};',
-  'let selectedBiome="basic",progress={coins:30,items:{emberHeart:3,glassEye:2}},over=false;const p={x:260,y:180,falling:0};',
+  'let selectedBiome="basic",progress={coins:30,items:{emberHeart:3,glassEye:2}},over=false,shopAdPending=false;const p={x:260,y:180,falling:0};',
   'const awarded=[],giveItem=id=>awarded.push(id),playSoundCue=()=>{},updateEconomy=()=>{},hud=()=>{},queueCheckpoint=()=>{};let saves=0;const flushCheckpoint=()=>saves++;',
   'const currentRoom={kind:"treasure"};prepareRoomLoot(currentRoom);let nearestLoot=currentRoom.loot[0];',
   'const [first,second]=[nearestLoot.key,nearestLoot.alternative];prepareRoomLoot(currentRoom);const same=nearestLoot.alternative===second;',

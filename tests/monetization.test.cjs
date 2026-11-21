@@ -47,8 +47,8 @@ test('gold is scarcer and the browser keeps the normal last-life outcome', {time
     Math.random = originalRandom;
     beginNewSlot(1,true);
     const shop=dungeon.find(room=>room.kind==='shop');enterRoom(shop.id,shop.doors[0].side);
-    showShopPreviewActions();
-    check(document.querySelector('#shop-preview-actions').hidden,'browser exposes test shop');
+    p.x=shop.loot[0].x;p.y=shop.loot[0].y;updateEconomy(0);
+    check(document.querySelector('#loot-watch-ad').hidden,'browser exposes test ad');
     lives=1;hp=0;over=true;resolvePlayerDeath();
     check(lives===0&&!document.querySelector('#revive-offer').open&&!resumableSave(readSlot(1).data),'browser last life failed');
   `, false);
@@ -84,25 +84,34 @@ test('ending a revive offer cancels loading and ignores its stale ad callback', 
   `);
 });
 
-test('shop grants ad gold once and spends only Test Diamonds on the fixed reward', {timeout: 5000}, async () => {
+test('a shop ad grants the selected item once, and the chest uses only Test Diamonds', {timeout: 5000}, async () => {
   await play(`
     beginNewSlot(1,true);
     const shop=dungeon.find(room=>room.kind==='shop');enterRoom(shop.id,shop.doors[0].side);
     const bridge=window.DungeonDotPreview;
-    const skipped=claimShopAd();bridge.reply(adRequests[0],'skipped');await skipped;
-    check(!shop.adRewardClaimed&&progress.coins===0,'skipped ad paid out');
-    const reward=claimShopAd();bridge.reply(adRequests[1],'earned');await reward;
-    check(progress.coins===5&&shop.adRewardClaimed,'shop ad reward missing');
-    check(continueSlot(1)&&currentRoom.adRewardClaimed&&progress.coins===5,'shop claim did not survive reload');
-    await claimShopAd();check(adRequests.length===2&&progress.coins===5,'shop paid twice');
     const el=id=>document.querySelector('#'+id);
+    const item=shop.loot[2],heal=shop.loot[3];p.x=heal.x;p.y=heal.y;updateEconomy(0);
+    check(el('loot-watch-ad').hidden,'full health flask shows an ad');
+    p.x=item.x;p.y=item.y;progress.coins=4;updateEconomy(0);
+    check(el('loot-take').disabled&&!el('loot-watch-ad').hidden,'low gold prevents a free ad offer');
+    const skipped=claimShopAd();bridge.reply(adRequests[0],'skipped');await skipped;
+    check(!shop.adRewardClaimed&&!item.claimed&&progress.coins===4,'skipped ad paid out');
+    progress.coins=60;updateEconomy(0);
+    const reward=claimShopAd();
+    check(!takeNearbyLoot(),'gold purchase went through while ad was active');
+    bridge.reply(adRequests[1],'earned');await reward;
+    check(progress.coins===60&&shop.adRewardClaimed&&item.claimed&&itemCount(item.key)===1&&!shop.loot[0].claimed,'shop rewarded the wrong item, wrong currency or too many items');
+    check(continueSlot(1)&&currentRoom.adRewardClaimed&&currentRoom.loot[2].claimed&&progress.coins===60,'shop claim did not survive reload');
+    p.x=currentRoom.loot[0].x;p.y=currentRoom.loot[0].y;updateEconomy(0);
+    check(el('loot-watch-ad').hidden,'another ad was offered after reload');
+    await claimShopAd();check(adRequests.length===2&&progress.coins===60,'shop paid twice');
     p.x=W/2;p.y=F/2+100;
     updateEconomy(0);check(!el('shop-diamond-chest').hidden,'chest is unreachable');
     el('shop-diamond-chest').onclick();
     el('diamond-open').onclick();check(!previewWallet.gilded,'chest opened without diamonds');
-    el('diamond-buy').onclick();check(previewWallet.diamonds===3&&progress.coins===5,'test purchase touched gold');
+    el('diamond-buy').onclick();check(previewWallet.diamonds===3&&progress.coins===60,'test purchase touched gold');
     el('diamond-open').onclick();el('diamond-open').onclick();
-    check(previewWallet.diamonds===0&&previewWallet.gilded&&progress.coins===5,'chest was not a single diamond purchase');
+    check(previewWallet.diamonds===0&&previewWallet.gilded&&progress.coins===60,'chest was not a single diamond purchase');
     check(JSON.parse(localStorage.getItem(PREVIEW_WALLET_KEY)).gilded,'cosmetic was not stored');
   `);
 });
