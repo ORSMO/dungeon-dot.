@@ -822,7 +822,8 @@ test('Apprentice evolves once and receives the complete spellbook for the chosen
 test('every level-three evolution card selects the option named on the card', () => {
   const result=run([
     ...schoolSpells,declaration('WEAPON_PATHS'),
-    ...['equippedWeapon','weaponChoices','validWeaponChoice','runHeroName','levelChoicePending','openElementChoice','selectMageSchool','selectWeapon'].map(method),
+    declaration('ART_ROWS'),declaration('HERO_PLATES'),
+    ...['plateIcon','evolutionPortrait','equippedWeapon','weaponChoices','validWeaponChoice','runHeroName','levelChoicePending','openElementChoice','selectMageSchool','selectWeapon'].map(method),
     'let hero,progress,arrows=[],bowShotCooldown=0,mageCooldowns={};const p={a:0};',
     'const panel={hidden:true},title={},description={},options={children:[],set innerHTML(value){this.children=[]},appendChild(card){this.children.push(card)}};',
     'const nodes={"#element-choice":panel,"#element-title":title,"#element-explain":description,"#element-options":options};',
@@ -831,7 +832,8 @@ test('every level-three evolution card selects the option named on the card', ()
     'for(let i=0;i<count;i++){progress={level:3,weapon:null,mageSchool:null};openElementChoice();',
     'if(options.children.length!==count||panel.hidden)throw Error("Choice menu did not render");',
     'const card=options.children[i];if(card.type!=="button"||!card.onclick()||!panel.hidden||levelChoicePending())throw Error("Card did not select an evolution");',
-    'const name=runHeroName();if(!card.innerHTML.includes(">"+name+"</strong>"))throw Error("Wrong evolution selected");names.push(name)}}'
+    'const name=runHeroName();if(!card.innerHTML.includes(">"+name+"</strong>"))throw Error("Wrong evolution selected");',
+    'if(!card.innerHTML.includes("plate-icon")||card.innerHTML.includes("NaN"))throw Error("Evolution art missing: "+name);names.push(name)}}'
   ],'names');
   assert.deepEqual(result,[
     'Duelist','Brawler','Flail Knight','Spearguard','Ranger','Crossbowman','Skirmisher',
