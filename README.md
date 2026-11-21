@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.69 — Four offers per shop
+
+Every Traveller Shop carries two different relics at 20 coins each, one stat upgrade at 12 coins, and one Healing Flask at 8 coins. A third relic fills the upgrade slot if an upgrade is unavailable when stocking the room. Returning to an older saved shop adds the missing stock and preserves its original offers and purchases. Android Preview ad rewards and the Diamond Chest are separate from the four gold offers.
+
 ## V8.68 — Scarcer gold
 
 Regular enemies now have a 45% base chance to drop one coin. Elites still guarantee gold, now two coins before bonuses. Regular rooms grant two coins on clear, cursed rooms four, and bosses 14. Treasure enemies grant 12 bonus coins. Existing luck and relic bonuses, saved gold balances, starting lives, and shop prices carry over.

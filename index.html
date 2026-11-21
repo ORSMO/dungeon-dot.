@@ -727,7 +727,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.68</small>
+   <small>V8.69</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -2483,29 +2483,41 @@ function rewardBoss(){
   showItemNotice(evolved+trial.seal+' earned · Dungeon '+dungeonDepth,5);
  }
 }
-function rollItem(excluded=null){
- const all=Object.keys(ITEM_DEFS).filter(id=>id!==excluded),available=all.filter(id=>itemCount(id)<(ITEM_STACK_LIMITS[id]??1)),unowned=available.filter(id=>!itemCount(id)),pool=unowned.length?unowned:available.length?available:all;
+function rollItem(...excluded){
+ const all=Object.keys(ITEM_DEFS).filter(id=>!excluded.includes(id)),available=all.filter(id=>itemCount(id)<(ITEM_STACK_LIMITS[id]??1)),unowned=available.filter(id=>!itemCount(id)),pool=unowned.length?unowned:available.length?available:all;
  const themed=pool.filter(id=>ITEM_DEFS[id].biome===selectedBiome),weighted=pool.concat(themed,themed);
  return weighted[Math.floor(Math.random()*weighted.length)];
 }
 function prepareRoomLoot(room){
  if(room.kind==='sandbox'){prepareSandboxEconomy(room);return}
+ if(room.kind==='shop'){prepareShopLoot(room);return}
  if(room.kind==='treasure'){
   room.loot??=[{id:'treasure',kind:'item',key:rollItem(),price:0,x:W/2,y:F/2,claimed:false}];
   const relic=room.loot[0];
   if(relic?.kind==='item'&&!relic.claimed&&!relic.alternative)relic.alternative=rollItem(relic.key);
   return;
  }
- if(room.loot)return;
- room.loot=[];
- if(room.kind==='shop'){
-  const keys=Object.keys(UPGRADE_DEFS).filter(upgradeAvailable);
-  room.loot=[
-   {id:'shop-item',kind:'item',key:rollItem(),price:20,x:W/2-100,y:F/2,claimed:false},
-   {id:'shop-heal',kind:'heal',key:'heal',price:8,x:W/2+100,y:F/2,claimed:false}
-  ];
-  if(keys.length)room.loot.splice(1,0,{id:'shop-stat',kind:'stat',key:keys[Math.floor(Math.random()*keys.length)],price:12,x:W/2,y:F/2,claimed:false});
- }
+ room.loot??=[];
+}
+function prepareShopLoot(room){
+ const stock=room.loot||[];
+ const relics=stock.filter(loot=>loot.kind==='item').map(loot=>loot.key);
+ const slots=[['shop-item',-180],['shop-stat',-60],['shop-item-2',60],['shop-heal',180]];
+ room.loot=slots.map(([id,offset])=>{
+  let loot=stock.find(entry=>entry.id===id);
+  if(!loot){
+   const upgrades=id==='shop-stat'?Object.keys(UPGRADE_DEFS).filter(upgradeAvailable):[];
+   if(upgrades.length)loot={kind:'stat',key:upgrades[Math.floor(Math.random()*upgrades.length)],price:12};
+   else if(id==='shop-heal')loot={kind:'heal',key:'heal',price:8};
+   else{
+    const key=rollItem(...relics);
+    loot={kind:'item',key,price:20};relics.push(key);
+   }
+   loot.id=id;loot.claimed=false;
+  }
+  loot.x=W/2+offset;loot.y=F/2;
+  return loot;
+ });
 }
 function lootDefinition(loot){return loot.kind==='item'?heroItemDefinition(loot.key):loot.kind==='stat'?heroUpgradeDefinition(loot.key):{name:'Healing Flask',desc:'Restore 20 health.',glyph:'✚',color:'#f3a5b1'}}
 function lootBuildStats(build){
@@ -3722,6 +3734,7 @@ function continueSlot(slot){
  prepareSlotSwitch();const data=readSlot(slot).data;if(!data)return false;loadingRun=true;activeSlot=slot;
  const savedRoom=data.dungeon[data.roomId],savedTreasure=savedRoom.kind==='treasure'?savedRoom.loot?.[0]:null;
  const previousAlternative=savedTreasure?.alternative;
+ const previousStockCount=savedRoom.loot?.length;
  try{
   progress=data.progress;dungeon=data.dungeon;dungeonDepth=data.depth;selectedBiome=data.biome;lastDungeonSignature=dungeonSignature(dungeon);arenaTime=data.arenaTime;
   hero=data.hero;mageSouls=data.mageSouls;mageMana=safeNumber(data.mageMana,100,0,190);hp=data.hp;armourHp=data.armourHp;lives=data.lives;kills=data.kills;shieldType=data.shieldType;shieldHp=data.shieldHp;shieldBroken=!!data.shieldBroken;shieldCooldown=data.shieldCooldown;shieldLastHit=data.shieldLastHit;shieldLaserTick=safeNumber(data.shieldLaserTick);
@@ -3737,7 +3750,7 @@ function continueSlot(slot){
   if(progress.reviveAds===REVIVE_ADS_REQUIRED)grantAdRevive();else showReviveOffer();
   updateSaveIndicator();return true;
  }
- if(savedTreasure?.alternative!==previousAlternative){queueCheckpoint();flushCheckpoint()}
+ if(savedTreasure?.alternative!==previousAlternative||savedRoom.kind==='shop'&&savedRoom.loot.length!==previousStockCount){queueCheckpoint();flushCheckpoint()}
  if(data.shieldPending&&!shieldType)showShieldChoice();
  hud();if(levelChoicePending())openElementChoice();updateSaveIndicator();return true;
 }
