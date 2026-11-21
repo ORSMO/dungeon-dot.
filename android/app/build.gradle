@@ -18,8 +18,8 @@ android {
         applicationId 'com.orsmo.dungeondot'
         minSdk 26
         targetSdk 36
-        versionCode 867
-        versionName '8.67'
+        versionCode 868
+        versionName '8.68'
         resValue 'string', 'app_name', 'Dungeon Dot'
     }
 
@@ -44,4 +44,5 @@ tasks.named('preBuild') {
 
 dependencies {
     implementation 'androidx.webkit:webkit:1.14.0'
+    debugImplementation 'com.google.android.gms:play-services-ads:25.5.0'
 }

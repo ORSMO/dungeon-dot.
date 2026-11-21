@@ -62,7 +62,7 @@ public final class MainActivity extends Activity {
         game.setBackgroundColor(BACKGROUND);
         game.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
-        // Only the bundled game can load. No JavaScript bridge is exposed.
+        // Only the bundled game can load. The Preview can request test ads from its entry page.
         WebSettings settings = game.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
@@ -100,6 +100,7 @@ public final class MainActivity extends Activity {
         });
         container.addView(game, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        PreviewRewards.attach(this, game, "https://" + HOST, ENTRY_PAGE);
         game.loadUrl(ENTRY_PAGE);
     }
 

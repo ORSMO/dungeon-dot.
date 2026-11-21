@@ -42,8 +42,14 @@ jobs:
           "$build_tools/aapt" dump badging "$apk" | tee android-badging.txt
           grep -Fq "package: name='com.orsmo.dungeondot.preview'" android-badging.txt
           grep -Fq "targetSdkVersion:'36'" android-badging.txt
-          if grep -Fq "android.permission.INTERNET" android-badging.txt; then
-            echo "The offline preview unexpectedly requests internet access"
+          grep -Fq "android.permission.INTERNET" android-badging.txt
+          if grep -Fq "com.google.android.gms.permission.AD_ID" android-badging.txt; then
+            echo "The preview unexpectedly requests the advertising identifier"
+            exit 1
+          fi
+          unzip -p "$bundle" base/manifest/AndroidManifest.xml > release-manifest.bin
+          if grep -aFq "android.permission.INTERNET" release-manifest.bin; then
+            echo "The offline release unexpectedly requests internet access"
             exit 1
           fi
           unzip -p "$apk" assets/index.html | cmp index.html -

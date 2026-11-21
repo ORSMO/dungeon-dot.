@@ -13,6 +13,14 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+In the V8.68 Preview, each shop offers one test ad for five coins. The claim survives revisits and reloads. On the last life, two completed test ads revive the player once per run. If the second ad is unavailable, the first still counts. The Diamond Chest shows its fixed reward before spending three Test Diamonds on a permanent gold Character portrait frame. The preview purchase is simulated and makes no charge. Test ads use Google's official test unit and need internet access. The production package includes neither the ad SDK nor the preview reward controls.
+
+For a paid launch, configure the production AdMob app and rewarded placements, consent flow and store disclosure. The real Diamond wallet needs Play Billing products and verified purchase, credit, spending, and recovery handling before enabling checkout.
+
+## V8.68 — Scarcer gold
+
+Regular enemies now have a 45% base chance to drop one coin. Elites still guarantee gold, now two coins before bonuses. Regular rooms grant two coins on clear, cursed rooms four, and bosses 14. Treasure enemies grant 12 bonus coins. Existing luck and relic bonuses, saved gold balances, starting lives, and shop prices carry over.
+
 ## V8.67 — Small player icons
 
 Health, lives and coins are shown as small icons with numbers in the top-left corner. Squire sees shield and armour durability. Mage sees mana and Necromancer souls. The strip has no panel or bars. The slim boss bar and transparent maps carry over from V8.66.

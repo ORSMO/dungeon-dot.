@@ -522,6 +522,17 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
 }
 #loot-panel[data-choice=true][hidden]{display:none}
 #loot-panel[data-choice=true]>:not(#treasure-choices),#treasure-choices[hidden]{display:none}
+#shop-preview-actions{position:absolute;z-index:8;left:10px;top:72px;display:grid;gap:4px;max-width:150px}
+#shop-preview-actions[hidden]{display:none}
+#shop-preview-actions button,.preview-offer button{padding:7px 10px;border:1px solid #a28458;border-radius:4px;background:#28211def;color:#ffe9c4;font:700 11px system-ui;min-height:36px}
+#shop-preview-actions button:disabled,.preview-offer button:disabled{opacity:.6}
+#shop-preview-status{color:#ffe0aa;font:11px system-ui;text-shadow:0 1px 3px #000}
+.preview-offer{width:min(430px,84vw);max-height:90dvh;overflow:auto;padding:16px;background:#201a19;color:#f8e6c8;border:5px solid #a28458;border-image:var(--brass-frame) 31 / 7px / 0 stretch}
+.preview-offer::backdrop{background:#0a0808ac}
+.preview-offer h2{margin:0;color:#ffebc5;font:700 23px Georgia,serif}
+.preview-offer p{margin:.5em 0;color:#eed6b4;font:13px/1.35 system-ui}
+.preview-offer .offer-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+#character-portrait[data-gilded=true]{box-shadow:0 0 0 2px #f2c664,0 0 12px #db9b3297}
 #treasure-choices h2{margin:0 0 6px;color:#ffedcd;font:700 16px Georgia,serif}
 .treasure-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
 .treasure-option{display:flex;flex-direction:column;align-items:stretch;min-width:0;padding:7px;border:1px solid #805e40;background:#211b18}
@@ -679,6 +690,23 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
   </div>
  </div>
 </section>
+<section id="shop-preview-actions" hidden aria-label="Shop offers">
+ <button id="shop-ad" type="button">Watch 1 test ad · +5 coins</button>
+ <button id="shop-diamond-chest" type="button" hidden>Inspect Diamond Chest</button>
+ <span id="shop-preview-status" role="status"></span>
+</section>
+<dialog id="revive-offer" class="preview-offer" aria-labelledby="revive-title">
+ <h2 id="revive-title">One last chance</h2>
+ <p>Complete two test ads to restore one life and retry. One ad revive per run. Ad length can vary.</p>
+ <p id="revive-status" role="status"></p>
+ <div class="offer-actions"><button id="revive-watch" type="button">Watch 2 test ads · Revive</button><button id="revive-end" type="button">End run</button></div>
+</dialog>
+<dialog id="diamond-chest" class="preview-offer" aria-labelledby="diamond-title">
+ <h2 id="diamond-title">Diamond Chest</h2>
+ <p>Unlocks a gold portrait frame for every hero. The frame appears in the Character screen.</p>
+ <p id="diamond-balance"></p><p id="diamond-status" role="status"></p>
+ <div class="offer-actions"><button id="diamond-open" type="button">Open · 3 Test Diamonds</button><button id="diamond-buy" type="button">Simulate purchase · 3 Test Diamonds</button><form method="dialog"><button>Close</button></form></div>
+</dialog>
 <aside id="opening-guide" hidden role="status"><strong id="opening-guide-title"></strong><span id="opening-guide-tip"></span></aside>
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot main menu">
@@ -699,7 +727,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.67</small>
+   <small>V8.68</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -769,8 +797,9 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
 <dialog id="privacy-policy" aria-labelledby="privacy-title" style="max-width:min(620px,90vw);max-height:85dvh;overflow:auto;padding:20px">
  <h2 id="privacy-title">Dungeon Dot privacy policy</h2>
  <p>Published by MrRSMd. Last updated 19 November 2026.</p>
- <p>Dungeon Dot runs offline. The game does not collect, transmit, sell, or share personal information. It has no account registration, advertising, analytics, tracking, or in-app purchases. It does not request access to your contacts, location, camera, microphone, or advertising identifier.</p>
+ <p>The production game runs offline. It has no account registration, advertising, analytics, tracking, or in-app purchases. It does not request access to your contacts, location, camera, microphone, or advertising identifier.</p>
  <p>Saved runs, progress, the enemy index, audio preferences, and control settings stay on your device. Android app backup is disabled. Clearing app storage or uninstalling deletes this information. The developer cannot access or recover these saves.</p>
+ <p id="preview-data-notice" hidden>The separate Android Preview can request test ads from Google when you choose an ad reward. These require an internet connection. Test Diamonds and simulated purchases are local to the Preview and involve no payment.</p>
  <p>Google Play manages installation, testing eligibility, updates, and any diagnostics you choose to share through Google's services under Google's privacy policy. The developer may receive feedback or diagnostic reports you submit through Google Play.</p>
  <p>Contact MrRSMd at mrdork29@gmail.com. Information you send in support emails or beta feedback is used to respond and investigate your report. Email providers and Google Play process those communications under their own policies. Email this address to request deletion of support messages.</p>
  <p>The game is intended for players aged 13 and older. This policy will be updated before a future release changes how the game handles information.</p>
@@ -2392,16 +2421,24 @@ function drawDamageNumbers(){
  for(const n of damageNumbers){g.globalAlpha=Math.min(1,n.life*3);const text=n.amount<10?n.amount.toFixed(1).replace('.0',''):String(Math.round(n.amount));g.strokeStyle='#16101b';g.strokeText(text,n.x,n.y);g.fillStyle='#ffe4ab';g.fillText(text,n.x,n.y)}
  g.restore();
 }
+function enemyCoinReward(enemy,luckyBonus,luck,cursed){
+ const base=enemy.elite?2:Number(Math.random()<.45);
+ const fortune=Number(Math.random()<Math.min(.5,luck*.08));
+ return (base+luckyBonus+fortune)*(cursed?2:1);
+}
 function rewardEnemy(enemy){
  if(enemy.rewarded)return;enemy.rewarded=true;queueEnemyDefeatAudio(enemy);recordEnemyKill(enemy);if(hero==='mage'&&progress.mageSchool==='necromancer')rememberMageCorpse(enemy);synergyEnemyDeath(enemy);
  earnXp(enemy.bossMinion||enemy.bossSummon?1:enemy.elite?5:['square','round'].includes(enemy.shape)?2:3);
- const amount=((enemy.elite?3:1)+(hero==='archer'?(enemy.lastHitBy==='arrow'?2*itemCount('luckyPenny'):0):hero==='mage'?(enemy.lastHitBy==='mage'?2*itemCount('luckyPenny'):0):itemCount('luckyPenny'))+(Math.random()<Math.min(.5,playerStats().luck*.08)?1:0))*(currentRoom?.kind==='cursed'?2:1);
- if(!enemy.bossMinion&&!enemy.bossSummon)coinDrops.push({x:enemy.x,y:enemy.y,amount});
+ if(!enemy.bossMinion&&!enemy.bossSummon){
+  const lucky=itemCount('luckyPenny'),bonus=hero==='classic'?lucky:enemy.lastHitBy===(hero==='archer'?'arrow':'mage')?2*lucky:0;
+  const amount=enemyCoinReward(enemy,bonus,playerStats().luck,currentRoom.kind==='cursed');
+  if(amount>0)coinDrops.push({x:enemy.x,y:enemy.y,amount});
+ }
  if(!inSandbox()&&!enemy.bossMinion&&!enemy.bossSummon){
   if(Math.random()<.03)heartDrops.push({x:enemy.x,y:enemy.y});
   if(Math.random()<.0025&&lives<5)lifeDrops.push({x:enemy.x,y:enemy.y});
  }
- if(enemy.isTreasure)coinDrops.push({x:enemy.x,y:enemy.y,amount:18});
+ if(enemy.isTreasure)coinDrops.push({x:enemy.x,y:enemy.y,amount:12});
  if(itemCount('leechFang')&&(hero==='classic'||hero==='archer'&&enemy.lastHitBy==='arrow'||hero==='mage'&&enemy.lastHitBy==='mage')){healPlayer((hero==='archer'?2:1)*itemCount('leechFang'));if(hero==='mage')restoreMageMana(6*itemCount('leechFang'))}
  if(hero!=='archer'&&itemCount('sporeSatchel'))friendlyZones.push({x:enemy.x,y:enemy.y,r:35,life:3,tick:0,power:itemCount('sporeSatchel')});
  if(hero!=='archer'&&itemCount('cinderSigil'))for(const e of enemies)if(e!==enemy&&e.hp>0&&Math.hypot(e.x-enemy.x,e.y-enemy.y)<55)friendlyDamage(e,3*itemCount('cinderSigil'),'item');
@@ -2416,7 +2453,7 @@ function collectDefeatedEnemies(){
 }
 function rewardRoom(){
  if(inSandbox()||currentRoom.clearRewarded||!['combat','cursed'].includes(currentRoom.kind))return;
- currentRoom.clearRewarded=true;playSoundCue('room-clear');coinDrops.push({x:W/2,y:F/2,amount:currentRoom.kind==='cursed'?6:3});
+ currentRoom.clearRewarded=true;playSoundCue('room-clear');coinDrops.push({x:W/2,y:F/2,amount:currentRoom.kind==='cursed'?4:2});
  if(currentRoom.kind==='cursed'&&Math.random()<.55){
   const rares=['stormCoil','leechFang','glassEye','cinderSigil','shieldBloom','thornMantle','reflectArrow'];
   const unowned=rares.filter(id=>!itemCount(id)),pool=unowned.length?unowned:rares;
@@ -2425,7 +2462,7 @@ function rewardRoom(){
  progress.roomsCleared++;
  if(progress.roomsCleared%3===0){
   const keys=Object.keys(UPGRADE_DEFS).filter(upgradeAvailable);
-  currentRoom.loot.push({id:'room-stat',kind:'stat',key:keys[Math.floor(Math.random()*keys.length)],price:0,x:W/2,y:F/2,claimed:false});
+  if(keys.length)currentRoom.loot.push({id:'room-stat',kind:'stat',key:keys[Math.floor(Math.random()*keys.length)],price:0,x:W/2,y:F/2,claimed:false});
  }
  synergyRoomClear();
  queueCheckpoint();
@@ -2434,7 +2471,7 @@ function rewardBoss(){
  if(inSandbox()||currentRoom.rewardGenerated)return;
  currentRoom.rewardGenerated=true;
  if(dungeonDepth!==VICTORY_DEPTH||currentRoom.victoryRecapSeen)playSoundCue('boss-clear');
- coinDrops.push({x:W/2-42,y:F/2,amount:20});earnXp(32);
+ coinDrops.push({x:W/2-42,y:F/2,amount:14});earnXp(32);
  const fallen=bossFight?.units.find(unit=>unit.hp<=0);if(fallen)synergyEnemyDeath(fallen);synergyRoomClear();
  currentRoom.loot=[{id:'boss-reward',kind:'item',key:rollItem(),price:0,x:W/2+45,y:F/2,claimed:false}];
  if(itemCount('leechFang'))healPlayer(4*itemCount('leechFang'));
@@ -2579,6 +2616,7 @@ function updateEconomy(dt){
    button.textContent=full?'Health full':maxed?'Upgrade unavailable':progress.coins<loot.price?'Need more coins':loot.price?'Buy':loot.kind==='stat'?'Take upgrade':'Take item';
   }
  }
+ showShopPreviewActions();
 }
 function takeNearbyLoot(relic=null){
  const loot=nearestLoot;
@@ -2592,6 +2630,100 @@ function takeNearbyLoot(relic=null){
  progress.coins-=loot.price;loot.claimed=true;
  if(loot.kind==='item')giveItem(loot.key);else if(loot.kind==='stat')giveUpgrade(loot.key);else{healPlayer(20);showItemNotice('Healing Flask · Restored health')}
  playSoundCue('loot');nearestLoot=null;updateEconomy(0);hud();queueCheckpoint();flushCheckpoint();return true;
+}
+
+const SHOP_AD_GOLD=5,REVIVE_ADS_REQUIRED=2,DIAMOND_CHEST_PRICE=3;
+const PREVIEW_WALLET_KEY='dd-test-wallet-v1';
+let previewAdRequest=null,previewAdId=0,shopAdPending=false,revivePending=false;
+let previewWallet={diamonds:0,gilded:false};
+function previewMarketEnabled(){return typeof window.DungeonDotPreview?.postMessage==='function'}
+function requestPreviewAd(){
+ if(!previewMarketEnabled()||previewAdRequest)return Promise.resolve('unavailable');
+ return new Promise(resolve=>{
+  const id=String(++previewAdId);
+  previewAdRequest={id,resolve};
+  try{window.DungeonDotPreview.postMessage(id)}catch(error){previewAdRequest=null;resolve('unavailable')}
+ });
+}
+function cancelPreviewAd(){
+ const request=previewAdRequest;
+ if(!request)return;
+ previewAdRequest=null;
+ try{window.DungeonDotPreview.postMessage('cancel:'+request.id)}catch(error){}
+ request.resolve('skipped');
+}
+function showShopPreviewActions(){
+ const panel=document.querySelector('#shop-preview-actions');
+ panel.hidden=!previewMarketEnabled()||currentRoom?.kind!=='shop'||over;
+ if(panel.hidden)return;
+ const button=document.querySelector('#shop-ad');
+ button.disabled=currentRoom.adRewardClaimed===true;
+ button.textContent=currentRoom.adRewardClaimed?'Ad reward collected':shopAdPending?'Cancel test ad':'Watch 1 test ad · +'+SHOP_AD_GOLD+' coins';
+ const chest=document.querySelector('#shop-diamond-chest');
+ chest.hidden=!!nearestLoot||Math.hypot(p.x-W/2,p.y-F/2-100)>60;
+}
+async function claimShopAd(){
+ if(!previewMarketEnabled()||currentRoom?.kind!=='shop'||!currentRoom.cleared||over||shopAdPending||currentRoom.adRewardClaimed)return;
+ const room=currentRoom,run=progress;
+ const status=document.querySelector('#shop-preview-status');status.textContent='';
+ stopMenuControls();shopAdPending=true;showShopPreviewActions();
+ const result=await requestPreviewAd();shopAdPending=false;
+ if(room!==currentRoom||run!==progress)return;
+ if(result==='earned'&&!room.adRewardClaimed){
+  room.adRewardClaimed=true;progress.coins+=SHOP_AD_GOLD;
+  queueCheckpoint();flushCheckpoint();playSoundCue('coin');
+  showItemNotice('+'+SHOP_AD_GOLD+' COINS');
+ }else status.textContent=result==='skipped'?'Ad skipped. You can try again.':'Test ad unavailable. Try again later.';
+ showShopPreviewActions();
+}
+function saveTestWallet(wallet){
+ try{localStorage.setItem(PREVIEW_WALLET_KEY,JSON.stringify(wallet));previewWallet=wallet;return true}
+ catch{return false}
+}
+function refreshDiamondChest(message=''){
+ document.querySelector('#diamond-balance').textContent='Balance '+previewWallet.diamonds+' Test Diamonds';
+ document.querySelector('#diamond-status').textContent=message;
+ const open=document.querySelector('#diamond-open');
+ open.disabled=previewWallet.gilded||previewWallet.diamonds<DIAMOND_CHEST_PRICE;
+ open.textContent=previewWallet.gilded?'Frame unlocked':'Open · '+DIAMOND_CHEST_PRICE+' Test Diamonds';
+ document.querySelector('#diamond-buy').hidden=previewWallet.gilded||previewWallet.diamonds>=DIAMOND_CHEST_PRICE;
+}
+function setupPreviewMarket(){
+ if(!previewMarketEnabled())return;
+ const bridge=window.DungeonDotPreview;
+ bridge.onmessage=event=>{
+  const [id,result]=String(event.data).split(':');
+  const request=previewAdRequest;
+  if(!request||request.id!==id)return;
+  previewAdRequest=null;
+  request.resolve(result==='earned'||result==='skipped'?result:'unavailable');
+ };
+ try{
+  const wallet=JSON.parse(localStorage.getItem(PREVIEW_WALLET_KEY));
+  if(wallet&&Number.isSafeInteger(wallet.diamonds)&&wallet.diamonds>=0)previewWallet={diamonds:wallet.diamonds,gilded:wallet.gilded===true};
+ }catch(error){}
+ document.querySelector('#preview-data-notice').hidden=false;
+ document.querySelector('#shop-ad').onclick=()=>shopAdPending?cancelPreviewAd():claimShopAd();
+ const diamondChest=document.querySelector('#diamond-chest');
+ document.querySelector('#shop-diamond-chest').onclick=()=>{
+  if(currentRoom?.kind!=='shop'||over||shopAdPending)return;
+  stopMenuControls();refreshDiamondChest();diamondChest.showModal();
+ };
+ document.querySelector('#diamond-buy').onclick=()=>{
+  if(!diamondChest.open||previewWallet.gilded||previewWallet.diamonds>=DIAMOND_CHEST_PRICE)return;
+  const saved=saveTestWallet({...previewWallet,diamonds:previewWallet.diamonds+DIAMOND_CHEST_PRICE});
+  refreshDiamondChest(saved?'Test Diamonds added. No charge.':'The test wallet could not be saved.');
+ };
+ document.querySelector('#diamond-open').onclick=()=>{
+  if(!diamondChest.open||previewWallet.gilded||previewWallet.diamonds<DIAMOND_CHEST_PRICE)return;
+  const saved=saveTestWallet({diamonds:previewWallet.diamonds-DIAMOND_CHEST_PRICE,gilded:true});
+  refreshDiamondChest(saved?'Gold portrait frame unlocked.':'The test wallet could not be saved.');
+  if(saved)playSoundCue('loot');
+ };
+ const revive=document.querySelector('#revive-offer');
+ revive.addEventListener('cancel',event=>{event.preventDefault();endReviveOffer()});
+ document.querySelector('#revive-watch').onclick=watchReviveAds;
+ document.querySelector('#revive-end').onclick=endReviveOffer;
 }
 
 const PROP_ART={"keep":[8,66,186,89],"forge":[207,65,188,90],"hollow":[407,63,187,94],"vault":[607,65,186,90],"grate":[23,225,154,157],"spikes":[222,225,155,158],"bridge":[405,227,190,142],"chest":[613,228,174,141],"coin":[24,421,151,156],"heart":[217,424,165,176],"life":[411,408,178,177],"flask":[635,410,130,176],"pedestal":[17,602,168,184],"relic":[246,600,106,193],"crate":[428,618,142,158],"barrel":[628,605,143,183]};
@@ -2718,6 +2850,10 @@ function drawEconomyRoomDecor(){
    g.fillStyle='#b79555';g.fillRect(W/2-28,F/2+13,56,9);g.restore();
   }
  }
+ if(currentRoom.kind==='shop'&&previewMarketEnabled()){
+  drawChestArt(W/2,F/2+100,48,previewWallet.gilded);
+  drawDoorMarker('DIAMOND CHEST',W/2,F/2+62,'#b7edff',false);
+ }
 }
 function inventoryIcon(def){
  return '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="19" fill="'+def.color+'"/><text x="24" y="31" text-anchor="middle" fill="#241e30" font-size="25" font-family="system-ui">'+def.glyph+'</text></svg>';
@@ -2779,6 +2915,7 @@ function updateCharacterMenu(){
  const {atlas,cell}=heroPortraitArtwork(),portrait=document.querySelector('#character-portrait');
  portrait.className='plate-icon plate-'+atlas;
  portrait.dataset.evolved=String(hasEvolved());
+ portrait.dataset.gilded=String(previewMarketEnabled()&&previewWallet.gilded);
  portrait.style.cssText='--sprite-col:'+(cell%4*100/3)+'%;--sprite-row:'+(Math.floor(cell/4)*100/(ART_ROWS[atlas]-1))+'%';
  document.querySelector('#character-name').textContent=runHeroName();
  document.querySelector('#character-progress').textContent=levelSummary()+(progress.elementPrimary?' · '+ELEMENTS[progress.elementPrimary].name:'')+(progress.elementSecondary?' + '+ELEMENTS[progress.elementSecondary].name:'');
@@ -2807,6 +2944,7 @@ function setupExpansionUI(){
  const mapButton=document.querySelector('#map-toggle');
  mapButton.onclick=()=>{mapVisible=!mapVisible;mapButton.setAttribute('aria-pressed',String(mapVisible));};
  setupSandboxEconomyUI();
+ setupPreviewMarket();
  document.querySelector('#stats-toggle').onclick=toggleCharacterMenu;
  document.querySelector('#character-close').onclick=closeCharacterMenu;
  for(const id of CHARACTER_PAGES)document.querySelector('#character-tab-'+id).onclick=()=>showCharacterPage(id);
@@ -3345,6 +3483,7 @@ function normalizeSavedRun(raw){
   if(room.kind==='cursed'&&(!Array.isArray(room.curses)||!room.curses.length||room.curses.length>2||room.curses.some(id=>!Object.hasOwn(CURSE_TYPES,id))))throw Error('Unknown curse');
   if(typeof room.wallBreach!=='string'||!/^\d{1,4},\d{1,4}$/.test(room.wallBreach))delete room.wallBreach;
   if(room.loot!==undefined&&!Array.isArray(room.loot))throw Error('Invalid pickups');
+  if(room.kind!=='shop'||room.adRewardClaimed!==true)delete room.adRewardClaimed;
   if(Array.isArray(room.loot))room.loot=room.loot.filter(loot=>loot&&Number.isFinite(loot.x)&&Number.isFinite(loot.y)&&Number.isFinite(loot.price)&&loot.price>=0&&(loot.kind==='item'&&Object.hasOwn(ITEM_DEFS,loot.key)||loot.kind==='stat'&&Object.hasOwn(UPGRADE_DEFS,loot.key)||loot.kind==='heal')).map(loot=>({...loot,claimed:!!loot.claimed})).slice(0,40);
   for(const loot of room.loot||[]){
    if(room.kind!=='treasure'||loot.kind!=='item'||loot.claimed||typeof loot.alternative!=='string'||loot.key===loot.alternative||!Object.hasOwn(ITEM_DEFS,loot.alternative))delete loot.alternative;
@@ -3360,13 +3499,15 @@ function normalizeSavedRun(raw){
   if(!seen.has(door.to)){seen.add(door.to);queue.push(door.to)}
  }
  if(seen.size!==rooms.length)throw Error('Disconnected dungeon');
- const {weapon,levelsThisDepth,mageSchool,legacyMage,trialsCleared}=raw.progress;
+ const {weapon,levelsThisDepth,mageSchool,legacyMage,trialsCleared,reviveUsed,reviveAds}=raw.progress;
  raw.progress={coins:Math.floor(safeNumber(raw.progress.coins)),items:knownDictionary(raw.progress.items,ITEM_DEFS),upgrades:knownDictionary(raw.progress.upgrades,UPGRADE_DEFS),roomsCleared:Math.floor(safeNumber(raw.progress.roomsCleared)),synergyCoins:Math.floor(safeNumber(raw.progress.synergyCoins,0,0,9)),level:Math.floor(safeNumber(raw.progress.level,1,1,30)),xp:safeNumber(raw.progress.xp,0,0,100000),elementPrimary:ELEMENTS[raw.progress.elementPrimary]?raw.progress.elementPrimary:null,elementSecondary:ELEMENTS[raw.progress.elementSecondary]&&raw.progress.elementSecondary!==raw.progress.elementPrimary?raw.progress.elementSecondary:null};
  raw.progress.levelsThisDepth=Math.floor(safeNumber(levelsThisDepth,0,0,2));
  raw.mageMana=safeNumber(raw.mageMana,100,0,190);
  raw.biome=BIOME_DEFS[raw.biome]?raw.biome:null;if(raw.biome==='basic')raw.biome=null;
  delete raw.regenWhileBleeding;
  raw.depth=Math.floor(safeNumber(raw.depth,1,1,10000));raw.hero=Object.hasOwn(HERO_DEFS,raw.hero)?raw.hero:'classic';raw.hp=safeNumber(raw.hp,50,1,1e6);raw.strongArrowHits=Math.floor(safeNumber(raw.strongArrowHits,0,0,100000));raw.lives=Math.floor(safeNumber(raw.lives,3,0,5));raw.kills=Math.floor(safeNumber(raw.kills));raw.arenaTime=safeNumber(raw.arenaTime);
+ raw.progress.reviveUsed=reviveUsed===true;
+ raw.progress.reviveAds=raw.lives===0&&!raw.progress.reviveUsed&&Number.isInteger(reviveAds)&&reviveAds>=0&&reviveAds<=REVIVE_ADS_REQUIRED?reviveAds:null;
  const clearedDepth=raw.depth-Number(!rooms.some(room=>room.kind==='boss'&&room.bossDefeated));
  raw.progress.trialsCleared=Array.isArray(trialsCleared)?Object.keys(DEEP_TRIALS).map(Number).filter(depth=>depth<=clearedDepth&&trialsCleared.includes(depth)):[];
  const armourCapacity=bodyArmourStats(raw.hero,raw.progress.upgrades).capacity;
@@ -3402,6 +3543,8 @@ function persistLifeCount(){
  try{
   const saved=readSlot(activeSlot);if(!saved.data)return;
   saved.data.lives=lives;
+  saved.data.progress.reviveUsed=progress.reviveUsed===true;
+  saved.data.progress.reviveAds=progress.reviveAds??null;
   if(saved.data.roomId===currentRoom.id&&currentRoom.cleared){saved.data.dungeon[saved.data.roomId].lifeDrops=lifeDrops;saved.data.dungeon[saved.data.roomId].heartDrops=heartDrops}
   localStorage.setItem(slotKey(activeSlot),JSON.stringify(saved.data));
  }catch(error){saveError='Could not save remaining lives. Browser storage may be unavailable.';updateSaveIndicator()}
@@ -3426,10 +3569,14 @@ function stopMenuControls(){
  if(editingControls)endEditing();
 }
 function closeGamePanels(){
+ cancelPreviewAd();
  const recap=document.querySelector('#victory-recap');if(recap.open)recap.close();
+ for(const id of ['revive-offer','diamond-chest']){
+  const dialog=document.querySelector('#'+id);if(dialog.open)dialog.close();
+ }
  document.querySelector('#element-choice').hidden=true;closeSettings();document.querySelector('#character-panel').hidden=true;document.querySelector('#sandbox-panel').hidden=true;document.querySelector('#sound-panel').hidden=true;document.querySelector('#bestiary-panel').hidden=true;
 }
-function persistencePaused(){return document.querySelector('#victory-recap').open||document.querySelector('#privacy-policy').open||!document.querySelector('#start-screen').hidden||!document.querySelector('#sound-panel').hidden||!document.querySelector('#bestiary-panel').hidden||!document.querySelector('#element-choice').hidden}
+function persistencePaused(){return shopAdPending||document.querySelector('#revive-offer').open||document.querySelector('#diamond-chest').open||document.querySelector('#victory-recap').open||document.querySelector('#privacy-policy').open||!document.querySelector('#start-screen').hidden||!document.querySelector('#sound-panel').hidden||!document.querySelector('#bestiary-panel').hidden||!document.querySelector('#element-choice').hidden}
 function victoryRecapPending(){
  return !inSandbox()&&lives>0&&dungeonDepth===VICTORY_DEPTH&&currentRoom?.kind==='boss'&&
   currentRoom.bossDefeated===true&&currentRoom.victoryRecapSeen!==true;
@@ -3475,6 +3622,9 @@ function showStartScreen(){
  stopMenuControls();closeGamePanels();queueCheckpoint();flushCheckpoint();flushProfile();
  document.querySelector('#start-screen').hidden=false;setStartView('home');updateSaveIndicator();
 }
+function resumableSave(data){
+ return !!data&&(data.lives>0||previewMarketEnabled()&&Number.isInteger(data.progress?.reviveAds));
+}
 function renderSaveSlots(){
  renderHeroPicker();
  const saves=[1,2].map(slot=>({slot,...readSlot(slot)}));
@@ -3487,7 +3637,7 @@ function renderSaveSlots(){
   if(data){
    const biome=BIOME_DEFS[data.biome]||BIOME_DEFS.basic;
    const won=data.depth>VICTORY_DEPTH||data.depth===VICTORY_DEPTH&&data.dungeon.some(room=>room.kind==='boss'&&room.bossDefeated);
-   const state=data.lives===0?'Run ended':won?'Victory':'';
+   const state=data.lives===0?(resumableSave(data)?'Revive available':'Run ended'):won?'Victory':'';
    detail.textContent=[runHeroName(data.hero,data.progress)+(hasEvolved(data.progress)?' (Evolved)':''),'Dungeon '+data.depth+' / '+biome.name,data.lives+' '+(data.lives===1?'life':'lives')+' left',state].filter(Boolean).join(' \u00b7 ');
   }else detail.textContent=saved.error||'Empty slot';
   card.appendChild(detail);
@@ -3498,7 +3648,7 @@ function renderSaveSlots(){
     timestamp.textContent='Saved '+new Date(data.savedAt).toLocaleString();
     card.appendChild(timestamp);
    }
-   if(data?.lives>0){
+   if(resumableSave(data)){
     const button=document.createElement('button');button.type='button';button.className='slot-primary';
     button.textContent='Continue';button.setAttribute('aria-label','Continue slot '+slot);button.onclick=()=>continueSlot(slot);
     actions.appendChild(button);
@@ -3525,8 +3675,8 @@ function renderSaveSlots(){
   }
   card.dataset.slot=slot;card.appendChild(actions);container.appendChild(card);
  }
- const resumable=!!activeSlot&&!(over&&lives===0);
- const last=saves.filter(save=>save.data?.lives>0).sort((a,b)=>Number(b.slot===profile.lastSlot)-Number(a.slot===profile.lastSlot)||b.data.savedAt-a.data.savedAt)[0];
+ const resumable=!!activeSlot&&(!over||resumableSave({lives,progress}));
+ const last=saves.filter(save=>resumableSave(save.data)).sort((a,b)=>Number(b.slot===profile.lastSlot)-Number(a.slot===profile.lastSlot)||b.data.savedAt-a.data.savedAt)[0];
  const resume=document.querySelector('#resume-current');
  resume.hidden=!resumable&&!last;
  resume.textContent=resumable?(over?'Return to checkpoint':inSandbox()?'Resume practice':'Resume run'):'Continue';
@@ -3568,7 +3718,7 @@ function restoreSafePosition(saved){
 }
 function continueSlot(slot){
  if(slot!==1&&slot!==2)return false;
- const saved=readSlot(slot);if(!saved.data||saved.data.lives===0){saveError=saved.error||'That run has no lives left. Start a new game.';updateSaveIndicator();return false}
+ const saved=readSlot(slot);if(!resumableSave(saved.data)){saveError=saved.error||'That run has no lives left. Start a new game.';updateSaveIndicator();return false}
  prepareSlotSwitch();const data=readSlot(slot).data;if(!data)return false;loadingRun=true;activeSlot=slot;
  const savedRoom=data.dungeon[data.roomId],savedTreasure=savedRoom.kind==='treasure'?savedRoom.loot?.[0]:null;
  const previousAlternative=savedTreasure?.alternative;
@@ -3582,12 +3732,17 @@ function continueSlot(slot){
   playerBleed=data.playerBleed;shieldPaused=false;
  }finally{loadingRun=false}
  profile.lastSlot=slot;profileDirty=true;flushProfile();savePending=false;saveError='';document.querySelector('#start-screen').hidden=true;
+ if(lives===0){
+  over=true;hp=0;
+  if(progress.reviveAds===REVIVE_ADS_REQUIRED)grantAdRevive();else showReviveOffer();
+  updateSaveIndicator();return true;
+ }
  if(savedTreasure?.alternative!==previousAlternative){queueCheckpoint();flushCheckpoint()}
  if(data.shieldPending&&!shieldType)showShieldChoice();
  hud();if(levelChoicePending())openElementChoice();updateSaveIndicator();return true;
 }
 function resumeCurrentGame(){
- if(over){if(activeSlot&&lives>0)continueSlot(activeSlot);return}
+ if(over){if(activeSlot&&resumableSave({lives,progress}))continueSlot(activeSlot);return}
  document.querySelector('#start-screen').hidden=true;pendingReplacement=null;stopMenuControls();
  if(levelChoicePending())openElementChoice();
 }
@@ -8390,15 +8545,70 @@ function resolvePlayerDeath(){
  if(!over||hp>0||inSandbox()||lives<=0)return;
  const hit=DEATH_TIPS[fatalHit];
  const recap=hit?' · '+hit[0]+'. '+hit[1]:'';
- lives=Math.max(0,lives-1);persistLifeCount();
+ lives=Math.max(0,lives-1);
+ const offer=lives===0&&activeSlot&&previewMarketEnabled()&&!progress.reviveUsed;
+ if(offer)progress.reviveAds=0;
+ persistLifeCount();
  playDungeonOutcome(lives>0?'life-lost':'defeat',lives>0?.68:1.25);
- if(lives===0){updateOpeningGuide();showItemNotice('Run ended'+recap,6);hud();return}
+ if(lives===0){
+  updateOpeningGuide();showItemNotice((offer?'Last life lost':'Run ended')+recap,6);
+  if(offer)showReviveOffer();
+  hud();return;
+ }
+ retryAfterLifeLoss((lives===1?'1 life remains':lives+' lives remain')+recap);
+}
+function retryAfterLifeLoss(notice){
  // Clear uncollected fight rewards so repeating the same room cannot farm them.
- coinDrops=[];heartDrops=[];lifeDrops=[];currentRoom.coinDrops=[];currentRoom.heartDrops=[];currentRoom.lifeDrops=[];
+ if(!currentRoom.cleared){
+  coinDrops=[];heartDrops=[];lifeDrops=[];currentRoom.coinDrops=[];currentRoom.heartDrops=[];currentRoom.lifeDrops=[];
+ }
  playerBleed=[];temporaryBleed=[];bleedStacks=0;poisonPlayerTimer=0;
  hp=playerStats().maxHealth;mageMana=mageMaxMana();over=false;inv=2;
  enterRoom(currentRoom.id,roomEntrySide);refillRoomDefences();inv=2;
- showItemNotice((lives===1?'1 life remains':lives+' lives remain')+recap,6);hud();
+ showItemNotice(notice,6);hud();
+}
+function showReviveOffer(){
+ const dialog=document.querySelector('#revive-offer');
+ stopMenuControls();renderReviveOffer();
+ if(!dialog.open)dialog.showModal();
+}
+function renderReviveOffer(message=''){
+ const watched=progress.reviveAds??0,button=document.querySelector('#revive-watch');
+ button.disabled=revivePending;
+ button.textContent=revivePending?'Loading test ad '+(watched+1)+' / '+REVIVE_ADS_REQUIRED+'…':watched>0?'Watch final test ad · Revive':'Watch 2 test ads · Revive';
+ document.querySelector('#revive-status').textContent=message||watched+' / '+REVIVE_ADS_REQUIRED+' ads completed';
+}
+function endReviveOffer(){
+ const dialog=document.querySelector('#revive-offer');
+ if(!dialog.open)return;
+ progress.reviveAds=null;persistLifeCount();dialog.close();cancelPreviewAd();
+ showItemNotice('Run ended',6);
+}
+function grantAdRevive(){
+ if(lives!==0||progress.reviveUsed||progress.reviveAds!==REVIVE_ADS_REQUIRED)return false;
+ progress.reviveUsed=true;progress.reviveAds=null;lives=1;persistLifeCount();
+ const dialog=document.querySelector('#revive-offer');if(dialog.open)dialog.close();
+ retryAfterLifeLoss('REVIVED · 1 LIFE REMAINS');
+ queueCheckpoint();flushCheckpoint();return true;
+}
+async function watchReviveAds(){
+ const dialog=document.querySelector('#revive-offer');
+ if(!previewMarketEnabled()||!dialog.open||revivePending||lives!==0||!Number.isInteger(progress.reviveAds))return;
+ const run=progress;
+ revivePending=true;
+ while(dialog.open&&progress===run&&Number.isInteger(run.reviveAds)&&run.reviveAds<REVIVE_ADS_REQUIRED){
+  renderReviveOffer();
+  const result=await requestPreviewAd();
+  if(!dialog.open||progress!==run||!Number.isInteger(run.reviveAds))break;
+  if(result!=='earned'){
+   revivePending=false;
+   renderReviveOffer(result==='skipped'?'Ad skipped. '+run.reviveAds+' completed.':'Test ad unavailable. '+run.reviveAds+' completed.');
+   return;
+  }
+  run.reviveAds++;persistLifeCount();
+ }
+ revivePending=false;
+ if(dialog.open&&progress===run)grantAdRevive();
 }
 function reset(){saveRetryAt=0;mageMana=100;mageManaCheckpointAt=0;mageSouls=0;resetMageRoom();mageLastCast='';mageHitCount=0;mageCastCount=0;document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();armourHp=bodyArmourStats().capacity;lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;strongArrowHits=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
 function combatInputEnabled(){
