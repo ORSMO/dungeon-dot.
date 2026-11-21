@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.58 — Floor and wall detail
+
+The four biomes now have finer surface detail, with warm chips in the Keep, ash-colored cuts in the Forge, moss-toned grain in the Hollow, and cool highlights in the Vault. Wall materials use higher-resolution cached tiles with fine-grain texture. Floor details are baked into the existing room cache, and joined walls retain their continuous edges.
+
 ## V8.57 — Sharper arena rendering
 
 The arena now uses the device's display density where it can. A 4-million-pixel arena limit and a separate 3-million-pixel room-art cache limit bound rendering cost on oversized displays. The room art cache also uses higher-quality resampling. Camera framing, touch positions and existing artwork use the same coordinates as before.

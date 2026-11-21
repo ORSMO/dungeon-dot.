@@ -648,7 +648,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  .pause-body{grid-template-columns:minmax(100px,.66fr) minmax(0,1.6fr)}
  .controls-body{grid-template-columns:minmax(106px,.70fr) minmax(0,1.5fr)}
 }
-</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.57</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.58</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
  <div class="pause-home">
   <div class="menu-header"><h2>Paused</h2><button id="settings-close" type="button" class="menu-control primary-control">Resume</button></div>
   <div class="pause-body">
@@ -736,7 +736,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.57</small>
+   <small>V8.58</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -1114,6 +1114,44 @@ const WORLD_ART={
  green:{ground:['#3f4938','#232f25','#17241c'],trim:'#7b9270',metal:'#48523d',light:'#a4b479',ink:'#18231b',paper:'#d9e9b4'},
  blue:{ground:['#334961','#20334a','#172234'],trim:'#85b0c3',metal:'#465e75',light:'#a3cbd6',ink:'#161f36',paper:'#d8f2fb'}
 };
+// Material accents are baked into the scenery and wall tiles, never drawn every frame.
+const SURFACE_DETAIL={
+ basic:{light:'#c3ad8d',dark:'#1b1411',accent:'#92857b',grain:1.0,veins:.19},
+ red:{light:'#d49b70',dark:'#170d0b',accent:'#a66247',grain:1.10,veins:.23},
+ green:{light:'#c2c48a',dark:'#12190d',accent:'#73935e',grain:1.15,veins:.21},
+ blue:{light:'#c9eaff',dark:'#152638',accent:'#7ca9c1',grain:.78,veins:.29},
+ bone:{light:'#e7d1a6',dark:'#211510',accent:'#ad9378',grain:.96,veins:.14}
+};
+function paintSurfaceDetail(ctx,id,width,height,seed,strength=1){
+ const {light,dark,accent,grain,veins}=SURFACE_DETAIL[id];
+ const random=()=>{
+  seed=(Math.imul(seed,1664525)+1013904223)>>>0;
+  return seed/4294967296;
+ };
+ ctx.save();
+ // Short chips follow the same slope within a cluster, like weathered stone grain.
+ for(let y=7;y<height-5;y+=17)for(let x=7;x<width-5;x+=17){
+  const ox=x+random()*12,oy=y+random()*12,angle=(random()-.5)*1.7;
+  for(let i=0;i<4;i++){
+   const px=ox+(random()-.5)*12,py=oy+(random()-.5)*11;
+   const length=(.45+random()*2.6)*grain;
+   ctx.globalAlpha=(.035+random()*.115)*strength;
+   artOval(ctx,px,py,length,.32+random()*.42,i===0?accent:light,angle);
+   ctx.globalAlpha*=.65;
+   artOval(ctx,px+.25,py+.65,length,.44,dark,angle);
+  }
+ }
+ // A dark cut and a fine lit shoulder give the larger flakes depth.
+ for(let y=18;y<height-18;y+=32)for(let x=18;x<width-18;x+=32){
+  if(random()>veins)continue;
+  const px=x+(random()-.5)*16,py=y+(random()-.5)*16;
+  const dx=3+random()*5,dy=(random()-.5)*7;
+  const points=[[px,py],[px+dx*.45,py+dy+.7],[px+dx*.66,py+dy-.8],[px+dx,py+dy*.6]];
+  ctx.globalAlpha=.26*strength;artPath(ctx,points,null,dark,1.1);
+  ctx.globalAlpha=.18*strength;artPath(ctx,points.map(([vx,vy])=>[vx,vy+.62]),null,accent,.55);
+ }
+ ctx.restore();
+}
 let worldScenery=null;
 function worldArtId(biome,kind){
  return kind==='sandbox'||!Object.hasOwn(WORLD_ART,biome)?'basic':biome;
@@ -1284,6 +1322,7 @@ function drawWorldScenery(){
    art.ground.forEach((color,i)=>ground.addColorStop(i/2,color));
    ctx.fillStyle=ground;ctx.fillRect(0,0,W,F);
   }
+  paintSurfaceDetail(ctx,id,W,F,Math.imul(roomId+1,137)^Math.imul(W+F,933),.7);
   drawWorldSeal(ctx,id,W,F,kind,art);
   worldScenery={key,layer};
   document.querySelector('main').dataset.world=id;
@@ -7793,17 +7832,28 @@ function drawWallRegions(theme){
 }
 
 const WALL_MATERIALS={basic:0,red:1,green:2,blue:3,bone:7};
-function drawWallTexture(region,cell){
+const wallMaterialTiles=new Map();
+function wallMaterialTile(material){
  const atlas=readyPainting('wall-textures');
- if(!atlas)return;
- const sw=atlas.naturalWidth/4,sh=atlas.naturalHeight/2;
- const sx=(cell%4)*sw+2,sy=Math.floor(cell/4)*sh+2;
+ if(!atlas)return null;
+ if(wallMaterialTiles.has(material))return wallMaterialTiles.get(material);
+ const cell=WALL_MATERIALS[material],sw=atlas.naturalWidth/4,sh=atlas.naturalHeight/2;
+ const tile=document.createElement('canvas');tile.width=tile.height=448;
+ const brush=tile.getContext('2d');brush.imageSmoothingQuality='high';
+ brush.drawImage(atlas,(cell%4)*sw+2,Math.floor(cell/4)*sh+2,sw-4,sh-4,0,0,tile.width,tile.height);
+ brush.scale(4,4);paintSurfaceDetail(brush,material,112,112,Math.imul(cell+1,196613),1.2);
+ wallMaterialTiles.set(material,tile);
+ return tile;
+}
+function drawWallTexture(region,material){
+ const tile=wallMaterialTile(material);
+ if(!tile)return;
  const size=112,{x,y,w,h}=region;
  // Mirroring the edge of each repeat avoids a new seam across adjoining wall tiles.
  for(let row=0;row*size<h;row++)for(let col=0;col*size<w;col++){
   g.save();g.translate(x+(col+col%2)*size,y+(row+row%2)*size);
   g.scale(col%2?-1:1,row%2?-1:1);
-  g.drawImage(atlas,sx,sy,sw-4,sh-4,0,0,size,size);
+  g.drawImage(tile,0,0,size,size);
   g.restore();
  }
 }
@@ -7815,7 +7865,7 @@ function drawWallRegion(region,type,theme,biome){
  g.fillStyle='#09090b';g.shadowColor='#050305b0';g.shadowBlur=7;g.shadowOffsetY=3;g.fill();
  g.shadowBlur=0;g.shadowOffsetY=0;g.clip();
  g.fillStyle=surface[0];g.fillRect(x,y,w,h);
- drawWallTexture(region,WALL_MATERIALS[type]??WALL_MATERIALS[biome]??0);
+ drawWallTexture(region,type==='bone'?'bone':biome);
  const shade=g.createLinearGradient(x,y,x+w*.27,y+h);
  shade.addColorStop(0,'#f2d9b42e');shade.addColorStop(.42,'#17172300');shade.addColorStop(1,'#0a0a1282');
  g.fillStyle=shade;g.fillRect(x,y,w,h);
@@ -8517,5 +8567,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.57';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.58';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
