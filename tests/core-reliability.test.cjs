@@ -1184,6 +1184,21 @@ test('one boss bar tracks shield, split health, and hides at victory',()=>{
  assert.deepEqual(result,{full:'100%',shieldHit:'85%',split:'25%',name:'Ooze King',hidden:true,max:'200'});
 });
 
+test('compact vitals display only current numbers for the active hero',()=>{
+ const result=run([
+  method('updatePlayerVitals'),
+  'const vitalNodes=Object.fromEntries(["health","lives","coins","shield","armour","mana","souls-count"].map(key=>[key,{dataset:{}}]));',
+  'const vitalPortrait={dataset:{}},vitalDefences={},vitalMagic={},vitalSouls={};',
+  'const lives=2,progress={coins:54,mageSchool:"necromancer"},shieldHp=34,armourHp=5.5,mageMana=62.8,mageSouls=2;',
+  'let hero="classic",hp=31.2,playerBleed=[1];const heroPortraitArtwork=()=>({atlas:hero,cell:0}),plateIcon=atlas=>atlas;',
+  'const playerStats=()=>({maxHealth:50}),bodyArmourStats=()=>({capacity:12}),mageMaxMana=()=>100;',
+  'const visible=()=>Object.entries(vitalNodes).filter(([key])=>key==="mana"||key==="souls-count"?!vitalMagic.hidden:key==="armour"||key==="shield"?!vitalDefences.hidden:true).map(([,node])=>node.textContent);',
+  'updatePlayerVitals();const classic=visible(),bleeding=vitalNodes.health.dataset.bleeding;',
+  'hero="mage";hp=28;playerBleed=[];updatePlayerVitals();const mage=visible();'
+ ],'{classic,mage,bleeding,portrait:vitalPortrait.innerHTML,souls:vitalSouls.hidden}');
+ assert.deepEqual(result,{classic:['32/50','2','54','34%','6/12'],mage:['28/50','2','54','62/100','2'],bleeding:'true',portrait:'mage',souls:false});
+});
+
 test('portal transfers queue an effect at both ends and cannot loop while occupied', () => {
   const result=run([
     method('teleportBody'),

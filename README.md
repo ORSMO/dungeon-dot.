@@ -13,6 +13,10 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.67 — Small player icons
+
+Health, lives and coins are shown as small icons with numbers in the top-left corner. Squire sees shield and armour durability. Mage sees mana and Necromancer souls. The strip has no panel or bars. The slim boss bar and transparent maps carry over from V8.66.
+
 ## V8.66 — Clearer arena view
 
 Player stats are available under Character. The arena shows a small enemy count when needed and transparent Map, Character, Pause, and Dash controls. Idle touch controls are fainter and brighten during use.
