@@ -13,9 +13,13 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
-In the V8.68 Preview, each shop offers one test ad for five coins. The claim survives revisits and reloads. On the last life, two completed test ads revive the player once per run. If the second ad is unavailable, the first still counts. The Diamond Chest shows its fixed reward before spending three Test Diamonds on a permanent gold Character portrait frame. The preview purchase is simulated and makes no charge. Test ads use Google's official test unit and need internet access. The production package includes neither the ad SDK nor the preview reward controls.
+In the Android Preview, the **Get free** button beneath **Buy** offers one test ad for the selected shop item. Each shop allows one ad-funded item, and the claim survives revisits and reloads. On the last life, two completed test ads revive the player once per run. If the second ad is unavailable, the first still counts. The Diamond Chest shows its fixed reward before spending three Test Diamonds on a permanent gold Character portrait frame. The preview purchase is simulated and makes no charge. Test ads use Google's official test unit and need internet access. The production package includes neither the ad SDK nor the preview reward controls.
 
 For a paid launch, configure the production AdMob app and rewarded placements, consent flow and store disclosure. The real Diamond wallet needs Play Billing products and verified purchase, credit, spending, and recovery handling before enabling checkout.
+
+## V8.71 — Redeem a shop item with a rewarded ad
+
+In Android Preview, complete one test ad to claim the selected item for free. The option appears beneath Buy and is limited to one redemption per shop. Cancelling preserves the item and the offer. A previous shop ad claim still counts toward the limit.
 
 ## V8.70 — Higher shop prices
 
