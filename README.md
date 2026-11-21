@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.56 — Loot presentation
+
+The nearby item panel now shows painted flask and relic art, keeps the purchase button easy to tap, and gives rare finds a distinct border. Small item plaques appear near visible pedestals and give way to the full card when an item is within reach.
+
 ## V8.55 — Visual consistency
 
 Painted portraits and weapon artwork now accompany the level-three choices. The Enemy Index, loot, notices, the practice panel, the control-position editor, the privacy dialog and the landscape prompt use the same bronze, parchment and dungeon artwork as the main menus. Boss notices sit beneath the arena action so they leave the boss bars clear.
