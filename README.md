@@ -13,6 +13,12 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.61 — Biome encounters
+
+Newly generated floors each contain one authored combat room for their biome. Armory Crossfire uses stone cover, two Marksmen and a wall bolt. Foundry Crossing has two bridged lava channels, routes around the ends and a breakable brazier. Nest Siege has one reinforcement nest with a cap of four spawns. Frozen Split Lanes uses pillars and icy flanks around a dry center lane. Room guidance names the objective on entry.
+
+The signature rooms leave space at each entrance and allow one aiming warning at a time for ranged enemies and wall bolts. Cleared encounters keep their layout and clear state when saved. Existing generated floors retain their layouts.
+
 ## V8.60 — First-dungeon lessons
 
 New runs start with two short fights in the first combat room. Squire learns to face and block a Footman, Scout learns to aim and release a sling shot, and Apprentice learns a basic rune and Rune Burst. A lone Marksman then demonstrates a locked shot lane with a longer windup. Pits, traps, nests, and random events are omitted from that room so each threat can be learned on its own.
