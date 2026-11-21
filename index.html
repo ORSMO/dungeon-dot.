@@ -657,7 +657,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  .pause-body{grid-template-columns:minmax(100px,.66fr) minmax(0,1.6fr)}
  .controls-body{grid-template-columns:minmax(106px,.70fr) minmax(0,1.5fr)}
 }
-</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.61</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.62</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
  <div class="pause-home">
   <div class="menu-header"><h2>Paused</h2><button id="settings-close" type="button" class="menu-control primary-control">Resume</button></div>
   <div class="pause-body">
@@ -746,7 +746,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.61</small>
+   <small>V8.62</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -2358,9 +2358,9 @@ function playerDamageAmount(base,source){
  if(Math.random()<playerStats().crit)amount*=2;
  return amount;
 }
-function friendlyDamage(target,amount,source='item'){
+function friendlyDamage(target,amount,source='item',spellHit=false){
  if(!target||target.hp<=0)return false;
- if(target.kind&&bossFight?.units.includes(target))return damageBoss(target,amount,source);
+ if(target.kind&&bossFight?.units.includes(target))return damageBoss(target,amount,source,spellHit);
  target.hp=Math.max(0,target.hp-playerDamageAmount(amount,source));if(source==='bat'||source==='arrow'){target.lastHitBy=source;afterPlayerBatHit(target,source)}if(source==='projectile')synergyProjectileHit(target);return true;
 }
 function afterPlayerBatHit(target,source='bat'){
@@ -4137,6 +4137,10 @@ function roomEnemyCount(room,character=hero,depth=dungeonDepth){
  const easing=character!=='classic'?[.65,.8,.9,.95,1][Math.min(4,Math.max(0,Math.floor(depth)-1))]:1;
  return Math.max(4,Math.round(base*easing));
 }
+function followsOpeningLesson(room){
+ return dungeonDepth===1&&room.kind==='combat'&&!room.encounter&&!room.openingLesson&&
+  room.doors.some(door=>dungeon[door.to]?.openingLesson);
+}
 const CURSE_TYPES={
  float:{name:'ZERO GRAVITY',hint:'Bodies drift and keep momentum'},
  pinball:{name:'PINBALL MADNESS',hint:'Walls send enemies ricocheting'},
@@ -4170,6 +4174,7 @@ function updateCurses(dt){
  }
 }
 const BIOME_PATHS=[
+ {id:'basic',name:'OLD DUNGEON',color:'#e7c591',dark:'#382a21'},
  {id:'red',name:'EMBER',color:'#ff746e',dark:'#4c222c'},
  {id:'green',name:'VERDANT',color:'#78eea4',dark:'#1e4437'},
  {id:'blue',name:'FROST',color:'#79baff',dark:'#233a59'}
@@ -4297,7 +4302,7 @@ function absorbBossShield(amount){
  if(bossFight.shieldHp===0)playSoundCue('boss-shield-break');
  return amount-absorbed;
 }
-function damageBoss(unit,amount,source='bat'){
+function damageBoss(unit,amount,source='bat',spellHit=false){
  if(!bossFight||bossFight.done||unit.hp<=0||unit.state==='rebirth')return false;
  let damage;
  if(bossFight.shieldHp>0){
@@ -4314,7 +4319,7 @@ function damageBoss(unit,amount,source='bat'){
    else synergyProjectileHit(unit);
    bossSpark(unit.x,unit.y,'#a5efff');
    if(unit.armour===0){
-    unit.vulnerable=6;
+    unit.vulnerable=chargedArrow||spellHit?9:6;
     elementFx.push({type:'split',x:unit.x,y:unit.y,life:.5,maxLife:.5});
    }
   }else bossSpark(unit.x,unit.y,'#8eb4f5');
@@ -4525,7 +4530,7 @@ function updateBossFight(dt,previousAngle,previousLag=0,playerStart=p){
  if(!bossFight.units.some(unit=>unit.hp>0))finishBossFight();
 }
 function bossHint(){
- if(bossFight.done)return inSandbox()?'TEST BOSS DEFEATED · SPAWN ANOTHER':'VICTORY · CHOOSE A COLOURED DOOR';
+ if(bossFight.done)return inSandbox()?'TEST BOSS DEFEATED · SPAWN ANOTHER':'VICTORY · PICK THE NEXT DUNGEON';
  if(inSandbox()&&!sandbox.attacks)return 'ATTACKS OFF · ENABLE THEM IN THE SPAWN MENU';
  const alive=bossFight.units.filter(u=>u.hp>0),unit=alive[0];
  // The killing blow can land after updateBossFight() but before hud() in the same frame.
@@ -4537,11 +4542,14 @@ function bossHint(){
  }
  const variant=BOSS_BLUEPRINTS[bossFight.variant];
  if(bossFight.variant==='phoenix'&&unit.state==='rebirth')return 'REBIRTH! · FIRE RING INCOMING · PREPARE TO DODGE';
- if(bossFight.variant==='oracle'&&unit.prismState==='warn')return 'PRISM LASER CHARGING · MOVE BEHIND YOUR SHIELD';
+ if(bossFight.variant==='oracle'&&unit.prismState==='warn')return hero==='classic'?'PRISM LASER CHARGING · FACE THE BEAM WITH YOUR SHIELD':'PRISM LASER CHARGING · LEAVE ITS LINE';
  if(bossFight.variant==='oracle'&&unit.prismState==='fire')return 'PRISM LASER FIRING · KEEP MOVING';
  if(bossFight.variant==='hydra'&&unit.state==='breathWarn')return 'THREE FIRE LANES CHARGING · FIND A GAP';
  if(bossFight.variant==='mire'&&bossFight.split)return 'TWINS LINKED BY A SLOWING TETHER · SEPARATE THEM';
- if(unit.kind==='crystal'&&hero==='archer')return unit.armour>0?'STRONG ARROWS CRACK ARMOUR · '+unit.armour+' LEFT':'CORE EXPOSED · HIT BEFORE IT REBUILDS ARMOUR';
+ if(unit.kind==='crystal'&&hero!=='classic'){
+  if(unit.armour<=0)return 'CORE EXPOSED · HIT BEFORE IT REBUILDS ARMOUR';
+  return (hero==='archer'?'STRONG ARROWS':'SPELL HITS')+' CRACK ARMOUR · '+unit.armour+' LEFT';
+ }
  if(bossGuardOpen(unit))return 'GUARD OPEN · ATTACK NOW';
  if(variant?.hint)return variant.hint;
  if(bossFight.kind==='gatekeeper')return unit.phase2?'DOUBLE CHARGE · WATCH FOR SEISMIC SLAMS':'DODGE CHARGES · RETURN CANNONBALLS · WATCH QUAKES';
@@ -4895,11 +4903,12 @@ function setupSandboxMenu(){
 }
 
 function roomDoors(){
- const doors=currentRoom.doors.map(door=>({...door,kind:inSandbox()?'sandboxExit':'room'}));
+ let doors=currentRoom.doors.map(door=>({...door,kind:inSandbox()?'sandboxExit':'room'}));
  if(currentRoom.kind==='start')doors.push({side:sandboxDoorSide(),kind:'sandbox',to:'sandbox'});
  if(currentRoom.kind==='boss'){
-  const free=Object.keys(DIRECTIONS).filter(side=>!doors.some(door=>door.side===side));
-  BIOME_PATHS.forEach((biome,i)=>doors.push({side:free[i],kind:'biome',biome:biome.id}));
+  const back=doors.find(door=>door.side===roomEntrySide)?.side??doors[0]?.side??'south';
+  const sides=[back,...Object.keys(DIRECTIONS).filter(side=>side!==back)];
+  doors=BIOME_PATHS.map(({id},i)=>({side:sides[i],kind:'biome',biome:id}));
  }
  return doors.map(door=>({...door,x:door.side==='west'?13:door.side==='east'?W-13:W/2,y:door.side==='north'?13:door.side==='south'?F-13:F/2}));
 }
@@ -5177,7 +5186,8 @@ function enterRoom(id,entry=null){
   else if(currentRoom.openingLesson){currentRoom.count=2;spawnOpeningThreat()}
   else if(currentRoom.encounter)spawnEncounter(currentRoom);
   else{
-   const wanted=roomEnemyCount(currentRoom);currentRoom.count=wanted;
+   const cap=followsOpeningLesson(currentRoom)?(hero==='classic'?12:9):Infinity;
+   const wanted=Math.min(roomEnemyCount(currentRoom),cap);currentRoom.count=wanted;
    for(let i=0;i<wanted;i++)spawn(selectedBiome&&i===0?currentBiome().enemies[0]:null);
   }
  }
@@ -5185,8 +5195,8 @@ function enterRoom(id,entry=null){
  if(!loadingRun&&changedRoom)refillRoomDefences();updateHeroHud();hud();if(!loadingRun&&levelChoicePending())openElementChoice();clearRoomDash();resetRoomSynergies();queueCheckpoint();
 }
 function nextDungeon(biome){
- if(currentRoom?.kind!=='boss'||!currentRoom.bossDefeated||!BIOME_PATHS.some(path=>path.id===biome))return;
- bankClearedRoomCoins();selectedBiome=biome;dungeonDepth++;progress.levelsThisDepth=0;buildDungeon();enterRoom(0);
+ if(currentRoom?.kind!=='boss'||!currentRoom.bossDefeated||!currentRoom.cleared||victoryRecapPending()||!BIOME_PATHS.some(path=>path.id===biome))return;
+ bankClearedRoomCoins();selectedBiome=biome==='basic'?null:biome;dungeonDepth++;progress.levelsThisDepth=0;buildDungeon();enterRoom(0);
 }
 function updateRoomProgress(){
  if(inSandbox()){currentRoom.cleared=true;return}
@@ -5957,7 +5967,7 @@ function mageHurt(target,base,kind='arc'){
  if(!target.kind&& !canDamage(target,160))return false;
  const before=target.hp,plates=target.armour;target.lastHitBy='mage';
  // Boss projectiles can open Gatekeeper defenses and remove Crystal Eye armor.
- const done=friendlyDamage(target,base*(1+itemCount('glassEye')*.25),'projectile');
+ const done=friendlyDamage(target,base*(1+itemCount('glassEye')*.25),'projectile',true);
  if(progress?.mageSchool==='necromancer'&&(target.hp<before||target.armour<plates)){
   if(kind==='grave')target.graveMarkUntil=arenaTime+9;
   if(target.kind&&target.graveMarkUntil>arenaTime){
@@ -7353,7 +7363,7 @@ function setupDungeonMechanics(room){
    dungeonNests.push({x,y,r,hp,maxHp:hp,clock:5+Math.random()*2,spawned:0});break;
   }
  }
- if(Math.random()<(hero!=='classic'&&dungeonDepth===1?.2:.4)){const types=['ambush','earthquake','treasure','invasion'];dungeonEvent={kind:types[Math.floor(Math.random()*types.length)],timer:6+Math.random()*4,done:false,message:'',messageUntil:0}}
+ if(!followsOpeningLesson(room)&&Math.random()<(hero!=='classic'&&dungeonDepth===1?.2:.4)){const types=['ambush','earthquake','treasure','invasion'];dungeonEvent={kind:types[Math.floor(Math.random()*types.length)],timer:6+Math.random()*4,done:false,message:'',messageUntil:0}}
 }
 let wallFixtures=[];
 function setupWallFixtures(room){
@@ -8752,5 +8762,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.61';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.62';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>

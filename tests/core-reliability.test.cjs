@@ -464,7 +464,18 @@ test('Archer strong shots crack boss armor without a reflection item', () => {
     'unit.lastArrowPower=.8;damageBoss(unit,3,"arrow");damageBoss(unit,3,"arrow");const strong=unit.armour;',
     'arenaTime=1.8;damageBoss(unit,3,"arrow");'
   ], '{weak,strong,armour:unit.armour,opening:unit.vulnerable,hp:unit.hp,state:unit.state,timer:unit.timer}');
-  assert.deepEqual(result,{weak:2,strong:1,armour:0,opening:6,hp:100,state:'shotWarn',timer:.42});
+  assert.deepEqual(result,{weak:2,strong:1,armour:0,opening:9,hp:100,state:'shotWarn',timer:.42});
+});
+
+test('Mage casts earn the same longer crystal opening and reflected shots keep their usual window',()=>{
+ const result=run([
+  method('damageBoss'),
+  'const BOW_MIN_DRAW=.17,arenaTime=4,bossFight={done:false},elementFx=[],bossSpark=()=>{},synergyProjectileHit=()=>{};',
+  'const original={kind:"crystal",hp:100,armour:1,state:"shotWarn",timer:.42};',
+  'const spell={...original},reflected={...original};',
+  'damageBoss(spell,3,"projectile",true);damageBoss(reflected,12,"projectile");'
+ ],'{spell:[spell.armour,spell.vulnerable,spell.timer],reflected:[reflected.armour,reflected.vulnerable,reflected.timer]}');
+ assert.deepEqual(result,{spell:[0,9,.42],reflected:[0,6,.42]});
 });
 
 test('index HP matches actual dungeon spawns, including elite rounding and Dungeon 14+', () => {

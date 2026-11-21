@@ -327,3 +327,55 @@ test('authored encounters keep every doorway and objective reachable across biom
  vm.runInNewContext(script.replace(startup,()=>probe+startup),makeGameContext(value=>{result=value}),{timeout:5000});
  assert.equal(result,12);
 });
+
+test('all boss entrances become locked Old Dungeon routes and advance depth after victory',()=>{
+ const probe=`
+  const check=(value,reason)=>{if(!value)throw Error(reason)};
+  selectedHero='classic';beginNewSlot(1,true);
+  for(const side of Object.keys(DIRECTIONS)){
+   const room=dungeon.find(r=>r.kind==='boss');
+   enterRoom(room.id,side);room.doors[0].side=side;
+   const doors=roomDoors(),keep=doors.find(door=>door.side===side);
+   check(doors.length===4&&new Set(doors.map(d=>d.side)).size===4,'boss gates need four distinct sides');
+   check(keep.kind==='biome'&&keep.biome==='basic'&&doors.every(d=>d.kind==='biome'),'entrance still points back');
+   roomEntrySide=null;check(roomDoors().find(d=>d.biome==='basic').side===side,'save reload lost the entrance');
+   const depth=dungeonDepth,dir=DIRECTIONS[side];
+   p.x=keep.x;p.y=keep.y;sticks[0].dx=dir.dx;sticks[0].dy=dir.dy;doorCooldown=0;
+   checkRoomDoors(.01);check(dungeonDepth===depth&&currentRoom===room,'locked entrance advanced the run');
+  }
+  const room=currentRoom,gate=roomDoors().find(d=>d.biome==='basic'),dir=DIRECTIONS[gate.side];
+  dungeonDepth=3;room.bossDefeated=true;room.cleared=true;progress.levelsThisDepth=2;
+  p.x=gate.x;p.y=gate.y;sticks[0].dx=dir.dx;sticks[0].dy=dir.dy;doorCooldown=0;
+  checkRoomDoors(.01);check(dungeonDepth===3&&currentRoom===room,'entrance skipped the victory recap');
+  room.victoryRecapSeen=true;checkRoomDoors(.01);
+  check(dungeonDepth===4&&selectedBiome===null&&currentRoom.kind==='start'&&progress.levelsThisDepth===0,'Old Dungeon route did not start a fresh deeper floor');
+  flushCheckpoint();
+  check(continueSlot(1)&&dungeonDepth===4&&selectedBiome===null&&currentRoom.kind==='start','Old Dungeon route did not survive save reload');
+  report(true);
+ `;
+ let result;
+ vm.runInNewContext(script.replace(startup,()=>probe+startup),makeGameContext(value=>{result=value}),{timeout:5000});
+ assert.equal(result,true);
+});
+
+test('the first regular room after the lesson eases the population spike for each class',()=>{
+ const probe=`
+  const checks=[];
+  for(const character of ['classic','archer','mage']){
+   selectedHero=character;beginNewSlot(1,true);
+   let seed=19247;
+   Math.random=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
+   lastDungeonSignature='';buildDungeon();enterRoom(0);
+   const lesson=dungeon[dungeon[0].doors[0].to];
+   const room=lesson.doors.map(door=>dungeon[door.to]).find(r=>r.shape==='big'&&followsOpeningLesson(r));
+   if(!room)throw Error('Fixed seed lost its large room after the lesson');
+   enterRoom(room.id,room.doors.find(door=>door.to===lesson.id).side);
+   if(dungeonEvent||enemies.length!==room.count)throw Error('Early room has an event or wrong population');
+   checks.push(room.count);
+  }
+  report(checks);
+ `;
+ let result;
+ vm.runInNewContext(script.replace(startup,()=>probe+startup),makeGameContext(value=>{result=value}),{timeout:5000});
+ assert.deepEqual(Array.from(result),[12,9,9]);
+});

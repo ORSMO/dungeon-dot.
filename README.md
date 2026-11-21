@@ -13,6 +13,12 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.62 — Boss routes and early combat pacing
+
+The door you entered through becomes the Old Dungeon route. Once the boss is defeated, all four doors lead to a fresh dungeon one depth lower. The Dungeon 3 victory recap still appears before you can continue.
+
+Regular Dungeon 1 combat rooms directly connected to the opening lesson cap their initial roster at 12 for Squire and nine for Scout and Mage. Random events wait until a later room. Strong arrows and direct spells that break the last crystal armour plate expose the core for nine seconds, up from six. Returned shots retain the six-second opening. These breaks leave the boss's attack timeline and scaling shield intact.
+
 ## V8.61 — Biome encounters
 
 Newly generated floors each contain one authored combat room for their biome. Armory Crossfire uses stone cover, two Marksmen and a wall bolt. Foundry Crossing has two bridged lava channels, routes around the ends and a breakable brazier. Nest Siege has one reinforcement nest with a cap of four spawns. Frozen Split Lanes uses pillars and icy flanks around a dry center lane. Room guidance names the objective on entry.
