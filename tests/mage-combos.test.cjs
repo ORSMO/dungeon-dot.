@@ -243,8 +243,9 @@ function runComboChecks(testSchool) {
     },
     CBA:({target,cast,tick})=>{
      startBossFight('gatekeeper');const boss=bossFight.units[0];boss.x=target.x+23;boss.y=target.y+28;
-     const health=boss.hp;cast();tick(1);
-     if(!(target.mageStasisUntil>arenaTime)||boss.mageStasisUntil||boss.hp>=health)throw Error('Stasis Field did not separate mob and boss effects');
+     const health=boss.hp,shield=bossFight.shieldHp;cast();tick(1);
+     if(!(target.mageStasisUntil>arenaTime)||boss.mageStasisUntil||boss.hp!==health||bossFight.shieldHp>=shield)
+      throw Error('Stasis Field did not restrain the mob and damage the boss shield');
     }
    }
   };

@@ -314,20 +314,21 @@ test('all 12 bosses have twice the previous HP in dungeons, practice and split f
     declaration('BOSS_HEALTH_MULTIPLIER'),
     source.slice(source.indexOf('const BOSS_BLUEPRINTS ='), source.indexOf('function currentBiome(')),
     'let inPractice=false,dungeonDepth=1,bossFight;const inSandbox=()=>inPractice,W=720,F=640;',
-    method('floorDifficulty'),method('bossMaxHealth'),method('bossRadius'),method('bossArmour'),method('createBossUnit'),method('startBossFight'),
+    method('floorDifficulty'),method('bossMaxHealth'),method('bossRadius'),method('bossArmour'),method('createBossUnit'),method('bossShieldCapacity'),method('startBossFight'),
     'const rows=[];',
     'for(const [id,oldHp] of Object.entries({gatekeeper:90,crystal:72,slime:96,furnace:112,hydra:98,phoenix:114,briar:122,matriarch:102,mire:120,glacier:118,oracle:104,avalanche:128})){',
     ' for(dungeonDepth of [1,2,5,20])for(inPractice of [false,true]){',
     '  const expected=2*Math.ceil(oldHp*(inPractice?1:1+Math.min(1.5,(dungeonDepth-1)*.12))*(inPractice?1:.75));',
     '  startBossFight(id);const unit=bossFight.units[0];',
-    '  rows.push({id,expected,hp:unit.hp,maxHp:unit.maxHp,hud:bossFight.totalMax});',
+    '  rows.push({id,expected,hp:unit.hp,maxHp:unit.maxHp,hud:bossFight.totalMax,shieldHp:bossFight.shieldHp,shieldMax:bossFight.shieldMax,scale:inPractice?50:50*1.5**(dungeonDepth-1)});',
     '  const part=createBossUnit(id,0,0,true);',
     '  if(part.kind==="slime"&&id!=="phoenix"){const expectedPart=2*Math.ceil(oldHp*.25*(inPractice?1:floorDifficulty())*(inPractice?1:.75));rows.push({id,expected:expectedPart,hp:part.hp,maxHp:part.maxHp,hud:expectedPart});}',
     ' }',
     '}'
   ], 'rows');
   assert.equal(new Set(result.map(row => row.id)).size, 12);
-  for (const {id,expected,hp,maxHp,hud} of result) {
+  for (const {id,expected,hp,maxHp,hud,shieldHp,shieldMax,scale} of result) {
+    if (scale!==undefined) assert.deepEqual([shieldHp,shieldMax],[scale,scale],id);
     assert.deepEqual([hp,maxHp,hud], [expected,expected,expected], id);
   }
 });
@@ -340,17 +341,17 @@ test('Phoenix rebirth doubles the old rounded refill and split bosses conserve r
     'const hero="classic",dashBatSweeps=()=>false,meleeIsSwinging=()=>false,inSandbox=()=>false,enemyAttacksEnabled=()=>false,blockShieldBody=()=>false,enemies=[],elementFx=[];',
     declaration('BOSS_DAMAGE'),
     'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),bossSignatureRing=()=>{},bossSpiralShot=()=>{},showItemNotice=()=>{},updateBossZoneList=()=>{},updateBossShots=()=>{},updateBossSpecial=()=>{},finishBossFight=()=>victories++;',
-    method('floorDifficulty'),method('bossMaxHealth'),method('bossRebirthHealth'),method('bossRadius'),method('bossArmour'),method('createBossUnit'),method('startBossFight'),
+    method('floorDifficulty'),method('bossMaxHealth'),method('bossRebirthHealth'),method('bossRadius'),method('bossArmour'),method('createBossUnit'),method('bossShieldCapacity'),method('startBossFight'),
     method('handleBiomeBossPhase'), method('updateBossFight'),
-    'startBossFight("phoenix");const phoenix=bossFight.units[0];phoenix.hp=0;updateBossFight(0,0);',
-    'const rebirth={hp:phoenix.hp,state:phoenix.state,victories};phoenix.hp=0;updateBossFight(0,0);',
-    'startBossFight("slime");bossFight.units[0].hp=57.5;updateBossFight(0,0);'
-  ], '{rebirth,victories,split:bossFight.split,hp:bossFight.units.map(unit=>unit.hp)}');
+    'startBossFight("phoenix");const phoenix=bossFight.units[0];bossFight.shieldHp=0;phoenix.hp=0;updateBossFight(0,0);',
+    'const rebirth={hp:phoenix.hp,state:phoenix.state,victories,shield:bossFight.shieldHp};phoenix.hp=0;updateBossFight(0,0);',
+    'startBossFight("slime");bossFight.shieldHp=0;bossFight.units[0].hp=57.5;updateBossFight(0,0);'
+  ], '{rebirth,victories,split:bossFight.split,hp:bossFight.units.map(unit=>unit.hp),splitShield:bossFight.shieldHp}');
   assert.deepEqual(result, {
-    rebirth:{hp:84,state:'rebirth',victories:0},
+    rebirth:{hp:84,state:'rebirth',victories:0,shield:0},
     victories:1,
     split:true,
-    hp:[28.75,28.75]
+    hp:[28.75,28.75],splitShield:0
   });
 });
 
@@ -1009,7 +1010,7 @@ test('sword bleed refreshes its duration and only hurts vulnerable targets', () 
     'let arenaTime=1,bleedStacks=0,mantleCooldown=0,friendlyZones=[];',
     'const hero="classic",equippedWeapon=()=>"sword",temporaryBleed=[];',
     'const normal={hp:4},armored={hp:4,kind:"crystal",armour:1};const enemies=[normal],bossFight={units:[armored]};',
-    method('applySwordBleed'),method('updateItemEffects'),
+    method('applySwordBleed'),method('absorbBossShield'),method('applyPeriodicDamage'),method('updateItemEffects'),
     'applySwordBleed(normal);applySwordBleed(armored);updateItemEffects(1);',
     'arenaTime=2;applySwordBleed(normal);const first=normal.hp;',
     'arenaTime=4.5;armored.armour=0;updateItemEffects(1);const refreshed=normal.hp;',
@@ -1249,4 +1250,31 @@ test('the first wall hit keeps a double charge going and the last opens the guar
   'arenaTime=5.16;updateGatekeeper(unit,1.16);'
  ],'{first,last,after:unit.state,closed:!bossGuardOpen(unit),impacts:elementFx.length}');
  assert.deepEqual(result,{first:['chargeWarn',1,false],last:['recover',1.15,0,true],after:'shotWarn',closed:true,impacts:2});
+});
+
+test('boss shields scale by 50 percent per dungeon and absorb final damage before health', () => {
+ const result=run([
+  method('bossShieldCapacity'),method('bossGuardOpen'),method('absorbBossShield'),method('damageBoss'),method('applyPeriodicDamage'),
+  'let arenaTime=3,rolls=0;const cues=[],unit={kind:"slime",hp:100,armour:0},regular={hp:20};',
+  'const bossFight={done:false,shieldHp:12.5,units:[unit]},playerDamageAmount=amount=>{rolls++;return amount*2};',
+  'const playSoundCue=id=>cues.push(id),afterPlayerBatHit=()=>{},synergyProjectileHit=()=>{},bossSpark=()=>{};',
+  'damageBoss(unit,2,"bat");const first=[bossFight.shieldHp,unit.hp];',
+  'applyPeriodicDamage(unit,1.5);applyPeriodicDamage(regular,1.5);const periodic=[bossFight.shieldHp,unit.hp,regular.hp];',
+  'damageBoss(unit,4,"bat");const broken=[bossFight.shieldHp,unit.hp];',
+  'const depths=[1,2,3,4,5].map(bossShieldCapacity);'
+ ],'{depths,first,periodic,broken,rolls,cues}');
+ assert.deepEqual(result,{depths:[50,75,112.5,168.75,253.125],first:[8.5,100],periodic:[7,100,18.5],broken:[0,99],rolls:2,cues:['boss-shield-break']});
+});
+
+test('breaking a boss shield restores native defense rules without interrupting attacks', () => {
+ const result=run([
+  declaration('GATEKEEPER_RETURN_OPENING'),method('bossGuardOpen'),method('absorbBossShield'),method('damageBoss'),
+  'const unit={kind:"gatekeeper",hp:100,state:"charge",timer:2,chargesLeft:2};',
+  'const bossFight={shieldHp:14,units:[unit]},arenaTime=10,cues=[];',
+  'const playerDamageAmount=n=>n,bossSpark=()=>{},afterPlayerBatHit=()=>{},synergyProjectileHit=()=>{},playSoundCue=id=>cues.push(id);',
+  'damageBoss(unit,9,"arrow");const shieldHit=[bossFight.shieldHp,unit.hp];',
+  'damageBoss(unit,6,"arrow");const after=[bossFight.shieldHp,unit.hp];',
+  'damageBoss(unit,7,"projectile");const returned=[unit.hp,bossGuardOpen(unit),unit.state,unit.timer,unit.chargesLeft];'
+ ],'{shieldHit,after,returned,cues}');
+ assert.deepEqual(result,{shieldHit:[5,100],after:[0,100],returned:[93,true,'charge',2,2],cues:['boss-shield-break']});
 });

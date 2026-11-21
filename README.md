@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.52 — Boss shields
+
+Every boss encounter starts with a single shield. It absorbs 50 damage in Dungeon 1, 75 in Dungeon 2, and 112.5 in Dungeon 3, increasing by 50% per dungeon. Damage uses up the shield before reaching the boss's usual defenses. The shield belongs to the encounter and is shared across split phases or rebirth. The boss HUD and Enemy Index show shield capacity separately from HP.
+
 ## V8.51 — Bosses keep attacking
 
 Boss stun states have been removed. Gatekeeper bosses briefly expose their guard after finishing a charge or taking a returned projectile. Returned projectiles, knocked-back minions and broken armor keep their damage or vulnerability effects. They no longer interrupt a boss's current attack. Boss contact remains dangerous during recovery.
