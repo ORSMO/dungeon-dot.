@@ -2,6 +2,12 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.65 — Treasure choice and shop previews
+
+Each unopened Treasure Room chest offers two different relics. Compare your hero's versions of the items, stack changes, affected stats, and newly unlocked synergies, then take one for free. The offer and chosen reward are saved. Old unopened chests keep their original item as the first choice, and claimed chests stay open.
+
+The Traveller Shop shows how each stat upgrade changes your current build before you buy it. It accounts for stat caps, Scout's weapon reload, Mage's mana and spell cooldowns, and Squire's armour durability starting next room. Shop prices and existing reward effects are unchanged.
+
 ## V8.64 — Brass HUD, shop and treasure art
 
 A high-resolution brass frame replaces the stretched artwork around health, boss stats, navigation controls, and the enemy counter. The maps and menu panels use the same trim. The Traveller Shop has a painted interior and the Treasure Room has a separate inlaid vault floor.

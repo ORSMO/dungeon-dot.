@@ -608,13 +608,35 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
 #loot-description{display:block;color:#ddc7b0;font-size:11px;line-height:1.35;margin-top:3px}
 .loot-footer{grid-column:2;display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:6px}
 #loot-price{color:#f6d28a;font-size:11px;font-weight:700}
-#loot-take{min-height:36px}
-#loot-take,#edit-done,#privacy-policy button,#rotate-fullscreen{
+.loot-change{display:block;color:#ffdfa0;font:600 11px/1.35 system-ui;white-space:pre-line;margin-top:4px}
+.loot-change:empty{display:none}
+#loot-take,#treasure-choices button{min-height:36px}
+#loot-take,#treasure-choices button,#edit-done,#privacy-policy button,#rotate-fullscreen{
  border:1px solid #b48c5d;border-radius:3px;color:#ffe9c0;
  background:linear-gradient(#55402c,#342621);box-shadow:inset 0 1px #f3ce9726;
 }
-#loot-take:focus-visible,#edit-done:focus-visible,#element-options button:focus-visible{
+#loot-take:focus-visible,#treasure-choices button:focus-visible,#edit-done:focus-visible,#element-options button:focus-visible{
  outline:2px solid #ffda91;outline-offset:2px;
+}
+#loot-panel[data-choice=true]{
+ display:block;width:min(520px,68vw);max-height:calc(100dvh - 122px);overflow:auto;
+ background:#1c1918;scrollbar-width:thin;scrollbar-color:#99764e #211b18;
+}
+#loot-panel[data-choice=true][hidden]{display:none}
+#loot-panel[data-choice=true]>:not(#treasure-choices),#treasure-choices[hidden]{display:none}
+#treasure-choices h2{margin:0 0 6px;color:#ffedcd;font:700 16px Georgia,serif}
+.treasure-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.treasure-option{display:flex;flex-direction:column;align-items:stretch;min-width:0;padding:7px;border:1px solid #805e40;background:#211b18}
+.treasure-option strong{color:#ffebc4;font:700 13px/1.2 Georgia,serif;overflow-wrap:anywhere}
+.treasure-option strong span{display:inline-block;min-width:16px}
+.treasure-option p{margin:4px 0;color:#e0cbb5;font:11px/1.25 system-ui}
+.treasure-option button{margin-top:auto;padding:5px 7px;font-size:11px}
+.treasure-option .loot-change{padding-bottom:6px}
+@media(max-height:370px){
+ #treasure-choices h2{margin-bottom:4px}
+ .treasure-option{padding:5px}
+ .treasure-option p{margin:3px 0}
+ .treasure-option .loot-change{margin-top:3px;padding-bottom:4px}
 }
 #item-notice{top:max(72px,var(--boss-top,72px));color:#ffdfad;font:700 11px/1.25 system-ui;text-align:center}
 #boss-hud:not([hidden]) ~ #item-notice{top:auto;bottom:26px}
@@ -672,7 +694,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  .pause-body{grid-template-columns:minmax(100px,.66fr) minmax(0,1.6fr)}
  .controls-body{grid-template-columns:minmax(106px,.70fr) minmax(0,1.5fr)}
 }
-</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.64</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div><span id="economy-room-name" hidden></span></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.65</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div><span id="economy-room-name" hidden></span></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
  <div class="pause-home">
   <div class="menu-header"><h2>Paused</h2><button id="settings-close" type="button" class="menu-control primary-control">Resume</button></div>
   <div class="pause-body">
@@ -739,8 +761,15 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
 </section>
 <section id="loot-panel" hidden aria-label="Nearby item">
  <canvas id="loot-preview" width="92" height="92" aria-hidden="true"></canvas>
- <div><strong id="loot-name"></strong><small id="loot-description"></small></div>
- <div class="loot-footer"><span id="loot-price"></span><button id="loot-take">Take item</button></div>
+ <div><strong id="loot-name"></strong><small id="loot-description"></small><small id="loot-change" class="loot-change"></small></div>
+ <div class="loot-footer"><span id="loot-price"></span><button id="loot-take" type="button">Take item</button></div>
+ <div id="treasure-choices" hidden>
+  <h2>Choose one relic</h2>
+  <div class="treasure-options">
+   <article class="treasure-option"><strong><span aria-hidden="true"></span><b></b></strong><p></p><small class="loot-change"></small><button type="button">Take relic</button></article>
+   <article class="treasure-option"><strong><span aria-hidden="true"></span><b></b></strong><p></p><small class="loot-change"></small><button type="button">Take relic</button></article>
+  </div>
+ </div>
 </section>
 <aside id="opening-guide" hidden role="status"><strong id="opening-guide-title"></strong><span id="opening-guide-tip"></span></aside>
 <div id="item-notice" hidden role="status"></div>
@@ -762,7 +791,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.64</small>
+   <small>V8.65</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -2188,7 +2217,7 @@ const DEEP_TRIALS={
 let evolutionAt=-Infinity;
 function currentDeepTrial(){return inSandbox()?null:DEEP_TRIALS[dungeonDepth]||null}
 function hasEvolved(run=progress){return (run?.level||0)>=EVOLUTION_LEVEL}
-function evolutionAttackRate(){return hasEvolved()?1.1:1}
+function evolutionAttackRate(build=progress){return hasEvolved(build)?1.1:1}
 function xpRequirement(level){const n=Math.max(1,level)-1;return 24+12*n+2*n*n}
 function levelChoicePending(){
  if(!progress||progress.level<3)return false;
@@ -2317,23 +2346,24 @@ function applyWeaponElement(target){
 }
 
 function freshProgress(){return {coins:0,items:{},upgrades:{},roomsCleared:0,synergyCoins:0,level:1,xp:0,levelsThisDepth:0,weapon:null,mageSchool:null,legacyMage:false,elementPrimary:null,elementSecondary:null,trialsCleared:[]}}
-function itemCount(id){return Math.min(ITEM_STACK_LIMITS[id]??Number.MAX_SAFE_INTEGER,progress?.items[id]||0)}
-function upgradeCount(id){return progress?.upgrades[id]||0}
-function playerStats(){
- const evolved=Number(hasEvolved());
+function itemCount(id,build=progress){return Math.min(ITEM_STACK_LIMITS[id]??Number.MAX_SAFE_INTEGER,build?.items?.[id]||0)}
+function upgradeCount(id,build=progress){return build?.upgrades?.[id]||0}
+function playerStats(build=progress){
+ const evolved=Number(hasEvolved(build)),item=id=>itemCount(id,build),upgrade=id=>upgradeCount(id,build);
+ const livingArmour=hasSynergy('livingArmour',build);
  return {
-  maxHealth:Math.min(100,Math.max(25,50+5*evolved+10*upgradeCount('vitality')+10*itemCount('emberHeart')-8*itemCount('glassEye'))),
-  damage:(1+.25*upgradeCount('power')+(hero==='mage'?0:hero==='archer'?.2:.4)*itemCount('glassEye')+.02*Math.max(0,(progress?.level||1)-1))*(1+.15*evolved),
-  moveSpeed:(hero==='mage'?112:118)*(1+Math.min(.8,.1*upgradeCount('speed')+(hero==='archer'?.05*itemCount('thornMantle'):0)))*(1+.08*evolved),
-  swing:Math.max(.55,1+.15*upgradeCount('swing')-(hero==='mage'?0:.1)*itemCount('counterweight'))*evolutionAttackRate(),
-  knockback:(1+.2*upgradeCount('knockback')+(hero==='mage'?.25:hero==='archer'?.12:.4)*itemCount('counterweight'))*(1+.1*evolved),
-  regen:Math.min(2.4,(hero==='mage'?.5:PLAYER_REGEN)+.15*evolved+.15*upgradeCount('regen')+(hero==='mage'?.18:hero==='archer'?.12:.3)*itemCount('mossCharm')+(hasSynergy('livingArmour')?.2:0)),
-  shieldProtection:hero!=='classic'?0:Math.min(.6,.1*upgradeCount('shield')+.15*itemCount('shieldBloom')),
-  crit:Math.min(.6,.05*upgradeCount('focus')+(hero==='archer'?.12*itemCount('glassEye'):0)),
-  luck:upgradeCount('luck')+itemCount('luckyPenny'),
-  armour:Math.min(.4,(hero==='mage'?.10:hero==='archer'?.05:0)+.05*evolved+(hero==='mage'?.06:hero==='archer'?.04:.1)*itemCount('thornMantle')+(hasSynergy('livingArmour')?.1:0)),
-  pickup:itemCount('magnetRing')?(hero==='archer'?28:95):23,
-  bulletSpeed:Math.max(.5,1-(hero==='archer'?0:.2)*itemCount('hourglass'))
+  maxHealth:Math.min(100,Math.max(25,50+5*evolved+10*upgrade('vitality')+10*item('emberHeart')-8*item('glassEye'))),
+  damage:(1+.25*upgrade('power')+(hero==='mage'?0:hero==='archer'?.2:.4)*item('glassEye')+.02*Math.max(0,(build?.level||1)-1))*(1+.15*evolved),
+  moveSpeed:(hero==='mage'?112:118)*(1+Math.min(.8,.1*upgrade('speed')+(hero==='archer'?.05*item('thornMantle'):0)))*(1+.08*evolved),
+  swing:Math.max(.55,1+.15*upgrade('swing')-(hero==='mage'?0:.1)*item('counterweight'))*evolutionAttackRate(build),
+  knockback:(1+.2*upgrade('knockback')+(hero==='mage'?.25:hero==='archer'?.12:.4)*item('counterweight'))*(1+.1*evolved),
+  regen:Math.min(2.4,(hero==='mage'?.5:PLAYER_REGEN)+.15*evolved+.15*upgrade('regen')+(hero==='mage'?.18:hero==='archer'?.12:.3)*item('mossCharm')+(livingArmour?.2:0)),
+  shieldProtection:hero!=='classic'?0:Math.min(.6,.1*upgrade('shield')+.15*item('shieldBloom')),
+  crit:Math.min(.6,.05*upgrade('focus')+(hero==='archer'?.12*item('glassEye'):0)),
+  luck:upgrade('luck')+item('luckyPenny'),
+  armour:Math.min(.4,(hero==='mage'?.10:hero==='archer'?.05:0)+.05*evolved+(hero==='mage'?.06:hero==='archer'?.04:.1)*item('thornMantle')+(livingArmour?.1:0)),
+  pickup:item('magnetRing')?(hero==='archer'?28:95):23,
+  bulletSpeed:Math.max(.5,1-(hero==='archer'?0:.2)*item('hourglass'))
  };
 }
 function healPlayer(amount){const before=hp;hp=Math.min(playerStats().maxHealth,hp+amount);return hp-before}
@@ -2535,16 +2565,21 @@ function rewardBoss(){
   showItemNotice(evolved+trial.seal+' earned · Dungeon '+dungeonDepth,5);
  }
 }
-function rollItem(){
- const all=Object.keys(ITEM_DEFS),available=all.filter(id=>itemCount(id)<(ITEM_STACK_LIMITS[id]??1)),unowned=available.filter(id=>!itemCount(id)),pool=unowned.length?unowned:available.length?available:all;
+function rollItem(excluded=null){
+ const all=Object.keys(ITEM_DEFS).filter(id=>id!==excluded),available=all.filter(id=>itemCount(id)<(ITEM_STACK_LIMITS[id]??1)),unowned=available.filter(id=>!itemCount(id)),pool=unowned.length?unowned:available.length?available:all;
  const themed=pool.filter(id=>ITEM_DEFS[id].biome===selectedBiome),weighted=pool.concat(themed,themed);
  return weighted[Math.floor(Math.random()*weighted.length)];
 }
 function prepareRoomLoot(room){
  if(room.kind==='sandbox'){prepareSandboxEconomy(room);return}
+ if(room.kind==='treasure'){
+  room.loot??=[{id:'treasure',kind:'item',key:rollItem(),price:0,x:W/2,y:F/2,claimed:false}];
+  const relic=room.loot[0];
+  if(relic?.kind==='item'&&!relic.claimed&&!relic.alternative)relic.alternative=rollItem(relic.key);
+  return;
+ }
  if(room.loot)return;
  room.loot=[];
- if(room.kind==='treasure')room.loot.push({id:'treasure',kind:'item',key:rollItem(),price:0,x:W/2,y:F/2,claimed:false});
  if(room.kind==='shop'){
   const keys=Object.keys(UPGRADE_DEFS).filter(upgradeAvailable);
   room.loot=[
@@ -2555,6 +2590,70 @@ function prepareRoomLoot(room){
  }
 }
 function lootDefinition(loot){return loot.kind==='item'?heroItemDefinition(loot.key):loot.kind==='stat'?heroUpgradeDefinition(loot.key):{name:'Healing Flask',desc:'Restore 20 health.',glyph:'✚',color:'#f3a5b1'}}
+function lootBuildStats(build){
+ const st=playerStats(build),pct=n=>(n*100).toFixed(0)+'%';
+ const stats={
+  'Max HP':String(st.maxHealth), 'Damage multiplier':st.damage.toFixed(2)+'×', 'Move speed':st.moveSpeed.toFixed(1),
+  'Knockback':pct(st.knockback), 'Health regen':st.regen.toFixed(2)+' HP/s', 'Critical chance':pct(st.crit),
+  'Damage reduction':pct(st.armour), 'Luck':String(st.luck), 'Enemy shot speed':pct(st.bulletSpeed)
+ };
+ if(hero==='classic'){
+  const body=bodyArmourStats(hero,build.upgrades);
+  stats['Swing speed']=pct(st.swing);
+  stats['Shield protection']=pct(st.shieldProtection);
+  stats['Armour durability (next room)']=String(body.capacity);
+  stats['Armour absorption']=pct(body.absorption);
+ }else if(hero==='archer'){
+  stats['Reload time']=rangedReloadTime(rangedWeaponShot(equippedWeapon(),1),build).toFixed(2)+' s';
+  stats['Arrow pierce bonus']=String(itemCount('counterweight',build));
+ }else{
+  stats['Max mana']=String(mageMaxMana(build));
+  stats['Mana regen']=mageManaRegen(build).toFixed(2)+' MP/s';
+  stats['Spell cooldown (% of base)']=pct(mageCooldownMultiplier(build,st));
+ }
+ return stats;
+}
+function lootBuildChange(kind,id){
+ if(kind==='heal')return '';
+ const item=kind==='item',count=item?itemCount(id):upgradeCount(id);
+ if(item&&count>=ITEM_STACK_LIMITS[id])return 'Stack full · +10 coins';
+ const field=item?'items':'upgrades';
+ const next={...progress,[field]:{...progress[field],[id]:count+1}};
+ const before=lootBuildStats(progress),after=lootBuildStats(next);
+ const showsMaxHealth=item&&(id==='emberHeart'||id==='glassEye');
+ const lines=Object.keys(before).filter(name=>before[name]!==after[name]||showsMaxHealth&&name==='Max HP').map(name=>name+' '+before[name]+' → '+after[name]);
+ if(item){
+  if(ITEM_STACK_LIMITS[id]>1)lines.unshift('Stacks '+count+' → '+(count+1)+' / '+ITEM_STACK_LIMITS[id]);
+  for(const synergy of activeSynergies(next))if(!hasSynergy(synergy))lines.push('Unlocks '+SYNERGY_DEFS[synergy].name);
+ }
+ return lines.join('\n')||(!item?'No stat change at current caps':'');
+}
+let lootDetailsKey='';
+function renderLootDetails(loot){
+ const panel=document.querySelector('#loot-panel'),choice=!!loot.alternative;
+ panel.dataset.choice=String(choice);
+ panel.dataset.rare=String(!!loot.rare);
+ const group=document.querySelector('#treasure-choices');group.hidden=!choice;
+ if(choice){
+  const keys=[loot.key,loot.alternative];
+  group.querySelectorAll('.treasure-option').forEach((card,i)=>{
+   const id=keys[i],def=heroItemDefinition(id),badge=card.querySelector('strong span');
+   badge.textContent=def.glyph;badge.style.color=def.color;
+   card.querySelector('strong b').textContent=def.name;
+   card.querySelector('p').textContent=def.desc;
+   card.querySelector('.loot-change').textContent=lootBuildChange('item',id);
+   const button=card.querySelector('button');
+   button.setAttribute('aria-label','Take '+def.name);
+   button.onclick=()=>takeNearbyLoot(id);
+  });
+ }else{
+  const def=lootDefinition(loot);
+  document.querySelector('#loot-name').textContent=def.name;
+  document.querySelector('#loot-description').textContent=loot.kind==='stat'?'':def.desc;
+  document.querySelector('#loot-change').textContent=loot.kind==='stat'?lootBuildChange('stat',loot.key):'';
+  document.querySelector('#loot-price').textContent=loot.price?loot.price+' coins':'Free pickup';
+ }
+}
 function roomCoinsHome(){return !!currentRoom?.cleared&&['combat','boss','cursed'].includes(currentRoom.kind)&&!inSandbox()&&!over&&!p.falling}
 function collectCoin(coin){
  if(coin.collected)return false;
@@ -2586,27 +2685,31 @@ function updateEconomy(dt){
   if(gainedLife)persistLifeCount();
  }
  nearestLoot=(currentRoom.loot||[]).filter(loot=>!loot.claimed&&Math.hypot(loot.x-p.x,loot.y-p.y)<58).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0]||null;
- const panel=document.querySelector('#loot-panel');panel.hidden=!nearestLoot||over;
+ const panel=document.querySelector('#loot-panel');panel.hidden=!nearestLoot||over||!!p.falling;
  panel.className=inSandbox()&&!document.querySelector('#sandbox-panel').hidden?'practice-with-menu':'';
- if(nearestLoot){
-  const def=lootDefinition(nearestLoot),button=document.querySelector('#loot-take');
-  panel.dataset.rare=String(!!nearestLoot.rare);
-  drawLootPreview(nearestLoot,def);
-  document.querySelector('#loot-name').textContent=def.name;
-  document.querySelector('#loot-description').textContent=def.desc;
-  document.querySelector('#loot-price').textContent=nearestLoot.price?nearestLoot.price+' coins':'Free pickup';
-  const full=nearestLoot.kind==='heal'&&hp>=playerStats().maxHealth;
-  const maxed=nearestLoot.kind==='stat'&&!upgradeAvailable(nearestLoot.key);
-  button.disabled=full||maxed||progress.coins<nearestLoot.price;
-  button.textContent=full?'Health full':maxed?'Upgrade unavailable':progress.coins<nearestLoot.price?'Need more coins':nearestLoot.price?'Buy':nearestLoot.kind==='stat'?'Take upgrade':'Take item';
+ if(!panel.hidden){
+  const loot=nearestLoot,key=JSON.stringify([hero,loot.kind,loot.key,loot.alternative,loot.price,loot.rare,progress.level,progress.weapon,progress.items,progress.upgrades]);
+  if(lootDetailsKey!==key){renderLootDetails(loot);lootDetailsKey=key}
+  if(!loot.alternative){
+   drawLootPreview(loot,lootDefinition(loot));
+   const button=document.querySelector('#loot-take'),full=loot.kind==='heal'&&hp>=playerStats().maxHealth;
+   const maxed=loot.kind==='stat'&&!upgradeAvailable(loot.key);
+   button.disabled=full||maxed||progress.coins<loot.price;
+   button.textContent=full?'Health full':maxed?'Upgrade unavailable':progress.coins<loot.price?'Need more coins':loot.price?'Buy':loot.kind==='stat'?'Take upgrade':'Take item';
+  }
  }
  document.querySelector('#coin-total').textContent=progress.coins;
 }
-function takeNearbyLoot(){
- if(over||!nearestLoot||nearestLoot.claimed||!(currentRoom.loot||[]).includes(nearestLoot)||Math.hypot(nearestLoot.x-p.x,nearestLoot.y-p.y)>=58||progress.coins<nearestLoot.price)return false;
- if(nearestLoot.kind==='heal'&&hp>=playerStats().maxHealth)return false;
- if(nearestLoot.kind==='stat'&&!upgradeAvailable(nearestLoot.key))return false;
- const loot=nearestLoot;progress.coins-=loot.price;loot.claimed=true;
+function takeNearbyLoot(relic=null){
+ const loot=nearestLoot;
+ if(over||p.falling||!loot||loot.claimed||!(currentRoom.loot||[]).includes(loot)||Math.hypot(loot.x-p.x,loot.y-p.y)>=58||progress.coins<loot.price)return false;
+ if(loot.alternative){
+  if(relic!==loot.key&&relic!==loot.alternative)return false;
+  loot.key=relic;delete loot.alternative;
+ }else if(relic!==null)return false;
+ if(loot.kind==='heal'&&hp>=playerStats().maxHealth)return false;
+ if(loot.kind==='stat'&&!upgradeAvailable(loot.key))return false;
+ progress.coins-=loot.price;loot.claimed=true;
  if(loot.kind==='item')giveItem(loot.key);else if(loot.kind==='stat')giveUpgrade(loot.key);else{healPlayer(20);showItemNotice('Healing Flask · Restored health')}
  playSoundCue('loot');nearestLoot=null;updateEconomy(0);hud();queueCheckpoint();flushCheckpoint();return true;
 }
@@ -2704,12 +2807,15 @@ function drawLoot(){
    g.beginPath();g.arc(loot.x,y,17,0,Math.PI*2);g.stroke();g.restore();
   }
   const art=loot.kind==='heal'?'flask':'relic';
-  if(!drawPropArt(art,loot.x,y,loot.kind==='heal'?18:24,25))artOval(g,loot.x,y,12,12,def.color);
-  if(loot.kind!=='heal'||!hasPaint){
-   artOval(g,loot.x,y,8,8,'#131620de');
-   g.fillStyle=def.color;g.font='bold 13px system-ui';g.textBaseline='middle';g.fillText(def.glyph,loot.x,y+1);g.textBaseline='alphabetic';
+  const displays=loot.alternative?[[def,loot.x-15],[heroItemDefinition(loot.alternative),loot.x+15]]:[[def,loot.x]];
+  for(const [display,x] of displays){
+   if(!drawPropArt(art,x,y,loot.kind==='heal'?18:24,25))artOval(g,x,y,12,12,display.color);
+   if(loot.kind!=='heal'||!hasPaint){
+    artOval(g,x,y,8,8,'#131620de');
+    g.fillStyle=display.color;g.font='bold 13px system-ui';g.textBaseline='middle';g.fillText(display.glyph,x,y+1);g.textBaseline='alphabetic';
+   }
   }
-  if(loot===nearestLoot||Math.hypot(p.x-loot.x,p.y-loot.y)>110)continue;
+  if(loot.alternative||loot===nearestLoot||Math.hypot(p.x-loot.x,p.y-loot.y)>110)continue;
   g.font='bold 9px Georgia';
   const label=loot.price?def.name+' · '+loot.price+' coins':def.name;
   const width=g.measureText(label).width+12,labelX=clamp(loot.x,width/2,W-width/2),labelY=loot.y+29;
@@ -2820,7 +2926,7 @@ function setupExpansionUI(){
  document.querySelector('#stats-toggle').onclick=toggleCharacterMenu;
  document.querySelector('#character-close').onclick=closeCharacterMenu;
  for(const id of CHARACTER_PAGES)document.querySelector('#character-tab-'+id).onclick=()=>showCharacterPage(id);
- document.querySelector('#loot-take').onclick=takeNearbyLoot;
+ document.querySelector('#loot-take').onclick=()=>takeNearbyLoot();
  for(const [id,def] of Object.entries(BIOME_ENEMIES))SANDBOX_CATALOG.push({id,name:def.name,color:def.color});
  for(const [id,def] of Object.entries(BOSS_BLUEPRINTS))if(!BOSS_TYPES.includes(id))SANDBOX_CATALOG.push({id:'boss:'+id,name:def.name,color:def.color});
 }
@@ -3362,6 +3468,9 @@ function normalizeSavedRun(raw){
   if(typeof room.wallBreach!=='string'||!/^\d{1,4},\d{1,4}$/.test(room.wallBreach))delete room.wallBreach;
   if(room.loot!==undefined&&!Array.isArray(room.loot))throw Error('Invalid pickups');
   if(Array.isArray(room.loot))room.loot=room.loot.filter(loot=>loot&&Number.isFinite(loot.x)&&Number.isFinite(loot.y)&&Number.isFinite(loot.price)&&loot.price>=0&&(loot.kind==='item'&&Object.hasOwn(ITEM_DEFS,loot.key)||loot.kind==='stat'&&Object.hasOwn(UPGRADE_DEFS,loot.key)||loot.kind==='heal')).map(loot=>({...loot,claimed:!!loot.claimed})).slice(0,40);
+  for(const loot of room.loot||[]){
+   if(room.kind!=='treasure'||loot.kind!=='item'||loot.claimed||typeof loot.alternative!=='string'||loot.key===loot.alternative||!Object.hasOwn(ITEM_DEFS,loot.alternative))delete loot.alternative;
+  }
   room.coinDrops=Array.isArray(room.coinDrops)?room.coinDrops.filter(coin=>coin&&Number.isFinite(coin.x)&&Number.isFinite(coin.y)&&Number.isFinite(coin.amount)&&coin.amount>0).map(coin=>({x:coin.x,y:coin.y,amount:Math.floor(safeNumber(coin.amount,1,1,1000))})).slice(0,500):[];
   for(const key of ['heartDrops','lifeDrops'])room[key]=Array.isArray(room[key])?room[key].filter(drop=>drop&&Number.isFinite(drop.x)&&Number.isFinite(drop.y)).map(drop=>({x:drop.x,y:drop.y})).slice(0,100):[];
  }
@@ -3583,6 +3692,8 @@ function continueSlot(slot){
  if(slot!==1&&slot!==2)return false;
  const saved=readSlot(slot);if(!saved.data||saved.data.lives===0){saveError=saved.error||'That run has no lives left. Start a new game.';updateSaveIndicator();return false}
  prepareSlotSwitch();const data=readSlot(slot).data;if(!data)return false;loadingRun=true;activeSlot=slot;
+ const savedRoom=data.dungeon[data.roomId],savedTreasure=savedRoom.kind==='treasure'?savedRoom.loot?.[0]:null;
+ const previousAlternative=savedTreasure?.alternative;
  try{
   progress=data.progress;dungeon=data.dungeon;dungeonDepth=data.depth;selectedBiome=data.biome;lastDungeonSignature=dungeonSignature(dungeon);arenaTime=data.arenaTime;
   hero=data.hero;mageSouls=data.mageSouls;mageMana=safeNumber(data.mageMana,100,0,190);hp=data.hp;armourHp=data.armourHp;lives=data.lives;kills=data.kills;shieldType=data.shieldType;shieldHp=data.shieldHp;shieldBroken=!!data.shieldBroken;shieldCooldown=data.shieldCooldown;shieldLastHit=data.shieldLastHit;shieldLaserTick=safeNumber(data.shieldLaserTick);
@@ -3594,6 +3705,7 @@ function continueSlot(slot){
    document.querySelector('#shield-durability').style.display=shieldType?'flex':'none';
  }finally{loadingRun=false}
  profile.lastSlot=slot;profileDirty=true;flushProfile();savePending=false;saveError='';document.querySelector('#start-screen').hidden=true;
+ if(savedTreasure?.alternative!==previousAlternative){queueCheckpoint();flushCheckpoint()}
  if(data.shieldPending&&!shieldType)showShieldChoice();
  hud();if(levelChoicePending())openElementChoice();updateSaveIndicator();return true;
 }
@@ -3879,8 +3991,8 @@ const SYNERGY_DEFS={
  secondSpring:{name:'Second Spring',items:['mossCharm','shieldBloom'],color:'#9ce7cd',desc:'Clearing a combat or boss room restores 6 health. Does not repair the shield.'}
 };
 let synergyFx=[],synergyFields=[],synergyClocks={};
-function hasSynergy(id){return SYNERGY_DEFS[id].items.every(item=>itemCount(item)>0)}
-function activeSynergies(){return Object.keys(SYNERGY_DEFS).filter(hasSynergy)}
+function hasSynergy(id,build=progress){return SYNERGY_DEFS[id].items.every(item=>itemCount(item,build)>0)}
+function activeSynergies(build=progress){return Object.keys(SYNERGY_DEFS).filter(id=>hasSynergy(id,build))}
 function announceSynergies(before){
  const added=activeSynergies().filter(id=>!before.includes(id));
  if(added.length)showItemNotice('SYNERGY UNLOCKED · '+added.map(id=>SYNERGY_DEFS[id].name).join(' + '));
@@ -5544,14 +5656,17 @@ function rangedWeaponShot(weapon,power){
   default:return {speed:220+400*power,damage:.7+3.1*power,impact:80+165*power,life:.8+.6*power,reload:.48,minReload:.23,r:2.5+power*1.6,power,pierce:0};
  }
 }
+function rangedReloadTime(shot,build=progress){
+ const reloadRate=(1+.15*upgradeCount('swing',build))*evolutionAttackRate(build);
+ return Math.max(shot.minReload,shot.reload/reloadRate)*(1+.1*itemCount('counterweight',build))*(1-Math.min(.5,.1*upgradeCount('shield',build)));
+}
 function fireArrow(power,angle){
  if(hero!=='archer'||!combatInputEnabled()||bowShotCooldown>0||bowDrawStage(power)==='idle')return false;
  const weapon=equippedWeapon(),shot=rangedWeaponShot(weapon,power);
  const ux=Math.cos(angle),uy=Math.sin(angle),speed=shot.speed*(1+.12*itemCount('shieldBloom'))*(1+.15*itemCount('mirrorLens'));
  arrows.push({weapon,x:p.x+ux*23,y:p.y+uy*23,vx:ux*speed,vy:uy*speed,r:shot.r,life:shot.life,power:shot.power,damage:shot.damage,
   impact:shot.impact,reflected:true,deflections:0,pierce:shot.pierce+Math.min(2,itemCount('counterweight')),hitTargets:new Set()});
- const reloadRate=(1+.15*upgradeCount('swing'))*evolutionAttackRate();
- bowShotCooldown=Math.max(shot.minReload,shot.reload/reloadRate)*(1+.1*itemCount('counterweight'))*(1-Math.min(.5,.1*upgradeCount('shield')));
+ bowShotCooldown=rangedReloadTime(shot);
  p.a=angle;p.target=angle;p.vel=0;playSoundCue('shot-'+weapon);return true;
 }
 function reflectArrowProjectile(arrow,ox,oy){
@@ -5842,8 +5957,11 @@ function drawMeleeWeapon(travel=0){
 }
 
 
-function mageMaxMana(){return Math.min(190,100+(hasEvolved()?10:0)+15*itemCount('shieldBloom'))}
-function mageManaRegen(){return Math.min(22,8+Number(hasEvolved())+1.5*upgradeCount('regen')+1.5*itemCount('shieldBloom')+.75*itemCount('mossCharm'))}
+function mageMaxMana(build=progress){return Math.min(190,100+(hasEvolved(build)?10:0)+15*itemCount('shieldBloom',build))}
+function mageManaRegen(build=progress){return Math.min(22,8+Number(hasEvolved(build))+1.5*upgradeCount('regen',build)+1.5*itemCount('shieldBloom',build)+.75*itemCount('mossCharm',build))}
+function mageCooldownMultiplier(build=progress,stats=playerStats(build)){
+ return Math.max(.45,1-.12*itemCount('shieldBloom',build)-.1*upgradeCount('shield',build)-.1*itemCount('hourglass',build))/Math.max(.7,stats.swing);
+}
 function restoreMageMana(amount){if(hero!=='mage'||amount<=0)return 0;const before=mageMana;mageMana=Math.min(mageMaxMana(),mageMana+amount);return mageMana-before}
 function refreshManaHud(){
  const bar=document.querySelector('#mana-hud');if(!bar)return;
@@ -6519,8 +6637,7 @@ function castMageSpell(path){
   if(error){showMageFeedback('invalid',error,error,1.35);return false}
  }
  mageMana=Math.max(0,mageMana-spell.mana);refreshManaHud();
- const cooldownMult=Math.max(.45,1-.12*itemCount('shieldBloom')-.1*upgradeCount('shield')-.1*itemCount('hourglass'))/Math.max(.7,playerStats().swing);
- mageCooldowns[path]=arenaTime+spell.cooldown*cooldownMult;
+ mageCooldowns[path]=arenaTime+spell.cooldown*mageCooldownMultiplier();
  mageGlobalReady=arenaTime+.18;
  showMageFeedback('cast',path+' · '+spell.name,path+' · '+spell.name+' · -'+spell.mana+' MP',1.8);
  pulseMageRunes(path,'cast');
@@ -8844,5 +8961,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.64';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.65';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
