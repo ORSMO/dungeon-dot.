@@ -13,6 +13,10 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.57 — Sharper arena rendering
+
+The arena now uses the device's display density where it can. A 4-million-pixel arena limit and a separate 3-million-pixel room-art cache limit bound rendering cost on oversized displays. The room art cache also uses higher-quality resampling. Camera framing, touch positions and existing artwork use the same coordinates as before.
+
 ## V8.56 — Loot presentation
 
 The nearby item panel now shows painted flask and relic art, keeps the purchase button easy to tap, and gives rare finds a distinct border. Small item plaques appear near visible pedestals and give way to the full card when an item is within reach.
