@@ -1207,6 +1207,21 @@ test('door artwork tracks the room lock and opens without replaying on entry', (
  assert.deepEqual({...result,moving:Math.round(result.moving*100)/100},{locked:0,unlock:0,moving:.5,settled:1,reduced:1,reentry:1,relocked:0});
 });
 
+test('the Old Dungeon art is scoped to its boss arena and its gate leaves clear the opening',()=>{
+ const result=run([
+  method('isKeepShowcase'),method('drawKeepShowcaseGate'),
+  'const atlas={naturalWidth:1774,naturalHeight:887},images=[];',
+  'const noop=()=>{},g={drawImage:(...args)=>images.push(args.slice(5,9)),fillRect:noop,save:noop,restore:noop,beginPath:noop,rect:noop,clip:noop,createLinearGradient:()=>({addColorStop:noop})};',
+  'const backdrops=[isKeepShowcase(null,"boss"),isKeepShowcase("basic","boss"),isKeepShowcase("red","boss"),isKeepShowcase(null,"combat"),isKeepShowcase(null,"sandbox")];',
+  'const gate=amount=>{images.length=0;drawKeepShowcaseGate(atlas,amount,1);return images.slice()};',
+  'const closed=gate(0),opening=gate(.5),open=gate(1);'
+ ],'{backdrops,closed,opening,open}');
+ assert.deepEqual(result.backdrops,[true,true,false,false,false]);
+ assert.deepEqual(result.closed,[[-39,-14,78,28],[-29,-10,29,20],[0,-10,29,20]]);
+ assert.deepEqual(result.opening,[[-39,-14,78,28],[-43.5,-10,29,20],[14.5,-10,29,20]]);
+ assert.deepEqual(result.open,[[-39,-14,78,28]]);
+});
+
 test('character pages preserve a stats fallback and only expose runes to Mage', () => {
  const result=run([
   declaration('CHARACTER_PAGES'),method('characterPage')
