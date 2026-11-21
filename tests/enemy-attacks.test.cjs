@@ -266,3 +266,64 @@ test('the first combat room teaches all three classes, retries cleanly, and only
  vm.runInNewContext(script.replace(startup,()=>probe+startup),makeGameContext(value=>{result=value}),{timeout:5000});
  assert.deepEqual(Array.from(result),['classic','archer','mage']);
 });
+
+test('authored encounters keep every doorway and objective reachable across biomes and classes',()=>{
+ const probe=`
+  const variants=[null,'red','green','blue'],passed=[];
+  for(const character of ['classic','archer','mage']){
+   selectedHero=character;beginNewSlot(1,true);
+   for(const biome of variants){
+    dungeonDepth=biome===null?1:2;selectedBiome=biome;buildDungeon();
+    const id=biome??'basic',matches=dungeon.filter(room=>room.encounter===id);
+    const check=(value,reason)=>{if(!value)throw Error(character+' / '+id+': '+reason)};
+    check(matches.length===1&&!matches[0].openingLesson&&validateDungeonTopology(dungeon),'bad encounter assignment');
+    const room=matches[0],entry=room.doors[0].side;
+    enterRoom(room.id,entry);
+    check(enemies.length===8&&!dungeonEvent&&!portals.length,'unexpected roster, event or portal');
+    const startPoints=[[62,F/2],[W-62,F/2],[W/2,62],[W/2,F-62]];
+    for(const e of enemies){
+     check(safeFloor(e.x,e.y,e.r+2),'spawn in blocked geometry: '+e.shape);
+     check(startPoints.every(([x,y])=>Math.hypot(x-e.x,y-e.y)>75),'spawn crowds a door: '+e.shape);
+    }
+    // Flood-fill a player-radius route over the full authored floor.
+    const step=8,key=(x,y)=>x+','+y,queue=[[W/2,F/2]],seen=new Set([key(W/2,F/2)]);
+    for(let i=0;i<queue.length;i++){
+     const [x,y]=queue[i];
+     for(const [dx,dy] of [[step,0],[-step,0],[0,step],[0,-step]]){
+      const nx=x+dx,ny=y+dy,k=key(nx,ny);
+      if(!seen.has(k)&&safeFloor(nx,ny,9)){seen.add(k);queue.push([nx,ny])}
+     }
+    }
+    const targets=[...startPoints,...enemies.map(e=>[e.x,e.y]),...dungeonNests.map(n=>[n.x,n.y])];
+    for(const [x,y] of targets)check(queue.some(([a,b])=>Math.hypot(x-a,y-b)<=12),'route to objective blocked');
+    check(!document.querySelector('#opening-guide').hidden,'missing encounter hint');
+    if(id==='basic'){
+     const bolt=wallFixtures[0],shooter=enemies.find(e=>e.shape==='shooter');
+     p.x=bolt.x+40;p.y=bolt.y;arenaTime=bolt.readyAt+1;shooter.shotWindup=.5;
+     updateWallFixtures(.01);check(!bolt.warnUntil,'bolt stacked with ranged windup');
+     shooter.shotWindup=0;updateWallFixtures(.01);check(bolt.warnUntil>arenaTime,'wall bolt did not start');
+    }else if(id==='red'){
+     check(floorGaps.length===2&&floorBridges.length===2&&wallFixtures[0]?.kind==='brazier','missing Foundry features');
+     check(floorVoid(.35*W,.29*F)&&!floorVoid(.35*W,.5*F)&&!floorVoid(.35*W,.10*F),'lava crossing lacks a bridge or outside route');
+    }else if(id==='green'){
+     const nest=dungeonNests[0];
+     enemies=[];updateRoomProgress();check(!room.cleared&&nest.hp===8,'nest did not gate the clear');
+     nest.spawned=nest.spawnLimit;nest.clock=0;updateDungeonMechanics(.1);
+     check(enemies.length===0,'nest ignored reinforcement cap');
+     nest.hp=0;
+    }else{
+     p.x=W/2;p.y=F/2;check(groundSlideFactor()===1,'middle Frost lane is slippery');
+     p.x=terrainPatches[0].x;p.y=terrainPatches[0].y;check(groundSlideFactor()>1,'missing ice lane');
+    }
+    enemies=[];updateRoomProgress();check(room.cleared&&document.querySelector('#opening-guide').hidden,'clear did not unlock');
+    flushCheckpoint();
+    check(continueSlot(1)&&currentRoom.cleared&&currentRoom.encounter===id&&enemies.length===0,'encounter changed or respawned after reload');
+    passed.push(character+'/'+id);
+   }
+  }
+  report(passed.length);
+ `;
+ let result;
+ vm.runInNewContext(script.replace(startup,()=>probe+startup),makeGameContext(value=>{result=value}),{timeout:5000});
+ assert.equal(result,12);
+});

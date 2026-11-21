@@ -657,7 +657,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  .pause-body{grid-template-columns:minmax(100px,.66fr) minmax(0,1.6fr)}
  .controls-body{grid-template-columns:minmax(106px,.70fr) minmax(0,1.5fr)}
 }
-</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.60</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.61</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
  <div class="pause-home">
   <div class="menu-header"><h2>Paused</h2><button id="settings-close" type="button" class="menu-control primary-control">Resume</button></div>
   <div class="pause-body">
@@ -746,7 +746,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.60</small>
+   <small>V8.61</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -1482,6 +1482,10 @@ function addSpecialRooms(rooms){
 }
 function makeBiomeTerrain(room){
  terrainPatches=[];hostileZones=[];friendlyZones=[];
+ if(room.encounter){
+  for(const [type,x,y,r] of ENCOUNTER_ROOMS[room.encounter].terrain||[])terrainPatches.push({type,x:x*W,y:y*F,r});
+  return;
+ }
  if(!['combat','cursed'].includes(room.kind)||!selectedBiome)return;
  const points=[[.36,.36],[.65,.64],[.35,.66],[.67,.34]];
  for(let i=0;i<points.length;i++){
@@ -1490,7 +1494,7 @@ function makeBiomeTerrain(room){
  }
 }
 function decorateBiomeLayout(room){
- if(!['combat','cursed'].includes(room.kind)||!selectedBiome)return;
+ if(room.encounter||!['combat','cursed'].includes(room.kind)||!selectedBiome)return;
  if(selectedBiome==='red'){
   for(const y of [.2,.76])walls.push({x:W*.5-9,y:F*y,w:18,h:44,type:'neutral'});
  }else if(selectedBiome==='green'){
@@ -3289,6 +3293,7 @@ function normalizeSavedRun(raw){
   if(!room||room.id!==i||!kinds.has(room.kind)||!Number.isFinite(room.w)||!Number.isFinite(room.h)||room.w<250||room.w>1600||room.h<250||room.h>1600||!Array.isArray(room.doors)||room.doors.length>4||!Number.isInteger(room.col)||!Number.isInteger(room.row))throw Error('Invalid dungeon');
   if(room.doors.some(door=>!DIRECTIONS[door.side]||!Number.isInteger(door.to)||door.to<0||door.to>=rooms.length))throw Error('Invalid door');
   if(room.openingLesson!==true||raw.depth!==1||room.kind!=='combat'||!rooms[0].doors.some(door=>door.to===i))delete room.openingLesson;
+  if(room.kind!=='combat'||room.shape!=='square'||room.openingLesson||room.encounter!==String(raw.biome??'basic')||!Object.hasOwn(ENCOUNTER_ROOMS,room.encounter))delete room.encounter;
   if(room.kind==='boss'&&(!Object.hasOwn(BOSS_BLUEPRINTS,room.bossKind)||room.cleared&&!room.bossDefeated))throw Error('Unknown boss');
   if(room.kind==='cursed'&&(!Array.isArray(room.curses)||!room.curses.length||room.curses.length>2||room.curses.some(id=>!Object.hasOwn(CURSE_TYPES,id))))throw Error('Unknown curse');
   if(typeof room.wallBreach!=='string'||!/^\d{1,4},\d{1,4}$/.test(room.wallBreach))delete room.wallBreach;
@@ -4093,6 +4098,34 @@ const ROOM_SHAPES={
  boss:{name:'BOSS CHAMBER',w:720,h:640,count:0},treasure:{name:'TREASURE ROOM',w:360,h:360,count:0},shop:{name:'SHOP',w:520,h:360,count:0},
  cursed:{name:'CURSED CHAMBER',w:680,h:500,count:22}
 };
+const ENCOUNTER_ROOMS={
+ basic:{
+  name:'Armory Crossfire',tip:'Break the Marksmen’s sightlines with cover. A wall bolt can hit the guards.',
+  walls:[[.33,.19,.07,.22],[.60,.59,.07,.22]],fixture:['bolt',.0375,.32,1,0],
+  enemies:[['square',.26,.27],['shooter',.71,.27],['round',.48,.30],['square',.72,.40],
+   ['round',.27,.63],['shooter',.28,.75],['square',.52,.70],['square',.74,.73]]
+ },
+ red:{
+  name:'Foundry Crossing',tip:'Take the bridges across the lava, or circle around the ends. Break the brazier to spill hot coals.',
+  walls:[[.44,.22,.12,.055],[.44,.73,.12,.055]],fixture:['brazier',.56,.2475,1,0],
+  gaps:[[.32,.16,.085,.68],[.595,.16,.085,.68]],bridges:[[.31,.43,.105,.14],[.585,.43,.105,.14]],
+  enemies:[['square',.22,.25],['emberling',.76,.25],['round',.22,.63],['cinderknight',.50,.63],
+   ['square',.75,.68],['emberling',.22,.77],['round',.50,.36],['square',.78,.76]]
+ },
+ green:{
+  name:'Nest Siege',tip:'Break the nest to stop reinforcements. Take the open side around the Root Guard.',
+  walls:[[.27,.39,.16,.06],[.58,.57,.17,.06]],nest:[.50,.25],
+  enemies:[['rootguard',.51,.43],['thornling',.74,.24],['round',.24,.25],['poison',.75,.40],
+   ['square',.22,.65],['thornling',.27,.74],['round',.53,.73],['square',.77,.74]]
+ },
+ blue:{
+  name:'Frozen Split Lanes',tip:'Use the pillars to break sightlines. Take the middle lane for steady footing.',
+  walls:[[.31,.27,.085,.10],[.61,.27,.085,.10],[.31,.63,.085,.10],[.61,.63,.085,.10]],
+  terrain:[['ice',.245,.49,34],['ice',.755,.51,34]],
+  enemies:[['icewisp',.23,.25],['square',.48,.31],['frostguard',.74,.25],['round',.23,.37],
+   ['square',.21,.66],['icewisp',.75,.72],['round',.52,.69],['square',.73,.60]]
+ }
+};
 // Deliberately steep population ramp. Dungeon five should demand an exceptional build.
 function roomEnemyTarget(room){
  const depth=Math.min(5,Math.max(1,dungeonDepth));
@@ -4204,6 +4237,8 @@ function buildDungeon(){
   for(const room of rooms){const col=room.col;room.col=-room.row;room.row=col;for(const door of room.doors)door.side=clockwise[door.side]}
  }
  if(dungeonDepth===1)rooms[rooms[0].doors[0].to].openingLesson=true;
+ const encounter=rooms.find(room=>room.kind==='combat'&&room.shape==='square'&&!room.openingLesson);
+ if(encounter)encounter.encounter=selectedBiome??'basic';
  dungeon=rooms;dungeon.find(room=>room.kind==='boss').bossKind=chooseBoss();lastDungeonSignature=dungeonSignature(rooms);
 }
 
@@ -5066,6 +5101,13 @@ function makeRoomLayout(room){
  walls.length=holes.length=portals.length=0;
  blankTiles();floorGaps=[];floorBridges=[];floorTraps=[];breakables=[];
  if(room.openingLesson)return;
+ if(room.encounter){
+  const design=ENCOUNTER_ROOMS[room.encounter];
+  for(const part of design.walls)walls.push({...rectFromLayout(room,part),type:'neutral'});
+  floorGaps=(design.gaps||[]).map(part=>rectFromLayout(room,part));
+  floorBridges=(design.bridges||[]).map(part=>rectFromLayout(room,part));
+  return;
+ }
  if(!['combat','cursed'].includes(room.kind))return;
  if(room.kind==='combat'&&setupRoomVariant(room)){
   placeRoomPortals(room);
@@ -5077,7 +5119,7 @@ function makeRoomLayout(room){
  if(room.shape==='big')holes.push({x:W*.35,y:F*.57,r:20});
  placeRoomPortals(room);
 }
-let openingWave=0;
+let openingWave=0,encounterGuideUntil=0;
 const OPENING_TIPS={
  classic:['Face the Footman to block. Swing with the right stick when it comes close.','Face the shot to send it back, or Dash across the dashed line.'],
  archer:['Move with the left stick. Aim with the right stick and release to fire.','Move sideways or Dash across the dashed line, then use the reload window.'],
@@ -5085,10 +5127,11 @@ const OPENING_TIPS={
 };
 function updateOpeningGuide(){
  const panel=document.querySelector('#opening-guide');
- panel.hidden=!currentRoom?.openingLesson||!!currentRoom.cleared||over;
+ const design=currentRoom?.encounter?ENCOUNTER_ROOMS[currentRoom.encounter]:null;
+ panel.hidden=!(currentRoom?.openingLesson||design)||!!currentRoom.cleared||over||!!design&&arenaTime>=encounterGuideUntil;
  if(panel.hidden)return;
- document.querySelector('#opening-guide-title').textContent=openingWave===0?'First encounter':'Read the shot';
- document.querySelector('#opening-guide-tip').textContent=OPENING_TIPS[hero][openingWave];
+ document.querySelector('#opening-guide-title').textContent=design?.name||(openingWave===0?'First encounter':'Read the shot');
+ document.querySelector('#opening-guide-tip').textContent=design?.tip||OPENING_TIPS[hero][openingWave];
 }
 function spawnOpeningThreat(){
  const points=[[W*.25,F*.25],[W*.75,F*.25],[W*.25,F*.75],[W*.75,F*.75],[W*.5,F*.5]];
@@ -5100,6 +5143,17 @@ function spawnOpeningThreat(){
  foe.abilityEnabled=false;
  foe.shootClock=1.7;
  enemies.push(foe);
+}
+function spawnEncounter(room){
+ const roster=ENCOUNTER_ROOMS[room.encounter].enemies;
+ room.count=roster.length;
+ let shooters=0;
+ for(const [shape,x,y] of roster){
+  const foe=makeEnemy(shape,x*W,y*F);
+  if(RANGED.includes(shape))foe.shootClock=2.8+shooters++*1.25;
+  else foe.abilityCooldown=Math.max(foe.abilityCooldown,3.5);
+  enemies.push(foe);
+ }
 }
 function enterRoom(id,entry=null){
  resetMageRoom();
@@ -5113,6 +5167,7 @@ function enterRoom(id,entry=null){
  const y=entry==='north'?62:entry==='south'?F-62:F/2;
  p={...p,x,y,safeX:x,safeY:y,fallReturn:null,vx:0,vy:0,kvx:0,kvy:0,sticky:null,wallContacts:new Set(),wallCooldowns:new Map(),portalCooldown:0,portalReady:false,falling:0,slowUntil:0,swimming:false,lavaTickAt:0,wallSpikeContact:false};
  enemies=[];pendingSplits=[];projectiles=[];artillery=[];gravityWells=[];reactionZones=[];bossFight=null;arrows=[];bowShotCooldown=0;openingWave=0;fatalHit=null;
+ encounterGuideUntil=currentRoom.encounter&&!currentRoom.cleared?arenaTime+8:0;
  healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];shards=[];portalFx=[];fallingFx=[];poisonPlayerTimer=0;playerPoisonGlow=0;
  doorCooldown=.7;meleeAudioSwing=false;queuedEnemyDefeat=null;inv=Math.max(inv||0,.9);
  sticks.forEach(stick=>{stick.dx=stick.dy=0});
@@ -5120,6 +5175,7 @@ function enterRoom(id,entry=null){
  if(!currentRoom.cleared){
   if(currentRoom.kind==='boss')startBossFight(currentRoom.bossKind);
   else if(currentRoom.openingLesson){currentRoom.count=2;spawnOpeningThreat()}
+  else if(currentRoom.encounter)spawnEncounter(currentRoom);
   else{
    const wanted=roomEnemyCount(currentRoom);currentRoom.count=wanted;
    for(let i=0;i<wanted;i++)spawn(selectedBiome&&i===0?currentBiome().enemies[0]:null);
@@ -5142,7 +5198,7 @@ function updateRoomProgress(){
    return;
   }
   currentRoom.cleared=true;for(let i=floorGaps.length-1;i>=0;i--)if(floorGaps[i].eventExpire)floorGaps.splice(i,1);eventCracks=[];rewardRoom();
-  if(currentRoom.openingLesson)updateOpeningGuide();
+  if(currentRoom.openingLesson||currentRoom.encounter)updateOpeningGuide();
  }
 }
 function checkRoomDoors(dt){
@@ -7138,7 +7194,7 @@ function propsKeepRoutesOpen(props){
  return [[W/2,62],[W-62,F/2],[W/2,F-62],[62,F/2],[W/2,F/2]].every(([x,y])=>visited.has(key(...cell(x,y))));
 }
 function initRoomProps(room){
- breakables=[];if(room.kind!=='combat'||room.openingLesson)return;
+ breakables=[];if(room.kind!=='combat'||room.openingLesson||room.encounter)return;
  if(!Array.isArray(room.props)){
   room.props=[];let seed=((room.id+19)*912367+(room.layoutId+3)*379721+dungeonDepth*1273)>>>0;
   const rand=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296};
@@ -7268,6 +7324,11 @@ function mechanicSpot(x,y,r=16){
 function setupDungeonMechanics(room){
  dungeonNests=[];trapControls=[];dungeonEvent=null;eventCracks=[];
  if(room.kind!=='combat'||room.cleared||room.openingLesson)return;
+ if(room.encounter){
+  const nest=ENCOUNTER_ROOMS[room.encounter].nest;
+  if(nest)dungeonNests.push({x:nest[0]*W,y:nest[1]*F,r:19,hp:8,maxHp:8,clock:7.5,spawned:0,spawnLimit:4});
+  return;
+ }
  // A pressure plate and a bat-operated lever control separate spike lanes.
  for(let i=0;i<Math.min(2,floorTraps.length);i++){
   const t=floorTraps[i],cx=t.x+t.w/2,cy=t.y+t.h/2;
@@ -7298,6 +7359,14 @@ let wallFixtures=[];
 function setupWallFixtures(room){
  wallFixtures=[];
  if(room.openingLesson||room.kind!=='combat'&&room.kind!=='cursed')return;
+ if(room.encounter){
+  const fixture=ENCOUNTER_ROOMS[room.encounter].fixture;
+  if(fixture){
+   const [kind,x,y,nx,ny]=fixture;
+   wallFixtures.push({kind,x:x*W,y:y*F,nx,ny,hp:2,warnUntil:0,activeUntil:0,readyAt:arenaTime+1.4,hits:new Set(),shot:null});
+  }
+  return;
+ }
  const random=portalRoomRandom(room);
  const masonry=walls.filter(w=>!w.moving&&!w.mageBone);
  const routeTiles=masonry.filter(w=>w.tile&&masonry.some(other=>other!==w&&
@@ -7438,7 +7507,8 @@ function updateWallFixtures(dt){
  for(const f of wallFixtures){
   if(f.kind==='bolt'&&f.hp>0){
    if(f.warnUntil&&arenaTime>=f.warnUntil)fireWallBolt(f);
-   else if(!currentRoom.cleared&&!f.warnUntil&&arenaTime>=f.readyAt&&!p.falling){
+   else if(!currentRoom.cleared&&!f.warnUntil&&arenaTime>=f.readyAt&&!p.falling&&
+       (!currentRoom.encounter||!enemies.some(enemy=>enemy.hp>0&&enemy.shotWindup>0))){
     const {out,across}=fixtureSide(f,p.x,p.y),mount=fixtureMountPoint(f);
     if(out>12&&out<110&&Math.abs(across)<17&&weaponLineClear(p.x,p.y,mount.x,mount.y,1))f.warnUntil=arenaTime+.68;
    }
@@ -7644,7 +7714,7 @@ function hitNest(n,power){
  if(n.hp<=0){
   playSoundCue('nest');shockwave(n,260,83);
   for(const e of enemies)if(e.hp>0&&Math.hypot(e.x-n.x,e.y-n.y)<83+e.r)e.hp-=2;
-  if(Math.random()<.2)spawnNear(n.x,n.y,'armored',false,32);
+  if(n.spawnLimit===undefined&&Math.random()<.2)spawnNear(n.x,n.y,'armored',false,32);
  }
  return true;
 }
@@ -7704,7 +7774,7 @@ function updateDungeonMechanics(dt){
   if(Math.hypot(p.x-sw.x,p.y-sw.y)<sw.r+8||enemies.some(e=>e.hp>0&&Math.hypot(e.x-sw.x,e.y-sw.y)<sw.r+e.r))triggerTrapControl(sw);
  }
  for(const n of dungeonNests){
-  if(n.hp<=0)continue;n.clock-=dt;
+  if(n.hp<=0||n.spawned>=(n.spawnLimit??Infinity))continue;n.clock-=dt;
   if(n.clock<=0){n.clock=6.5+Math.random()*2.8;
    if(enemies.filter(e=>e.hp>0).length<Math.min(MAX_BODIES-2,currentRoom.count+8)){
     const e=spawnNear(n.x,n.y,Math.random()<.65?'round':'square',false,n.r+12);if(e)n.spawned++;
@@ -8445,7 +8515,7 @@ document.querySelector('#control-opacity').oninput=e=>{controls.opacity=Number(e
 document.querySelector('#floating-controls').onchange=e=>{controls.floating=e.target.checked;saveControls()};
 document.querySelector('#controls-reset').onclick=()=>{controls={...defaultControls,positions:defaultControls.positions.map(a=>[...a])};dashControl={x:.78,y:.76};syncControls();saveDashControl();saveControls()};async function goFullscreen(){try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock)await screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}document.querySelector('#fullscreen-toggle').onclick=goFullscreen;document.querySelector('#rotate-fullscreen').onclick=goFullscreen;
 function frame(t){updateDungeonAudio();const previousRenderAngle=p.a;const damageBefore=captureDamage(),oldPlayerHp=hp;const protectedPracticeHp=inSandbox()&&!sandbox.attacks?hp:null;pendingSplits=[];let dt=Math.min((t-last)/1000||0,.035);last=t;if(document.hidden||portraitLayout.matches||shieldPaused||!document.querySelector('#character-panel').hidden||persistencePaused()){requestAnimationFrame(frame);return}
-if(settings.hidden&&!editingControls&&document.querySelector('#sandbox-panel').hidden){recordVisibleEncounters();arenaTime+=dt;updateSynergies(dt);if(!over){updateItemEffects(dt);updateBiomeWorld(dt);updateCurses(dt);updateDungeonMechanics(dt);updateFloorTraps();updateWallFixtures(dt)}if(!over){shieldUpdate(dt);rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage,true,'bleed')}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&playerBleed.length===0&&!p.swimming){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){const where=p.fallReturn||safeRespawn();p.x=where.x;p.y=where.y;p.safeX=p.x;p.safeY=p.y;p.kvx=p.kvy=p.vx=p.vy=0;p.sticky=null;p.wallContacts=new Set();p.wallCooldowns=new Map();p.portalCooldown=1;p.fallReturn=null;hp=Math.max(0,hp-25);inv=Math.max(inv,1.5);if(hp<=0){over=true;fatalHit='pit'}showItemNotice('FELL INTO THE ABYSS · -25 HP')}}
+if(settings.hidden&&!editingControls&&document.querySelector('#sandbox-panel').hidden){recordVisibleEncounters();arenaTime+=dt;if(encounterGuideUntil>0&&arenaTime>=encounterGuideUntil){encounterGuideUntil=0;updateOpeningGuide()}updateSynergies(dt);if(!over){updateItemEffects(dt);updateBiomeWorld(dt);updateCurses(dt);updateDungeonMechanics(dt);updateFloorTraps();updateWallFixtures(dt)}if(!over){shieldUpdate(dt);rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage,true,'bleed')}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&playerBleed.length===0&&!p.swimming){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){const where=p.fallReturn||safeRespawn();p.x=where.x;p.y=where.y;p.safeX=p.x;p.safeY=p.y;p.kvx=p.kvy=p.vx=p.vy=0;p.sticky=null;p.wallContacts=new Set();p.wallCooldowns=new Map();p.portalCooldown=1;p.fallReturn=null;hp=Math.max(0,hp-25);inv=Math.max(inv,1.5);if(hp<=0){over=true;fatalHit='pit'}showItemNotice('FELL INTO THE ABYSS · -25 HP')}}
 healFx=healFx.filter(f=>(f.life-=dt)>0);wallFx=wallFx.filter(f=>{f.life-=dt;if(f.type==='particle'){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.exp(-5*dt);f.vy*=Math.exp(-5*dt)}return f.life>0});elementFx=elementFx.filter(f=>(f.life-=dt)>0);puddles=puddles.filter(q=>(q.life-=dt)>0);poisonPuddles=poisonPuddles.filter(q=>(q.life-=dt)>0);
 if(!over&&!p.falling){let l=sticks[0],ox=p.x,oy=p.y;
 poisonPlayerTimer=Math.max(0,poisonPlayerTimer-dt);playerPoisonGlow=Math.max(0,playerPoisonGlow-dt);
@@ -8512,7 +8582,7 @@ if(e.isTreasure){
   const force=e.panicTime>0?55:dir?70:22;
   e.vx+=steer.x*force*dt;e.vy+=steer.y*force*dt;
  }
- if(enemyAttacksEnabled()){if(e.shotWindup>0){e.shotWindup-=dt;if(e.shotWindup<=0){fireRanged(e,e.shotTarget||p);e.shotTarget=null;e.shootClock=(e.shape==='cannon'?3.9:e.shape==='scatter'?2.7:e.shape==='seeker'?3.2:2.35)*(e.elite?.8:1)}}else{e.shootClock-=dt;if(e.shootClock<=0&&d<265&&e.phaseIn<=0){if(!weaponLineClear(e.x,e.y,p.x,p.y,4)){e.shootClock=.45+Math.random()*.25}else if(enemies.filter(other=>other.shotWindup>0).length>=3+Math.floor(Math.min(5,dungeonDepth)/2))e.shootClock=.25;else{e.shotTarget={x:clamp(p.x+(e.shape==='cannon'?(p.vx||0)*.5:0),25,W-25),y:clamp(p.y+(e.shape==='cannon'?(p.vy||0)*.5:0),25,F-25)};e.shotWindup=(currentRoom.openingLesson?.9:e.shape==='cannon'?.8:.55)*(e.elite?.8:1)}}}}
+ if(enemyAttacksEnabled()){if(e.shotWindup>0){e.shotWindup-=dt;if(e.shotWindup<=0){fireRanged(e,e.shotTarget||p);e.shotTarget=null;e.shootClock=(e.shape==='cannon'?3.9:e.shape==='scatter'?2.7:e.shape==='seeker'?3.2:2.35)*(e.elite?.8:1)}}else{e.shootClock-=dt;if(e.shootClock<=0&&d<265&&e.phaseIn<=0){if(!weaponLineClear(e.x,e.y,p.x,p.y,4)){e.shootClock=.45+Math.random()*.25}else if(enemies.filter(other=>other.shotWindup>0).length>=(currentRoom.encounter?1:3+Math.floor(Math.min(5,dungeonDepth)/2))||currentRoom.encounter&&wallFixtures.some(f=>f.kind==='bolt'&&f.warnUntil>arenaTime))e.shootClock=.25;else{e.shotTarget={x:clamp(p.x+(e.shape==='cannon'?(p.vx||0)*.5:0),25,W-25),y:clamp(p.y+(e.shape==='cannon'?(p.vy||0)*.5:0),25,F-25)};e.shotWindup=(currentRoom.openingLesson?.9:e.shape==='cannon'?.8:.55)*(e.elite?.8:1)}}}}
 }else if(enemyMovementEnabled()&&d>21){
  const avoid=teamworkVector(e,target,d);
  e.vx+=avoid.x*62*dt*(e.allyBoostUntil>arenaTime?1.65:1);e.vy+=avoid.y*62*dt*(e.allyBoostUntil>arenaTime?1.65:1);
@@ -8682,5 +8752,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.60';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.61';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
