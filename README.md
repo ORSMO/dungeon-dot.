@@ -2,6 +2,16 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.63 — Level 8 and deep trials
+
+The automatic level-8 evolution now has its own sound and a brief gold effect. The evolved hero keeps a gold marker and portrait trim. The Character screen previews the upgrade before level 8.
+
+- **Dungeon 5 — Iron Trial.** Clear the opening biome encounter with two elite guards, then defeat the boss to earn the Iron Seal.
+- **Dungeon 8 — Sigil Trial.** Defeat a boss with a 15% shorter signature cooldown to earn the Sigil Seal. Attack warning times remain the same.
+- **Dungeon 12 — Crown Trial.** Clear both challenges to earn the Crown Seal.
+
+Earned seals and the next trial appear under Character → Run. Seals belong to the current save slot and have no stat bonuses. Test Room fights do not award seals.
+
 ## V8.62 — Boss routes and early combat pacing
 
 The door you entered through becomes the Old Dungeon route. Once the boss is defeated, all four doors lead to a fresh dungeon one depth lower. The Dungeon 3 victory recap still appears before you can continue.
