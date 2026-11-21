@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.51 — Bosses keep attacking
+
+Boss stun states have been removed. Gatekeeper bosses briefly expose their guard after finishing a charge or taking a returned projectile. Returned projectiles, knocked-back minions and broken armor keep their damage or vulnerability effects. They no longer interrupt a boss's current attack. Boss contact remains dangerous during recovery.
+
 ## V8.50 — Beyond the Torchlight
 
 The title screen plays an original 58-second stereo instrumental arranged for flute, plucked strings, low bowed strings and bells. The track loops after the first interaction and fades into dungeon audio when a run begins. The Music and ambience slider controls it, and the soundtrack is bundled for offline Android play.

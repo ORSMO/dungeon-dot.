@@ -563,7 +563,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  .pause-body{grid-template-columns:minmax(100px,.66fr) minmax(0,1.6fr)}
  .controls-body{grid-template-columns:minmax(106px,.70fr) minmax(0,1.5fr)}
 }
-</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.50</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon">📱</div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.51</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count">● 0</small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
  <div class="pause-home">
   <div class="menu-header"><h2>Paused</h2><button id="settings-close" type="button" class="menu-control primary-control">Resume</button></div>
   <div class="pause-body">
@@ -650,7 +650,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.50</small>
+   <small>V8.51</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -1105,7 +1105,6 @@ function drawPaintedBoss(unit,flash){
    artPath(g,[[x,y-5],[x+4,y],[x,y+5],[x-4,y]],paint?.color||'#b5ddf9','#e9f6ff');
   }
  }
- if(unit.state==='stunned'){g.fillStyle='#fff2b8';g.textAlign='center';g.font='bold 11px monospace';g.fillText('STUNNED',0,-size/2-4)}
  return true;
 }
 
@@ -1227,7 +1226,7 @@ const BOSS_BLUEPRINTS = {
  furnace:{name:'FURNACE WARDEN',archetype:'gatekeeper',hp:112,color:'#f49b58',biome:'red',element:'fire',hint:'BAIT THE CHARGE · WALL CRASH = FIRE RING'},
  hydra:{name:'CINDER HYDRA',archetype:'crystal',hp:98,color:'#e58550',biome:'red',element:'fire',hint:'THREE FIRE BREATH LANES · RETURN FIRE ORBS'},
  phoenix:{name:'ASH PHOENIX',archetype:'slime',hp:114,color:'#ffb267',biome:'red',element:'fire',hint:'DODGE FLAME RINGS · IT REBIRTHS AFTER DEFEAT'},
- briar:{name:'BRIAR COLOSSUS',archetype:'gatekeeper',hp:122,color:'#a4b86a',biome:'green',element:'poison',hint:'ROOT CAGES HAVE AN EXIT · STRIKE WHEN STUNNED'},
+ briar:{name:'BRIAR COLOSSUS',archetype:'gatekeeper',hp:122,color:'#a4b86a',biome:'green',element:'poison',hint:'ROOT CAGES HAVE AN EXIT · STRIKE AFTER THE CHARGE'},
  matriarch:{name:'SPORE MATRIARCH',archetype:'crystal',hp:102,color:'#c398ca',biome:'green',element:'poison',hint:'SPREADING SPORE BLOOMS · REFLECT PROJECTILES'},
  mire:{name:'MIRE TWINS',archetype:'slime',hp:120,color:'#9cce72',biome:'green',element:'poison',hint:'WATCH POISON LANDINGS · TWINS CREATE A TETHER'},
  glacier:{name:'GLACIER KNIGHT',archetype:'gatekeeper',hp:118,color:'#a6d9f5',biome:'blue',element:'frost',hint:'WALL CRASHES CREATE FROST SHARDS AND SPIKES'},
@@ -1419,8 +1418,13 @@ function updateBiomeBossUnit(unit,dt){
    unit.trailClock=(unit.trailClock||0)-dt;
    if(unit.trailClock<=0){unit.trailClock=.3;bossZone(unit,id==='furnace'?'fire':'roots',22,2.8,.25,unit.x,unit.y)}
   }
-  if(old==='charge'&&unit.state==='stunned'&&id==='glacier')radialBossShots(unit,8);
-  if(old==='stunned'&&unit.state==='recover'&&id==='briar')spawnBiomeSummons(unit,'thornling',unit.phase2?2:1);
+  if(old==='charge'&&unit.state==='recover'){
+   if(id==='glacier')radialBossShots(unit,8);
+   if(id==='briar')unit.summonAfterCharge=true;
+  }
+  if(old==='recover'&&unit.state!=='recover'&&unit.summonAfterCharge){
+   unit.summonAfterCharge=false;spawnBiomeSummons(unit,'thornling',unit.phase2?2:1);
+  }
   return true;
  }
  if(['hydra','matriarch','oracle'].includes(id)){
@@ -1606,9 +1610,6 @@ function updateBossSpecial(dt){
   if(special.elapsed>=special.duration){
    fight.special=null;
    for(const unit of living)unit.timer=Math.max(unit.timer,1.15);
-   if(special.unit.kind==='gatekeeper'){
-    special.unit.state='stunned';special.unit.timer=1.8;
-   }
   }
   return;
  }
@@ -1621,7 +1622,7 @@ function updateBossSpecial(dt){
  fight.specialCooldown=unit.phase2?5.4:7.2;
 }
 function bossSignatureImpact(u,old){
- if(old==='charge'&&u.state==='stunned'){
+ if(old==='charge'&&u.state==='recover'){
   if(u.variant==='gatekeeper')bossSignatureQuake(u);
   if(u.variant==='furnace')bossSignatureRing(u,'fire',7,85,24,.75,1.4);
   if(u.variant==='briar')bossRootCage(u);
@@ -1828,7 +1829,6 @@ function drawBiomeBossBody(unit,flash){
   g.beginPath();for(let i=0;i<7;i++){const a=i*Math.PI*2/7,rr=r*(i%2?.9:1.1);if(i)g.lineTo(Math.cos(a)*rr,Math.sin(a)*rr);else g.moveTo(Math.cos(a)*rr,Math.sin(a)*rr)}g.closePath();g.fill();g.stroke();
  }else{g.beginPath();g.ellipse(0,2,r,r*.9,0,0,Math.PI*2);g.fill();g.stroke();g.fillStyle='#5b7c42';g.beginPath();g.arc(-r*.45,-r*.5,7,0,Math.PI*2);g.fill()}
  g.fillStyle='#292338';g.beginPath();g.arc(-8,-3,3.5,0,Math.PI*2);g.arc(8,-3,3.5,0,Math.PI*2);g.fill();
- if(unit.state==='stunned'){g.fillStyle='#fff1a9';g.textAlign='center';g.font='10px monospace';g.fillText('STUNNED',0,-r-16)}
  return true;
 }
 function biomeCatalogIcon(item){
@@ -3253,7 +3253,7 @@ function recordVisibleEncounters(){
  if(bossFight&&!bossFight.done&&bossFight.units.some(unit=>unit.hp>0&&visible(unit)))recordBossEncounter(bossFight);
 }
 function enemyDescription(entry){
- if(entry.boss)return BOSS_BLUEPRINTS[entry.id.slice(5)].hint||({gatekeeper:'Dodge its charge into a wall, then strike while it is stunned. Return its cannonballs.',crystal:'Return its crystals to break the armour and expose its core.',slime:'Avoid marked landings. Knock its small slimes back at it; defeat both halves after it splits.'}[entry.id.slice(5)]);
+ if(entry.boss)return BOSS_BLUEPRINTS[entry.id.slice(5)].hint||({gatekeeper:'Dodge its charge into a wall to open its guard. Returning cannonballs also opens the guard.',crystal:'Return its crystals to break the armour and expose its core.',slime:'Avoid marked landings. Knock its small slimes back at it; defeat both halves after it splits.'}[entry.id.slice(5)]);
  const descriptions={square:'Charges after a red warning line. A strong bat swing can interrupt it.',round:'Light on its feet: feints sideways, then rushes a marked position.',healer:'A green pulse heals nearby enemies. Interrupt its windup or focus it down.',merge:'Fusions grow dangerous; its rally pulse makes nearby enemies charge faster.',splitter:'Can summon two extra fragments, then splits into three when defeated.',mini:'A small, light fragment of a Fracture Golem.',armored:'Telegraphs an 18-damage ground slam, then recovers slowly. Strong swings pierce armour.',fire:'Flame rings hurt on contact and leave burning zones. Hard impacts cause extra bursts.',water:'Marks a location, then floods it with slippery water that can conduct electricity.',electric:'Marks the ground before an electric strike and a lingering charged zone.',rubber:'Ricochet charges rapidly and rebounds off walls with extra force.',poison:'Targets an area with poison that remains dangerous after it attacks.',magnet:'Pulls and pushes nearby bodies; a charged pulse slams anyone too close.',crystal:'Fires a five-way crystal shard burst after a visible warning.',bomb:'Arms a short fuse on its own or when struck hard. Leave the blast radius.',mirror:'Its marked pulse throws attackers away; hard hits also recoil toward you.',sponge:'Stores impact force and triggers a telegraphed shockwave.',regenerator:'Heals itself over time, then pulses to restore nearby allies.',bloodletter:'A marked blood strike inflicts damage and bleeding. Contact also bleeds.',gravity:'Marks a future gravity well; escape its pull before detonation.',laser:'Charges a beam before firing; walls redirect its path.',shooter:'Aims a warning line, then fires two reflectable shots.',scatter:'Telegraphs a five-shot fan. Escape sideways or reflect it.',frostcaster:'Aims before firing twin slowing ice bolts.',spitter:'Fires two poison globes toward a marked position.',cannon:'Locks onto your predicted location and calls a marked 22-damage artillery blast.',seeker:'Locks on before releasing a slow homing projectile. Reflect it with the bat.',bloodcaster:'Fires two telegraphed bleeding projectiles.',emberling:'Launches burning bolts after lining up the target.',cinderknight:'A heavy Ember Crucible knight with a marked short charge.',thornling:'A Verdant spitter that releases twin poisonous seeds.',rootguard:'A tough Verdant guardian that marks slowing root patches.',icewisp:'A fast Frostbound enemy with paired freezing shots.',frostguard:'Freezing ring slows anyone inside; impacts make it fire frost shards.',royalSlime:'Returns to the Ooze King to heal it. Knock it into the king to interrupt it.'};
  return descriptions[entry.id]||'A dungeon enemy. Watch its movement and use the bat to control the fight.';
 }
@@ -3347,7 +3347,7 @@ function bestiaryStats(entry,depth){
    vitals.push(['Armour plates',bossArmour(def)+' → '+bossArmour(def,true)]);
    body.push(['Core exposure','6 seconds']);
   }else if(kind==='gatekeeper'){
-   body.push(['Charge count','1 → 2'],['Wall crash stun','2.1 seconds']);
+   body.push(['Charge count','1 → 2'],['Wall crash opens guard',GATEKEEPER_CRASH_OPENING+' seconds'],['Returned shot opens guard',GATEKEEPER_RETURN_OPENING+' seconds']);
   }else if(id==='phoenix'){
    const rebirth=bossRebirthHealth(hp);
    vitals.push(['Rebirth HP','+'+rebirth+' HP'],['Total across both lives',hp+rebirth+' HP']);
@@ -3930,9 +3930,14 @@ function hurtBossPlayer(amount,x,y){
  p.kvx=(p.kvx||0)+dx/d*135;p.kvy=(p.kvy||0)+dy/d*135;
  if(hp<=0)over=true;
 }
+const GATEKEEPER_CRASH_OPENING=1.15;
+const GATEKEEPER_RETURN_OPENING=1.25;
+function bossGuardOpen(unit){
+ return unit.kind==='gatekeeper'&&(unit.guardOpenUntil||0)>arenaTime;
+}
 function damageBoss(unit,amount,source='bat'){
  if(!bossFight||bossFight.done||unit.hp<=0||unit.state==='rebirth')return false;
- if(unit.kind==='gatekeeper'&&(source==='bat'||source==='arrow')&&unit.state!=='stunned'){bossSpark(unit.x,unit.y);return false}
+ if(unit.kind==='gatekeeper'&&(source==='bat'||source==='arrow')&&!bossGuardOpen(unit)){bossSpark(unit.x,unit.y);return false}
  if(unit.kind==='crystal'&&unit.armour>0){
   const chargedArrow=source==='arrow'&&bowDrawStage(unit.lastArrowPower||0)==='strong'&&arenaTime>=(unit.arrowCrackAt||0);
   if(source==='projectile'||chargedArrow){
@@ -3941,15 +3946,14 @@ function damageBoss(unit,amount,source='bat'){
    else synergyProjectileHit(unit);
    bossSpark(unit.x,unit.y,'#a5efff');
    if(unit.armour===0){
-    unit.vulnerable=6;unit.state='recover';unit.timer=1;
+    unit.vulnerable=6;
     elementFx.push({type:'split',x:unit.x,y:unit.y,life:.5,maxLife:.5});
    }
   }else bossSpark(unit.x,unit.y,'#8eb4f5');
   return false;
  }
  unit.hp=Math.max(0,unit.hp-playerDamageAmount(amount,source));unit.flash=.16;if(source==='bat'||source==='arrow'){unit.lastHitBy=source;afterPlayerBatHit(unit,source)}if(source==='projectile')synergyProjectileHit(unit);
- if(unit.kind==='gatekeeper'&&source==='projectile'){unit.state='stunned';unit.timer=1.5;unit.chargesLeft=0}
- if(unit.kind==='slime'&&source==='minion'){unit.state='stunned';unit.timer=1.3}
+ if(unit.kind==='gatekeeper'&&source==='projectile')unit.guardOpenUntil=Math.max(unit.guardOpenUntil||0,arenaTime+GATEKEEPER_RETURN_OPENING);
  return true;
 }
 function bossBatSegment(angle,x=p.x,y=p.y){
@@ -3988,10 +3992,13 @@ function updateGatekeeper(unit,dt){
   if(nx!==unit.x||ny!==unit.y||unit.timer<=0){
    elementFx.push({type:'shock',x:unit.x,y:unit.y,radius:50,life:.35,maxLife:.35});
    unit.chargesLeft--;
-   if(unit.chargesLeft>0)beginGateCharge(unit,true);else{unit.state='stunned';unit.timer=2.1}
+   if(unit.chargesLeft>0)beginGateCharge(unit,true);
+   else{
+    unit.state='recover';unit.timer=GATEKEEPER_CRASH_OPENING;
+    unit.guardOpenUntil=Math.max(unit.guardOpenUntil||0,arenaTime+GATEKEEPER_CRASH_OPENING);
+   }
   }
  }else if(unit.state==='shotWarn'&&unit.timer<=0){fireBossVolley(unit,unit.phase2?3:1,'cannonball');unit.state='recover';unit.timer=1.6}
- else if(unit.state==='stunned'&&unit.timer<=0){unit.state='recover';unit.timer=.85}
 }
 function markCrystalSpikes(unit){
  const offsets=unit.phase2?[[0,0],[52,0],[-52,0],[0,52],[0,-52]]:[[0,0],[46,28],[-46,-28]];
@@ -4031,7 +4038,7 @@ function updateSlimeKing(unit,dt){
    unit.turn++;if(unit.turn%2===0)spawnBossSlimes(unit);
    unit.state='recover';unit.timer=unit.part?1.1:1.5;
   }
- }else if(unit.state==='stunned'&&unit.timer<=0){unit.state='recover';unit.timer=1}
+ }
 }
 function updateBossShots(dt,previousAngle,previousLag=0){
  for(const shot of bossFight.shots){
@@ -4097,7 +4104,7 @@ function updateBossFight(dt,previousAngle,previousLag=0,playerStart=p){
     if(!updateBiomeBossUnit(unit,dt)){const before=unit.state;if(unit.kind==='gatekeeper')updateGatekeeper(unit,dt);else if(unit.kind==='crystal')updateCrystalEye(unit,dt);else updateSlimeKing(unit,dt);bossSignatureImpact(unit,before)}
     updateBossSignature(unit,dt);
    }
-  }else if(unit.state==='stunned'){unit.timer-=dt;if(unit.timer<=0){unit.state='recover';unit.timer=1.2}}
+  }
   if(unit.state!=='jump'&&unit.state!=='rebirth'){
    const dashHit=unit.hitCooldown===0&&dashBatSweeps(unit,previousAngle);
    const swingHit=hero==='classic'&&unit.hitCooldown===0&&meleeIsSwinging()&&meleeSweep(unit.x,unit.y,unit.r,previousAngle,previousLag);
@@ -4112,18 +4119,18 @@ function updateBossFight(dt,previousAngle,previousLag=0,playerStart=p){
    }
    if(unit.hp<=0)continue;
    const strike=unit.state==='charge'?BOSS_DAMAGE.charge:BOSS_DAMAGE.contact;
-   const shieldWear=unit.state!=='stunned'&&enemyAttacksEnabled()?bossDamageAmount(strike)*1.8:0;
+   const shieldWear=enemyAttacksEnabled()?bossDamageAmount(strike)*1.8:0;
    if(blockShieldBody(unit,wasAirborne?unit.x:oldX,wasAirborne?unit.y:oldY,wasAirborne?p:playerStart,shieldWear))continue;
    const dx=p.x-unit.x,dy=p.y-unit.y,dist=Math.hypot(dx,dy),reach=unit.r+9;
    if(dist<reach){const nx=dist>.001?dx/dist:1,ny=dist>.001?dy/dist:0;
-    if(unit.state!=='stunned')hurtBossPlayer(strike,unit.x,unit.y);
+    hurtBossPlayer(strike,unit.x,unit.y);
     p.x=clamp(unit.x+nx*(reach+1),23,W-23);p.y=clamp(unit.y+ny*(reach+1),23,F-23);
    }
   }
  }
  updateBossZoneList(dt);
  updateBossShots(dt,previousAngle,previousLag);
- // Slimes return to the nearest living king; bat-knocked slimes interrupt it.
+ // Slimes return to the nearest living king; bat-knocked slimes damage it.
  for(const slime of enemies){
   if(!slime.bossMinion||slime.hp<=0)continue;
   const unit=bossFight.units.filter(u=>u.hp>0&&u.state!=='jump').sort((a,b)=>Math.hypot(a.x-slime.x,a.y-slime.y)-Math.hypot(b.x-slime.x,b.y-slime.y))[0];
@@ -4159,8 +4166,9 @@ function bossHint(){
  if(bossFight.variant==='hydra'&&unit.state==='breathWarn')return 'THREE FIRE LANES CHARGING · FIND A GAP';
  if(bossFight.variant==='mire'&&bossFight.split)return 'TWINS LINKED BY A SLOWING TETHER · SEPARATE THEM';
  if(unit.kind==='crystal'&&hero==='archer')return unit.armour>0?'STRONG ARROWS CRACK ARMOUR · '+unit.armour+' LEFT':'CORE EXPOSED · HIT BEFORE IT REBUILDS ARMOUR';
- if(variant?.hint)return variant.hint+(unit.state==='stunned'?' · STUNNED':'');
- if(bossFight.kind==='gatekeeper')return unit.state==='stunned'?'STUNNED · ATTACK NOW':unit.phase2?'DOUBLE CHARGE · WATCH FOR SEISMIC SLAMS':'DODGE CHARGES · RETURN CANNONBALLS · WATCH QUAKES';
+ if(bossGuardOpen(unit))return 'GUARD OPEN · ATTACK NOW';
+ if(variant?.hint)return variant.hint;
+ if(bossFight.kind==='gatekeeper')return unit.phase2?'DOUBLE CHARGE · WATCH FOR SEISMIC SLAMS':'DODGE CHARGES · RETURN CANNONBALLS · WATCH QUAKES';
  if(bossFight.kind==='crystal')return unit.armour>0?'REFLECT SPINNING CRYSTALS · ARMOUR '+unit.armour+'/4':'CORE EXPOSED · HIT BEFORE IT REBUILDS ARMOUR';
  return bossFight.split?'TWO KINGS · STICKY LANDINGS · DEFEAT BOTH':'STICKY LANDINGS · BAT SMALL SLIMES INTO THE KING';
 }
@@ -4316,11 +4324,10 @@ function drawBossFight(){
   const flash=unit.flash>0;
   if(drawPaintedBoss(unit,flash)||drawBiomeBossBody(unit,flash)){g.restore();continue}
   if(unit.kind==='gatekeeper'){
-   g.fillStyle=flash?'#ffe9b3':unit.state==='chargeWarn'?'#c44e47':unit.state==='stunned'?'#8d8194':'#5b5267';g.fillRect(-unit.r,-unit.r,unit.r*2,unit.r*2);
+   g.fillStyle=flash?'#ffe9b3':unit.state==='chargeWarn'?'#c44e47':'#5b5267';g.fillRect(-unit.r,-unit.r,unit.r*2,unit.r*2);
    g.strokeStyle='#e1bc78';g.lineWidth=4;g.strokeRect(-unit.r,-unit.r,unit.r*2,unit.r*2);
    g.fillStyle='#271f32';g.fillRect(-18,-7,36,12);g.fillStyle='#ffaf68';g.fillRect(-12,-4,7,5);g.fillRect(5,-4,7,5);
    g.fillStyle='#c3a57d';g.fillRect(unit.r+8,-12,7,40);g.fillStyle='#a091ad';g.fillRect(unit.r-1,-21,25,18);
-   if(unit.state==='stunned'){g.fillStyle='#fff1a9';g.font='bold 12px monospace';g.textAlign='center';g.fillText('STUNNED',0,-unit.r-12)}
   }else if(unit.kind==='crystal'){
    g.fillStyle=flash?'#fff':unit.armour>0?'#668cdb':'#dbbaff';g.beginPath();g.moveTo(0,-29);g.lineTo(24,0);g.lineTo(0,29);g.lineTo(-24,0);g.closePath();g.fill();
    g.strokeStyle='#c6edff';g.lineWidth=2;g.stroke();g.fillStyle='#261c49';g.beginPath();g.ellipse(0,0,12,7,0,0,Math.PI*2);g.fill();g.fillStyle='#f5f3ff';g.beginPath();g.arc(0,0,4,0,Math.PI*2);g.fill();
@@ -4394,7 +4401,7 @@ function setSandboxAttacks(value){
   for(const e of enemies){e.laserState='cooldown';e.laserClock=1.2;e.shootClock=1;e.bombTimer=0}
   if(bossFight){
    bossFight.shots=[];bossFight.hazards=[];bossFight.special=null;
-   for(const unit of bossFight.units)if(unit.state!=='stunned'){unit.state='recover';unit.timer=1.2}
+   for(const unit of bossFight.units){unit.state='recover';unit.timer=1.2;unit.guardOpenUntil=0;unit.summonAfterCharge=false}
   }
  }
  updateSandboxMenu();
@@ -8180,5 +8187,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.50';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.51';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
