@@ -13,6 +13,12 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.54 — Boss and trap feedback
+
+Boss charges, crashes, landings, volleys, beams, lightning and other signatures now sound as they go off. Dashed aim lines show the actual projectile fan just before the Gatekeeper family, Crystal Eye, Spore Matriarch or Prism Oracle fires. Cinder Hydra keeps its three breath lanes.
+
+Wall bolts, swinging chains, spilled embers and rising floor spikes now have distinct activation sounds. The existing danger warnings still play before the attacks. Damage and attack timings are unchanged.
+
 ## V8.53 — Enemy attack audio
 
 Regular enemies now have sound cues for charge and spell windups, ranged shots, laser warmup and fire, and bomb fuses and explosions. The seven projectile families have distinct launch sounds. Cannon fire, artillery impacts, and Root Guard patches also have cues. Nearby windups sound once per attack and repeated cues are rate-limited in crowds. The Sound Effects setting controls these cues.

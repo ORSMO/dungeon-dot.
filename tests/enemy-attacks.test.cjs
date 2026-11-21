@@ -117,6 +117,23 @@ function checkAttacks(character) {
  resolveEnemyContact(melee,melee.x,melee.y,p);
  expect(hp<50,'body contact failed to deal damage');
 
+ for(const [id,kind] of [['gatekeeper','cannonball'],['crystal','crystal'],['oracle','crystal']]){
+  for(const phase2 of [false,true]){
+   setup();startBossFight(id);
+   const unit=bossFight.units[0];unit.phase2=phase2;unit.state='shotWarn';
+   const segments=[],originalMove=g.moveTo,originalLine=g.lineTo;
+   let origin;
+   g.moveTo=(x,y)=>{origin={x,y}};
+   g.lineTo=(x,y)=>segments.push(Math.atan2(y-origin.y,x-origin.x));
+   drawBossHazards();
+   g.moveTo=originalMove;g.lineTo=originalLine;
+   expect(!bossFight.shots.length,id+' warning fired a projectile');
+   fireBossVolley(unit,kind);
+   const expectedCount=(id==='gatekeeper'?1:id==='crystal'?3:5)+(phase2?2:0);
+   expect(segments.length===expectedCount&&bossFight.shots.length===expectedCount,id+' warning count differs from its volley');
+   expect(bossFight.shots.every((shot,i)=>Math.abs(segments[i]-Math.atan2(shot.vy,shot.vx))<1e-9),id+' warning lanes missed the actual direction');
+  }
+ }
  let signatures=0,steps=0,bosses=0;
  for(const id of Object.keys(BOSS_BLUEPRINTS)){
   setup();startBossFight(id);
@@ -128,29 +145,29 @@ function checkAttacks(character) {
    expect(unit.state==='chargeWarn',id+' missing charge telegraph');
    warning('warn-charge');
    updateBossFight(unit.timer+.01,p.a);
-   expect(unit.state==='charge',id+' never charged');
+   expect(unit.state==='charge'&&cues.includes('boss-charge'),id+' never charged audibly');
    p.x=unit.x+17;p.y=unit.y;
    updateBossFight(.01,p.a);
    expect(hp<50,id+' charge did not hit');
    p.x=W*.25;unit.x=W-unit.r-18;unit.aim=0;
    updateBossFight(.01,p.a);
-   expect(unit.state==='recover'&&bossFight.hazards.length,id+' missing crash hazards');
+   expect(unit.state==='recover'&&bossFight.hazards.length&&cues.includes('boss-crash'),id+' missing crash hazards or sound');
    unit.timer=0;
    updateBossFight(.01,p.a);warning('warn-volley');
    updateBossFight(unit.timer+.01,p.a);
-   expect(bossFight.shots.some(shot=>shot.kind==='cannonball'),id+' did not fire its cannon');
+   expect(bossFight.shots.some(shot=>shot.kind==='cannonball')&&cues.includes('boss-cannon'),id+' did not fire its cannon audibly');
   }else if(unit.kind==='crystal'){
    expect(unit.state==='shotWarn'||unit.state==='breathWarn',id+' missing volley telegraph');
    warning('warn-volley');
    updateBossFight(unit.timer+.01,p.a);
-   expect(bossFight.shots.length>0,id+' did not fire a volley');
+   expect(bossFight.shots.length>0&&cues.includes(id==='hydra'?'boss-breath':'boss-shards'),id+' did not fire a volley audibly');
    unit.timer=0;
    updateBossFight(.01,p.a);
    expect(bossFight.hazards.length&&bossFight.hazards.every(hazard=>!hazard.active),id+' missing field telegraph');
    if(id==='oracle'){
     unit.prismClock=0;updateBossSignature(unit,.01);warning('warn-beam');
     updateBossSignature(unit,1.7);updateBossSignature(unit,.02);
-    expect(unit.prismState==='fire'&&hp<50,'Oracle beam failed to hit');
+    expect(unit.prismState==='fire'&&hp<50&&cues.includes('boss-beam'),'Oracle beam failed to hit or sound');
    }
   }else{
    expect(unit.state==='jumpWarn',id+' missing landing telegraph');
@@ -159,7 +176,7 @@ function checkAttacks(character) {
    expect(unit.state==='jump'&&hp===50,id+' hit during its launch');
    unit.turn=1;
    updateBossFight(.76,p.a);
-   expect(unit.state==='recover'&&hp<50&&bossFight.hazards.length,id+' missing landing damage or hazards');
+   expect(unit.state==='recover'&&hp<50&&bossFight.hazards.length&&cues.includes('boss-crash'),id+' missing landing damage, hazards or sound');
    expect(enemies.length>0,id+' failed to summon on its second landing');
    for(const summoned of enemies){
     updateEnemyBomb(summoned,.02);
@@ -176,6 +193,7 @@ function checkAttacks(character) {
    updateBossSpecial(Math.min(...signature.steps.map(step=>step.at))-.01);
    expect(hp===50&&!bossFight.shots.length&&signature.steps.every(step=>!step.hit),id+' resolved before the warning ended');
    for(const step of signature.steps){
+    const cueCount=cues.length;
     hp=50;inv=0;over=false;armourHp=bodyArmourStats().capacity;bossFight.shots=[];
     if(step.type==='line'){
      p.x=(step.x1+step.x2)/2;p.y=(step.y1+step.y2)/2;
@@ -194,6 +212,7 @@ function checkAttacks(character) {
      resolveBossSpecialStep(signature,step);
     }
     expect(hp<50,id+' '+step.type+' missed inside its attack');
+    expect(cues.length>cueCount&&cues.at(-1).startsWith('boss-'),id+' '+step.type+' released silently');
     steps++;
    }
    signatures++;

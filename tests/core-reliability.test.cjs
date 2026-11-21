@@ -188,13 +188,14 @@ test('wall bolt warns, stops at the first enemy, and can be disabled', () => {
     'const p={x:85,y:80},currentRoom={cleared:false},enemies=[{x:60,y:80,r:8,hp:5,phaseIn:0}];',
     'const enemyAttacksEnabled=()=>true,classicDashProtected=()=>false,damagedHealth=amount=>hp-amount;',
     'const weaponLineClear=()=>true,shieldBlocksLaser=()=>null,nearRect=()=>false;',
+    'const sounds=[],playEnemyAttack=(_,cue)=>sounds.push(cue);',
     'const f={kind:"bolt",x:20,y:80,nx:1,ny:0,hp:2,warnUntil:0,readyAt:0};wallFixtures=[f];',
     'updateWallFixtures(.02);const warning=f.warnUntil;arenaTime=1.4;updateWallFixtures(.02);const before=enemies[0].hp;',
     'arenaTime=1.7;updateWallFixtures(.02);const after=enemies[0].hp,stop=f.shot.x2;',
     'arenaTime=3;f.warnUntil=3.5;strikeWallFixture(f,2);',
     'arenaTime=4;updateWallFixtures(.02);'
-  ],'{warning,before,after,stop,hp,disabled:f.hp===0&&f.warnUntil===0}');
-  assert.deepEqual(result,{warning:1.6800000000000002,before:5,after:2,stop:50,hp:50,disabled:true});
+  ],'{warning,before,after,stop,hp,disabled:f.hp===0&&f.warnUntil===0,sounds}');
+  assert.deepEqual(result,{warning:1.6800000000000002,before:5,after:2,stop:50,hp:50,disabled:true,sounds:['trap-bolt']});
 });
 
 test('chains and spilled coals hurt enemies without repeating damage every frame', () => {
@@ -204,6 +205,7 @@ test('chains and spilled coals hurt enemies without repeating damage every frame
     'let arenaTime=1,wallFixtures=[],elementFx=[],inv=0,hp=50,over=false;',
     'const p={x:300,y:300},currentRoom={cleared:false},e={x:111,y:100,r:8,hp:10,vx:-110,vy:0,phaseIn:0},enemies=[e];',
     'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),enemyAttacksEnabled=()=>true,weaponLineClear=()=>true;',
+    'const sounds=[],playEnemyAttack=(_,cue)=>sounds.push(cue);',
     'const chain={kind:"chain",x:90,y:100,nx:1,ny:0,hp:2,readyAt:0,warnUntil:0,activeUntil:0,hits:new Set()};',
     'wallFixtures=[chain];updateWallFixtures(.02);const charge=chain.warnUntil;arenaTime=1.4;updateWallFixtures(.02);',
     'arenaTime=1.43;updateWallFixtures(.02);const afterChain=e.hp,push=e.vx;',
@@ -211,12 +213,25 @@ test('chains and spilled coals hurt enemies without repeating damage every frame
     'strikeWallFixture(brazier,2);updateWallFixtures(.02);const firstCoal=e.hp;',
     'arenaTime=1.45;updateWallFixtures(.02);const nextFrame=e.hp;',
     'arenaTime=2;updateWallFixtures(.02);const nextTick=e.hp;'
-  ],'{charge,afterChain,push,firstCoal,nextFrame,nextTick}');
+  ],'{charge,afterChain,push,firstCoal,nextFrame,nextTick,sounds}');
   assert.equal(result.charge,1.38);
   assert.equal(result.afterChain,8);
   assert.ok(result.push>0);
   assert.equal(result.firstCoal,result.nextFrame);
   assert.ok(result.nextTick<result.nextFrame);
+  assert.deepEqual(result.sounds,['trap-chain','trap-embers']);
+});
+
+test('floor spikes only sound once per nearby activation',()=>{
+ const result=run([
+  method('trapPhase'),method('updateFloorTraps'),
+  'let arenaTime=1.5,over=false,inv=1;const p={x:25,y:25},enemies=[],floorTraps=[{phase:0},{phase:0,distant:true}];',
+  'const currentRoom={cleared:false},audibleFloorTraps=new WeakSet(),enemyAttacksEnabled=()=>true,nearRect=(x,y,r,t)=>!t.distant;',
+  'const sounds=[],playSoundCue=cue=>sounds.push(cue);',
+  'updateFloorTraps();const before=sounds.length;arenaTime=1.81;updateFloorTraps();updateFloorTraps();',
+  'arenaTime=3;updateFloorTraps();arenaTime=5.31;updateFloorTraps();'
+ ],'{before,sounds}');
+ assert.deepEqual(result,{before:0,sounds:['trap-spikes','trap-spikes']});
 });
 
 test('fixtures have safe mounts and a broken masonry passage stays open on reentry', () => {
@@ -391,13 +406,14 @@ test('cleaves respect the marked arc and lightning hits once after its warning',
     'const hits=[],oracle={hp:80,variant:"oracle",kind:"crystal",state:"recover",timer:.4,x:360,y:320,r:25};',
     'const bossFight={units:[oracle],shots:[],hazards:[],special:null,specialCooldown:0,specialTurn:0};',
     'const enemyAttacksEnabled=()=>true,dashInvulnerable=()=>false,hurtBossPlayer=damage=>hits.push(damage);',
+    'const sounds=[],playSoundCue=cue=>sounds.push(cue);',
     method('bossSpecialHits'),method('resolveBossSpecialStep'),method('updateBossSpecial'),
     'const cleave={type:"arc",x:100,y:100,r:80,angle:0,spread:1};',
     'const inside=bossSpecialHits(cleave,155,110),behind=bossSpecialHits(cleave,50,100),far=bossSpecialHits(cleave,190,100);',
-    'updateBossSpecial(0);updateBossSpecial(.92);const before=hits.length;',
+    'updateBossSpecial(0);updateBossSpecial(.92);const before=hits.length,beforeSound=sounds.length;',
     'updateBossSpecial(.03);updateBossSpecial(.05);p.x=700;p.y=600;updateBossSpecial(1.4);'
-  ], '{inside,behind,far,before,hits,ended:bossFight.special===null}');
-  assert.deepEqual(result,{inside:true,behind:false,far:false,before:0,hits:[8],ended:true});
+  ], '{inside,behind,far,before,beforeSound,hits,ended:bossFight.special===null,sounds}');
+  assert.deepEqual(result,{inside:true,behind:false,far:false,before:0,beforeSound:0,hits:[8],ended:true,sounds:['boss-lightning','boss-lightning','boss-lightning']});
 });
 
 test('split bosses take turns and a dead caster cancels its pending signature', () => {
@@ -407,6 +423,7 @@ test('split bosses take turns and a dead caster cancels its pending signature', 
     'const right={...left,x:395};',
     'const bossFight={units:[left,right],shots:[],hazards:[],special:null,specialCooldown:0,specialTurn:0};',
     'const enemyAttacksEnabled=()=>true,dashInvulnerable=()=>true,hurtBossPlayer=()=>{throw Error("unexpected damage")};',
+    'const playSoundCue=()=>{};',
     method('bossSpecialHits'),method('resolveBossSpecialStep'),method('updateBossSpecial'),
     'updateBossSpecial(0);const first=bossFight.special.unit===left;',
     'updateBossSpecial(2);bossFight.specialCooldown=0;',
@@ -1243,13 +1260,14 @@ test('the first wall hit keeps a double charge going and the last opens the guar
  const result=run([
   declaration('GATEKEEPER_CRASH_OPENING'),method('bossGuardOpen'),method('beginGateCharge'),method('updateGatekeeper'),
   'const p={x:157,y:100},W=400,F=400,elementFx=[],clamp=(x,a,b)=>Math.min(b,Math.max(a,x)),enemyMovementEnabled=()=>true,bossMoveFactor=()=>1,fireBossVolley=()=>{};',
+  'const sounds=[],playSoundCue=cue=>sounds.push(cue);',
   'let arenaTime=4;const unit={kind:"gatekeeper",state:"charge",timer:2,aim:0,phase2:true,r:25,x:355,y:100,chargesLeft:2,turn:1};',
   'updateGatekeeper(unit,.1);const first=[unit.state,unit.chargesLeft,bossGuardOpen(unit)];',
   'unit.timer=.05;updateGatekeeper(unit,.1);unit.aim=0;updateGatekeeper(unit,.1);',
   'const last=[unit.state,unit.timer,unit.chargesLeft,bossGuardOpen(unit)];',
   'arenaTime=5.16;updateGatekeeper(unit,1.16);'
- ],'{first,last,after:unit.state,closed:!bossGuardOpen(unit),impacts:elementFx.length}');
- assert.deepEqual(result,{first:['chargeWarn',1,false],last:['recover',1.15,0,true],after:'shotWarn',closed:true,impacts:2});
+ ],'{first,last,after:unit.state,closed:!bossGuardOpen(unit),impacts:elementFx.length,sounds}');
+ assert.deepEqual(result,{first:['chargeWarn',1,false],last:['recover',1.15,0,true],after:'shotWarn',closed:true,impacts:2,sounds:['boss-crash','boss-charge','boss-crash']});
 });
 
 test('boss shields scale by 50 percent per dungeon and absorb final damage before health', () => {
