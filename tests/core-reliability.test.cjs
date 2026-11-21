@@ -40,6 +40,28 @@ function method(name) {
 function run(parts, result) {
   return new Function(parts.concat(['return (' + result + ');']).join('\n'))();
 }
+
+test('arena uses high-density phone pixels and limits oversized displays without moving controls',()=>{
+ const result=run([
+  method('rasterScale'),method('resizeArena'),
+  'const H=360,MAX_RASTER_EDGE=4096,ARENA_PIXEL_BUDGET=4000000;',
+  'let viewW=640,renderScale=1,box={width:740,height:360},writes=0;',
+  'const window={devicePixelRatio:3},arena={getBoundingClientRect:()=>box},g={};',
+  'let pixelWidth,pixelHeight;const c={get width(){return pixelWidth},get height(){return pixelHeight},set width(w){writes++;pixelWidth=w},set height(h){writes++;pixelHeight=h}};',
+  'const resizeJoysticks=ratio=>moves.push(ratio),moves=[];const size=()=>[c.width,c.height];',
+  'resizeArena();const phone=size(),initialMoves=moves.length;resizeArena();const unchanged=writes;',
+  'window.devicePixelRatio=2;resizeArena();const densityOnly=moves.length;',
+  'box={width:2560,height:1440};window.devicePixelRatio=1;resizeArena();const desktop=size();',
+  'box={width:7680,height:2160};window.devicePixelRatio=2;resizeArena();const huge=size();'
+ ],'{phone,unchanged,densityOnly,initialMoves,desktop,huge,quality:g.imageSmoothingQuality}');
+ assert.deepEqual(result.phone,[2220,1080]);
+ assert.deepEqual(result.desktop,[2560,1440]);
+ assert.equal(result.unchanged,2);
+ assert.equal(result.densityOnly,result.initialMoves);
+ assert.ok(result.huge[0]*result.huge[1]<=4_000_000);
+ assert.ok(Math.max(...result.huge)<=4096);
+ assert.equal(result.quality,'medium');
+});
 const evolutionMethods=[declaration('EVOLUTION_LEVEL'),method('hasEvolved'),method('evolutionAttackRate')];
 
 test('joined wall and bridge artwork removes internal seams without filling gaps', () => {

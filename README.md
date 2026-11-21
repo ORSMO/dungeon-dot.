@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.57 — Sharper arena rendering
+
+The arena now uses the device's display density where it can. A 4-million-pixel arena limit and a separate 3-million-pixel room-art cache limit bound rendering cost on oversized displays. The room art cache also uses higher-quality resampling. Camera framing, touch positions and existing artwork use the same coordinates as before.
+
 ## V8.56 — Loot presentation
 
 The nearby item panel now shows painted flask and relic art, keeps the purchase button easy to tap, and gives rare finds a distinct border. Small item plaques appear near visible pedestals and give way to the full card when an item is within reach.
