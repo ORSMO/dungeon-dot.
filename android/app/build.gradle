@@ -18,8 +18,8 @@ android {
         applicationId 'com.orsmo.dungeondot'
         minSdk 26
         targetSdk 36
-        versionCode 851
-        versionName '8.51'
+        versionCode 852
+        versionName '8.52'
         resValue 'string', 'app_name', 'Dungeon Dot'
     }
 
