@@ -468,6 +468,12 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  width:clamp(74px,13vw,132px);height:auto;display:block;margin:0 auto 6px;
  filter:drop-shadow(0 7px 7px #08070b);
 }
+#character-portrait[data-evolved=true]{
+ border-radius:50%;outline:1px solid #e6bc7d;outline-offset:3px;
+ background-color:#3b2d214f;
+}
+#character-evolution{display:block;margin-top:7px;color:#f2ce94;font:11px/1.35 system-ui}
+#run-records strong{white-space:normal;overflow-wrap:anywhere}
 #character-panel #character-name{margin:0;color:#ffedcb;font:700 clamp(17px,2.6vw,25px)/1 Georgia,serif}
 #character-progress,#character-coins{display:block;color:#e1c59d;margin:6px 0;font:11px/1.45 system-ui}
 #character-panel .character-note{margin:8px 0 0;color:#d1baa7;font-size:11px;line-height:1.45}
@@ -657,7 +663,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  .pause-body{grid-template-columns:minmax(100px,.66fr) minmax(0,1.6fr)}
  .controls-body{grid-template-columns:minmax(106px,.70fr) minmax(0,1.5fr)}
 }
-</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.62</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.63</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
  <div class="pause-home">
   <div class="menu-header"><h2>Paused</h2><button id="settings-close" type="button" class="menu-control primary-control">Resume</button></div>
   <div class="pause-body">
@@ -699,6 +705,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <h3 id="character-name"></h3>
    <small id="character-progress"></small>
    <small id="character-coins"></small>
+   <small id="character-evolution"></small>
    <p id="character-class-note" class="character-note"></p>
   </aside>
   <div class="character-main">
@@ -746,7 +753,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.62</small>
+   <small>V8.63</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -804,7 +811,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
     <div><dt>Biggest impact</dt><dd id="victory-impact"></dd></div>
     <div><dt>Biggest damage burst</dt><dd id="victory-damage"></dd></div>
    </dl>
-   <p>Choose a path into Dungeon 4, or return to the menu with your progress saved.</p>
+   <p>Continue into Dungeon 4 toward level 8 evolution. Clear Dungeon 5 to earn the Iron Seal.</p>
    <div class="victory-actions">
     <button id="victory-continue" type="button">Continue deeper</button>
     <button id="victory-menu" type="button">Save and return to menu</button>
@@ -1361,7 +1368,26 @@ function drawWorldScenery(){
  g.restore();
  return art;
 }
+function drawEvolutionMark(){
+ if(!hasEvolved())return;
+ g.save();g.strokeStyle='#f1ca8e';g.lineWidth=1.5;
+ for(const angle of [.32,Math.PI+.32]){
+  g.beginPath();g.ellipse(p.x,p.y+4,15,9,0,angle,angle+1.25);g.stroke();
+ }
+ const elapsed=arenaTime-evolutionAt;
+ if(!reducedWorldMotion.matches&&elapsed>=0&&elapsed<.9){
+  const progress=elapsed/.9;
+  g.globalAlpha=.7*(1-progress);
+  g.beginPath();g.arc(p.x,p.y,14+30*progress,0,Math.PI*2);g.stroke();
+  for(let i=0;i<6;i++){
+   const angle=i*Math.PI/3,r=14+27*progress,x=p.x+Math.cos(angle)*r,y=p.y+Math.sin(angle)*r;
+   artPath(g,[[x,y-3],[x+2,y],[x,y+3],[x-2,y]],'#ffe7ab');
+  }
+ }
+ g.restore();
+}
 function drawHeroPortrait(){
+ drawEvolutionMark();
  if(drawPaintedHero())return;
  const path=equippedWeapon();
  const aimingLeft=Math.cos(p.a)<0;
@@ -1836,7 +1862,7 @@ function updateBossSpecial(dt){
  const unit=living[fight.specialTurn%living.length];
  fight.special=buildBossSpecial(unit);
  fight.specialTurn++;
- fight.specialCooldown=unit.phase2?5.4:7.2;
+ fight.specialCooldown=(unit.phase2?5.4:7.2)*(fight.trialSignaturePace??1);
 }
 function bossSignatureImpact(u,old){
  if(old==='charge'&&u.state==='recover'){
@@ -2143,6 +2169,13 @@ function runHeroName(character=hero,run=progress){
 let elementHitCounter=0,elementComboClock=0;
 const EVOLUTION_LEVEL=8;
 const VICTORY_DEPTH=3;
+const DEEP_TRIALS={
+ 5:{name:'Iron Trial',seal:'Iron Seal',veterans:2,signaturePace:1,brief:'Elite guards in the biome encounter'},
+ 8:{name:'Sigil Trial',seal:'Sigil Seal',veterans:0,signaturePace:.85,brief:'Boss signatures recharge faster'},
+ 12:{name:'Crown Trial',seal:'Crown Seal',veterans:2,signaturePace:.85,brief:'Elite guards and faster boss signatures'}
+};
+let evolutionAt=-Infinity;
+function currentDeepTrial(){return inSandbox()?null:DEEP_TRIALS[dungeonDepth]||null}
 function hasEvolved(run=progress){return (run?.level||0)>=EVOLUTION_LEVEL}
 function evolutionAttackRate(){return hasEvolved()?1.1:1}
 function xpRequirement(level){const n=Math.max(1,level)-1;return 24+12*n+2*n*n}
@@ -2231,13 +2264,14 @@ function gainRunXp(amount,practice=false){
  const beforeMana=!hadEvolved&&hero==='mage'?mageMaxMana():0;
  progress.xp+=amount;
  const gained=advanceRunLevels(progress,practice);
- if(gained)playSoundCue('level');
  if(!hadEvolved&&hasEvolved()){
   healPlayer(playerStats().maxHealth-beforeHealth);
   if(hero==='mage')restoreMageMana(mageMaxMana()-beforeMana);
-  showItemNotice(runHeroName()+' EVOLVED · STATS BOOSTED');
+  evolutionAt=arenaTime;playSoundCue('evolution');
+  showItemNotice(runHeroName()+' EVOLVED · STATS BOOSTED',5);
   return true;
  }
+ if(gained)playSoundCue('level');
  if(gained&&!practice)showItemNotice('LEVEL '+progress.level+' · +'+(gained*2)+'% WEAPON DAMAGE');
  return false;
 }
@@ -2271,7 +2305,7 @@ function applyWeaponElement(target){
  const effect=styles[pair];if(effect){synergyArea(target.x,target.y,effect[2],effect[1],40,effect[0],target)}
 }
 
-function freshProgress(){return {coins:0,items:{},upgrades:{},roomsCleared:0,synergyCoins:0,level:1,xp:0,levelsThisDepth:0,weapon:null,mageSchool:null,legacyMage:false,elementPrimary:null,elementSecondary:null}}
+function freshProgress(){return {coins:0,items:{},upgrades:{},roomsCleared:0,synergyCoins:0,level:1,xp:0,levelsThisDepth:0,weapon:null,mageSchool:null,legacyMage:false,elementPrimary:null,elementSecondary:null,trialsCleared:[]}}
 function itemCount(id){return Math.min(ITEM_STACK_LIMITS[id]??Number.MAX_SAFE_INTEGER,progress?.items[id]||0)}
 function upgradeCount(id){return progress?.upgrades[id]||0}
 function playerStats(){
@@ -2482,6 +2516,13 @@ function rewardBoss(){
  const fallen=bossFight?.units.find(unit=>unit.hp<=0);if(fallen)synergyEnemyDeath(fallen);synergyRoomClear();
  currentRoom.loot=[{id:'boss-reward',kind:'item',key:rollItem(),price:0,x:W/2+45,y:F/2,claimed:false}];
  if(itemCount('leechFang'))healPlayer(4*itemCount('leechFang'));
+ const trial=currentDeepTrial();
+ const veteransCleared=!trial?.veterans||dungeon.some(room=>room.encounter&&room.cleared);
+ if(trial&&veteransCleared&&!progress.trialsCleared.includes(dungeonDepth)){
+  progress.trialsCleared.push(dungeonDepth);
+  const evolved=evolutionAt===arenaTime?runHeroName()+' EVOLVED · ':'';
+  showItemNotice(evolved+trial.seal+' earned · Dungeon '+dungeonDepth,5);
+ }
 }
 function rollItem(){
  const all=Object.keys(ITEM_DEFS),available=all.filter(id=>itemCount(id)<(ITEM_STACK_LIMITS[id]??1)),unowned=available.filter(id=>!itemCount(id)),pool=unowned.length?unowned:available.length?available:all;
@@ -2708,6 +2749,12 @@ function updateRunRecords(){
   ['Health restored',(runStats.healed||0).toFixed(1)],['Sword bleeds',bleedStacks],
   ['Splits',runStats.splits||0],['Fusions',runStats.fusions||0]
  ];
+ if(dungeonDepth>=VICTORY_DEPTH){
+  const next=Object.keys(DEEP_TRIALS).map(Number).find(depth=>depth>=dungeonDepth&&!progress.trialsCleared.includes(depth));
+  const seals=progress.trialsCleared.map(depth=>DEEP_TRIALS[depth].seal);
+  if(next)values.unshift(['Next trial','Dungeon '+next+' · '+DEEP_TRIALS[next].name]);
+  if(seals.length)values.unshift(['Trial seals',seals.join(' · ')]);
+ }
  renderStatCards('#run-records',values);
 }
 function updateCharacterMenu(){
@@ -2728,10 +2775,12 @@ function updateCharacterMenu(){
  if(hero==='mage')document.querySelector('#mage-spell-list').innerHTML=Object.entries(mageSpellbook()).map(([path,spell])=>'<p><strong>'+path+' · '+spell.name+' · '+spell.mana+' MP</strong>'+(spell.desc?' <small>'+spell.desc+'</small>':'')+'</p>').join('');
  const {atlas,cell}=heroPortraitArtwork(),portrait=document.querySelector('#character-portrait');
  portrait.className='plate-icon plate-'+atlas;
+ portrait.dataset.evolved=String(hasEvolved());
  portrait.style.cssText='--sprite-col:'+(cell%4*100/3)+'%;--sprite-row:'+(Math.floor(cell/4)*100/(ART_ROWS[atlas]-1))+'%';
  document.querySelector('#character-name').textContent=runHeroName();
  document.querySelector('#character-progress').textContent=levelSummary()+(progress.elementPrimary?' · '+ELEMENTS[progress.elementPrimary].name:'')+(progress.elementSecondary?' + '+ELEMENTS[progress.elementSecondary].name:'');
  document.querySelector('#character-coins').textContent=progress.coins+' coins · Dungeon '+dungeonDepth;
+ document.querySelector('#character-evolution').textContent=hasEvolved()?'Evolved · Permanent run bonuses active':'Level 8 evolution · +5 max HP, +15% damage and faster attacks'+(hero==='mage'?' · +10 max mana':'');
  updateRunRecords();
  const inventory=document.querySelector('#item-inventory');inventory.innerHTML='';
  for(const [id,count] of Object.entries(progress.items)){
@@ -2875,6 +2924,7 @@ const DUNGEON_SOUND={
  'coin':[pitched('sine',1280,970,.13,.12),pitched('sine',1840,1480,.11,.066,.025)],
  'loot':[pitched('sine',523,510,.17,.14),pitched('sine',659,650,.20,.14,.064),pitched('triangle',784,752,.30,.16,.125,2100)],
  'level':[pitched('triangle',330,330,.21,.15),pitched('sine',440,440,.23,.15,.075),pitched('triangle',587,587,.39,.18,.155,2000),pitched('sine',880,880,.37,.10,.212)],
+ 'evolution':[pitched('triangle',196,392,.38,.17,0,1250),pitched('sine',392,587,.42,.15,.12),pitched('triangle',587,784,.57,.13,.24,1900),pitched('sine',1175,1175,.53,.09,.39)],
  'room-clear':[pitched('sine',247,247,.35,.135,0,0,.03),pitched('sine',370,370,.39,.12,.105,0,.03),pitched('triangle',494,494,.40,.12,.196,1300,.04)],
  'boss-clear':[pitched('triangle',147,147,.49,.21,0,850,.03),pitched('sine',294,294,.40,.13,.10),pitched('sine',440,440,.42,.14,.20),pitched('triangle',587,587,.56,.14,.29,1800,.03)],
  'boss-entrance':[pitched('triangle',98,73,.53,.24,0,710,.08),textured('lowpass',570,.42,.18,.04,.1),pitched('triangle',147,110,.47,.17,.12,990,.04)],
@@ -3310,13 +3360,15 @@ function normalizeSavedRun(raw){
   if(!seen.has(door.to)){seen.add(door.to);queue.push(door.to)}
  }
  if(seen.size!==rooms.length)throw Error('Disconnected dungeon');
- const {weapon,levelsThisDepth,mageSchool,legacyMage}=raw.progress;
+ const {weapon,levelsThisDepth,mageSchool,legacyMage,trialsCleared}=raw.progress;
  raw.progress={coins:Math.floor(safeNumber(raw.progress.coins)),items:knownDictionary(raw.progress.items,ITEM_DEFS),upgrades:knownDictionary(raw.progress.upgrades,UPGRADE_DEFS),roomsCleared:Math.floor(safeNumber(raw.progress.roomsCleared)),synergyCoins:Math.floor(safeNumber(raw.progress.synergyCoins,0,0,9)),level:Math.floor(safeNumber(raw.progress.level,1,1,30)),xp:safeNumber(raw.progress.xp,0,0,100000),elementPrimary:ELEMENTS[raw.progress.elementPrimary]?raw.progress.elementPrimary:null,elementSecondary:ELEMENTS[raw.progress.elementSecondary]&&raw.progress.elementSecondary!==raw.progress.elementPrimary?raw.progress.elementSecondary:null};
  raw.progress.levelsThisDepth=Math.floor(safeNumber(levelsThisDepth,0,0,2));
  raw.mageMana=safeNumber(raw.mageMana,100,0,190);
  raw.biome=BIOME_DEFS[raw.biome]?raw.biome:null;if(raw.biome==='basic')raw.biome=null;
  delete raw.regenWhileBleeding;
  raw.depth=Math.floor(safeNumber(raw.depth,1,1,10000));raw.hero=Object.hasOwn(HERO_DEFS,raw.hero)?raw.hero:'classic';raw.hp=safeNumber(raw.hp,50,1,1e6);raw.strongArrowHits=Math.floor(safeNumber(raw.strongArrowHits,0,0,100000));raw.lives=Math.floor(safeNumber(raw.lives,3,0,5));raw.kills=Math.floor(safeNumber(raw.kills));raw.arenaTime=safeNumber(raw.arenaTime);
+ const clearedDepth=raw.depth-Number(!rooms.some(room=>room.kind==='boss'&&room.bossDefeated));
+ raw.progress.trialsCleared=Array.isArray(trialsCleared)?Object.keys(DEEP_TRIALS).map(Number).filter(depth=>depth<=clearedDepth&&trialsCleared.includes(depth)):[];
  const armourCapacity=bodyArmourStats(raw.hero,raw.progress.upgrades).capacity;
  raw.armourHp=safeNumber(raw.armourHp,armourCapacity,0,armourCapacity);
  raw.progress.weapon=raw.progress.level>=3&&validWeaponChoice(raw.hero,weapon)?weapon:null;
@@ -4242,7 +4294,12 @@ function buildDungeon(){
   for(const room of rooms){const col=room.col;room.col=-room.row;room.row=col;for(const door of room.doors)door.side=clockwise[door.side]}
  }
  if(dungeonDepth===1)rooms[rooms[0].doors[0].to].openingLesson=true;
- const encounter=rooms.find(room=>room.kind==='combat'&&room.shape==='square'&&!room.openingLesson);
+ let encounter=rooms.find(room=>room.kind==='combat'&&room.shape==='square'&&!room.openingLesson);
+ if(DEEP_TRIALS[dungeonDepth]?.veterans){
+  // Make the veteran room part of the route to every branch on these floors.
+  encounter=rooms[rooms[0].doors[0].to];
+  Object.assign(encounter,ROOM_SHAPES.square,{shape:'square'});
+ }
  if(encounter)encounter.encounter=selectedBiome??'basic';
  dungeon=rooms;dungeon.find(room=>room.kind==='boss').bossKind=chooseBoss();lastDungeonSignature=dungeonSignature(rooms);
 }
@@ -4275,7 +4332,8 @@ function createBossUnit(id,x,y,part=false){
 function startBossFight(id){
  const unit=createBossUnit(id,W/2,F/2),shieldMax=bossShieldCapacity(inSandbox()?1:dungeonDepth);
  bossFight={kind:unit.kind,variant:id,name:BOSS_BLUEPRINTS[id].name,units:[unit],shots:[],hazards:[],
-  totalMax:unit.maxHp,shieldMax,shieldHp:shieldMax,shieldHitAt:-Infinity,split:false,reborn:false,done:false,special:null,specialTurn:0,specialCooldown:4.8};
+  totalMax:unit.maxHp,shieldMax,shieldHp:shieldMax,shieldHitAt:-Infinity,split:false,reborn:false,done:false,special:null,specialTurn:0,specialCooldown:4.8,
+  trialSignaturePace:currentDeepTrial()?.signaturePace??1};
 }
 function bossSpark(x,y,color='#ffe4a3'){
  wallFx.push({type:'particle',x,y,vx:0,vy:-25,life:.35,maxLife:.35,color,size:4});
@@ -5156,9 +5214,11 @@ function spawnOpeningThreat(){
 function spawnEncounter(room){
  const roster=ENCOUNTER_ROOMS[room.encounter].enemies;
  room.count=roster.length;
- let shooters=0;
+ let shooters=0,veterans=currentDeepTrial()?.veterans??0;
  for(const [shape,x,y] of roster){
-  const foe=makeEnemy(shape,x*W,y*F);
+  const elite=veterans>0&&(shape==='square'||shape==='round');
+  if(elite)veterans--;
+  const foe=makeEnemy(shape,x*W,y*F,elite);
   if(RANGED.includes(shape))foe.shootClock=2.8+shooters++*1.25;
   else foe.abilityCooldown=Math.max(foe.abilityCooldown,3.5);
   enemies.push(foe);
@@ -5175,7 +5235,7 @@ function enterRoom(id,entry=null){
  const x=entry==='west'?62:entry==='east'?W-62:W/2;
  const y=entry==='north'?62:entry==='south'?F-62:F/2;
  p={...p,x,y,safeX:x,safeY:y,fallReturn:null,vx:0,vy:0,kvx:0,kvy:0,sticky:null,wallContacts:new Set(),wallCooldowns:new Map(),portalCooldown:0,portalReady:false,falling:0,slowUntil:0,swimming:false,lavaTickAt:0,wallSpikeContact:false};
- enemies=[];pendingSplits=[];projectiles=[];artillery=[];gravityWells=[];reactionZones=[];bossFight=null;arrows=[];bowShotCooldown=0;openingWave=0;fatalHit=null;
+ enemies=[];pendingSplits=[];projectiles=[];artillery=[];gravityWells=[];reactionZones=[];bossFight=null;arrows=[];bowShotCooldown=0;openingWave=0;fatalHit=null;evolutionAt=-Infinity;
  encounterGuideUntil=currentRoom.encounter&&!currentRoom.cleared?arenaTime+8:0;
  healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];shards=[];portalFx=[];fallingFx=[];poisonPlayerTimer=0;playerPoisonGlow=0;
  doorCooldown=.7;meleeAudioSwing=false;queuedEnemyDefeat=null;inv=Math.max(inv||0,.9);
@@ -5197,6 +5257,8 @@ function enterRoom(id,entry=null){
 function nextDungeon(biome){
  if(currentRoom?.kind!=='boss'||!currentRoom.bossDefeated||!currentRoom.cleared||victoryRecapPending()||!BIOME_PATHS.some(path=>path.id===biome))return;
  bankClearedRoomCoins();selectedBiome=biome==='basic'?null:biome;dungeonDepth++;progress.levelsThisDepth=0;buildDungeon();enterRoom(0);
+ const trial=currentDeepTrial();
+ if(trial)showItemNotice(trial.name+' · '+trial.brief,5);
 }
 function updateRoomProgress(){
  if(inSandbox()){currentRoom.cleared=true;return}
@@ -8762,5 +8824,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.62';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.63';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>

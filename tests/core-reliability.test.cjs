@@ -351,7 +351,7 @@ test('all 12 bosses have twice the previous HP in dungeons, practice and split f
     declaration('BOSS_HEALTH_MULTIPLIER'),
     source.slice(source.indexOf('const BOSS_BLUEPRINTS ='), source.indexOf('function currentBiome(')),
     'let inPractice=false,dungeonDepth=1,bossFight;const inSandbox=()=>inPractice,W=720,F=640;',
-    method('floorDifficulty'),method('bossMaxHealth'),method('bossRadius'),method('bossArmour'),method('createBossUnit'),method('bossShieldCapacity'),method('startBossFight'),
+    method('floorDifficulty'),method('bossMaxHealth'),method('bossRadius'),method('bossArmour'),method('createBossUnit'),method('bossShieldCapacity'),method('startBossFight'),'const currentDeepTrial=()=>null;',
     'const rows=[];',
     'for(const [id,oldHp] of Object.entries({gatekeeper:90,crystal:72,slime:96,furnace:112,hydra:98,phoenix:114,briar:122,matriarch:102,mire:120,glacier:118,oracle:104,avalanche:128})){',
     ' for(dungeonDepth of [1,2,5,20])for(inPractice of [false,true]){',
@@ -378,7 +378,7 @@ test('Phoenix rebirth doubles the old rounded refill and split bosses conserve r
     'const hero="classic",dashBatSweeps=()=>false,meleeIsSwinging=()=>false,inSandbox=()=>false,enemyAttacksEnabled=()=>false,blockShieldBody=()=>false,enemies=[],elementFx=[];',
     declaration('BOSS_DAMAGE'),
     'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),bossSignatureRing=()=>{},bossSpiralShot=()=>{},showItemNotice=()=>{},updateBossZoneList=()=>{},updateBossShots=()=>{},updateBossSpecial=()=>{},finishBossFight=()=>victories++;',
-    method('floorDifficulty'),method('bossMaxHealth'),method('bossRebirthHealth'),method('bossRadius'),method('bossArmour'),method('createBossUnit'),method('bossShieldCapacity'),method('startBossFight'),
+    method('floorDifficulty'),method('bossMaxHealth'),method('bossRebirthHealth'),method('bossRadius'),method('bossArmour'),method('createBossUnit'),method('bossShieldCapacity'),method('startBossFight'),'const currentDeepTrial=()=>null;',
     method('handleBiomeBossPhase'), method('updateBossFight'),
     'startBossFight("phoenix");const phoenix=bossFight.units[0];bossFight.shieldHp=0;phoenix.hp=0;updateBossFight(0,0);',
     'const rebirth={hp:phoenix.hp,state:phoenix.state,victories,shield:bossFight.shieldHp};phoenix.hp=0;updateBossFight(0,0);',
@@ -991,7 +991,7 @@ test('all three paths get the automatic level-eight stats with their existing ca
 
 test('crossing level eight once announces evolution, fills new capacity, and skips a reward modal', () => {
   const result=run([
-    'const playSoundCue=()=>{};',
+    'let evolutionAt=-Infinity;const arenaTime=10,sounds=[],playSoundCue=cue=>sounds.push(cue);',
     ...evolutionMethods,
     ...['xpRequirement','advanceRunLevels','gainRunXp','earnXp','levelChoicePending','levelSummary','mageMaxMana','restoreMageMana','healPlayer'].map(method),
     'const hero="mage",progress={level:7,xp:xpRequirement(7)-1,levelsThisDepth:0,mageSchool:"necromancer"};',
@@ -1000,10 +1000,10 @@ test('crossing level eight once announces evolution, fills new capacity, and ski
     'const runHeroName=()=>"Necromancer Dot",showItemNotice=message=>notices.push(message),openElementChoice=()=>opens++;',
     'const refreshManaHud=()=>{},refreshElementHud=()=>{},queueCheckpoint=()=>{};',
     'earnXp(2);const evolved={hp,mageMana,level:progress.level,hud:levelSummary()};earnXp(500);'
-  ],'{evolved,hp,mageMana,level:progress.level,opens,noticeCount:notices.filter(text=>text.includes("EVOLVED")).length}');
+  ],'{evolved,hp,mageMana,level:progress.level,opens,evolutionAt,sounds,noticeCount:notices.filter(text=>text.includes("EVOLVED")).length}');
   assert.deepEqual(result,{
     evolved:{hp:30,mageMana:50,level:8,hud:'LV 8 · EVOLVED · 0/206 XP'},
-    hp:30,mageMana:50,level:9,opens:0,noticeCount:1
+    hp:30,mageMana:50,level:9,opens:0,evolutionAt:10,sounds:['evolution','level'],noticeCount:1
   });
 });
 

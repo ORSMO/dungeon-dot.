@@ -379,3 +379,46 @@ test('the first regular room after the lesson eases the population spike for eac
  vm.runInNewContext(script.replace(startup,()=>probe+startup),makeGameContext(value=>{result=value}),{timeout:5000});
  assert.deepEqual(Array.from(result),[12,9,9]);
 });
+
+test('deep trials grant seals only on live clears and survive a reload without replaying evolution',()=>{
+ const probe=`
+  const check=(value,message)=>{if(!value)throw Error(message)};
+  const snapshotDepths=[];
+  selectedHero='mage';beginNewSlot(1,true);
+  progress.level=7;progress.mageSchool='arcane';progress.xp=xpRequirement(7)-1;
+  gainRunXp(1);
+  check(hasEvolved()&&evolutionAt===arenaTime&&document.querySelector('#element-choice').hidden,'evolution cue or modal');
+  for(const depth of [5,8,12]){
+   for(const biome of [null,'red','green','blue']){
+    dungeonDepth=depth;selectedBiome=biome;buildDungeon();enterRoom(0);
+    const encounter=dungeon.find(room=>room.encounter),trial=DEEP_TRIALS[depth];
+    check(!trial.veterans||dungeon[0].doors[0].to===encounter.id,'veterans were not on the route');
+    enterRoom(encounter.id,encounter.doors[0].side);
+    const count=enemies.filter(enemy=>enemy.elite).length;
+    check(count===trial.veterans&&enemies.length===8&&enemies.every(e=>safeFloor(e.x,e.y,e.r+2)),'wrong veteran count or blocked spawn: '+biome);
+    enemies=[];for(const nest of dungeonNests)nest.hp=0;updateRoomProgress();
+    const boss=dungeon.find(room=>room.kind==='boss');enterRoom(boss.id,boss.doors[0].side);
+    check(bossFight.shieldHp===bossShieldCapacity(depth),'trial affected boss shield');
+    const unit=bossFight.units[0];
+    bossFight.specialCooldown=0;updateBossSpecial(0);
+    check(bossFight.specialCooldown===7.2*trial.signaturePace&&bossFight.special.steps.every(step=>step.at>=.9),'signature timing or warning');
+    if(biome!=='blue')continue;
+    const earned=progress.trialsCleared.length;
+    for(const member of bossFight.units)member.hp=0;
+    finishBossFight();finishBossFight();
+    check(progress.trialsCleared.length===earned+1&&progress.trialsCleared.at(-1)===depth,'wrong seal count');
+    flushCheckpoint();
+    check(continueSlot(1)&&progress.trialsCleared.includes(depth)&&hasEvolved()&&evolutionAt===-Infinity,'seal save/load or replayed evolution');
+    snapshotDepths.push(depth);
+   }
+  }
+  dungeonDepth=12;currentRoom={kind:'sandbox'};startBossFight('gatekeeper');
+  check(bossFight.trialSignaturePace===1&&bossFight.shieldMax===50,'practice inherited a trial');
+  finishBossFight();
+  check(progress.trialsCleared.join(',')==='5,8,12','practice changed earned seals');
+  report(snapshotDepths);
+ `;
+ let result;
+ vm.runInNewContext(script.replace(startup,()=>probe+startup),makeGameContext(value=>{result=value}),{timeout:5000});
+ assert.deepEqual(Array.from(result),[5,8,12]);
+});
