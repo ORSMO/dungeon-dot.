@@ -341,11 +341,11 @@ header .health{grid-template-columns:auto minmax(30px,clamp(34px,8vw,119px)) aut
 .plate-mobs-dungeon{background-image:url('art/mobs-dungeon.webp')}
 .plate-mobs-realms{background-image:url('art/mobs-realms.webp');background-size:400% 200%}
 
-/* Painted bronze, ruby and vellum keep the floating HUD inside the game's art style. */
+/* Shared brass trim for the combat plates and menus. */
+:root{--brass-frame:url("art/hud-brass-frame.webp")}
 .combat-info header,#boss-hud{
- --hud-plate:url("art/hud-nameplate.webp");
  background:linear-gradient(160deg,#272321f5,#121419f5) padding-box;
- border:6px solid #8b623d;border-image:var(--hud-plate) 22 45 fill / 12px 21px / 2px stretch;
+ border:6px solid #8b623d;border-image:var(--brass-frame) 31 fill / 9px / 0 stretch;
  border-radius:5px;box-shadow:0 3px 12px #0008;
 }
 .combat-info header{padding:4px 8px;gap:4px 8px}
@@ -365,17 +365,20 @@ header .hp-track,#mana-hud .mana-track{
 #lives-count,#coin-count,#level-hud,header #kills{color:#f4d6a4}
 #lives-count{letter-spacing:.035em}
 #coin-count{color:#ffdc85}
-#enemy-counter{
+#enemy-counter,#economy-room-name{
  min-width:67px;min-height:42px;justify-content:center;gap:2px;padding:5px 13px;
- border:0;background:transparent url("art/hud-plaque.webp") center/100% 100% no-repeat;
+ border:4px solid #8b623d;border-image:var(--brass-frame) 31 fill / 7px / 0 stretch;
+ background:#211b19 padding-box;
  filter:drop-shadow(0 2px 3px #000a);color:#fff0c5;
 }
+#enemy-counter[hidden],#economy-room-name[hidden]{display:none}
+#economy-room-name{display:grid;place-items:center;font:700 13px Georgia,serif;min-height:32px}
 #enemy-counter .plate-icon{width:23px;filter:drop-shadow(0 1px 2px #000)}
 #enemy-count{font-size:17px;text-shadow:0 1px 2px #000}
 .combat-actions button,.combat-actions #map-toggle{
  min-width:46px;min-height:41px;display:grid;justify-items:center;align-content:center;gap:0;
  padding:2px 6px;color:#ffe7b9;font:700 10px Georgia,serif;line-height:1.05;
- border:4px solid #9a754b;border-image:url("art/hud-nameplate.webp") 22 45 fill / 7px 11px / 0 stretch;
+ border:4px solid #9a754b;border-image:var(--brass-frame) 31 fill / 7px / 0 stretch;
  background:#231d19 padding-box;box-shadow:0 2px 5px #0009;
 }
 .combat-actions .hud-pictogram{width:19px;height:18px}
@@ -443,6 +446,11 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  background:linear-gradient(90deg,#614129b4,#271f1dd9 70%),url("art/wall-textures.webp") left top/560px auto;
  border-bottom:1px solid #8d6743;
 }
+#menu-setup .menu-section,#bestiary-panel,#character-panel,#settings-panel,#sound-panel,#victory-recap{
+ border-image:var(--brass-frame) 31 / 5px / 0 stretch!important;
+}
+.menu-action{background:linear-gradient(90deg,#17151666,#19181c88),var(--brass-frame) center/100% 100%}
+.menu-links button:focus-visible,.menu-action:focus-visible{outline:2px solid #f3c88d;outline-offset:3px}
 #bestiary-panel .index-heading{
  padding:4px 8px;border-bottom:1px solid #8d6743;
  background:linear-gradient(90deg,#614129b4,#271f1dd9 70%),url("art/wall-textures.webp") left top/560px auto;
@@ -588,6 +596,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
 #loot-panel{
  box-sizing:border-box;display:grid;grid-template-columns:46px minmax(0,1fr);
  column-gap:10px;width:min(362px,48vw);align-items:center;
+ border:5px solid #a78052;border-image:var(--brass-frame) 31 / 6px / 0 stretch;
 }
 #loot-panel[data-rare=true]{border-color:#c39cdb;box-shadow:0 5px 18px #070609a0,inset 0 0 0 2px #b692d031}
 #loot-preview{
@@ -663,7 +672,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  .pause-body{grid-template-columns:minmax(100px,.66fr) minmax(0,1.6fr)}
  .controls-body{grid-template-columns:minmax(106px,.70fr) minmax(0,1.5fr)}
 }
-</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.63</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.64</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div><span id="economy-room-name" hidden></span></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
  <div class="pause-home">
   <div class="menu-header"><h2>Paused</h2><button id="settings-close" type="button" class="menu-control primary-control">Resume</button></div>
   <div class="pause-body">
@@ -753,7 +762,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.63</small>
+   <small>V8.64</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -1184,6 +1193,7 @@ function artOval(ctx,x,y,rx,ry,color,angle=0){
 }
 
 const WORLD_PAINTINGS={basic:'keep',red:'forge',green:'hollow',blue:'vault'};
+const ECONOMY_PAINTINGS={shop:'shop-interior',treasure:'treasure-vault'};
 const KEEP_SHOWCASE_ART={floor:'keep-showcase-floor',materials:'keep-showcase-materials',boss:'gatekeeper-showcase'};
 function isKeepShowcase(biome,kind){
  return kind==='boss'&&(biome==null||biome==='basic');
@@ -1199,7 +1209,7 @@ const ART_ROWS={heroes:3,beasts:3,mobs:4,'mobs-dungeon':3,'mobs-realms':2};
 const paintings={};
 function loadArtwork(){
  if(typeof Image!=='function')return;
- for(const name of [...Object.values(WORLD_PAINTINGS),...Object.values(KEEP_SHOWCASE_ART),...Object.keys(ART_ROWS),'weapons','dungeon-props','hud-nameplate','hud-compass','shield-crest','wall-textures','room-mechanics','arcane-plates','dungeon-vessels']){
+ for(const name of [...Object.values(WORLD_PAINTINGS),...Object.values(KEEP_SHOWCASE_ART),...Object.values(ECONOMY_PAINTINGS),...Object.keys(ART_ROWS),'weapons','dungeon-props','hud-brass-frame','hud-compass','shield-crest','wall-textures','room-mechanics','arcane-plates','dungeon-vessels','ironbound-chests']){
   const image=new Image();image.decoding='async';image.src='art/'+name+'.webp';paintings[name]=image;
  }
 }
@@ -1326,18 +1336,19 @@ function drawWorldSeal(ctx,id,w,h,kind,art){
 function drawWorldScenery(){
  const {kind,id:roomId}=currentRoom;
  const id=worldArtId(selectedBiome,kind);
- const showcase=isKeepShowcase(selectedBiome,kind)?readyPainting(KEEP_SHOWCASE_ART.floor):null;
- const painting=showcase||readyPainting(WORLD_PAINTINGS[id]);
+ const specialArt=ECONOMY_PAINTINGS[kind]||(isKeepShowcase(selectedBiome,kind)?KEEP_SHOWCASE_ART.floor:null);
+ const custom=specialArt?readyPainting(specialArt):null;
+ const painting=custom||readyPainting(WORLD_PAINTINGS[id]);
  const scale=rasterScale(W,F,renderScale,WORLD_PIXEL_BUDGET);
  const width=Math.floor(W*scale),height=Math.floor(F*scale);
- const key=[id,kind,roomId,W,F,showcase?'showcase':!!painting,width,height].join(':');
+ const key=[id,kind,roomId,W,F,custom?specialArt:!!painting,width,height].join(':');
  const art=WORLD_ART[id];
  if(worldScenery?.key!==key){
   const layer=document.createElement('canvas');layer.width=width;layer.height=height;
   const ctx=layer.getContext('2d');ctx.scale(layer.width/W,layer.height/F);
   ctx.imageSmoothingQuality='high';
   if(painting){
-   if(showcase)ctx.drawImage(showcase,0,0,W,F);
+   if(custom)ctx.drawImage(custom,0,0,W,F);
    else paintRoomPlate(ctx,painting,W,F);
    const shade=ctx.createRadialGradient(W/2,F/2,Math.min(W,F)*.12,W/2,F/2,Math.hypot(W,F)*.55);
    shade.addColorStop(0,id==='green'?'#0b130d4f':'#080b101c');
@@ -1348,7 +1359,7 @@ function drawWorldScenery(){
    art.ground.forEach((color,i)=>ground.addColorStop(i/2,color));
    ctx.fillStyle=ground;ctx.fillRect(0,0,W,F);
   }
-  if(!showcase)paintSurfaceDetail(ctx,id,W,F,Math.imul(roomId+1,137)^Math.imul(W+F,933),.7);
+  if(!custom)paintSurfaceDetail(ctx,id,W,F,Math.imul(roomId+1,137)^Math.imul(W+F,933),.7);
   drawWorldSeal(ctx,id,W,F,kind,art);
   worldScenery={key,layer};
   document.querySelector('main').dataset.world=id;
@@ -2538,9 +2549,9 @@ function prepareRoomLoot(room){
   const keys=Object.keys(UPGRADE_DEFS).filter(upgradeAvailable);
   room.loot=[
    {id:'shop-item',kind:'item',key:rollItem(),price:20,x:W/2-100,y:F/2,claimed:false},
-   {id:'shop-stat',kind:'stat',key:keys[Math.floor(Math.random()*keys.length)],price:12,x:W/2,y:F/2,claimed:false},
    {id:'shop-heal',kind:'heal',key:'heal',price:8,x:W/2+100,y:F/2,claimed:false}
   ];
+  if(keys.length)room.loot.splice(1,0,{id:'shop-stat',kind:'stat',key:keys[Math.floor(Math.random()*keys.length)],price:12,x:W/2,y:F/2,claimed:false});
  }
 }
 function lootDefinition(loot){return loot.kind==='item'?heroItemDefinition(loot.key):loot.kind==='stat'?heroUpgradeDefinition(loot.key):{name:'Healing Flask',desc:'Restore 20 health.',glyph:'✚',color:'#f3a5b1'}}
@@ -2624,6 +2635,15 @@ function drawPropArt(name,x,y,w,h){
  g.drawImage(image,sx,sy,sw,sh,x-w/2,y-h/2,w,h);
  return true;
 }
+function drawChestArt(x,y,width,open=false){
+ const image=readyPainting('ironbound-chests');
+ if(!image)return drawPropArt('chest',x,y,width,width*.78);
+ const [sx,sy,sw,sh]=open?[966,74,703,743]:[105,234,701,578];
+ const height=sh/sw*width,bottom=y+width*.38;
+ artOval(g,x,bottom-2,width*.5,width*.15,'#0c0a0bb3');
+ g.drawImage(image,sx,sy,sw,sh,x-width/2,bottom-height,width,height);
+ return true;
+}
 function drawPickupArt(name,x,y,size,color){
  if(!readyPainting('dungeon-props'))return false;
  artOval(g,x,y+size*.32,size*.5,size*.26,'#0a0b11c9');
@@ -2674,11 +2694,11 @@ function drawLoot(){
  }
  for(const loot of currentRoom.loot||[]){
   if(loot.claimed)continue;const def=lootDefinition(loot);
-
-  const hasPaint=drawPropArt('pedestal',loot.x,loot.y+10,39,23);
+  const fromChest=currentRoom.kind==='treasure';
+  const hasPaint=fromChest||drawPropArt('pedestal',loot.x,loot.y+10,39,23);
   if(!hasPaint){g.fillStyle='#4a3d53';g.fillRect(loot.x-20,loot.y+8,40,12);g.strokeStyle=def.color;g.lineWidth=2;g.strokeRect(loot.x-20,loot.y+8,40,12)}
   const float=reducedWorldMotion.matches?0:Math.sin(arenaTime*2+loot.x*.025)*2;
-  const y=loot.y-7+float;
+  const y=loot.y-(fromChest?33:7)+float;
   if(loot.rare){
    g.save();g.strokeStyle='#e5bcff';g.lineWidth=2;g.shadowColor='#a65dff';g.shadowBlur=9;
    g.beginPath();g.arc(loot.x,y,17,0,Math.PI*2);g.stroke();g.restore();
@@ -2701,24 +2721,17 @@ function drawLoot(){
  g.restore();
 }
 function drawEconomyRoomDecor(){
- if(currentRoom.kind!=='shop'&&currentRoom.kind!=='treasure')return;
- g.save();g.textAlign='center';g.fillStyle='#e8ce93';g.font='bold 17px monospace';
- if(currentRoom.kind==='shop'){
-  g.fillText('TRAVELLER SHOP',W/2,F/2-88);
-  g.fillStyle='#654c3b';g.fillRect(W/2-165,F/2+63,330,28);g.fillStyle='#a77f52';g.fillRect(W/2-165,F/2+63,330,5);
-  g.fillStyle='#8c75a9';g.beginPath();g.arc(W/2,F/2+105,15,0,Math.PI*2);g.fill();g.fillStyle='#e8d2b1';g.fillRect(W/2-8,F/2+99,16,11);
-  g.fillStyle='#c6b3cf';g.font='10px monospace';g.fillText('Walk to an item to inspect and buy',W/2,F/2-66);
- }else{
-  g.fillText('FORGOTTEN TREASURE',W/2,F/2-76);
-  const claimed=(currentRoom.loot||[]).every(loot=>loot.claimed);
-  g.strokeStyle='#9f8560';g.lineWidth=2;g.beginPath();g.moveTo(W/2,F/2-52);g.lineTo(W/2+62,F/2+10);g.lineTo(W/2,F/2+72);g.lineTo(W/2-62,F/2+10);g.closePath();g.stroke();
-  g.save();g.globalAlpha=claimed?.48:1;
-  if(!drawPropArt('chest',W/2,F/2+30,59,44)){
-   g.fillStyle='#785039';g.fillRect(W/2-26,F/2+17,52,29);g.fillStyle='#b79555';g.fillRect(W/2-28,F/2+13,56,9);
-  }
-  g.restore();
+ if(currentRoom.kind==='shop'&&!readyPainting(ECONOMY_PAINTINGS.shop)){
+  g.save();g.fillStyle='#654c3b';g.fillRect(W/2-165,F/2+63,330,28);
+  g.fillStyle='#a77f52';g.fillRect(W/2-165,F/2+63,330,5);g.restore();
  }
- g.restore();
+ if(currentRoom.kind==='treasure'){
+  const claimed=(currentRoom.loot||[]).every(loot=>loot.claimed);
+  if(!drawChestArt(W/2,F/2+10,60,claimed)){
+   g.save();g.fillStyle='#785039';g.fillRect(W/2-26,F/2+17,52,29);
+   g.fillStyle='#b79555';g.fillRect(W/2-28,F/2+13,56,9);g.restore();
+  }
+ }
 }
 function inventoryIcon(def){
  return '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="19" fill="'+def.color+'"/><text x="24" y="31" text-anchor="middle" fill="#241e30" font-size="25" font-family="system-ui">'+def.glyph+'</text></svg>';
@@ -5422,7 +5435,7 @@ function drawMapFrame(x,y,w,h,title,theme){
  g.fillStyle=board;g.fillRect(x,y,w,h);
  g.strokeStyle=theme.light;g.lineWidth=1;g.strokeRect(x+.5,y+.5,w-1,h-1);
  g.strokeStyle=theme.trim+'88';g.strokeRect(x+2.5,y+2.5,w-5,h-5);
- const plate=readyPainting('hud-nameplate');
+ const plate=readyPainting('hud-brass-frame');
  if(plate)g.drawImage(plate,x+2,y+1,w-4,19);
  else{g.fillStyle=theme.ink;g.fillRect(x+1,y+1,w-2,15)}
  g.strokeStyle=theme.trim;g.beginPath();g.moveTo(x+2,y+19);g.lineTo(x+w-2,y+19);g.stroke();
@@ -7369,11 +7382,12 @@ function drawPotProp(x,y,r){
 function drawRoomProps(){
  g.save();g.textAlign='center';g.textBaseline='middle';g.font='bold 13px monospace';
  for(const o of breakables){
+  if(o.kind==='chest'&&o.broken){drawChestArt(o.x,o.y,PROP_DEFS.chest.r*2,true);continue}
   if(o.broken)continue;
   const d=PROP_DEFS[o.kind];
   if(o.kind==='pot'){drawPotProp(o.x,o.y,d.r);continue}
   g.fillStyle=d.color;g.strokeStyle='#2a1c29';g.lineWidth=2;
-  const painted=drawPropArt(o.kind,o.x,o.y,d.r*2,d.r*2);
+  const painted=o.kind==='chest'?drawChestArt(o.x,o.y,d.r*2):drawPropArt(o.kind,o.x,o.y,d.r*2,d.r*2);
   if(!painted){
    if(o.kind==='barrel'){g.beginPath();g.arc(o.x,o.y,d.r,0,Math.PI*2);g.fill();g.stroke()}
    else{g.fillRect(o.x-d.r,o.y-d.r,d.r*2,d.r*2);g.strokeRect(o.x-d.r,o.y-d.r,d.r*2,d.r*2)}
@@ -8403,6 +8417,8 @@ elementFx.push({type:'split',x:oldX,y:oldY,life:.38,maxLife:.38});
 }
 const lifeDisplay=document.createElement('span');lifeDisplay.id='lives-count';document.querySelector('header .health').appendChild(lifeDisplay);
 const combatHeader=document.querySelector('.combat-info header');
+const enemyCounter=document.querySelector('#enemy-counter');
+const economyRoomName=document.querySelector('#economy-room-name');
 const combatHud=document.querySelector('main');
 function syncBossPanelTop(){
  const top=combatHeader.getBoundingClientRect().bottom-combatHud.getBoundingClientRect().top+4;
@@ -8417,6 +8433,10 @@ function hud(){
  const bossUnits=bossFight&&!bossFight.done?bossFight.units.filter(unit=>unit.hp>0).length:0;
  const count=document.querySelector('#enemy-count'),remaining=String(enemiesLeft+bossUnits);
  if(count.textContent!==remaining)count.textContent=remaining;
+ const roomName=currentRoom?.kind==='shop'?'Traveller Shop':currentRoom?.kind==='treasure'?'Treasure Room':'';
+ if(economyRoomName.textContent!==roomName)economyRoomName.textContent=roomName;
+ economyRoomName.hidden=!roomName||remaining!=='0';
+ enemyCounter.hidden=!economyRoomName.hidden;
  updateBossHud();updateSandboxMenu();updateCharacterMenu();updateDashButton();shieldUpdate(0);updateBodyArmour();document.querySelector('#coin-total').textContent=progress?.coins||0;
 }
 const DEATH_TIPS={
@@ -8824,5 +8844,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.63';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.64';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>

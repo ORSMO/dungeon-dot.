@@ -13,6 +13,12 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.64 — Brass HUD, shop and treasure art
+
+A high-resolution brass frame replaces the stretched artwork around health, boss stats, navigation controls, and the enemy counter. The maps and menu panels use the same trim. The Traveller Shop has a painted interior and the Treasure Room has a separate inlaid vault floor.
+
+Ironbound chests have closed and opened artwork. The vault chest opens when the reward is claimed, and combat chests remain visible after being broken. Purchases still save normally. Shops skip the stat-upgrade slot when all upgrades are capped.
+
 ## V8.63 — Level 8 and deep trials
 
 The automatic level-8 evolution now has its own sound and a brief gold effect. The evolved hero keeps a gold marker and portrait trim. The Character screen previews the upgrade before level 8.
