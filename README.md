@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.68 — Scarcer gold
+
+Regular enemies now have a 45% base chance to drop one coin. Elites still guarantee gold, now two coins before bonuses. Regular rooms grant two coins on clear, cursed rooms four, and bosses 14. Treasure enemies grant 12 bonus coins. Existing luck and relic bonuses, saved gold balances, starting lives, and shop prices carry over.
+
 ## V8.67 — Small player icons
 
 Health, lives and coins are shown as small icons with numbers in the top-left corner. Squire sees shield and armour durability. Mage sees mana and Necromancer souls. The strip has no panel or bars. The slim boss bar and transparent maps carry over from V8.66.
