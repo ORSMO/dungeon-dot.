@@ -2,6 +2,12 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.64 — Brass HUD, shop and treasure art
+
+A high-resolution brass frame replaces the stretched artwork around health, boss stats, navigation controls, and the enemy counter. The maps and menu panels use the same trim. The Traveller Shop has a painted interior and the Treasure Room has a separate inlaid vault floor.
+
+Ironbound chests have closed and opened artwork. The vault chest opens when the reward is claimed, and combat chests remain visible after being broken. Purchases still save normally. Shops skip the stat-upgrade slot when all upgrades are capped.
+
 ## V8.63 — Level 8 and deep trials
 
 The automatic level-8 evolution now has its own sound and a brief gold effect. The evolved hero keeps a gold marker and portrait trim. The Character screen previews the upgrade before level 8.

@@ -1233,6 +1233,18 @@ test('the Old Dungeon art is scoped to its boss arena and its gate leaves clear 
  assert.deepEqual(result.open,[[-39,-14,78,28]]);
 });
 
+test('shops omit exhausted upgrade stock while keeping their other items and sold state',()=>{
+ const result=run([
+  method('prepareRoomLoot'),
+  'const W=520,F=360,UPGRADE_DEFS={power:{}};let canBuy=true;',
+  'const rollItem=()=>"emberHeart",upgradeAvailable=()=>canBuy;',
+  'const stocked={kind:"shop"},exhausted={kind:"shop"},vault={kind:"treasure"};',
+  'prepareRoomLoot(stocked);stocked.loot[0].claimed=true;canBuy=false;',
+  'prepareRoomLoot(stocked);prepareRoomLoot(exhausted);prepareRoomLoot(vault);'
+ ],'{stocked:stocked.loot.map(x=>[x.id,x.price,x.claimed]),exhausted:exhausted.loot.map(x=>x.id),treasure:vault.loot.map(x=>[x.id,x.price])}');
+ assert.deepEqual(result,{stocked:[['shop-item',20,true],['shop-stat',12,false],['shop-heal',8,false]],exhausted:['shop-item','shop-heal'],treasure:[['treasure',0]]});
+});
+
 test('character pages preserve a stats fallback and only expose runes to Mage', () => {
  const result=run([
   declaration('CHARACTER_PAGES'),method('characterPage')
