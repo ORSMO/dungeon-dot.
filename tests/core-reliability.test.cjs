@@ -10,7 +10,7 @@ const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 const start = html.indexOf('<script>');
 const end = html.indexOf('</script>', start);
 assert.ok(start >= 0 && end > start, 'The standalone game script must exist.');
-const source = html.slice(start + '<script>'.length, end);
+const source = html.slice(start + '<script>'.length, end).replace(/\r\n/g, '\n');
 
 function declaration(name) {
   const from = source.indexOf('const ' + name + '=');
