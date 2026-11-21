@@ -276,7 +276,18 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
 :root{--brass-frame:url("art/hud-brass-frame.webp")}
 .plate-mobs-dungeon{background-image:url("art/mobs-dungeon.webp")}
 .plate-mobs-realms{background-image:url("art/mobs-realms.webp");background-size:400% 200%}
-.combat-info{position:absolute;z-index:4;top:10px;left:10px;pointer-events:none}
+.combat-info{position:absolute;z-index:4;top:10px;left:10px;pointer-events:none;display:grid;justify-items:start;gap:3px}
+#player-vitals{display:grid;gap:2px;color:#fff1d3;font:700 11px/1.1 system-ui;font-variant-numeric:tabular-nums;text-shadow:0 1px 2px #000,0 0 5px #000}
+.vitals-row{display:flex;align-items:center;gap:7px}
+.vitals-row[hidden]{display:none}
+.vital{display:inline-flex;gap:2px;align-items:center;white-space:nowrap}
+.vital .hud-pictogram,.vital .plate-icon,.vital-shield{width:14px;height:14px;flex:none}
+.vital .plate-icon,.vital-shield,.vital-coin{filter:drop-shadow(0 1px 2px #000)}
+.vital-shield{background:url("art/shield-crest.webp") center/contain no-repeat}
+.vital-coin{width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe3a3,#c5923f 56%,#714122);border:1px solid #ebbd78}
+.vital-soul{width:14px;text-align:center;color:#e0b8ff}
+#vital-health[data-bleeding=true]{color:#ffaaa7}
+#vital-souls[hidden]{display:none}
 #enemy-counter{display:flex;align-items:center;gap:2px;color:#ffefc9;text-shadow:0 1px 3px #000}
 #enemy-counter .plate-icon{display:block;width:23px;--sprite-col:0%;--sprite-row:0%;filter:drop-shadow(0 1px 2px #000)}
 #enemy-count{font:700 15px Georgia,serif}
@@ -292,6 +303,8 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
 .combat-actions button:is(:hover,:focus-visible){background:#1d161864}
 .combat-actions #map-toggle[aria-pressed=false] .hud-pictogram{opacity:.55}
 .hud-pictogram{display:inline-block;width:18px;height:18px;background:url("art/hud-ornaments.webp") no-repeat;background-size:400% 200%;filter:drop-shadow(0 1px 2px #000)}
+.hud-heart{background-position:66.6667% 0}
+.hud-mana{background-position:100% 0}
 .hud-map{background-position:0 100%}
 .hud-character{background-position:33.3333% 100%}
 .hud-pause{background-position:66.6667% 100%}
@@ -573,7 +586,23 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  .pause-body{grid-template-columns:minmax(100px,.66fr) minmax(0,1.6fr)}
  .controls-body{grid-template-columns:minmax(106px,.70fr) minmax(0,1.5fr)}
 }
-</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div><span id="economy-room-name" hidden></span></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden role="progressbar" aria-labelledby="boss-name" aria-valuemin="0"><div id="boss-fill"></div><strong id="boss-name"></strong></section><output id="mage-cast-status" class="hud-accessible" role="status" aria-live="polite"></output><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info">
+ <div id="player-vitals" role="group" aria-label="Player stats">
+  <div class="vitals-row">
+   <span class="vital"><span class="hud-pictogram hud-heart" aria-hidden="true"></span><span class="hud-accessible">Health</span><span id="vital-health">50/50</span></span>
+   <span class="vital"><span id="vital-portrait" aria-hidden="true"></span><span class="hud-accessible">Lives</span><span id="vital-lives">3</span></span>
+   <span class="vital"><span class="vital-coin" aria-hidden="true"></span><span class="hud-accessible">Coins</span><span id="vital-coins">0</span></span>
+  </div>
+  <div id="vitals-defences" class="vitals-row" hidden>
+   <span class="vital"><span class="vital-shield" aria-hidden="true"></span><span class="hud-accessible">Shield durability</span><span id="vital-shield"></span></span>
+   <span class="vital"><span class="hud-pictogram hud-character" aria-hidden="true"></span><span class="hud-accessible">Armour durability</span><span id="vital-armour"></span></span>
+  </div>
+  <div id="vitals-magic" class="vitals-row" hidden>
+   <span class="vital"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><span class="hud-accessible">Mana</span><span id="vital-mana"></span></span>
+   <span id="vital-souls" class="vital" hidden><span class="vital-soul" aria-hidden="true">✦</span><span class="hud-accessible">Souls</span><span id="vital-souls-count"></span></span>
+  </div>
+ </div>
+ <div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div><span id="economy-room-name" hidden></span></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden role="progressbar" aria-labelledby="boss-name" aria-valuemin="0"><div id="boss-fill"></div><strong id="boss-name"></strong></section><output id="mage-cast-status" class="hud-accessible" role="status" aria-live="polite"></output><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
  <div class="pause-home">
   <div class="menu-header"><h2>Paused</h2><button id="settings-close" type="button" class="menu-control primary-control">Resume</button></div>
   <div class="pause-body">
@@ -670,7 +699,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.66</small>
+   <small>V8.67</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -8303,6 +8332,33 @@ elementFx.push({type:'split',x:oldX,y:oldY,life:.38,maxLife:.38});
 }
 const enemyCounter=document.querySelector('#enemy-counter');
 const economyRoomName=document.querySelector('#economy-room-name');
+const vitalNodes=Object.fromEntries(['health','lives','coins','shield','armour','mana','souls-count'].map(id=>[id,document.querySelector('#vital-'+id)]));
+const vitalPortrait=document.querySelector('#vital-portrait');
+const vitalDefences=document.querySelector('#vitals-defences');
+const vitalMagic=document.querySelector('#vitals-magic');
+const vitalSouls=document.querySelector('#vital-souls');
+function updatePlayerVitals(){
+ const {atlas,cell}=heroPortraitArtwork(),portraitKey=atlas+':'+cell;
+ if(vitalPortrait.dataset.portrait!==portraitKey){
+  vitalPortrait.dataset.portrait=portraitKey;
+  vitalPortrait.innerHTML=plateIcon(atlas,cell);
+ }
+ const health=Math.max(0,Math.ceil(hp)),bleeding=String(playerBleed.length>0);
+ if(vitalNodes.health.dataset.bleeding!==bleeding)vitalNodes.health.dataset.bleeding=bleeding;
+ const values={health:health+'/'+playerStats().maxHealth,lives:String(lives),coins:String(progress.coins)};
+ vitalDefences.hidden=hero!=='classic';
+ vitalMagic.hidden=hero!=='mage';
+ if(hero==='classic'){
+  values.shield=Math.round(shieldHp)+'%';
+  values.armour=Math.ceil(armourHp)+'/'+bodyArmourStats().capacity;
+ }
+ if(hero==='mage'){
+  values.mana=Math.floor(mageMana)+'/'+mageMaxMana();
+  vitalSouls.hidden=progress.mageSchool!=='necromancer';
+  values['souls-count']=String(mageSouls);
+ }
+ for(const [key,value] of Object.entries(values))if(vitalNodes[key].textContent!==value)vitalNodes[key].textContent=value;
+}
 function hud(){
  if(hero==='mage')mageMana=Math.max(0,Math.min(mageMaxMana(),mageMana));
  const enemiesLeft=enemies.filter(enemy=>enemy.hp>0).length;
@@ -8627,6 +8683,7 @@ finishDamageCapture(damageBefore,oldPlayerHp,dt);flushEnemyDefeatAudio();updateD
 checkRoomDoors(dt);}
 resolvePlayerDeath();
 showVictoryRecap();
+updatePlayerVitals();
 // Keep the camera centered on the player; clip the world above the fixed controls.
 g.setTransform(c.width/viewW,0,0,c.height/H,0,0);
 g.fillStyle='#0a090a';g.fillRect(0,0,viewW,H);

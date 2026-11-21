@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.67 — Small player icons
+
+Health, lives and coins are shown as small icons with numbers in the top-left corner. Squire sees shield and armour durability. Mage sees mana and Necromancer souls. The strip has no panel or bars. The slim boss bar and transparent maps carry over from V8.66.
+
 ## V8.66 — Clearer arena view
 
 Player stats are available under Character. The arena shows a small enemy count when needed and transparent Map, Character, Pause, and Dash controls. Idle touch controls are fainter and brighten during use.
