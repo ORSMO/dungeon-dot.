@@ -2,6 +2,10 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.70 — Higher shop prices
+
+The Traveller Shop and practice shop charge 50 gold per relic, 28 per stat upgrade, and 14 per healing flask on Dungeon 1. Prices increase by 25% of the starting price per dungeon, rounded to whole gold and capped at double from Dungeon 5 onward. Existing shops keep their inventory and sold records, and unsold stock updates to the new price when you enter or resume the room. Earned gold, free room rewards, and Preview ad and Diamond prices carry over.
+
 ## V8.69 — Four offers per shop
 
 Every Traveller Shop carries two different relics at 20 coins each, one stat upgrade at 12 coins, and one Healing Flask at 8 coins. A third relic fills the upgrade slot if an upgrade is unavailable when stocking the room. Returning to an older saved shop adds the missing stock and preserves its original offers and purchases. Android Preview ad rewards and the Diamond Chest are separate from the four gold offers.
