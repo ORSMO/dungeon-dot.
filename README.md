@@ -2,6 +2,12 @@
 
 Landscape-first physics dungeon crawler. Open `index.html` with the `art/` folder alongside it.
 
+## V8.55 — Visual consistency
+
+Painted portraits and weapon artwork now accompany the level-three choices. The Enemy Index, loot, notices, the practice panel, the control-position editor, the privacy dialog and the landscape prompt use the same bronze, parchment and dungeon artwork as the main menus. Boss notices sit beneath the arena action so they leave the boss bars clear.
+
+Enemy windups, boss landing zones and artillery use a shared visual style with dark outlines and colors suited to each effect. Dashed edges identify warnings, solid edges identify active hazards, and timed attacks show progress around the edge.
+
 ## V8.54 — Boss and trap feedback
 
 Boss charges, crashes, landings, volleys, beams, lightning and other signatures now sound as they go off. Dashed aim lines show the actual projectile fan just before the Gatekeeper family, Crystal Eye, Spore Matriarch or Prism Oracle fires. Cinder Hydra keeps its three breath lanes.
