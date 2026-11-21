@@ -877,7 +877,7 @@ test('every level-three evolution card selects the option named on the card', ()
 test('failed magic casts preserve mana and a successful cast enforces both cooldowns', () => {
   const result=run([
     declaration('SPELL_ZONE_ART'),method('spellArtKind'),'const soundCues=[],playSoundCue=id=>soundCues.push(id);',
-    ...schoolSpells,method('castMageSpell'),method('pulseMageRunes'),
+    ...schoolSpells,method('castMageSpell'),method('mageCooldownMultiplier'),method('pulseMageRunes'),
     'let mageMana=100,arenaTime=1,mageGlobalReady=0,mageCastCount=0,mageRuneFx=[],resource=false,feedback="";',
     'const progress={mageSchool:"necromancer"},mageCooldowns={},mageInputEnabled=()=>true,mageAim=()=>({a:0});',
     'const castSchoolSpell=()=>resource?undefined:"NEED A SOUL",itemCount=()=>0,upgradeCount=()=>0,playerStats=()=>({swing:1});',
@@ -1099,7 +1099,7 @@ test('Archer uses the release position and never fires on a cancelled pointer', 
     'const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),pt=event=>event;',
     'const combatInputEnabled=()=>true,itemCount=()=>0,upgradeCount=()=>0,equippedWeapon=()=>"bow";',
     'const soundCues=[],playSoundCue=id=>soundCues.push(id);',
-    method('setStick'), method('bowPower'), method('bowDrawStage'), method('rangedWeaponShot'), method('fireArrow'), method('endCanvasPointer'),
+    method('setStick'), method('bowPower'), method('bowDrawStage'), method('rangedWeaponShot'), method('rangedReloadTime'), method('fireArrow'), method('endCanvasPointer'),
     'endCanvasPointer({type:"pointerup",pointerId:7,x:100,y:200});',
     'sticks[1].id=7;endCanvasPointer({type:"pointercancel",pointerId:7,x:135,y:200});',
     'const afterCancels=arrows.length;',
@@ -1238,11 +1238,57 @@ test('shops omit exhausted upgrade stock while keeping their other items and sol
   method('prepareRoomLoot'),
   'const W=520,F=360,UPGRADE_DEFS={power:{}};let canBuy=true;',
   'const rollItem=()=>"emberHeart",upgradeAvailable=()=>canBuy;',
-  'const stocked={kind:"shop"},exhausted={kind:"shop"},vault={kind:"treasure"};',
+  'const stocked={kind:"shop"},exhausted={kind:"shop"};',
   'prepareRoomLoot(stocked);stocked.loot[0].claimed=true;canBuy=false;',
-  'prepareRoomLoot(stocked);prepareRoomLoot(exhausted);prepareRoomLoot(vault);'
- ],'{stocked:stocked.loot.map(x=>[x.id,x.price,x.claimed]),exhausted:exhausted.loot.map(x=>x.id),treasure:vault.loot.map(x=>[x.id,x.price])}');
- assert.deepEqual(result,{stocked:[['shop-item',20,true],['shop-stat',12,false],['shop-heal',8,false]],exhausted:['shop-item','shop-heal'],treasure:[['treasure',0]]});
+  'prepareRoomLoot(stocked);prepareRoomLoot(exhausted);'
+ ],'{stocked:stocked.loot.map(x=>[x.id,x.price,x.claimed]),exhausted:exhausted.loot.map(x=>x.id)}');
+ assert.deepEqual(result,{stocked:[['shop-item',20,true],['shop-stat',12,false],['shop-heal',8,false]],exhausted:['shop-item','shop-heal']});
+});
+
+test('treasure offers distinct relics, preserves old offers and grants a single free choice',()=>{
+ const result=run([
+  method('itemCount'),method('rollItem'),method('prepareRoomLoot'),method('takeNearbyLoot'),
+  'const W=520,F=360,ITEM_DEFS={emberHeart:{},mossCharm:{},glassEye:{}},ITEM_STACK_LIMITS={emberHeart:3,mossCharm:3,glassEye:2};',
+  'let selectedBiome="basic",progress={coins:30,items:{emberHeart:3,glassEye:2}},over=false;const p={x:260,y:180,falling:0};',
+  'const awarded=[],giveItem=id=>awarded.push(id),playSoundCue=()=>{},updateEconomy=()=>{},hud=()=>{},queueCheckpoint=()=>{};let saves=0;const flushCheckpoint=()=>saves++;',
+  'const currentRoom={kind:"treasure"};prepareRoomLoot(currentRoom);let nearestLoot=currentRoom.loot[0];',
+  'const [first,second]=[nearestLoot.key,nearestLoot.alternative];prepareRoomLoot(currentRoom);const same=nearestLoot.alternative===second;',
+  'const invalid=takeNearbyLoot("other"),skipped=takeNearbyLoot();p.x=0;const distant=takeNearbyLoot(second);p.x=260;',
+  'const picked=takeNearbyLoot(second),double=takeNearbyLoot(first);prepareRoomLoot(currentRoom);',
+  'const old={kind:"treasure",loot:[{kind:"item",key:"emberHeart",claimed:false}]},claimed={kind:"treasure",loot:[{kind:"item",key:"emberHeart",claimed:true}]};',
+  'prepareRoomLoot(old);prepareRoomLoot(claimed);'
+ ],'{first,distinct:first!==second,same,invalid,skipped,distant,picked,double,awarded,second,coins:progress.coins,saves,chosen:currentRoom.loot[0],old:old.loot[0],claimed:claimed.loot[0]}');
+ assert.equal(result.first,'mossCharm');
+ assert.ok(result.distinct&&result.same&&result.picked);
+ assert.ok(!result.distant&&!result.invalid&&!result.skipped&&!result.double);
+ assert.deepEqual(result.awarded,[result.second]);
+ assert.equal(result.coins,30);
+ assert.equal(result.saves,1);
+ assert.equal(result.chosen.key,result.second);
+ assert.ok(result.chosen.claimed&&!result.chosen.alternative);
+ assert.deepEqual(result.old,{kind:'item',key:'emberHeart',claimed:false,alternative:'mossCharm'});
+ assert.deepEqual(result.claimed,{kind:'item',key:'emberHeart',claimed:true});
+});
+
+test('loot previews use the real caps, hero-specific stats and synergy effects without changing the build',()=>{
+ const result=run([
+  ...evolutionMethods,declaration('ITEM_STACK_LIMITS'),declaration('SYNERGY_DEFS'),declaration('BODY_ARMOUR_MAX_RANK'),declaration('PLAYER_REGEN'),
+  ...['itemCount','upgradeCount','playerStats','hasSynergy','activeSynergies','bodyArmourStats','rangedWeaponShot','rangedReloadTime','mageMaxMana','mageManaRegen','mageCooldownMultiplier','lootBuildStats','lootBuildChange'].map(method),
+  'let hero="classic",progress={level:1,items:{mossCharm:1,emberHeart:1,hourglass:1},upgrades:{vitality:4}};const equippedWeapon=()=>"crossbow";',
+  'const original=JSON.stringify(progress),hp=lootBuildChange("stat","vitality"),plates=lootBuildChange("stat","armourPlates");',
+  'const synergy=lootBuildChange("item","thornMantle"),capped=lootBuildChange("item","hourglass");',
+  'hero="archer";const reload=lootBuildChange("stat","shield");hero="mage";',
+  'const recovery=lootBuildChange("stat","regen"),extraMana=lootBuildChange("item","shieldBloom");'
+ ],'{hp,plates,synergy,capped,reload,recovery,extraMana,unchanged:JSON.stringify(progress)===original}');
+ assert.equal(result.hp,'No stat change at current caps');
+ assert.equal(result.plates,'Armour durability (next room) 12 → 16');
+ assert.match(result.synergy,/Damage reduction 0% → 20%/);
+ assert.match(result.synergy,/Unlocks Living Armour/);
+ assert.equal(result.capped,'Stack full · +10 coins');
+ assert.equal(result.reload,'Reload time 0.90 s → 0.81 s');
+ assert.match(result.recovery,/Mana regen 8.75 MP\/s → 10.25 MP\/s/);
+ assert.match(result.extraMana,/Max mana 100 → 115/);
+ assert.ok(result.unchanged);
 });
 
 test('character pages preserve a stats fallback and only expose runes to Mage', () => {

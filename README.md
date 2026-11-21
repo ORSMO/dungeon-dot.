@@ -13,6 +13,12 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.65 — Treasure choice and shop previews
+
+Each unopened Treasure Room chest offers two different relics. Compare your hero's versions of the items, stack changes, affected stats, and newly unlocked synergies, then take one for free. The offer and chosen reward are saved. Old unopened chests keep their original item as the first choice, and claimed chests stay open.
+
+The Traveller Shop shows how each stat upgrade changes your current build before you buy it. It accounts for stat caps, Scout's weapon reload, Mage's mana and spell cooldowns, and Squire's armour durability starting next room. Shop prices and existing reward effects are unchanged.
+
 ## V8.64 — Brass HUD, shop and treasure art
 
 A high-resolution brass frame replaces the stretched artwork around health, boss stats, navigation controls, and the enemy counter. The maps and menu panels use the same trim. The Traveller Shop has a painted interior and the Treasure Room has a separate inlaid vault floor.
