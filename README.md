@@ -13,6 +13,10 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.56 — Loot presentation
+
+The nearby item panel now shows painted flask and relic art, keeps the purchase button easy to tap, and gives rare finds a distinct border. Small item plaques appear near visible pedestals and give way to the full card when an item is within reach.
+
 ## V8.55 — Visual consistency
 
 Painted portraits and weapon artwork now accompany the level-three choices. The Enemy Index, loot, notices, the practice panel, the control-position editor, the privacy dialog and the landscape prompt use the same bronze, parchment and dungeon artwork as the main menus. Boss notices sit beneath the arena action so they leave the boss bars clear.

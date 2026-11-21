@@ -10,7 +10,7 @@
 .inventory-row svg{width:39px;height:39px;flex:none}.inventory-row strong{display:block;font-size:11px}.inventory-row small{display:block;font-size:10px;line-height:1.35;color:#cfc0df}
 .character-note{font-size:10px;line-height:1.4;color:#aaa0bc;margin-bottom:0}
 #loot-panel{position:absolute;z-index:18;left:50%;bottom:69px;transform:translateX(-50%);width:min(340px,54vw);padding:9px 11px;border:1px solid #d9bd7b;border-radius:9px;background:#221b2aed;color:#f3e7c8;font:11px system-ui}
-#loot-panel>strong,#loot-panel>small{display:block}#loot-panel>small{color:#cdbedb;font-size:10px;margin:3px 0 7px}#loot-panel>div{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#f0cf7d}#loot-take{padding:7px 11px;font-size:11px;background:#65502f}#loot-take:disabled{opacity:.55}
+#loot-take{padding:7px 11px;font-size:11px}#loot-take:disabled{opacity:.65}
 #item-notice{position:absolute;z-index:14;top:74px;left:50%;transform:translateX(-50%);max-width:58vw;padding:8px 11px;border:1px solid #c9a96c;border-radius:8px;background:#241b2bf2;color:#f2ddb4;font:10px system-ui;pointer-events:none}
 #loot-panel.practice-with-menu{left:40%;width:min(300px,48vw)}
 @media(max-height:420px){#character-panel{font-size:11px;padding:9px}#character-stats>div{padding:4px;font-size:9px}.inventory-row{padding:4px 0}#loot-panel{bottom:63px;padding:7px 9px}}
@@ -578,9 +578,21 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  border:1px solid var(--world-edge,#a78052);border-radius:4px;
  box-shadow:0 5px 18px #070609a0,inset 0 0 0 2px #e7b77013;
 }
-#loot-panel>strong,#privacy-title{color:#ffe6bc;font-family:Georgia,serif}
-#loot-panel>strong{font-size:17px}
-#loot-panel>small{color:#ddc7b0;line-height:1.35}
+#loot-panel{
+ box-sizing:border-box;display:grid;grid-template-columns:46px minmax(0,1fr);
+ column-gap:10px;width:min(362px,48vw);align-items:center;
+}
+#loot-panel[data-rare=true]{border-color:#c39cdb;box-shadow:0 5px 18px #070609a0,inset 0 0 0 2px #b692d031}
+#loot-preview{
+ display:block;width:46px;height:46px;background:#16151b url("art/hud-compass.webp") center/contain no-repeat;
+ border-radius:50%;
+}
+#loot-name,#privacy-title{color:#ffe6bc;font-family:Georgia,serif}
+#loot-name{display:block;font-size:17px;line-height:1.15;overflow-wrap:anywhere}
+#loot-description{display:block;color:#ddc7b0;font-size:11px;line-height:1.35;margin-top:3px}
+.loot-footer{grid-column:2;display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:6px}
+#loot-price{color:#f6d28a;font-size:11px;font-weight:700}
+#loot-take{min-height:36px}
 #loot-take,#edit-done,#privacy-policy button,#rotate-fullscreen{
  border:1px solid #b48c5d;border-radius:3px;color:#ffe9c0;
  background:linear-gradient(#55402c,#342621);box-shadow:inset 0 1px #f3ce9726;
@@ -636,7 +648,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  .pause-body{grid-template-columns:minmax(100px,.66fr) minmax(0,1.6fr)}
  .controls-body{grid-template-columns:minmax(106px,.70fr) minmax(0,1.5fr)}
 }
-</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.55</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.56</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
  <div class="pause-home">
   <div class="menu-header"><h2>Paused</h2><button id="settings-close" type="button" class="menu-control primary-control">Resume</button></div>
   <div class="pause-body">
@@ -701,8 +713,9 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  </div>
 </section>
 <section id="loot-panel" hidden aria-label="Nearby item">
- <strong id="loot-name"></strong><small id="loot-description"></small>
- <div><span id="loot-price"></span><button id="loot-take">Take item</button></div>
+ <canvas id="loot-preview" width="92" height="92" aria-hidden="true"></canvas>
+ <div><strong id="loot-name"></strong><small id="loot-description"></small></div>
+ <div class="loot-footer"><span id="loot-price"></span><button id="loot-take">Take item</button></div>
 </section>
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot main menu">
@@ -723,7 +736,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.55</small>
+   <small>V8.56</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -2426,6 +2439,8 @@ function updateEconomy(dt){
  panel.className=inSandbox()&&!document.querySelector('#sandbox-panel').hidden?'practice-with-menu':'';
  if(nearestLoot){
   const def=lootDefinition(nearestLoot),button=document.querySelector('#loot-take');
+  panel.dataset.rare=String(!!nearestLoot.rare);
+  drawLootPreview(nearestLoot,def);
   document.querySelector('#loot-name').textContent=def.name;
   document.querySelector('#loot-description').textContent=def.desc;
   document.querySelector('#loot-price').textContent=nearestLoot.price?nearestLoot.price+' coins':'Free pickup';
@@ -2446,6 +2461,22 @@ function takeNearbyLoot(){
 }
 
 const PROP_ART={"keep":[8,66,186,89],"forge":[207,65,188,90],"hollow":[407,63,187,94],"vault":[607,65,186,90],"grate":[23,225,154,157],"spikes":[222,225,155,158],"bridge":[405,227,190,142],"chest":[613,228,174,141],"coin":[24,421,151,156],"heart":[217,424,165,176],"life":[411,408,178,177],"flask":[635,410,130,176],"pedestal":[17,602,168,184],"relic":[246,600,106,193],"crate":[428,618,142,158],"barrel":[628,605,143,183]};
+let lootPreviewKey='';
+function drawLootPreview(loot,def){
+ const image=readyPainting('dungeon-props');
+ const key=JSON.stringify([loot.kind,loot.key,def.glyph,def.color,!!image]);
+ if(key===lootPreviewKey)return;
+ lootPreviewKey=key;
+ const brush=document.querySelector('#loot-preview').getContext('2d');
+ brush.clearRect(0,0,92,92);
+ const potion=loot.kind==='heal',crop=PROP_ART[potion?'flask':'relic'];
+ if(image)brush.drawImage(image,...crop,potion?24:29,17,potion?44:34,58);
+ if(!potion||!image){
+  brush.textAlign='center';brush.textBaseline='middle';brush.font='bold 28px system-ui';
+  brush.lineWidth=6;brush.strokeStyle='#18141b';brush.strokeText(def.glyph,46,45);
+  brush.fillStyle=def.color;brush.fillText(def.glyph,46,45);
+ }
+}
 function drawPropArt(name,x,y,w,h){
  const image=readyPainting('dungeon-props'),crop=PROP_ART[name];
  if(!image||!crop)return false;
@@ -2518,8 +2549,13 @@ function drawLoot(){
    artOval(g,loot.x,y,8,8,'#131620de');
    g.fillStyle=def.color;g.font='bold 13px system-ui';g.textBaseline='middle';g.fillText(def.glyph,loot.x,y+1);g.textBaseline='alphabetic';
   }
-  g.fillStyle='#ecdfbe';g.font='8px monospace';g.fillText(loot.rare?'RARE · '+def.name:def.name,loot.x,loot.y+33);
-  if(loot.price){g.fillStyle='#efcd74';g.fillText(loot.price+' coins',loot.x,loot.y+44)}
+  if(loot===nearestLoot||Math.hypot(p.x-loot.x,p.y-loot.y)>110)continue;
+  g.font='bold 9px Georgia';
+  const label=loot.price?def.name+' · '+loot.price+' coins':def.name;
+  const width=g.measureText(label).width+12,labelX=clamp(loot.x,width/2,W-width/2),labelY=loot.y+29;
+  g.fillStyle='#1c171ce8';g.fillRect(labelX-width/2,labelY-10,width,14);
+  g.lineWidth=1;g.strokeStyle=loot.rare?'#c39cdb':'#a88050';g.strokeRect(labelX-width/2,labelY-10,width,14);
+  g.fillStyle='#ffe6bd';g.fillText(label,labelX,labelY);
  }
  for(const zone of friendlyZones){g.globalAlpha=Math.min(.35,zone.life*.2);g.fillStyle='#98dc71';g.beginPath();g.arc(zone.x,zone.y,zone.r,0,Math.PI*2);g.fill()}
  g.restore();
@@ -8448,5 +8484,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.55';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.56';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
