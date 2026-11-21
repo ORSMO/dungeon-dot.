@@ -230,3 +230,39 @@ for(const [character,name] of [['classic','Stick'],['archer','Sling'],['mage','A
   assert.deepEqual({...result},{ranged:12,specials:20,bosses:12,signatures:24,steps:91});
  });
 }
+
+test('the first combat room teaches all three classes, retries cleanly, and only rewards a full clear',()=>{
+ const probe=`
+  const passed=[];
+  const check=(value,reason)=>{if(!value)throw Error(hero+': '+reason)};
+  for(const character of ['classic','archer','mage']){
+   selectedHero=character;beginNewSlot(1,true);
+   const entry=dungeon[0].doors[0],room=dungeon[entry.to],side=DIRECTIONS[entry.side].opposite;
+   check(hp===50&&lives===3&&room.openingLesson,'starting stats or lesson marker');
+   enterRoom(room.id,side);
+   const clean=()=>[walls,holes,portals,floorTraps,breakables,dungeonNests,wallFixtures].every(items=>!items.length)&&!dungeonEvent;
+   const first=()=>enemies.length===1&&enemies[0].shape===(character==='classic'?'square':'round')&&!enemies[0].abilityEnabled;
+   check(first()&&clean()&&!room.cleared&&!document.querySelector('#opening-guide').hidden,'opening room or first lesson '+JSON.stringify({first:first(),layout:[walls,holes,portals,floorTraps,breakables,dungeonNests,wallFixtures].map(items=>items.length),event:!!dungeonEvent,cleared:room.cleared,guide:document.querySelector('#opening-guide').hidden,enemies:enemies.map(e=>e.shape)} ));
+   const kill=()=>{for(const enemy of enemies)enemy.hp=0;collectDefeatedEnemies();enemies=[];updateRoomProgress()};
+   kill();
+   check(enemies.length===1&&enemies[0].shape==='shooter'&&openingWave===1&&!room.cleared&&!room.clearRewarded,'marksman wave or premature reward');
+   hp=1;inv=0;hp=damagedHealth(20,false,'shot');over=hp<=0;resolvePlayerDeath();
+   check(first()&&hp===50&&lives===2&&openingWave===0,'death did not reset the lesson');
+   check(document.querySelector('#item-notice').textContent.includes('Enemy projectile'),'death recap lacks the cause');
+   kill();kill();
+   check(room.cleared&&room.clearRewarded&&progress.roomsCleared===1&&document.querySelector('#opening-guide').hidden,'completion not rewarded exactly once');
+   flushCheckpoint();
+   check(continueSlot(1)&&currentRoom.openingLesson&&currentRoom.cleared&&enemies.length===0,'saved lesson cleared did not reopen safely');
+   const old=readSlot(1).data;delete old.dungeon[room.id].openingLesson;
+   localStorage.setItem(slotKey(2),JSON.stringify(old));
+   check(continueSlot(2)&&!currentRoom.openingLesson&&currentRoom.cleared,'old save unexpectedly gained a lesson');
+   dungeonDepth=2;selectedBiome='red';buildDungeon();
+   check(!dungeon.some(room=>room.openingLesson),'lesson repeated on a deeper floor');
+   passed.push(character);
+  }
+  report(passed);
+ `;
+ let result;
+ vm.runInNewContext(script.replace(startup,()=>probe+startup),makeGameContext(value=>{result=value}),{timeout:5000});
+ assert.deepEqual(Array.from(result),['classic','archer','mage']);
+});

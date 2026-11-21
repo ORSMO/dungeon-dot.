@@ -13,6 +13,12 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.60 — First-dungeon lessons
+
+New runs start with two short fights in the first combat room. Squire learns to face and block a Footman, Scout learns to aim and release a sling shot, and Apprentice learns a basic rune and Rune Burst. A lone Marksman then demonstrates a locked shot lane with a longer windup. Pits, traps, nests, and random events are omitted from that room so each threat can be learned on its own.
+
+A life-loss notice names the fatal hit and offers a counter when the source is known. The standard 50 starting HP and three lives still apply. The lesson marker is optional in saves, so older runs keep their existing rooms.
+
 ## V8.59 — Old Dungeon showcase
 
 The Old Dungeon boss arena has new painted slate flooring, cut-stone walls, and an ironbound entrance gate. The Gatekeeper uses a new high-resolution sprite and matching boss portrait. The gate follows the existing unlock animation, and the arena uses the existing room layout and combat rules.

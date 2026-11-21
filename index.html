@@ -603,6 +603,14 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
 }
 #item-notice{top:max(72px,var(--boss-top,72px));color:#ffdfad;font:700 11px/1.25 system-ui;text-align:center}
 #boss-hud:not([hidden]) ~ #item-notice{top:auto;bottom:26px}
+#opening-guide{
+ position:absolute;z-index:13;bottom:20px;left:50%;transform:translateX(-50%);
+ box-sizing:border-box;width:min(340px,48vw);padding:6px 10px;pointer-events:none;
+ background:#1f1916ec;border:1px solid #90704d;border-radius:4px;text-align:center;
+ color:#e6d1b4;font:11px/1.3 system-ui;
+}
+#opening-guide[hidden]{display:none}
+#opening-guide strong{display:block;color:#ffe6bd;font:700 14px/1.2 Georgia,serif;margin-bottom:2px}
 #edit-hint{top:70px}
 #coin-count{display:inline-flex;align-items:center;gap:4px}
 #coin-count::before{
@@ -649,7 +657,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  .pause-body{grid-template-columns:minmax(100px,.66fr) minmax(0,1.6fr)}
  .controls-body{grid-template-columns:minmax(106px,.70fr) minmax(0,1.5fr)}
 }
-</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.59</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.60</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
  <div class="pause-home">
   <div class="menu-header"><h2>Paused</h2><button id="settings-close" type="button" class="menu-control primary-control">Resume</button></div>
   <div class="pause-body">
@@ -718,6 +726,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  <div><strong id="loot-name"></strong><small id="loot-description"></small></div>
  <div class="loot-footer"><span id="loot-price"></span><button id="loot-take">Take item</button></div>
 </section>
+<aside id="opening-guide" hidden role="status"><strong id="opening-guide-title"></strong><span id="opening-guide-tip"></span></aside>
 <div id="item-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot main menu">
  <div class="menu-view menu-home" id="menu-home">
@@ -737,7 +746,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.59</small>
+   <small>V8.60</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -1023,7 +1032,7 @@ function resolveEnemyContact(enemy,oldX,oldY,playerStart){
  p.kvx-=nx*push;p.kvy-=ny*push;
  if(!attacks||inv>0)return;
  if(enemy.shape==='bloodletter')addEnemyBleed('bloodContact');
- hp=damagedHealth(damage);inv=1.1;if(hp<=0)over=true;
+ hp=damagedHealth(damage,false,'contact');inv=1.1;if(hp<=0)over=true;
 }
 const ENEMY_SPECIAL_DAMAGE={slam:[18,22],blood:[9,9],fire:[12,12],electric:[10,10],magnet:[10,10],mirror:[11,11],sponge:[13,13],bomb:[16,22]};
 const ENEMY_BLEED={bloodContact:[12,2],bloodSpecial:[6,1.5],bloodcaster:[7,1.4],emberbolt:[3,1.2],bossFire:[3,1.2],bossPoison:[4,1.2],wallSpike:[2,1]};
@@ -1048,7 +1057,7 @@ const RANGED_COLOR={emberling:'#ff974b',thornling:'#a5c65a',icewisp:'#adf1ff',em
 let projectiles=[],artillery=[],gravityWells=[],reactionZones=[];
 function laserPath(x,y,a){let segments=[],dx=Math.cos(a),dy=Math.sin(a),sx=x,sy=y;for(let bounce=0;bounce<2;bounce++){let best=Math.hypot(W,F)*2,nx=0,ny=0;const boxes=[{x:13,y:13,w:W-26,h:F-26,outer:true},...walls];for(let w of boxes){let edges=w.outer?[[w.x,0,-1,0],[w.x+w.w,0,1,0],[0,w.y,0,-1],[0,w.y+w.h,0,1]]:[[w.x,0,-1,0],[w.x+w.w,0,1,0],[0,w.y,0,-1],[0,w.y+w.h,0,1]];for(let [v,_,ex,ey] of edges){if(ex){if(Math.abs(dx)<.00001)continue;let t=(v-sx)/dx,hitY=sy+dy*t;if(t>.01&&t<best&&(w.outer?hitY>=w.y&&hitY<=w.y+w.h:hitY>=w.y&&hitY<=w.y+w.h)){if(w.outer?dx*ex>0:dx*ex<0){best=t;nx=ex;ny=0}}}else{if(Math.abs(dy)<.00001)continue;let t=((ey?_:v)-sy)/dy;let hitX=sx+dx*t;if(t>.01&&t<best&&hitX>=w.x&&hitX<=w.x+w.w){if(w.outer?dy*ey>0:dy*ey<0){best=t;nx=0;ny=ey}}}}}let ex=sx+dx*best,ey=sy+dy*best;segments.push({x1:sx,y1:sy,x2:ex,y2:ey});if(bounce===1||(!nx&&!ny))break;sx=ex-nx*.25;sy=ey-ny*.25;dx=nx?-dx:dx;dy=ny?-dy:dy}return segments}
 function laserDistance(x,y,s){let dx=s.x2-s.x1,dy=s.y2-s.y1,t=Math.max(0,Math.min(1,((x-s.x1)*dx+(y-s.y1)*dy)/(dx*dx+dy*dy||1)));return Math.hypot(x-s.x1-t*dx,y-s.y1-t*dy)}
-function updateLasers(dt){if(!enemyAttacksEnabled())return;for(let e of enemies){if(e.shape!=='laser'||e.hp<=0||e.phaseIn>0)continue;e.laserClock=(e.laserClock||0)-dt;if(e.laserClock<=0&&e.laserState!=='charge'&&e.laserState!=='fire'){e.laserState='charge';e.laserTime=1.8;e.laserAngle=Math.atan2(p.y-e.y,p.x-e.x)}if(e.laserState==='charge'){e.laserTime-=dt;let target=Math.atan2(p.y-e.y,p.x-e.x),diff=Math.atan2(Math.sin(target-e.laserAngle),Math.cos(target-e.laserAngle));e.laserAngle+=Math.max(-.38*dt,Math.min(.38*dt,diff));if(e.laserTime<=0){e.laserState='fire';e.laserTime=2;e.laserHit=.15;playEnemyAttack(e,'enemy-beam',320)}}else if(e.laserState==='fire'){e.laserTime-=dt;let target=Math.atan2(p.y-e.y,p.x-e.x),diff=Math.atan2(Math.sin(target-e.laserAngle),Math.cos(target-e.laserAngle));e.laserAngle+=Math.max(-.16*dt,Math.min(.16*dt,diff));let rawLines=laserPath(e.x,e.y,e.laserAngle);if(shieldBlocksLaser(rawLines)){shieldLaserTick+=dt;if(shieldLaserTick>=.1){shieldDamage(1.8);shieldLaserTick=0}}let lines=shieldLaserLines(rawLines);e.laserHit-=dt;if(e.laserHit<=0){if(lines.some(seg=>laserDistance(p.x,p.y,seg)<11)&&inv<=0&&!classicDashProtected()){hp=damagedHealth(ENEMY_DAMAGE.laser);inv=.32;if(hp<=0)over=true}for(let t of enemies){if(t===e||t.hp<=0)continue;if(lines.some(seg=>laserDistance(t.x,t.y,seg)<t.r+2)&&canDamage(t,150))t.hp-=1}e.laserHit=.28}if(e.laserTime<=0){e.laserState='cooldown';e.laserClock=3.4+Math.random()*1.1}}}}
+function updateLasers(dt){if(!enemyAttacksEnabled())return;for(let e of enemies){if(e.shape!=='laser'||e.hp<=0||e.phaseIn>0)continue;e.laserClock=(e.laserClock||0)-dt;if(e.laserClock<=0&&e.laserState!=='charge'&&e.laserState!=='fire'){e.laserState='charge';e.laserTime=1.8;e.laserAngle=Math.atan2(p.y-e.y,p.x-e.x)}if(e.laserState==='charge'){e.laserTime-=dt;let target=Math.atan2(p.y-e.y,p.x-e.x),diff=Math.atan2(Math.sin(target-e.laserAngle),Math.cos(target-e.laserAngle));e.laserAngle+=Math.max(-.38*dt,Math.min(.38*dt,diff));if(e.laserTime<=0){e.laserState='fire';e.laserTime=2;e.laserHit=.15;playEnemyAttack(e,'enemy-beam',320)}}else if(e.laserState==='fire'){e.laserTime-=dt;let target=Math.atan2(p.y-e.y,p.x-e.x),diff=Math.atan2(Math.sin(target-e.laserAngle),Math.cos(target-e.laserAngle));e.laserAngle+=Math.max(-.16*dt,Math.min(.16*dt,diff));let rawLines=laserPath(e.x,e.y,e.laserAngle);if(shieldBlocksLaser(rawLines)){shieldLaserTick+=dt;if(shieldLaserTick>=.1){shieldDamage(1.8);shieldLaserTick=0}}let lines=shieldLaserLines(rawLines);e.laserHit-=dt;if(e.laserHit<=0){if(lines.some(seg=>laserDistance(p.x,p.y,seg)<11)&&inv<=0&&!classicDashProtected()){hp=damagedHealth(ENEMY_DAMAGE.laser,false,'beam');inv=.32;if(hp<=0)over=true}for(let t of enemies){if(t===e||t.hp<=0)continue;if(lines.some(seg=>laserDistance(t.x,t.y,seg)<t.r+2)&&canDamage(t,150))t.hp-=1}e.laserHit=.28}if(e.laserTime<=0){e.laserState='cooldown';e.laserClock=3.4+Math.random()*1.1}}}}
 
 function triggerReaction(type,x,y,r=35){if(type==='steam'){elementFx.push({type:'steam',x,y,life:.55,maxLife:.55});return}reactionZones.push({type,x,y,r,life:type==='electric'?1.6:type==='fire'?2.2:2.8,tick:0});elementFx.push({type:type==='fire'?'fire':'shock',x,y,radius:r,life:.4,maxLife:.4})}
 function updateReactions(dt){if(!enemyAttacksEnabled())return;for(let w of gravityWells){w.life-=dt;let elapsed=w.maxLife-w.life,range=w.range;for(let e of enemies){if(e.hp<=0)continue;let dx=w.x-e.x,dy=w.y-e.y,d=Math.hypot(dx,dy)||1;if(d<range){let force=175*(1-d/range)*dt/Math.max(.5,e.mass);e.vx+=dx/d*force;e.vy+=dy/d*force}}let dx=w.x-p.x,dy=w.y-p.y,d=Math.hypot(dx,dy)||1;if(d<range){let force=105*(1-d/range)*dt;p.kvx=(p.kvx||0)+dx/d*force;p.kvy=(p.kvy||0)+dy/d*force}for(let q of projectiles){let dx=w.x-q.x,dy=w.y-q.y,d=Math.hypot(dx,dy)||1;if(d<range){q.vx+=dx/d*460*(1-d/range)*dt;q.vy+=dy/d*460*(1-d/range)*dt}}if(w.life<=0){shockwave({x:w.x,y:w.y},w.elite?390:300,range);elementFx.push({type:'shock',x:w.x,y:w.y,radius:range,life:.55,maxLife:.55})}}gravityWells=gravityWells.filter(w=>w.life>0);
@@ -1060,7 +1069,7 @@ function fireRanged(e,aim=p){if(!enemyAttacksEnabled())return;let dx=aim.x-e.x,d
 playEnemyAttack(e,ENEMY_SHOT_SOUNDS[kind]);
 if(kind==='cannon'){artillery.push({x:Math.max(25,Math.min(W-25,aim.x)),y:Math.max(25,Math.min(F-25,aim.y)),startX:e.x,startY:e.y,life:1.35,maxLife:1.35,r:26,owner:e});return}
 const {count,speed}=ENEMY_PROJECTILES[kind];for(let k=0;k<count;k++){let a=angle+(k-(count-1)/2)*(kind==='scatter'?.21:.17);projectiles.push({x:e.x+Math.cos(a)*(e.r+7),y:e.y+Math.sin(a)*(e.r+7),vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,kind,r:kind==='spitter'?5:4,life:4,owner:e,reflected:false})}}
-function rangedUpdate(dt){if(!enemyAttacksEnabled())return;for(let a of artillery){a.life-=dt;if(a.life<=0){playEnemyAttack(a,'enemy-explosion');if(Math.hypot(p.x-a.x,p.y-a.y)<a.r+7&&inv<=0&&!classicDashProtected()){hp=damagedHealth(ENEMY_DAMAGE.artillery);inv=.55;if(hp<=0)over=true}for(let e of enemies){if(e!==a.owner&&e.hp>0&&Math.hypot(e.x-a.x,e.y-a.y)<a.r+e.r&&canDamage(e,150))e.hp-=2}elementFx.push({type:'fire',x:a.x,y:a.y,r:0,life:.38,maxLife:.38})}}artillery=artillery.filter(a=>a.life>0);
+function rangedUpdate(dt){if(!enemyAttacksEnabled())return;for(let a of artillery){a.life-=dt;if(a.life<=0){playEnemyAttack(a,'enemy-explosion');if(Math.hypot(p.x-a.x,p.y-a.y)<a.r+7&&inv<=0&&!classicDashProtected()){hp=damagedHealth(ENEMY_DAMAGE.artillery,false,'shell');inv=.55;if(hp<=0)over=true}for(let e of enemies){if(e!==a.owner&&e.hp>0&&Math.hypot(e.x-a.x,e.y-a.y)<a.r+e.r&&canDamage(e,150))e.hp-=2}elementFx.push({type:'fire',x:a.x,y:a.y,r:0,life:.38,maxLife:.38})}}artillery=artillery.filter(a=>a.life>0);
 for(let q of projectiles){q.life-=dt;if(q.life<=0)continue;if(q.kind==='seeker'){let target=q.reflected?enemies.filter(e=>e.hp>0).sort((a,b)=>Math.hypot(a.x-q.x,a.y-q.y)-Math.hypot(b.x-q.x,b.y-q.y))[0]:p;if(target){let a=Math.atan2(target.y-q.y,target.x-q.x),v=Math.hypot(q.vx,q.vy),cur=Math.atan2(q.vy,q.vx),diff=Math.atan2(Math.sin(a-cur),Math.cos(a-cur)),next=cur+Math.max(-1.8*dt,Math.min(1.8*dt,diff));q.vx=Math.cos(next)*v;q.vy=Math.sin(next)*v}}
 let ox=q.x,oy=q.y;const synergySpeed=synergyProjectileFactor(q)*mageShotSpeed(q)*(hero==='archer'&&!q.reflected&&itemCount('hourglass')&&arrows.some(a=>Math.hypot(a.x-q.x,a.y-q.y)<65)?.62:1);q.x+=q.vx*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;q.y+=q.vy*dt*(q.reflected?1:playerStats().bulletSpeed)*synergySpeed;
 if(q.x<16||q.x>W-16||q.y<16||q.y>F-16){q.life=0;continue}if(projectileHitsProp(q,ox,oy)||projectileHitsNest(q,ox,oy))continue
@@ -1068,7 +1077,7 @@ let wall=walls.find(w=>q.x+q.r>w.x&&q.x-q.r<w.x+w.w&&q.y+q.r>w.y&&q.y-q.r<w.y+w.
 if(mageBlocksShot(q,ox,oy))continue;
 if(!q.reflected&&shieldHit(q.x,q.y,q.r)){shieldDamage(q.kind==='scatter'?8:q.kind==='seeker'?20:12);let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.45;q.vy=Math.sin(a)*speed*1.45;q.reflected=true;q.life=2.5;continue}
 if(!q.reflected&&hero==='classic'&&meleeSweep(q.x,q.y,q.r+1+5*itemCount('reflectArrow'),p.a,p.flailLag||0)){let speed=Math.hypot(q.vx,q.vy),a=Math.atan2(q.y-p.y,q.x-p.x);q.vx=Math.cos(a)*speed*1.35;q.vy=Math.sin(a)*speed*1.35;q.reflected=true;q.life=2.5;continue}
-if(q.reflected){for(let e of enemies){if(e.hp<=0)continue;if(Math.hypot(q.x-e.x,q.y-e.y)<e.r+q.r){if(canDamage(e,165))friendlyDamage(e,q.kind==='cannon'?3:2,'projectile');if(q.kind==='frostcaster'){let water=puddles.find(z=>Math.hypot(z.x-e.x,z.y-e.y)<z.r);if(water){water.life=.2;triggerReaction('ice',water.x,water.y,water.r)}}q.life=0;break}}}else if(!classicDashProtected()&&Math.hypot(q.x-p.x,q.y-p.y)<q.r+8&&inv<=0){if(q.kind==='bloodcaster')addEnemyBleed('bloodcaster');else if(q.kind==='frostcaster')p.slowUntil=arenaTime+2;else if(q.kind==='spitter')poisonPuddles.push({x:q.x,y:q.y,r:25,life:2.5,maxLife:2.5});else{if(q.kind==='emberbolt')addEnemyBleed('emberbolt');hp=damagedHealth(ENEMY_PROJECTILES[q.kind]?.damage??ENEMY_PROJECTILES.shooter.damage);if(hp<=0)over=true}inv=.4;q.life=0}}
+if(q.reflected){for(let e of enemies){if(e.hp<=0)continue;if(Math.hypot(q.x-e.x,q.y-e.y)<e.r+q.r){if(canDamage(e,165))friendlyDamage(e,q.kind==='cannon'?3:2,'projectile');if(q.kind==='frostcaster'){let water=puddles.find(z=>Math.hypot(z.x-e.x,z.y-e.y)<z.r);if(water){water.life=.2;triggerReaction('ice',water.x,water.y,water.r)}}q.life=0;break}}}else if(!classicDashProtected()&&Math.hypot(q.x-p.x,q.y-p.y)<q.r+8&&inv<=0){if(q.kind==='bloodcaster')addEnemyBleed('bloodcaster');else if(q.kind==='frostcaster')p.slowUntil=arenaTime+2;else if(q.kind==='spitter')poisonPuddles.push({x:q.x,y:q.y,r:25,life:2.5,maxLife:2.5});else{if(q.kind==='emberbolt')addEnemyBleed('emberbolt');hp=damagedHealth(ENEMY_PROJECTILES[q.kind]?.damage??ENEMY_PROJECTILES.shooter.damage,false,'shot');if(hp<=0)over=true}inv=.4;q.life=0}}
 projectiles=projectiles.filter(q=>q.life>0)}
 
 let bleedStacks=0,temporaryBleed=[];let playerBleed=[];
@@ -1499,7 +1508,7 @@ function updateZone(zone,dt){
  if(zone.tick<.65)return;zone.tick=0;
  if(!classicDashProtected()&&Math.hypot(p.x-zone.x,p.y-zone.y)<zone.r+8&&inv<=0){
   if(zone.type==='frost')p.slowUntil=arenaTime+1.2;
-  hp=damagedHealth(ZONE_DAMAGE[zone.type]??ZONE_DAMAGE.frost);inv=.5;if(hp<=0)over=true;
+  hp=damagedHealth(ZONE_DAMAGE[zone.type]??ZONE_DAMAGE.frost,false,zone.type==='poison'?'poison':'hazard');inv=.5;if(hp<=0)over=true;
  }
 }
 function updateBiomeWorld(dt){
@@ -1510,7 +1519,7 @@ function updateBiomeWorld(dt){
   const phase=(arenaTime+patch.phase)%6;patch.warn=phase>=2.7&&phase<3.7;patch.active=phase>=3.7&&phase<5.2;
   patch.tick=Math.max(0,patch.tick-dt);
   if(patch.active&&patch.tick===0){patch.tick=.7;
-   if(Math.hypot(p.x-patch.x,p.y-patch.y)<patch.r+8&&inv<=0&&!classicDashProtected()){hp=damagedHealth(patch.type==='vent'?7:4);inv=.5;if(patch.type==='frostVent')p.slowUntil=arenaTime+1.2;if(hp<=0)over=true}
+   if(Math.hypot(p.x-patch.x,p.y-patch.y)<patch.r+8&&inv<=0&&!classicDashProtected()){hp=damagedHealth(patch.type==='vent'?7:4,false,'hazard');inv=.5;if(patch.type==='frostVent')p.slowUntil=arenaTime+1.2;if(hp<=0)over=true}
   }
  }
  for(const zone of hostileZones){
@@ -1572,16 +1581,20 @@ function drawBiomeEnemyDetails(e){
  if(e.biomeWindup>0){g.strokeStyle='#ffd59a';g.beginPath();g.moveTo(e.x,e.y);g.lineTo(e.x+Math.cos(e.biomeAim)*70,e.y+Math.sin(e.biomeAim)*70);g.stroke()}
  g.restore();
 }
-function damagedHealth(amount,periodic=false){
+let fatalHit=null;
+function damagedHealth(amount,periodic=false,cause=null){
  if(dashInvulnerable()||inSandbox()&&!sandbox.attacks)return hp;
- const damage=Math.max(0,amount)*(1-playerStats().armour);
- if(hero==='mage'&&damage>0)return Math.max(0,hp-mageIncomingDamage(damage,periodic));
- if(hero!=='classic'||armourHp<=0||damage===0)return Math.max(0,hp-damage);
- const absorbed=Math.min(armourHp,damage*bodyArmourStats().absorption);
- armourHp-=absorbed;
- if(armourHp===0)showItemNotice('ARMOUR BROKEN · NEXT ROOM');
- updateBodyArmour();queueCheckpoint();
- return Math.max(0,hp-(damage-absorbed));
+ let damage=Math.max(0,amount)*(1-playerStats().armour);
+ if(hero==='mage'&&damage>0)damage=mageIncomingDamage(damage,periodic);
+ if(hero==='classic'&&armourHp>0&&damage>0){
+  const absorbed=Math.min(armourHp,damage*bodyArmourStats().absorption);
+  armourHp-=absorbed;damage-=absorbed;
+  if(armourHp===0)showItemNotice('ARMOUR BROKEN · NEXT ROOM');
+  updateBodyArmour();queueCheckpoint();
+ }
+ const remaining=Math.max(0,hp-damage);
+ if(cause&&hp>0&&remaining===0)fatalHit=cause;
+ return remaining;
 }
 function bossMoveFactor(unit){return ((unit.slowUntil||0)>arenaTime?.6:1)*(unit.variant==='glacier'?1.12:1)}
 function bossElement(unit){return BOSS_BLUEPRINTS[unit.variant]?.element||null}
@@ -1854,7 +1867,7 @@ function updateBossSignature(u,dt){
    else if(u.prismState==='fire'){
     const raw=laserPath(u.x,u.y,u.prismAngle),shield=shieldBlocksLaser(raw);
     u.prismHit-=dt;
-    if(u.prismHit<=0){if(shield)shieldDamage(5);else if(raw.some(a=>laserDistance(p.x,p.y,a)<12))hurtBossPlayer(BOSS_DAMAGE.beam,u.x,u.y);u.prismHit=.28}
+    if(u.prismHit<=0){if(shield)shieldDamage(5);else if(raw.some(a=>laserDistance(p.x,p.y,a)<12))hurtBossPlayer(BOSS_DAMAGE.beam,u.x,u.y,'beam');u.prismHit=.28}
     if(u.prismTimer<=0)u.prismState=null;
    }
   }
@@ -1993,7 +2006,7 @@ function updateBossZoneList(dt){
   const wasActive=hazard.active;
   if(hazard.type)updateZone(hazard,dt);
   else if(!hazard.active){hazard.warn-=dt;if(hazard.warn<=0)hazard.active=true}
-  else{hazard.life-=dt;if(hazard.life>0&&!hazard.hit&&Math.hypot(p.x-hazard.x,p.y-hazard.y)<hazard.r+8){hurtBossPlayer(BOSS_DAMAGE.quake,hazard.x,hazard.y);hazard.hit=true}}
+  else{hazard.life-=dt;if(hazard.life>0&&!hazard.hit&&Math.hypot(p.x-hazard.x,p.y-hazard.y)<hazard.r+8){hurtBossPlayer(BOSS_DAMAGE.quake,hazard.x,hazard.y,'quake');hazard.hit=true}}
   if(!wasActive&&hazard.active)playEnemyAttack(hazard,hazard.type?'boss-field':'boss-crash',hazard.r+175);
  }
  bossFight.hazards=bossFight.hazards.filter(h=>!h.active||h.life>0);
@@ -2275,8 +2288,8 @@ function playerStats(){
  };
 }
 function healPlayer(amount){const before=hp;hp=Math.min(playerStats().maxHealth,hp+amount);return hp-before}
-function showItemNotice(text){
- const el=document.querySelector('#item-notice');el.textContent=text;el.hidden=false;itemNoticeTime=3.5;
+function showItemNotice(text,seconds=3.5){
+ const el=document.querySelector('#item-notice');el.textContent=text;el.hidden=false;itemNoticeTime=seconds;
 }
 
 
@@ -3275,6 +3288,7 @@ function normalizeSavedRun(raw){
   const room=rooms[i];
   if(!room||room.id!==i||!kinds.has(room.kind)||!Number.isFinite(room.w)||!Number.isFinite(room.h)||room.w<250||room.w>1600||room.h<250||room.h>1600||!Array.isArray(room.doors)||room.doors.length>4||!Number.isInteger(room.col)||!Number.isInteger(room.row))throw Error('Invalid dungeon');
   if(room.doors.some(door=>!DIRECTIONS[door.side]||!Number.isInteger(door.to)||door.to<0||door.to>=rooms.length))throw Error('Invalid door');
+  if(room.openingLesson!==true||raw.depth!==1||room.kind!=='combat'||!rooms[0].doors.some(door=>door.to===i))delete room.openingLesson;
   if(room.kind==='boss'&&(!Object.hasOwn(BOSS_BLUEPRINTS,room.bossKind)||room.cleared&&!room.bossDefeated))throw Error('Unknown boss');
   if(room.kind==='cursed'&&(!Array.isArray(room.curses)||!room.curses.length||room.curses.length>2||room.curses.some(id=>!Object.hasOwn(CURSE_TYPES,id))))throw Error('Unknown curse');
   if(typeof room.wallBreach!=='string'||!/^\d{1,4},\d{1,4}$/.test(room.wallBreach))delete room.wallBreach;
@@ -4189,6 +4203,7 @@ function buildDungeon(){
   const clockwise={north:'east',east:'south',south:'west',west:'north'};
   for(const room of rooms){const col=room.col;room.col=-room.row;room.row=col;for(const door of room.doors)door.side=clockwise[door.side]}
  }
+ if(dungeonDepth===1)rooms[rooms[0].doors[0].to].openingLesson=true;
  dungeon=rooms;dungeon.find(room=>room.kind==='boss').bossKind=chooseBoss();lastDungeonSignature=dungeonSignature(rooms);
 }
 
@@ -4227,10 +4242,10 @@ function bossSpark(x,y,color='#ffe4a3'){
 }
 const BOSS_DAMAGE={contact:8,charge:16,cannonball:12,crystal:7,quake:14,landing:15,splitLanding:11,beam:4,tether:3};
 function bossDamageAmount(amount){return Math.ceil(amount*2.5)}
-function hurtBossPlayer(amount,x,y){
+function hurtBossPlayer(amount,x,y,cause='boss'){
  if(!enemyAttacksEnabled()||inv>0||over||p.falling||classicDashProtected())return;
  const strike=bossDamageAmount(amount);
- hp=damagedHealth(strike);inv=.8;
+ hp=damagedHealth(strike,false,cause);inv=.8;
  const dx=p.x-x,dy=p.y-y,d=Math.hypot(dx,dy)||1;
  p.kvx=(p.kvx||0)+dx/d*135;p.kvy=(p.kvy||0)+dy/d*135;
  if(hp<=0)over=true;
@@ -4390,7 +4405,7 @@ function updateBossShots(dt,previousAngle,previousLag=0){
    }
    if(laserDistance(p.x,p.y,{x1:ox,y1:oy,x2:shot.x,y2:shot.y})<shot.r+9){
     if(classicDashProtected()||shot.damage&&dashInvulnerable())continue;
-     hurtBossPlayer(shot.damage??BOSS_DAMAGE[shot.kind]??BOSS_DAMAGE.crystal,shot.x,shot.y);
+     hurtBossPlayer(shot.damage??BOSS_DAMAGE[shot.kind]??BOSS_DAMAGE.crystal,shot.x,shot.y,'shot');
     bossProjectileStatus(shot);shot.life=0;
    }
   }else for(const unit of bossFight.units){
@@ -4449,7 +4464,7 @@ function updateBossFight(dt,previousAngle,previousLag=0,playerStart=p){
    if(blockShieldBody(unit,wasAirborne?unit.x:oldX,wasAirborne?unit.y:oldY,wasAirborne?p:playerStart,shieldWear))continue;
    const dx=p.x-unit.x,dy=p.y-unit.y,dist=Math.hypot(dx,dy),reach=unit.r+9;
    if(dist<reach){const nx=dist>.001?dx/dist:1,ny=dist>.001?dy/dist:0;
-    hurtBossPlayer(strike,unit.x,unit.y);
+    hurtBossPlayer(strike,unit.x,unit.y,unit.state==='charge'?'charge':'contact');
     p.x=clamp(unit.x+nx*(reach+1),23,W-23);p.y=clamp(unit.y+ny*(reach+1),23,F-23);
    }
   }
@@ -5050,6 +5065,7 @@ function placeRoomPortals(room){
 function makeRoomLayout(room){
  walls.length=holes.length=portals.length=0;
  blankTiles();floorGaps=[];floorBridges=[];floorTraps=[];breakables=[];
+ if(room.openingLesson)return;
  if(!['combat','cursed'].includes(room.kind))return;
  if(room.kind==='combat'&&setupRoomVariant(room)){
   placeRoomPortals(room);
@@ -5060,6 +5076,30 @@ function makeRoomLayout(room){
  if(room.shape==='big')walls.push({x:Math.floor(W*.50/TILE_SIZE)*TILE_SIZE,y:Math.floor(F*.30/TILE_SIZE)*TILE_SIZE,w:TILE_SIZE,h:TILE_SIZE,type:'neutral',moving:true,baseX:Math.floor(W*.50/TILE_SIZE)*TILE_SIZE,baseY:Math.floor(F*.30/TILE_SIZE)*TILE_SIZE,axis:'x',range:18,speed:1.1,phase:0});
  if(room.shape==='big')holes.push({x:W*.35,y:F*.57,r:20});
  placeRoomPortals(room);
+}
+let openingWave=0;
+const OPENING_TIPS={
+ classic:['Face the Footman to block. Swing with the right stick when it comes close.','Face the shot to send it back, or Dash across the dashed line.'],
+ archer:['Move with the left stick. Aim with the right stick and release to fire.','Move sideways or Dash across the dashed line, then use the reload window.'],
+ mage:['Tap A to cast. Swipe from A to B and release to cast Rune Burst.','Step off the dashed line, then cast while the Marksman reloads.']
+};
+function updateOpeningGuide(){
+ const panel=document.querySelector('#opening-guide');
+ panel.hidden=!currentRoom?.openingLesson||!!currentRoom.cleared||over;
+ if(panel.hidden)return;
+ document.querySelector('#opening-guide-title').textContent=openingWave===0?'First encounter':'Read the shot';
+ document.querySelector('#opening-guide-tip').textContent=OPENING_TIPS[hero][openingWave];
+}
+function spawnOpeningThreat(){
+ const points=[[W*.25,F*.25],[W*.75,F*.25],[W*.25,F*.75],[W*.75,F*.75],[W*.5,F*.5]];
+ const distance=openingWave===0?132:165;
+ const pointScore=([x,y])=>Math.abs(Math.hypot(x-p.x,y-p.y)-distance);
+ const [x,y]=points.reduce((best,point)=>pointScore(point)<pointScore(best)?point:best);
+ const shape=openingWave===1?'shooter':hero==='classic'?'square':'round';
+ const foe=makeEnemy(shape,x,y);
+ foe.abilityEnabled=false;
+ foe.shootClock=1.7;
+ enemies.push(foe);
 }
 function enterRoom(id,entry=null){
  resetMageRoom();
@@ -5072,12 +5112,20 @@ function enterRoom(id,entry=null){
  const x=entry==='west'?62:entry==='east'?W-62:W/2;
  const y=entry==='north'?62:entry==='south'?F-62:F/2;
  p={...p,x,y,safeX:x,safeY:y,fallReturn:null,vx:0,vy:0,kvx:0,kvy:0,sticky:null,wallContacts:new Set(),wallCooldowns:new Map(),portalCooldown:0,portalReady:false,falling:0,slowUntil:0,swimming:false,lavaTickAt:0,wallSpikeContact:false};
- enemies=[];pendingSplits=[];projectiles=[];artillery=[];gravityWells=[];reactionZones=[];bossFight=null;arrows=[];bowShotCooldown=0;
+ enemies=[];pendingSplits=[];projectiles=[];artillery=[];gravityWells=[];reactionZones=[];bossFight=null;arrows=[];bowShotCooldown=0;openingWave=0;fatalHit=null;
  healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];shards=[];portalFx=[];fallingFx=[];poisonPlayerTimer=0;playerPoisonGlow=0;
  doorCooldown=.7;meleeAudioSwing=false;queuedEnemyDefeat=null;inv=Math.max(inv||0,.9);
  sticks.forEach(stick=>{stick.dx=stick.dy=0});
  if(currentRoom.kind==='start')playerBleed=[];
- if(!currentRoom.cleared){if(currentRoom.kind==='boss')startBossFight(currentRoom.bossKind);else{const wanted=roomEnemyCount(currentRoom);currentRoom.count=wanted;for(let i=0;i<wanted;i++)spawn(selectedBiome&&i===0?currentBiome().enemies[0]:null)}}
+ if(!currentRoom.cleared){
+  if(currentRoom.kind==='boss')startBossFight(currentRoom.bossKind);
+  else if(currentRoom.openingLesson){currentRoom.count=2;spawnOpeningThreat()}
+  else{
+   const wanted=roomEnemyCount(currentRoom);currentRoom.count=wanted;
+   for(let i=0;i<wanted;i++)spawn(selectedBiome&&i===0?currentBiome().enemies[0]:null);
+  }
+ }
+ updateOpeningGuide();
  if(!loadingRun&&changedRoom)refillRoomDefences();updateHeroHud();hud();if(!loadingRun&&levelChoicePending())openElementChoice();clearRoomDash();resetRoomSynergies();queueCheckpoint();
 }
 function nextDungeon(biome){
@@ -5088,7 +5136,13 @@ function updateRoomProgress(){
  if(inSandbox()){currentRoom.cleared=true;return}
  if(currentRoom.kind==='boss'){currentRoom.cleared=!!currentRoom.bossDefeated;return}
  if(!currentRoom.cleared&&enemies.length===0&&!dungeonNests.some(n=>n.hp>0)&&(!dungeonEvent||dungeonEvent.done)){
+  if(currentRoom.openingLesson&&over)return;
+  if(currentRoom.openingLesson&&openingWave===0){
+   openingWave=1;spawnOpeningThreat();updateOpeningGuide();
+   return;
+  }
   currentRoom.cleared=true;for(let i=floorGaps.length-1;i>=0;i--)if(floorGaps[i].eventExpire)floorGaps.splice(i,1);eventCracks=[];rewardRoom();
+  if(currentRoom.openingLesson)updateOpeningGuide();
  }
 }
 function checkRoomDoors(dt){
@@ -6917,7 +6971,7 @@ const ENEMY_CASTS={
 function specialPlayerHit(x,y,r,damage,origin=null){
  if(!enemyAttacksEnabled()||inv>0||over||p.falling||classicDashProtected()||Math.hypot(p.x-x,p.y-y)>=r+9)return false;
  if(origin&&shieldHit(origin.x,origin.y,origin.r)){shieldDamage(damage*1.4);inv=.4;return false}
- hp=damagedHealth(damage);inv=.8;if(hp<=0)over=true;
+ hp=damagedHealth(damage,false,'special');inv=.8;if(hp<=0)over=true;
  const d=Math.hypot(p.x-x,p.y-y)||1;p.kvx=(p.kvx||0)+(p.x-x)/d*110;p.kvy=(p.kvy||0)+(p.y-y)/d*110;
  return true;
 }
@@ -7084,7 +7138,7 @@ function propsKeepRoutesOpen(props){
  return [[W/2,62],[W-62,F/2],[W/2,F-62],[62,F/2],[W/2,F/2]].every(([x,y])=>visited.has(key(...cell(x,y))));
 }
 function initRoomProps(room){
- breakables=[];if(room.kind!=='combat')return;
+ breakables=[];if(room.kind!=='combat'||room.openingLesson)return;
  if(!Array.isArray(room.props)){
   room.props=[];let seed=((room.id+19)*912367+(room.layoutId+3)*379721+dungeonDepth*1273)>>>0;
   const rand=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296};
@@ -7213,7 +7267,7 @@ function mechanicSpot(x,y,r=16){
 }
 function setupDungeonMechanics(room){
  dungeonNests=[];trapControls=[];dungeonEvent=null;eventCracks=[];
- if(room.kind!=='combat'||room.cleared)return;
+ if(room.kind!=='combat'||room.cleared||room.openingLesson)return;
  // A pressure plate and a bat-operated lever control separate spike lanes.
  for(let i=0;i<Math.min(2,floorTraps.length);i++){
   const t=floorTraps[i],cx=t.x+t.w/2,cy=t.y+t.h/2;
@@ -7243,7 +7297,7 @@ function setupDungeonMechanics(room){
 let wallFixtures=[];
 function setupWallFixtures(room){
  wallFixtures=[];
- if(room.kind!=='combat'&&room.kind!=='cursed')return;
+ if(room.openingLesson||room.kind!=='combat'&&room.kind!=='cursed')return;
  const random=portalRoomRandom(room);
  const masonry=walls.filter(w=>!w.moving&&!w.mageBone);
  const routeTiles=masonry.filter(w=>w.tile&&masonry.some(other=>other!==w&&
@@ -7297,7 +7351,7 @@ function updateWallSpikes(body){
 }
 function fixtureDamagePlayer(amount,periodic=false){
  if(!enemyAttacksEnabled()||over||p.falling||classicDashProtected()||!periodic&&inv>0)return;
- hp=damagedHealth(amount,periodic);
+ hp=damagedHealth(amount,periodic,'hazard');
  if(!periodic)inv=.45;
  if(hp<=0)over=true;
 }
@@ -7751,7 +7805,7 @@ function updateFloorTraps(){
  for(const t of floorTraps){
   if(!trapPhase(t).active){audibleFloorTraps.delete(t);continue}
   if(!audibleFloorTraps.has(t)&&nearRect(p.x,p.y,110,t)){audibleFloorTraps.add(t);playSoundCue('trap-spikes')}
-  if(!p.falling&&inv<=0&&!classicDashProtected()&&nearRect(p.x,p.y,8,t)){hp=damagedHealth(11);inv=.7;if(hp<=0)over=true}
+  if(!p.falling&&inv<=0&&!classicDashProtected()&&nearRect(p.x,p.y,8,t)){hp=damagedHealth(11,false,'spikes');inv=.7;if(hp<=0)over=true}
   for(const e of enemies)if(e.hp>0&&nearRect(e.x,e.y,e.r,t)&&(e.floorHitUntil||0)<=arenaTime){e.hp-=1;e.floorHitUntil=arenaTime+.8}
  }
 }
@@ -8223,17 +8277,34 @@ function hud(){
  if(count.textContent!==remaining)count.textContent=remaining;
  updateBossHud();updateSandboxMenu();updateCharacterMenu();updateDashButton();shieldUpdate(0);updateBodyArmour();document.querySelector('#coin-total').textContent=progress?.coins||0;
 }
+const DEATH_TIPS={
+ contact:['Enemy contact','Keep moving to leave room between you and the enemy.'],
+ shot:['Enemy projectile','Move sideways when the aim locks.'],
+ beam:['Sweeping beam','Cross the warning line before the beam fires.'],
+ shell:['Artillery','Leave the marked landing circle.'],
+ bleed:['Bleeding','Create space until the bleed wears off.'],
+ pit:['Abyss fall','Use the bridge or give the pit edge room.'],
+ poison:['Poison','Leave the pool before it ticks again.'],
+ spikes:['Floor spikes','Wait for the spikes to retract before crossing.'],
+ hazard:['Hazard','Move out of the dashed boundary before it activates.'],
+ special:['Enemy special','Move away from the warning marker before it fills.'],
+ boss:['Boss attack','Watch the windup and move before the attack lands.'],
+ charge:['Boss charge','Move across the charge lane, away from the wall impact.'],
+ quake:['Boss impact','Leave the marked impact area.']
+};
 function resolvePlayerDeath(){
  if(!over||hp>0||inSandbox()||lives<=0)return;
+ const hit=DEATH_TIPS[fatalHit];
+ const recap=hit?' · '+hit[0]+'. '+hit[1]:'';
  lives=Math.max(0,lives-1);persistLifeCount();
  playDungeonOutcome(lives>0?'life-lost':'defeat',lives>0?.68:1.25);
- if(lives===0){showItemNotice('RUN ENDED · ALL LIVES LOST');hud();return}
+ if(lives===0){updateOpeningGuide();showItemNotice('Run ended'+recap,6);hud();return}
  // Clear uncollected fight rewards so repeating the same room cannot farm them.
  coinDrops=[];heartDrops=[];lifeDrops=[];currentRoom.coinDrops=[];currentRoom.heartDrops=[];currentRoom.lifeDrops=[];
  playerBleed=[];temporaryBleed=[];bleedStacks=0;poisonPlayerTimer=0;
  hp=playerStats().maxHealth;mageMana=mageMaxMana();over=false;inv=2;
  enterRoom(currentRoom.id,roomEntrySide);refillRoomDefences();inv=2;
- showItemNotice('LIFE LOST · '+lives+' REMAIN · ROOM RESET');hud();
+ showItemNotice((lives===1?'1 life remains':lives+' lives remain')+recap,6);hud();
 }
 function reset(){saveRetryAt=0;mageMana=100;mageManaCheckpointAt=0;mageSouls=0;resetMageRoom();mageLastCast='';mageHitCount=0;mageCastCount=0;document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();armourHp=bodyArmourStats().capacity;lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;strongArrowHits=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
 function combatInputEnabled(){
@@ -8374,12 +8445,12 @@ document.querySelector('#control-opacity').oninput=e=>{controls.opacity=Number(e
 document.querySelector('#floating-controls').onchange=e=>{controls.floating=e.target.checked;saveControls()};
 document.querySelector('#controls-reset').onclick=()=>{controls={...defaultControls,positions:defaultControls.positions.map(a=>[...a])};dashControl={x:.78,y:.76};syncControls();saveDashControl();saveControls()};async function goFullscreen(){try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock)await screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}document.querySelector('#fullscreen-toggle').onclick=goFullscreen;document.querySelector('#rotate-fullscreen').onclick=goFullscreen;
 function frame(t){updateDungeonAudio();const previousRenderAngle=p.a;const damageBefore=captureDamage(),oldPlayerHp=hp;const protectedPracticeHp=inSandbox()&&!sandbox.attacks?hp:null;pendingSplits=[];let dt=Math.min((t-last)/1000||0,.035);last=t;if(document.hidden||portraitLayout.matches||shieldPaused||!document.querySelector('#character-panel').hidden||persistencePaused()){requestAnimationFrame(frame);return}
-if(settings.hidden&&!editingControls&&document.querySelector('#sandbox-panel').hidden){recordVisibleEncounters();arenaTime+=dt;updateSynergies(dt);if(!over){updateItemEffects(dt);updateBiomeWorld(dt);updateCurses(dt);updateDungeonMechanics(dt);updateFloorTraps();updateWallFixtures(dt)}if(!over){shieldUpdate(dt);rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage,true)}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&playerBleed.length===0&&!p.swimming){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){const where=p.fallReturn||safeRespawn();p.x=where.x;p.y=where.y;p.safeX=p.x;p.safeY=p.y;p.kvx=p.kvy=p.vx=p.vy=0;p.sticky=null;p.wallContacts=new Set();p.wallCooldowns=new Map();p.portalCooldown=1;p.fallReturn=null;hp=Math.max(0,hp-25);inv=Math.max(inv,1.5);if(hp<=0)over=true;showItemNotice('FELL INTO THE ABYSS · -25 HP')}}
+if(settings.hidden&&!editingControls&&document.querySelector('#sandbox-panel').hidden){recordVisibleEncounters();arenaTime+=dt;updateSynergies(dt);if(!over){updateItemEffects(dt);updateBiomeWorld(dt);updateCurses(dt);updateDungeonMechanics(dt);updateFloorTraps();updateWallFixtures(dt)}if(!over){shieldUpdate(dt);rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage,true,'bleed')}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&playerBleed.length===0&&!p.swimming){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){const where=p.fallReturn||safeRespawn();p.x=where.x;p.y=where.y;p.safeX=p.x;p.safeY=p.y;p.kvx=p.kvy=p.vx=p.vy=0;p.sticky=null;p.wallContacts=new Set();p.wallCooldowns=new Map();p.portalCooldown=1;p.fallReturn=null;hp=Math.max(0,hp-25);inv=Math.max(inv,1.5);if(hp<=0){over=true;fatalHit='pit'}showItemNotice('FELL INTO THE ABYSS · -25 HP')}}
 healFx=healFx.filter(f=>(f.life-=dt)>0);wallFx=wallFx.filter(f=>{f.life-=dt;if(f.type==='particle'){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.exp(-5*dt);f.vy*=Math.exp(-5*dt)}return f.life>0});elementFx=elementFx.filter(f=>(f.life-=dt)>0);puddles=puddles.filter(q=>(q.life-=dt)>0);poisonPuddles=poisonPuddles.filter(q=>(q.life-=dt)>0);
 if(!over&&!p.falling){let l=sticks[0],ox=p.x,oy=p.y;
 poisonPlayerTimer=Math.max(0,poisonPlayerTimer-dt);playerPoisonGlow=Math.max(0,playerPoisonGlow-dt);
 if(poisonPuddles.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<q.r+7))playerPoisonGlow=.24;
-if(!classicDashProtected()&&poisonPlayerTimer<=0&&poisonPuddles.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<q.r+7)){hp=damagedHealth(ENEMY_DAMAGE.poisonTick);poisonPlayerTimer=.65;if(hp<=0)over=true}
+if(!classicDashProtected()&&poisonPlayerTimer<=0&&poisonPuddles.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<q.r+7)){hp=damagedHealth(ENEMY_DAMAGE.poisonTick,false,'poison');poisonPlayerTimer=.65;if(hp<=0)over=true}
 let onPuddle=puddles.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<q.r+7);let slideBoost=p.swimming?.62:(onPuddle?1.65:1)*groundSlideFactor();
 p.kvx=(p.kvx||0)*Math.exp(-(curseActive('float')?2:groundSlideFactor()>1?3:6)*dt);p.kvy=(p.kvy||0)*Math.exp(-(curseActive('float')?2:groundSlideFactor()>1?3:6)*dt);
 if(!moveDash(dt)){p.x=clamp(p.x+(l.dx*playerStats().moveSpeed*(arenaTime<(p.slowUntil||0)?.58:1)*slideBoost+p.kvx)*dt,23,W-23);p.y=clamp(p.y+(l.dy*playerStats().moveSpeed*(arenaTime<(p.slowUntil||0)?.58:1)*slideBoost+p.kvy)*dt,23,F-23);}
@@ -8441,7 +8512,7 @@ if(e.isTreasure){
   const force=e.panicTime>0?55:dir?70:22;
   e.vx+=steer.x*force*dt;e.vy+=steer.y*force*dt;
  }
- if(enemyAttacksEnabled()){if(e.shotWindup>0){e.shotWindup-=dt;if(e.shotWindup<=0){fireRanged(e,e.shotTarget||p);e.shotTarget=null;e.shootClock=(e.shape==='cannon'?3.9:e.shape==='scatter'?2.7:e.shape==='seeker'?3.2:2.35)*(e.elite?.8:1)}}else{e.shootClock-=dt;if(e.shootClock<=0&&d<265&&e.phaseIn<=0){if(!weaponLineClear(e.x,e.y,p.x,p.y,4)){e.shootClock=.45+Math.random()*.25}else if(enemies.filter(other=>other.shotWindup>0).length>=3+Math.floor(Math.min(5,dungeonDepth)/2))e.shootClock=.25;else{e.shotTarget={x:clamp(p.x+(e.shape==='cannon'?(p.vx||0)*.5:0),25,W-25),y:clamp(p.y+(e.shape==='cannon'?(p.vy||0)*.5:0),25,F-25)};e.shotWindup=(e.shape==='cannon'?.8:.55)*(e.elite?.8:1)}}}}
+ if(enemyAttacksEnabled()){if(e.shotWindup>0){e.shotWindup-=dt;if(e.shotWindup<=0){fireRanged(e,e.shotTarget||p);e.shotTarget=null;e.shootClock=(e.shape==='cannon'?3.9:e.shape==='scatter'?2.7:e.shape==='seeker'?3.2:2.35)*(e.elite?.8:1)}}else{e.shootClock-=dt;if(e.shootClock<=0&&d<265&&e.phaseIn<=0){if(!weaponLineClear(e.x,e.y,p.x,p.y,4)){e.shootClock=.45+Math.random()*.25}else if(enemies.filter(other=>other.shotWindup>0).length>=3+Math.floor(Math.min(5,dungeonDepth)/2))e.shootClock=.25;else{e.shotTarget={x:clamp(p.x+(e.shape==='cannon'?(p.vx||0)*.5:0),25,W-25),y:clamp(p.y+(e.shape==='cannon'?(p.vy||0)*.5:0),25,F-25)};e.shotWindup=(currentRoom.openingLesson?.9:e.shape==='cannon'?.8:.55)*(e.elite?.8:1)}}}}
 }else if(enemyMovementEnabled()&&d>21){
  const avoid=teamworkVector(e,target,d);
  e.vx+=avoid.x*62*dt*(e.allyBoostUntil>arenaTime?1.65:1);e.vy+=avoid.y*62*dt*(e.allyBoostUntil>arenaTime?1.65:1);
@@ -8611,5 +8682,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.59';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.60';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
