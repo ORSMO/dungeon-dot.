@@ -419,12 +419,12 @@ test('Archer strong shots crack boss armor without a reflection item', () => {
   const result=run([
     declaration('BOW_MIN_DRAW'),method('bowDrawStage'),method('damageBoss'),
     'let arenaTime=1;const bossFight={done:false},elementFx=[],bossSpark=()=>{};',
-    'const unit={kind:"crystal",state:"recover",hp:100,armour:2};',
+    'const unit={kind:"crystal",state:"shotWarn",timer:.42,hp:100,armour:2};',
     'unit.lastArrowPower=.5;damageBoss(unit,3,"arrow");const weak=unit.armour;',
     'unit.lastArrowPower=.8;damageBoss(unit,3,"arrow");damageBoss(unit,3,"arrow");const strong=unit.armour;',
     'arenaTime=1.8;damageBoss(unit,3,"arrow");'
-  ], '{weak,strong,armour:unit.armour,opening:unit.vulnerable,hp:unit.hp}');
-  assert.deepEqual(result,{weak:2,strong:1,armour:0,opening:6,hp:100});
+  ], '{weak,strong,armour:unit.armour,opening:unit.vulnerable,hp:unit.hp,state:unit.state,timer:unit.timer}');
+  assert.deepEqual(result,{weak:2,strong:1,armour:0,opening:6,hp:100,state:'shotWarn',timer:.42});
 });
 
 test('index HP matches actual dungeon spawns, including elite rounding and Dungeon 14+', () => {
@@ -1224,4 +1224,29 @@ test('the original menu theme is shipped as a local audio asset', () => {
   assert.equal(asset,'audio/beyond-the-torchlight.mp3');
   assert.ok(bytes.length>250000);
   assert.ok(bytes.subarray(0,3).toString()==='ID3'||(bytes[0]===0xff&&(bytes[1]&0xe0)===0xe0));
+});
+
+test('returned shots open the Gatekeeper guard without cancelling its charge', () => {
+ const result=run([
+  declaration('GATEKEEPER_RETURN_OPENING'),method('bossGuardOpen'),method('damageBoss'),
+  'const bossFight={done:false},bossSpark=()=>{},playerDamageAmount=n=>n,afterPlayerBatHit=()=>{},synergyProjectileHit=()=>{};',
+  'let arenaTime=10;const unit={kind:"gatekeeper",state:"charge",timer:1.62,chargesLeft:2,hp:64};',
+  'const blocked=damageBoss(unit,8,"bat"),projectile=damageBoss(unit,12,"projectile"),open=damageBoss(unit,5,"arrow");',
+  'arenaTime=11.26;const expired=damageBoss(unit,9,"arrow");',
+  'const slime={kind:"slime",state:"jumpWarn",timer:.68,hp:40};const minion=damageBoss(slime,8,"minion");'
+ ],'{blocked,projectile,open,expired,hp:unit.hp,charge:[unit.state,unit.timer,unit.chargesLeft],minion,slime:[slime.hp,slime.state,slime.timer]}');
+ assert.deepEqual(result,{blocked:false,projectile:true,open:true,expired:false,hp:47,charge:['charge',1.62,2],minion:true,slime:[32,'jumpWarn',.68]});
+});
+
+test('the first wall hit keeps a double charge going and the last opens the guard briefly', () => {
+ const result=run([
+  declaration('GATEKEEPER_CRASH_OPENING'),method('bossGuardOpen'),method('beginGateCharge'),method('updateGatekeeper'),
+  'const p={x:157,y:100},W=400,F=400,elementFx=[],clamp=(x,a,b)=>Math.min(b,Math.max(a,x)),enemyMovementEnabled=()=>true,bossMoveFactor=()=>1,fireBossVolley=()=>{};',
+  'let arenaTime=4;const unit={kind:"gatekeeper",state:"charge",timer:2,aim:0,phase2:true,r:25,x:355,y:100,chargesLeft:2,turn:1};',
+  'updateGatekeeper(unit,.1);const first=[unit.state,unit.chargesLeft,bossGuardOpen(unit)];',
+  'unit.timer=.05;updateGatekeeper(unit,.1);unit.aim=0;updateGatekeeper(unit,.1);',
+  'const last=[unit.state,unit.timer,unit.chargesLeft,bossGuardOpen(unit)];',
+  'arenaTime=5.16;updateGatekeeper(unit,1.16);'
+ ],'{first,last,after:unit.state,closed:!bossGuardOpen(unit),impacts:elementFx.length}');
+ assert.deepEqual(result,{first:['chargeWarn',1,false],last:['recover',1.15,0,true],after:'shotWarn',closed:true,impacts:2});
 });
