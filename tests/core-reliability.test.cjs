@@ -881,7 +881,7 @@ test('failed magic casts preserve mana and a successful cast enforces both coold
     'let mageMana=100,arenaTime=1,mageGlobalReady=0,mageCastCount=0,mageRuneFx=[],resource=false,feedback="";',
     'const progress={mageSchool:"necromancer"},mageCooldowns={},mageInputEnabled=()=>true,mageAim=()=>({a:0});',
     'const castSchoolSpell=()=>resource?undefined:"NEED A SOUL",itemCount=()=>0,upgradeCount=()=>0,playerStats=()=>({swing:1});',
-    'const refreshManaHud=()=>{},queueCheckpoint=()=>{},showMageFeedback=(kind,label)=>feedback=label;',
+    'const mageMaxMana=()=>100,queueCheckpoint=()=>{},showMageFeedback=(kind,label)=>feedback=label;',
     'const locked=castMageSpell("AA"),failed=castMageSpell("ABC"),before={mageMana,mageGlobalReady,feedback};',
     'resource=true;const applied=castMageSpell("ABC"),duringGlobal=castMageSpell("A");arenaTime=2;const duringSpell=castMageSpell("ABC");'
   ],'{locked,failed,before,applied,duringGlobal,duringSpell,mageMana,mageCastCount,ready:mageCooldowns.ABC,flashes:mageRuneFx.map(f=>f.id+":"+f.kind),soundCues}');
@@ -1153,12 +1153,35 @@ test('Interrupting controls clears both sticks, the rune trace and any bat momen
   });
 });
 
-test('the floor map hides undiscovered room types and distinguishes cleared encounters', () => {
-  const kinds=run([
-    declaration('MAP_MARKS'),method('mapRoomKind'),
-    'const rooms=[{kind:"boss"},{kind:"boss",discovered:true},{kind:"cursed",visited:true},{kind:"shop",discovered:true},{kind:"combat",discovered:true},{kind:"combat",visited:true,cleared:true}];'
-  ],'rooms.map(mapRoomKind)');
-  assert.deepEqual(kinds,['unknown','boss','cursed','shop','combat','clear']);
+test('minimal maps show position and exits, with locked routes dimmed',()=>{
+ const result=run([
+  method('mapExitsOpen'),method('drawDungeonMap'),method('drawRoomMap'),
+  'let recap=false;const N=()=>{},viewW=640,W=400,F=320,selectedBiome=null,inSandbox=()=>false,victoryRecapPending=()=>recap;',
+  'const currentRoom={id:0,kind:"combat",col:0,row:0,visited:true,cleared:false,doors:[{to:1}]};',
+  'const dungeon=[currentRoom,{id:1,col:1,row:0,doors:[{to:0}]}],floorGaps=[],floorBridges=[],walls=[],holes=[],portals=[];',
+  'const p={x:200,y:160,target:0},roomDoors=()=>[{x:W-13,y:F/2,side:"east"}];',
+  'const draws=[],artPath=(brush,points,color)=>draws.push(["player",color]);',
+  'const g={save:N,restore:N,beginPath:N,moveTo:N,lineTo:N,translate:N,rotate:N,stroke(){draws.push(["route",this.strokeStyle])},fillRect(x,y,w,h){draws.push([w===6&&h===2?"door":"fill",this.fillStyle])}};',
+  'drawDungeonMap();drawRoomMap();const locked=draws.splice(0);currentRoom.cleared=true;',
+  'drawDungeonMap();drawRoomMap();const open=draws.splice(0);recap=true;const waits=mapExitsOpen();'
+ ],'{locked,open,waits}');
+ assert.deepEqual(result.locked,[['route','#db9c7b65'],['fill','#fff1cfe8'],['fill','#e7d7ac45'],['fill','#eddfb432'],['door','#d1927e95'],['player','#fff7e7']]);
+ assert.equal(result.open[0][1],'#fff0c9db');
+ assert.deepEqual(result.open[4],['door','#fff3d8f0']);
+ assert.equal(result.waits,false);
+});
+
+test('one boss bar tracks shield, split health, and hides at victory',()=>{
+ const result=run([
+  method('updateBossHud'),
+  'const panel={setAttribute(id,value){this[id]=value}},fill={style:{}},name={};',
+  'const document={querySelector:id=>({"#boss-hud":panel,"#boss-fill":fill,"#boss-name":name})[id]};',
+  'const currentRoom={kind:"boss"},inSandbox=()=>false,bossFight={name:"Ooze King",totalMax:150,shieldMax:50,shieldHp:50,units:[{hp:150}]};',
+  'updateBossHud();const full=fill.style.width;bossFight.shieldHp=20;updateBossHud();const shieldHit=fill.style.width;',
+  'bossFight.shieldHp=0;bossFight.units=[{hp:15},{hp:35},{hp:-1}];updateBossHud();const split=fill.style.width;',
+  'bossFight.done=true;updateBossHud();'
+ ],'{full,shieldHit,split,name:name.textContent,hidden:panel.hidden,max:panel["aria-valuemax"]}');
+ assert.deepEqual(result,{full:'100%',shieldHit:'85%',split:'25%',name:'Ooze King',hidden:true,max:'200'});
 });
 
 test('portal transfers queue an effect at both ends and cannot loop while occupied', () => {

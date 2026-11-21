@@ -13,6 +13,12 @@ gradle -p android :app:lintDebug :app:assembleDebug :app:bundleRelease
 
 The Android app bundles the same `index.html` and opens in landscape. Its save slots live inside the app. The test APK appears in `android/app/build/outputs/apk/debug/` as **Dungeon Dot Preview**. The release bundle appears in `android/app/build/outputs/bundle/release/` and needs release signing before a Play Console upload. The preview has its own app ID, so its save data belongs to the preview installation.
 
+## V8.66 — Clearer arena view
+
+Player stats are available under Character. The arena shows a small enemy count when needed and transparent Map, Character, Pause, and Dash controls. Idle touch controls are fainter and brighten during use.
+
+Boss fights use one thin red bar with the boss name. The fill tracks remaining shield and health together and disappears on victory. The maps show the room layout, position and paths without frames, headings or legends. Open exits glow brighter than locked exits, and the Map button hides both maps.
+
 ## V8.65 — Treasure choice and shop previews
 
 Each unopened Treasure Room chest offers two different relics. Compare your hero's versions of the items, stack changes, affected stats, and newly unlocked synergies, then take one for free. The offer and chosen reward are saved. Old unopened chests keep their original item as the first choice, and claimed chests stay open.
