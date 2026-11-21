@@ -1,5 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#191724"><title>Dungeon Dot — Painted Realms</title><style>*{box-sizing:border-box}body{margin:0;background:#11101a;color:#eee;font:14px system-ui;display:flex;align-items:center;justify-content:center;min-height:100dvh}main{width:min(100vw,470px);padding:8px}header{display:flex;justify-content:space-between;margin:4px 4px 8px}canvas{width:100%;height:auto;display:block;touch-action:none;border-radius:12px}footer{display:flex;align-items:center;justify-content:space-between;padding:10px 4px}button{border:0;background:#504365;color:white;border-radius:8px;padding:10px 16px}small{color:#bdb3cc}.health{display:flex;align-items:center;gap:8px;min-width:170px;font-weight:700}.hp-track{width:116px;height:13px;border:2px solid #756782;border-radius:4px;background:#382938;overflow:hidden}#hp-fill{height:100%;width:100%;background:#69d58a;transition:width .16s ease}#hp-bleed{position:absolute;right:0;top:0;height:100%;width:0;background:#ec3855;transition:width .12s linear}.hp-track{position:relative}#hp-label{font-size:11px;color:#d5cadc}main{width:100vw;height:100dvh;padding:0;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}body{overflow:hidden;min-height:100dvh;background:#080812}#arena{position:relative;width:100vw;height:100dvh;flex:none}#game{width:100%;height:100%;border-radius:0}header{position:absolute;z-index:4;top:0;left:0;right:0;margin:0;padding:8px 12px;background:linear-gradient(#0d0b1ce8,#0d0b1c88);align-items:center;pointer-events:none;gap:12px}header .health{min-width:0}header .hp-track{width:clamp(65px,12vw,160px)}header #kills{font:800 12px monospace;white-space:nowrap}header #shield-durability{max-width:180px!important}footer{position:absolute;z-index:4;right:clamp(95px,17vw,145px);bottom:7px;gap:6px;padding:0;display:flex;flex-wrap:wrap;justify-content:flex-end;pointer-events:none}footer small{display:none}footer button{pointer-events:auto;background:#3a3057dd;border:1px solid #8e76b0;border-radius:8px;padding:7px 10px;font:600 10px monospace;white-space:nowrap}#stats-panel{position:absolute;right:8px;top:44px;z-index:6;background:#161226f0;border:1px solid #77629c;border-radius:10px;max-width:240px;max-height:calc(100dvh - 70px);overflow:auto}#shield-choice{font-size:13px!important}#rotate-overlay{display:none;position:fixed;inset:0;z-index:100;background:radial-gradient(circle at center,#31204b,#0a0914);color:white;align-items:center;justify-content:center;flex-direction:column;gap:18px;text-align:center;padding:24px;font:700 19px system-ui}#rotate-overlay .turn-icon{font-size:64px;animation:turnphone 2s ease-in-out infinite alternate}@keyframes turnphone{to{transform:rotate(90deg)}}#rotate-overlay button{font-size:16px;padding:14px 22px;background:#7654bc}@media(orientation:portrait){#rotate-overlay{display:flex}main{visibility:hidden}}@media(max-height:380px){header{padding:3px 9px}footer button{padding:5px 7px;font-size:9px}}@media(orientation:landscape){#rotate-overlay{display:none}} #settings-panel{position:absolute;right:10px;top:42px;z-index:15;background:#1c1532f5;color:white;border:1px solid #a58bdb;border-radius:12px;padding:12px;width:min(280px,72vw);max-height:calc(100dvh - 50px);overflow:auto;font:12px system-ui}#settings-panel[hidden],#controls-settings[hidden],#edit-hint[hidden]{display:none!important}#settings-panel button{margin:4px;background:#53416f;border:1px solid #8d75ae;padding:7px;border-radius:6px;color:white}#controls-settings{display:grid;gap:6px}#controls-settings label{display:grid;gap:4px}#controls-settings input[type=range]{width:100%;accent-color:#ac83ef}#edit-hint{position:absolute;top:42px;left:50%;transform:translateX(-50%);z-index:15;background:#271b45;padding:8px;border:1px solid #b59aea;border-radius:8px;color:white;font:700 12px monospace}  #boss-hud{position:absolute;z-index:5;top:76px;left:50%;transform:translateX(-50%);width:min(360px,52vw);padding:7px 10px;background:#1a1025ed;border:1px solid #bd8858;border-radius:8px;pointer-events:none;font:10px monospace}#boss-hud[hidden]{display:none!important}.boss-heading{display:flex;justify-content:space-between;gap:8px;color:#f4dba2}.boss-track{height:9px;background:#3d2638;border:1px solid #90677c;margin:4px 0;overflow:hidden;border-radius:3px}#boss-fill{height:100%;background:linear-gradient(90deg,#bb405d,#fa9871);width:100%}#boss-hint{display:block;color:#d6c0e9;font-size:9px} #sandbox-toggle[hidden],#sandbox-panel[hidden],#sandbox-start[hidden],#sandbox-tools[hidden]{display:none!important}#sandbox-panel{position:absolute;z-index:20;right:10px;top:42px;width:min(302px,44vw);max-height:calc(100dvh - 100px);overflow:auto;padding:9px;background:#171c2ff5;border:1px solid #79b6dc;border-radius:10px;font:11px system-ui;color:#e0edfa}.sandbox-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;color:#b5e8ff}#sandbox-panel button{border:1px solid #6886a9;border-radius:6px;background:#334260;padding:6px 7px;font:600 10px system-ui;color:#fff}.sandbox-switches,.sandbox-actions{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}.sandbox-switches button{flex:1}.sandbox-switches button[aria-pressed=true]{background:#245648!important;border-color:#86e6b5!important}#sandbox-panel small{display:block;color:#b4c5dd;font:9px system-ui;line-height:1.35}#sandbox-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;max-height:calc(100dvh - 240px);min-height:72px;overflow:auto;margin:7px 0;padding:2px}.spawn-tile{aspect-ratio:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;min-width:0;padding:4px!important;background:#252d43!important}.spawn-tile svg{width:70%;max-height:52px;flex:1;min-height:28px}.spawn-tile span{font:9px system-ui;line-height:1.1;overflow-wrap:anywhere}.spawn-tile[aria-pressed=true]{border:2px solid #ffe1a0!important;background:#433d4d!important} #sandbox-panel{display:flex;flex-direction:column;overflow:hidden}#sandbox-tools{display:flex;flex-direction:column;min-height:0;flex:1}#sandbox-tools>.sandbox-switches,#sandbox-tools>.sandbox-actions,#sandbox-tools>small{flex-shrink:0}#sandbox-grid{min-height:0;flex:1 1 auto;max-height:calc(100dvh - 260px)} #character-panel[hidden],#loot-panel[hidden],#item-notice[hidden]{display:none!important}
-#coin-count{color:#f7d581;font:800 12px monospace;white-space:nowrap}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#191724"><title>Dungeon Dot — Painted Realms</title><style>*{box-sizing:border-box}body{margin:0;background:#11101a;color:#eee;font:14px system-ui;display:flex;align-items:center;justify-content:center;min-height:100dvh}main{width:min(100vw,470px);padding:8px}canvas{width:100%;height:auto;display:block;touch-action:none;border-radius:12px}footer{display:flex;align-items:center;justify-content:space-between;padding:10px 4px}button{border:0;background:#504365;color:white;border-radius:8px;padding:10px 16px}small{color:#bdb3cc}main{width:100vw;height:100dvh;padding:0;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}body{overflow:hidden;min-height:100dvh;background:#080812}#arena{position:relative;width:100vw;height:100dvh;flex:none}#game{width:100%;height:100%;border-radius:0}footer{position:absolute;z-index:4;right:clamp(95px,17vw,145px);bottom:7px;gap:6px;padding:0;display:flex;flex-wrap:wrap;justify-content:flex-end;pointer-events:none}footer small{display:none}footer button{pointer-events:auto;background:#3a3057dd;border:1px solid #8e76b0;border-radius:8px;padding:7px 10px;font:600 10px monospace;white-space:nowrap}#stats-panel{position:absolute;right:8px;top:44px;z-index:6;background:#161226f0;border:1px solid #77629c;border-radius:10px;max-width:240px;max-height:calc(100dvh - 70px);overflow:auto}#shield-choice{font-size:13px!important}#rotate-overlay{display:none;position:fixed;inset:0;z-index:100;background:radial-gradient(circle at center,#31204b,#0a0914);color:white;align-items:center;justify-content:center;flex-direction:column;gap:18px;text-align:center;padding:24px;font:700 19px system-ui}#rotate-overlay .turn-icon{font-size:64px;animation:turnphone 2s ease-in-out infinite alternate}@keyframes turnphone{to{transform:rotate(90deg)}}#rotate-overlay button{font-size:16px;padding:14px 22px;background:#7654bc}@media(orientation:portrait){#rotate-overlay{display:flex}main{visibility:hidden}}@media(max-height:380px){footer button{padding:5px 7px;font-size:9px}}@media(orientation:landscape){#rotate-overlay{display:none}} #settings-panel{position:absolute;right:10px;top:42px;z-index:15;background:#1c1532f5;color:white;border:1px solid #a58bdb;border-radius:12px;padding:12px;width:min(280px,72vw);max-height:calc(100dvh - 50px);overflow:auto;font:12px system-ui}#settings-panel[hidden],#controls-settings[hidden],#edit-hint[hidden]{display:none!important}#settings-panel button{margin:4px;background:#53416f;border:1px solid #8d75ae;padding:7px;border-radius:6px;color:white}#controls-settings{display:grid;gap:6px}#controls-settings label{display:grid;gap:4px}#controls-settings input[type=range]{width:100%;accent-color:#ac83ef}#edit-hint{position:absolute;top:42px;left:50%;transform:translateX(-50%);z-index:15;background:#271b45;padding:8px;border:1px solid #b59aea;border-radius:8px;color:white;font:700 12px monospace} #sandbox-toggle[hidden],#sandbox-panel[hidden],#sandbox-start[hidden],#sandbox-tools[hidden]{display:none!important}#sandbox-panel{position:absolute;z-index:20;right:10px;top:42px;width:min(302px,44vw);max-height:calc(100dvh - 100px);overflow:auto;padding:9px;background:#171c2ff5;border:1px solid #79b6dc;border-radius:10px;font:11px system-ui;color:#e0edfa}.sandbox-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;color:#b5e8ff}#sandbox-panel button{border:1px solid #6886a9;border-radius:6px;background:#334260;padding:6px 7px;font:600 10px system-ui;color:#fff}.sandbox-switches,.sandbox-actions{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}.sandbox-switches button{flex:1}.sandbox-switches button[aria-pressed=true]{background:#245648!important;border-color:#86e6b5!important}#sandbox-panel small{display:block;color:#b4c5dd;font:9px system-ui;line-height:1.35}#sandbox-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;max-height:calc(100dvh - 240px);min-height:72px;overflow:auto;margin:7px 0;padding:2px}.spawn-tile{aspect-ratio:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;min-width:0;padding:4px!important;background:#252d43!important}.spawn-tile svg{width:70%;max-height:52px;flex:1;min-height:28px}.spawn-tile span{font:9px system-ui;line-height:1.1;overflow-wrap:anywhere}.spawn-tile[aria-pressed=true]{border:2px solid #ffe1a0!important;background:#433d4d!important} #sandbox-panel{display:flex;flex-direction:column;overflow:hidden}#sandbox-tools{display:flex;flex-direction:column;min-height:0;flex:1}#sandbox-tools>.sandbox-switches,#sandbox-tools>.sandbox-actions,#sandbox-tools>small{flex-shrink:0}#sandbox-grid{min-height:0;flex:1 1 auto;max-height:calc(100dvh - 260px)} #character-panel[hidden],#loot-panel[hidden],#item-notice[hidden]{display:none!important}
 #character-panel{position:absolute;z-index:35;left:10px;top:42px;width:min(370px,60vw);max-height:calc(100dvh - 66px);overflow:auto;padding:12px;background:#191628f5;border:1px solid #aa91cb;border-radius:12px;color:#ece4f8;font:12px system-ui}
 #character-coins{display:block;color:#f1d391;margin:5px 0 9px}
 #character-stats{display:grid;grid-template-columns:1fr 1fr;gap:5px}
@@ -49,16 +48,16 @@ footer #restart{display:none}
 #dash-button.editing{border-style:dashed;border-color:#ffe17e;background:#493b3c;color:#ffe9ab;z-index:16;cursor:move}
 #synergy-list{display:grid;gap:7px}.synergy-row{display:flex;gap:10px;border:1px solid #4d415c;border-radius:8px;padding:9px;background:#211d2d}.synergy-row.active{border-color:#a48b56;background:#352c32}.synergy-row strong{font-size:12px;color:#c3afcf}.synergy-row.active strong{color:#f3d391}.synergy-row small{display:block;font-size:10px;color:#a69ab3;margin:3px 0}.synergy-row p{font-size:10px;line-height:1.45;color:#c7bacf;margin:3px 0 0}.synergy-icons{display:flex;align-items:center;gap:4px;min-width:62px;font-size:22px}.synergy-icons b{font-size:12px;color:#82708e}#synergy-count{color:#ebcc87;font-size:11px}
 
-#level-hud{color:#e7c9ff;font:700 10px monospace;white-space:nowrap}
-#level-hud.evolved{color:#ffe2a5}
-#mana-hud{display:none;align-items:center;gap:5px;flex:none;color:#c6baff;font:700 10px monospace;white-space:nowrap}
-#mana-hud .mana-track{width:clamp(55px,8.4vw,100px);height:10px;border:1px solid #8d79d8;border-radius:5px;background:#28213e;overflow:hidden}
-#mana-fill{height:100%;width:100%;background:linear-gradient(90deg,#5d88f0,#c481ff);transition:width .10s linear}
-#mana-hud.low-mana #mana-fill{background:linear-gradient(90deg,#8c579c,#fa8bc0)}
-#mana-label{font-size:10px;color:#d8c8ff}
-@media(max-width:750px){#mana-hud .mana-track{width:48px}#mana-hud{gap:3px;font-size:9px}#mana-label{font-size:9px}header{gap:6px!important}}
-#melee-defences{display:flex;flex-direction:column;gap:3px;flex:1;min-width:85px;max-width:132px}#melee-defences[hidden]{display:none}#armour-durability{display:flex;align-items:center;gap:5px}#armour-durability .armour-track{flex:1;height:5px;background:#443950;border-radius:5px;overflow:hidden}#armour-durability-fill{height:100%;background:#e8bf7b}#armour-durability-label{font:8px monospace;color:#f1d4a4;white-space:nowrap}#armour-durability.broken #armour-durability-label{color:#aa98a8}
-#mage-spell-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:5px 12px}#mage-spell-list p{margin:0;font-size:11px}#mage-spell-list small{display:block;color:#c5bbd3}#mage-souls{color:#ebc5ea;padding-left:3px}
+
+
+
+
+
+
+
+@media(max-width:750px){#mana-hud .mana-track{width:48px}}
+
+#mage-spell-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:5px 12px}#mage-spell-list p{margin:0;font-size:11px}#mage-spell-list small{display:block;color:#c5bbd3}
 #element-choice[hidden]{display:none}
 #element-choice{position:fixed;inset:0;z-index:75;background:#0c0b17e8;display:flex;align-items:center;justify-content:center;padding:clamp(5px,3dvh,18px);color:white}
 #element-choice .element-dialog{width:min(560px,100%);max-height:100%;overflow:auto;overscroll-behavior:contain;background:#252036;border:2px solid #ae8de0;border-radius:13px;padding:15px;text-align:center}
@@ -79,12 +78,12 @@ footer #restart{display:none}
 }
 
 :root{color-scheme:dark}
-main{--world-edge:#8c7354;--world-hud:#221913}
-main[data-world=red]{--world-edge:#b67952;--world-hud:#311c18}
-main[data-world=green]{--world-edge:#7d9772;--world-hud:#1e2a1e}
-main[data-world=blue]{--world-edge:#87aabf;--world-hud:#1b2b42}
-header{background:linear-gradient(var(--world-hud),#100d0be3);border-bottom:1px solid var(--world-edge)}
-#boss-hud{border-color:var(--world-edge);background:var(--world-hud);color:#f1e3c5}
+main{--world-edge:#8c7354}
+main[data-world=red]{--world-edge:#b67952}
+main[data-world=green]{--world-edge:#7d9772}
+main[data-world=blue]{--world-edge:#87aabf}
+
+
 footer button,#settings-panel button{background:linear-gradient(#493625,#2c2119);border-color:var(--world-edge);color:#f1e2c0}
 button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offset:2px}
 
@@ -273,156 +272,42 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
 }
 
 
-/* The combat HUD and maps share the title screen's ink and bronze palette. */
-header{padding:5px 11px;min-height:37px;align-items:center;gap:8px;background:linear-gradient(180deg,#10141a,var(--world-hud));box-shadow:0 2px 12px #0008}
-header .health{display:grid;grid-template-columns:auto minmax(33px,clamp(39px,10vw,148px)) auto;gap:2px 5px;align-items:center;flex:none}
-header .health>span:first-child{color:#f4dfb7;font:700 10px monospace}
-header .hp-track{width:100%;height:10px;border:1px solid var(--world-edge);border-radius:2px;background:#251824}
-#hp-fill{box-shadow:inset 0 1px #fff5}
-#hp-bleed{opacity:.85}
-#hp-label{color:#fff2d2;font:700 10px monospace;white-space:nowrap}
-#lives-count{grid-column:2/4;color:#f3bcad;font:700 9px monospace;white-space:nowrap}
-#mana-hud{gap:4px;color:#e5d5ff}
-#mana-hud .mana-track{width:clamp(30px,8vw,110px);border-radius:2px;border-color:#8e78ae}
-#mana-label{color:#f1ddff}
-#mage-souls{font-size:9px}
-#melee-defences{width:clamp(74px,14vw,147px);min-width:0;flex:none}
-#melee-defences small{font-size:8px!important}
-.hud-counters{display:flex;align-items:center;gap:9px;min-width:0;margin-left:auto}
-#level-hud{min-width:0;color:#efdfba;text-overflow:ellipsis;overflow:hidden}
-#level-hud.evolved{color:#ffe2a5}
-#coin-count{color:#ffdea0;white-space:nowrap;font:700 10px monospace}
-header #kills{color:#f0e4cf;font-size:10px}
-#map-toggle{padding:4px 7px;pointer-events:auto;flex:none;border:1px solid var(--world-edge);border-radius:2px;background:#1e2029;color:#efdbb3;font:700 10px monospace}
-#map-toggle[aria-pressed=true]{background:#5e4a33;border-color:#aa8757}
-
-#boss-hud{width:min(410px,54vw);top:72px;border-radius:3px;padding:5px 8px;background:linear-gradient(145deg,#141721f5,var(--world-hud));box-shadow:0 4px 15px #0009;display:grid;grid-template-columns:auto minmax(0,1fr);gap:7px;align-items:center}
-#boss-portrait .plate-icon{width:33px;display:block}
-.boss-heading{align-items:center;color:#f8dca8}
-#boss-name{font:700 clamp(10px,1.6vw,15px)/1.1 Georgia,serif}
-#boss-health{white-space:nowrap}
-.boss-track{height:8px;border:1px solid #a56a59;background:#2e1921;border-radius:2px}
-#boss-fill{background:linear-gradient(90deg,#b64c49,#f29a6f);box-shadow:inset 0 1px #ffb6a9}
-#boss-hint{color:#f5d5b5;line-height:1.2}
-footer button{border-radius:2px}
-#dash-button{background:radial-gradient(circle at 50% 40%,#354253,#18212b);border-color:#d7b583;color:#fff2d1;box-shadow:0 0 0 3px #11172395}
-#dash-button.cooling{background:#20242c;border-color:#827d74;color:#e1d2bc}
-#dash-button.editing{background:#483927;border-color:#ffe0a3}
-@media(max-width:710px){.hud-counters{gap:5px}#version{display:none}#melee-defences{width:83px}#boss-portrait .plate-icon{width:27px}}
-
-
-/* Floating combat controls leave the painted arena visible behind them. */
-.combat-info{position:absolute;z-index:4;top:9px;left:10px;width:max-content;max-width:calc(100% - 206px);display:grid;gap:5px;justify-items:start;pointer-events:none}
-.combat-info header{position:static;max-width:100%;min-height:0;flex-wrap:wrap;justify-content:flex-start;gap:4px 9px;padding:5px 7px;background:#111721dc;border:1px solid var(--world-edge);border-radius:3px;box-shadow:0 3px 9px #08090c80}
-header .health{grid-template-columns:auto minmax(30px,clamp(34px,8vw,119px)) auto}
-.hud-counters{margin-left:0;gap:6px}
-#version{display:none}
-.combat-actions{position:absolute;top:9px;right:10px;z-index:7;display:flex;gap:5px}
-.combat-actions button{min-width:47px;min-height:36px;padding:5px 7px;border:1px solid var(--world-edge);border-radius:3px;background:#131a24ea;color:#f4e2bd;font:700 11px system-ui;pointer-events:auto}
-.combat-actions #map-toggle{font:700 11px system-ui;min-width:38px}
-#enemy-counter{display:flex;align-items:center;gap:3px;min-width:48px;padding:1px 6px 1px 2px;border:1px solid var(--world-edge);border-radius:3px;background:#131821df;color:#ffe2ad}
-#enemy-counter .plate-icon{display:block;width:27px;--sprite-col:0%;--sprite-row:0%}
-#enemy-count{font:700 17px Georgia,serif;min-width:12px;text-align:center}
-.hud-accessible{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-#boss-hud{top:69px}
-#settings-panel{top:53px}
-#settings-panel #main-menu-toggle{background:#594330;border-color:#aa8151}
-#save-indicator{top:109px;left:10px;background:#261b20;color:#ffe1ba;padding:5px}
-@media(max-width:740px){
- .combat-info{max-width:calc(100% - 195px)}
- header #kills{font-size:8px}
- .hud-counters{gap:5px}
-}
-@media(max-width:590px){
- header .health{grid-template-columns:auto 33px auto}
- #boss-hud{top:81px}
-}
-
-.plate-mobs-dungeon{background-image:url('art/mobs-dungeon.webp')}
-.plate-mobs-realms{background-image:url('art/mobs-realms.webp');background-size:400% 200%}
-
-/* Shared brass trim for the combat plates and menus. */
+/* Keep only compact, translucent controls over the arena. */
 :root{--brass-frame:url("art/hud-brass-frame.webp")}
-.combat-info header,#boss-hud{
- background:linear-gradient(160deg,#272321f5,#121419f5) padding-box;
- border:6px solid #8b623d;border-image:var(--brass-frame) 31 fill / 9px / 0 stretch;
- border-radius:5px;box-shadow:0 3px 12px #0008;
+.plate-mobs-dungeon{background-image:url("art/mobs-dungeon.webp")}
+.plate-mobs-realms{background-image:url("art/mobs-realms.webp");background-size:400% 200%}
+.combat-info{position:absolute;z-index:4;top:10px;left:10px;pointer-events:none}
+#enemy-counter{display:flex;align-items:center;gap:2px;color:#ffefc9;text-shadow:0 1px 3px #000}
+#enemy-counter .plate-icon{display:block;width:23px;--sprite-col:0%;--sprite-row:0%;filter:drop-shadow(0 1px 2px #000)}
+#enemy-count{font:700 15px Georgia,serif}
+#economy-room-name{color:#fff0d2;font:700 12px Georgia,serif;text-shadow:0 1px 3px #000,0 1px 5px #000}
+#enemy-counter[hidden],#economy-room-name[hidden]{display:none}
+.hud-accessible{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.combat-actions{position:absolute;top:7px;right:8px;z-index:7;display:flex;gap:2px}
+.combat-actions button,.combat-actions #map-toggle{
+ min-width:44px;min-height:38px;display:grid;justify-items:center;align-content:center;gap:1px;
+ padding:2px 4px;border:0;border-radius:3px;background:transparent;color:#fff0d2;
+ font:700 10px/1.05 system-ui;text-shadow:0 1px 3px #000,0 1px 5px #000;pointer-events:auto;
 }
-.combat-info header{padding:4px 8px;gap:4px 8px}
-header .health{grid-template-columns:auto minmax(31px,clamp(38px,7vw,114px)) auto;gap:2px 4px}
-.hud-pictogram{display:inline-block;width:19px;height:19px;flex:none;background:url("art/hud-ornaments.webp") no-repeat;background-size:400% 200%;filter:drop-shadow(0 1px 2px #000)}
-.hud-heart{background-position:66.6667% 0}
-.hud-mana{background-position:100% 0}
+.combat-actions button:is(:hover,:focus-visible){background:#1d161864}
+.combat-actions #map-toggle[aria-pressed=false] .hud-pictogram{opacity:.55}
+.hud-pictogram{display:inline-block;width:18px;height:18px;background:url("art/hud-ornaments.webp") no-repeat;background-size:400% 200%;filter:drop-shadow(0 1px 2px #000)}
 .hud-map{background-position:0 100%}
 .hud-character{background-position:33.3333% 100%}
 .hud-pause{background-position:66.6667% 100%}
-header .hp-track,#mana-hud .mana-track{
- border-color:#b28c5c;background:linear-gradient(#120e0e,#292024);box-shadow:0 1px 2px #0009,inset 0 1px 2px #000;
+#boss-hud{
+ position:absolute;z-index:5;top:10px;left:50%;transform:translateX(-50%);pointer-events:none;
+ width:min(320px,44vw);height:17px;display:grid;place-items:center;
+ overflow:hidden;padding:0;border:0;border-radius:3px;background:#31151ba8;
 }
-#hp-fill{box-shadow:inset 0 1px #fff8,inset 0 -1px #0004}
-#mana-fill{background:linear-gradient(180deg,#adf7ff,#459fcf 52%,#28578b)}
-#hp-label,#mana-label,#boss-health{color:#fff0ca;font-variant-numeric:tabular-nums}
-#lives-count,#coin-count,#level-hud,header #kills{color:#f4d6a4}
-#lives-count{letter-spacing:.035em}
-#coin-count{color:#ffdc85}
-#enemy-counter,#economy-room-name{
- min-width:67px;min-height:42px;justify-content:center;gap:2px;padding:5px 13px;
- border:4px solid #8b623d;border-image:var(--brass-frame) 31 fill / 7px / 0 stretch;
- background:#211b19 padding-box;
- filter:drop-shadow(0 2px 3px #000a);color:#fff0c5;
-}
-#enemy-counter[hidden],#economy-room-name[hidden]{display:none}
-#economy-room-name{display:grid;place-items:center;font:700 13px Georgia,serif;min-height:32px}
-#enemy-counter .plate-icon{width:23px;filter:drop-shadow(0 1px 2px #000)}
-#enemy-count{font-size:17px;text-shadow:0 1px 2px #000}
-.combat-actions button,.combat-actions #map-toggle{
- min-width:46px;min-height:41px;display:grid;justify-items:center;align-content:center;gap:0;
- padding:2px 6px;color:#ffe7b9;font:700 10px Georgia,serif;line-height:1.05;
- border:4px solid #9a754b;border-image:var(--brass-frame) 31 fill / 7px / 0 stretch;
- background:#231d19 padding-box;box-shadow:0 2px 5px #0009;
-}
-.combat-actions .hud-pictogram{width:19px;height:18px}
-.combat-actions #map-toggle[aria-pressed=true]{filter:brightness(1.28);color:#ffe4a0}
-.combat-actions button:hover{filter:brightness(1.35)}
-#boss-hud{padding:4px 9px;gap:8px;width:min(416px,54vw);top:75px}
-#boss-portrait{
- display:grid;place-items:center;width:43px;height:43px;
- background:url("art/hud-compass.webp") center/contain no-repeat;
-}
-#boss-portrait .plate-icon{width:32px;filter:drop-shadow(0 2px 2px #000)}
-#boss-portrait .plate-gatekeeper{background:url("art/gatekeeper-showcase.webp") center 8%/132% no-repeat}
-.boss-shield-row{display:flex;align-items:center;gap:7px;margin:2px 0 1px;color:#d1eff4;font:700 8px/1.15 monospace}
-.boss-shield-row[hidden]{display:none}
-.boss-shield-track{flex:1;height:5px;overflow:hidden;background:#17202c;border:1px solid #638fa5;border-radius:2px}
-#boss-shield-fill{height:100%;background:linear-gradient(90deg,#3c88aa,#b7eff5);width:100%}
-#boss-shield-label{min-width:94px;text-align:right;white-space:nowrap}
-.boss-track{border-color:#ab7954;background:#1a1216;height:8px;box-shadow:inset 0 1px 2px #000}
-#boss-fill{background:linear-gradient(180deg,#ffd099 0%,#cd663e 38%,#882d29);box-shadow:inset 0 1px #fff6}
-#boss-hint{color:#f5d5ae}
-#dash-button{
- background:#201918d6 url("art/hud-compass.webp") center/100% 100% no-repeat;
- border:0;box-shadow:0 2px 5px #000a;color:#fff0cb;
-}
-#dash-button.cooling{background:#28201df0 url("art/hud-compass.webp") center/100% 100% no-repeat;filter:saturate(.65);color:#eadbc0}
-@media(max-width:740px){
- .combat-info{max-width:calc(100% - 207px)}
- #boss-hud{gap:5px}
- #boss-portrait{width:34px;height:34px}
- #boss-portrait .plate-icon{width:26px}
-}
-
-
-@media(max-height:470px){
- #boss-hud{top:max(63px,var(--boss-top,75px));padding:2px 8px;border-width:5px}
- #boss-hud .boss-track{margin:2px 0}
- #boss-portrait{width:33px;height:33px}
- #boss-portrait .plate-icon{width:25px}
-}
-#shield-durability::before{content:"";display:block;flex:none;width:11px;height:13px;background:url("art/shield-crest.webp") center/contain no-repeat;filter:drop-shadow(0 1px 1px #000)}
-#shield-durability[data-state=broken]::before{filter:grayscale(1);opacity:.5}
-#shield-durability-label{color:#f7ddb1!important}
-#shield-durability[data-state=cracked] #shield-durability-label{color:#f7af93!important}
-#shield-durability[data-state=broken] #shield-durability-label{color:#cfaaa2!important}
+#boss-hud[hidden]{display:none}
+#boss-fill{position:absolute;inset:0 auto 0 0;width:100%;background:#b42b37ed}
+#boss-name{position:relative;color:#fff4e8;font:700 11px/1 system-ui;text-shadow:0 1px 2px #19080c}
+@media(max-width:520px){#boss-hud{top:39px}}
+#dash-button,#dash-button.cooling{background:#17161c39;border-color:#f3dbae66;box-shadow:none;color:#fff0d2;text-shadow:0 1px 3px #000}
+#dash-button.editing{background:#493b3c;color:#ffe9ab}
+#settings-panel #main-menu-toggle{background:#594330;border-color:#aa8151}
+#save-indicator{top:48px;left:10px;background:#261b20bd;color:#ffe1ba;padding:5px}
 
 /* In-run menus share the bronze trim and world colors used in combat. */
 main{--menu-scene:url("art/keep.webp")}
@@ -638,7 +523,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  .treasure-option p{margin:3px 0}
  .treasure-option .loot-change{margin-top:3px;padding-bottom:4px}
 }
-#item-notice{top:max(72px,var(--boss-top,72px));color:#ffdfad;font:700 11px/1.25 system-ui;text-align:center}
+#item-notice{top:38px;color:#ffdfad;font:700 11px/1.25 system-ui;text-align:center}
 #boss-hud:not([hidden]) ~ #item-notice{top:auto;bottom:26px}
 #opening-guide{
  position:absolute;z-index:13;bottom:20px;left:50%;transform:translateX(-50%);
@@ -649,12 +534,6 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
 #opening-guide[hidden]{display:none}
 #opening-guide strong{display:block;color:#ffe6bd;font:700 14px/1.2 Georgia,serif;margin-bottom:2px}
 #edit-hint{top:70px}
-#coin-count{display:inline-flex;align-items:center;gap:4px}
-#coin-count::before{
- content:"";width:9px;height:9px;border:1px solid #e7b66d;border-radius:50%;
- background:radial-gradient(circle at 35% 28%,#ffe2a0,#c9913d 52%,#69401f);
- box-shadow:inset 0 0 0 1px #885422,0 1px 2px #080507;
-}
 #rotate-overlay{
  color:#ffe8bb;background:linear-gradient(#100e18a0,#171015ec),url("art/menu-gate.webp") center/cover;
 }
@@ -694,7 +573,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  .pause-body{grid-template-columns:minmax(100px,.66fr) minmax(0,1.6fr)}
  .controls-body{grid-template-columns:minmax(106px,.70fr) minmax(0,1.5fr)}
 }
-</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><header><div class="health"><span class="hud-pictogram hud-heart" role="img" aria-label="Health"></span><div class="hp-track"><div id="hp-fill"></div><div id="hp-bleed"></div></div><span id="hp-label">100%</span></div><div id="mana-hud" role="meter" aria-label="Mage mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="hud-pictogram hud-mana" aria-hidden="true"></span><div class="mana-track"><div id="mana-fill"></div></div><span id="mana-label">100/100</span><span id="mage-souls" hidden></span></div><div id="melee-defences" hidden><div id="shield-durability" style="display:none;align-items:center;gap:5px;flex:1;max-width:118px"><div style="height:7px;background:#332d43;border-radius:5px;overflow:hidden;flex:1"><div id="shield-durability-fill" style="height:100%;width:100%;background:#8ceaff"></div></div><small id="shield-durability-label" style="font:8px monospace;color:#bcefff;white-space:nowrap">SHIELD 100%</small></div><div id="armour-durability" role="meter" aria-label="Body armour durability" aria-valuemin="0" aria-valuemax="12" aria-valuenow="12"><div class="armour-track"><div id="armour-durability-fill"></div></div><small id="armour-durability-label">ARMOUR 12/12</small></div></div><div class="hud-counters"><small id="version" style="color:#a9e6f4;font:700 11px monospace">V8.65</small><small id="level-hud">LV 1 · XP 0/24</small><output id="mage-cast-status" role="status" aria-live="polite" style="position:absolute;left:-9999px"></output><small id="coin-count"><span class="hud-accessible">Coins</span><span id="coin-total">0</span></small><b id="kills">KILLS 0</b></div></header><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div><span id="economy-room-name" hidden></span></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden><div id="boss-portrait" aria-hidden="true"></div><div class="boss-vitals"><div class="boss-heading"><strong id="boss-name"></strong><span id="boss-health"></span></div><div class="boss-track"><div id="boss-fill"></div></div><div id="boss-shield-row" class="boss-shield-row" role="meter" aria-label="Boss shield" hidden><div class="boss-shield-track"><div id="boss-shield-fill"></div></div><span id="boss-shield-label"></span></div><small id="boss-hint"></small></div></section><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
+</style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info"><div id="enemy-counter" role="status" aria-live="polite"><span class="plate-icon plate-mobs" aria-hidden="true"></span><span class="hud-accessible">Enemies left</span><strong id="enemy-count">0</strong></div><span id="economy-room-name" hidden></span></div><nav class="combat-actions" aria-label="Combat controls"><button id="map-toggle" type="button" aria-pressed="true" aria-label="Show minimaps"><span class="hud-pictogram hud-map" aria-hidden="true"></span>Map</button><button id="stats-toggle" type="button"><span class="hud-pictogram hud-character" aria-hidden="true"></span>Character</button><button id="settings-toggle" type="button"><span class="hud-pictogram hud-pause" aria-hidden="true"></span>Pause</button></nav><section id="boss-hud" hidden role="progressbar" aria-labelledby="boss-name" aria-valuemin="0"><div id="boss-fill"></div><strong id="boss-name"></strong></section><output id="mage-cast-status" class="hud-accessible" role="status" aria-live="polite"></output><div id="arena"><canvas id="game" width="640" height="360"></canvas><button id="dash-button" type="button" hidden aria-label="Dash ready">DASH</button><div id="shield-choice" hidden style="position:absolute;inset:0;background:#100d20e8;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:18px;text-align:center;color:#fff;font:14px monospace"><strong style="font-size:20px;color:#d8b7ff">10 KILLS — CHOOSE A SHIELD</strong><small>Starts tiny · grows every 5 kills</small><button id="choose-flat" style="padding:14px;background:#473568;color:#fff;border:2px solid #bb8cff;border-radius:10px;width:90%">▰ FLAT SHIELD<br><small>A bar in front of your bat</small></button><button id="choose-curved" style="padding:14px;background:#29475e;color:#fff;border:2px solid #71e8ff;border-radius:10px;width:90%">◡ CURVED SHIELD<br><small>Wraps around your body</small></button></div></div><section id="settings-panel" class="menu-shell" hidden role="dialog" aria-modal="true" aria-label="Pause and settings">
  <div class="pause-home">
   <div class="menu-header"><h2>Paused</h2><button id="settings-close" type="button" class="menu-control primary-control">Resume</button></div>
   <div class="pause-body">
@@ -791,7 +670,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.65</small>
+   <small>V8.66</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -910,37 +789,17 @@ function shieldDamage(amount){
  if(hero!=='classic'||shieldBroken||shieldHp<=0||classicDashProtected())return;
  shieldType='curved';shieldHp=Math.max(0,shieldHp-Math.max(0,amount)*(1-playerStats().shieldProtection));
  if(amount>0)playSoundCue('shield-block');
- shieldLastHit=arenaTime;shieldBroken=shieldHp<=0;shieldCooldown=0;shieldUpdate(0);queueCheckpoint();
-}
-function shieldUpdate(dt){
- const bar=document.querySelector('#shield-durability'),fill=document.querySelector('#shield-durability-fill'),label=document.querySelector('#shield-durability-label');
- bar.style.display=hero==='classic'?'flex':'none';fill.style.width=shieldHp+'%';
- const state=shieldBroken?'broken':shieldHp<35?'cracked':'ready';
- bar.dataset.state=state;
- fill.style.background=state==='broken'?'#665561':state==='cracked'?'linear-gradient(#eb9b78,#9b4c45)':'linear-gradient(#e8deb4,#6e9bb7)';
- label.textContent=shieldBroken?'SHIELD BROKEN':'SHIELD '+Math.round(shieldHp)+'%';
+ shieldLastHit=arenaTime;shieldBroken=shieldHp<=0;shieldCooldown=0;queueCheckpoint();
 }
 function refillRoomDefences(){
- shieldType='curved';shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;shieldUpdate(0);
+ shieldType='curved';shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;
  armourHp=bodyArmourStats().capacity;
- updateBodyArmour();
 }
 function bodyArmourStats(character=hero,upgrades=progress?.upgrades){
  if(character!=='classic')return {capacity:0,absorption:0};
  const plates=Math.min(BODY_ARMOUR_MAX_RANK,upgrades?.armourPlates||0);
  const padding=Math.min(BODY_ARMOUR_MAX_RANK,upgrades?.armourPadding||0);
  return {capacity:12+4*plates,absorption:(25+5*padding)/100};
-}
-function updateBodyArmour(){
- const group=document.querySelector('#melee-defences');
- group.hidden=hero!=='classic';
- if(group.hidden)return;
- const capacity=bodyArmourStats().capacity,remaining=Math.ceil(armourHp);
- const bar=document.querySelector('#armour-durability');
- bar.setAttribute('aria-valuemax',capacity);bar.setAttribute('aria-valuenow',remaining);
- bar.classList.toggle('broken',armourHp<=0);
- document.querySelector('#armour-durability-fill').style.width=armourHp/capacity*100+'%';
- document.querySelector('#armour-durability-label').textContent=remaining?'ARMOUR '+remaining+'/'+capacity:'ARMOUR BROKEN';
 }
 
 function drawCharacterShield(){
@@ -1660,7 +1519,7 @@ function damagedHealth(amount,periodic=false,cause=null){
   const absorbed=Math.min(armourHp,damage*bodyArmourStats().absorption);
   armourHp-=absorbed;damage-=absorbed;
   if(armourHp===0)showItemNotice('ARMOUR BROKEN · NEXT ROOM');
-  updateBodyArmour();queueCheckpoint();
+  queueCheckpoint();
  }
  const remaining=Math.max(0,hp-damage);
  if(cause&&hp>0&&remaining===0)fatalHit=cause;
@@ -2235,13 +2094,6 @@ function evolutionPortrait(id){
  if(id==='arcane')return plateIcon('mobs',15);
  return plateIcon('heroes',HERO_PLATES[id]);
 }
-function refreshElementHud(){
- const el=document.querySelector('#level-hud');
- if(!el||!progress)return;
- const first=progress.elementPrimary,second=progress.elementSecondary;
- el.classList.toggle('evolved',hasEvolved());
- el.textContent=levelSummary()+' · '+runHeroName()+(hero==='mage'&&progress.legacyMage?((first?' · '+ELEMENTS[first].name:'')+(second?' + '+ELEMENTS[second].name:'')):'');
-}
 function openElementChoice(){
  const panel=document.querySelector('#element-choice');
  if(!panel||!panel.hidden||!levelChoicePending())return;
@@ -2272,7 +2124,7 @@ function selectElement(id){
  progress.elementPrimary=id;
  document.querySelector('#element-choice').hidden=true;
  showItemNotice('ELEMENT ACQUIRED · '+ELEMENTS[id].name);
- refreshElementHud();queueCheckpoint();flushCheckpoint();hud();return true;
+ queueCheckpoint();flushCheckpoint();hud();return true;
 }
 function selectMageSchool(id){
  if(hero!=='mage'||progress?.legacyMage||!Object.hasOwn(MAGE_SCHOOLS,id)||!levelChoicePending())return false;
@@ -2318,7 +2170,7 @@ function gainRunXp(amount,practice=false){
 function earnXp(amount){
  if(!progress||inSandbox()||over||amount<=0)return;
  gainRunXp(amount*.5);
- refreshElementHud();if(levelChoicePending())openElementChoice();
+ if(levelChoicePending())openElementChoice();
  queueCheckpoint();
 }
 function elementChain(target,damage=1.5,count=2){
@@ -2698,7 +2550,6 @@ function updateEconomy(dt){
    button.textContent=full?'Health full':maxed?'Upgrade unavailable':progress.coins<loot.price?'Need more coins':loot.price?'Buy':loot.kind==='stat'?'Take upgrade':'Take item';
   }
  }
- document.querySelector('#coin-total').textContent=progress.coins;
 }
 function takeNearbyLoot(relic=null){
  const loot=nearestLoot;
@@ -2879,16 +2730,20 @@ function updateRunRecords(){
 function updateCharacterMenu(){
  const panel=document.querySelector('#character-panel');if(panel.hidden)return;
  const st=playerStats(),values=[
-  ['Health',Math.ceil(hp)+' / '+st.maxHealth],[hero==='mage'?'Spell damage':hero==='archer'?'Ranged damage':'Melee damage',st.damage.toFixed(2)+'×'],['Move speed',Math.round(st.moveSpeed)],[hero==='mage'?'Cast speed':hero==='archer'?'Reload speed':'Swing speed',Math.round(st.swing*100)+'%'],['Knockback',Math.round(st.knockback*100)+'%'],
+  ['Health',Math.ceil(hp)+' / '+st.maxHealth],['Lives',lives+' / 5'],[hero==='mage'?'Spell damage':hero==='archer'?'Ranged damage':'Melee damage',st.damage.toFixed(2)+'×'],['Move speed',Math.round(st.moveSpeed)],[hero==='mage'?'Cast speed':hero==='archer'?'Reload speed':'Swing speed',Math.round(st.swing*100)+'%'],['Knockback',Math.round(st.knockback*100)+'%'],
   ['Health regen',st.regen.toFixed(1)+'/s'],[hero==='mage'?'Magic recovery':hero==='archer'?'Bonus bow reload':'Shield damage reduction',hero==='mage'?Math.round(Math.min(.45,upgradeCount('shield')*.1+itemCount('shieldBloom')*.12)*100)+'%':hero==='archer'?Math.round(Math.min(.5,upgradeCount('shield')*.1)*100)+'%':Math.round(st.shieldProtection*100)+'%'],['Critical chance',Math.round(st.crit*100)+'%'],['Luck',st.luck],['Damage reduction',Math.round(st.armour*100)+'%'],[hero==='archer'?'Arrow slow zone':'Enemy shot speed',hero==='archer'?(itemCount('hourglass')?'ON':'OFF'):Math.round(st.bulletSpeed*100)+'%'],[hero==='archer'?'Coin pickup (arrows collect)':'Coin pickup range',st.pickup]
  ];
+ const bleed=Math.min(hp,pendingBleed());
+ if(bleed>0)values.splice(1,0,['Bleeding',bleed.toFixed(1)+' HP pending']);
  if(hero==='mage')values.splice(1,0,['Mana',Math.floor(mageMana)+' / '+mageMaxMana()],['Mana regeneration',mageManaRegen().toFixed(1)+'/s']);
+ if(hero==='mage'&&progress.mageSchool==='necromancer')values.splice(2,0,['Souls',mageSouls+' / '+MAGE_SOUL_LIMIT]);
  if(hero==='classic'){
   const armour=bodyArmourStats();
+  values.push(['Shield durability',shieldBroken?'Broken':Math.round(shieldHp)+'%']);
   values.push(['Body armour durability',Math.ceil(armourHp)+' / '+armour.capacity],['Body armour absorption',Math.round(armour.absorption*100)+'% while intact']);
  }
  renderStatCards('#character-stats',values);
- document.querySelector('#character-class-note').textContent=hero==='mage'?'Trace the runes in the order shown and release to cast. Mana regenerates automatically.':(weaponForm().desc||HERO_DEFS[hero].hint);
+ document.querySelector('#character-class-note').textContent=bossFight&&!bossFight.done?bossHint():hero==='mage'?'Trace the runes in the order shown and release to cast. Mana regenerates automatically.':(weaponForm().desc||HERO_DEFS[hero].hint);
  document.querySelector('#mage-spellbook').hidden=hero!=='mage';
  document.querySelector('#character-tab-runes').hidden=hero!=='mage';
  if(hero==='mage')document.querySelector('#mage-spell-list').innerHTML=Object.entries(mageSpellbook()).map(([path,spell])=>'<p><strong>'+path+' · '+spell.name+' · '+spell.mana+' MP</strong>'+(spell.desc?' <small>'+spell.desc+'</small>':'')+'</p>').join('');
@@ -2979,12 +2834,6 @@ function drawSandboxEconomySigns(){
  g.fillStyle='#edcc80';g.font='bold 18px monospace';g.fillText('PRACTICE SHOP',W/2,540);
  g.fillStyle='#c8c0cd';g.font='10px monospace';g.fillText('Items · all stat upgrades · healing · practice coins only',W/2,561);
  g.restore();
-}
-function drawSandboxLootMap(ox,oy,scale){
- if(!inSandbox())return;
- g.save();
- for(const loot of currentRoom.loot||[])if(!loot.claimed){g.fillStyle=loot.price?'#e8c16b':'#c9a2ed';g.fillRect(ox+loot.x*scale-1,oy+loot.y*scale-1,2,2)}
- g.textAlign='center';g.font='6px monospace';g.fillStyle='#dac6ef';g.fillText('ITEMS',ox+W*scale/2,oy+F*scale*.08);g.fillStyle='#e9cf8d';g.fillText('SHOP',ox+W*scale/2,oy+F*scale*.96);g.restore();
 }
 function setupSandboxEconomyUI(){
  document.querySelector('#sandbox-coins').onclick=addPracticeCoins;
@@ -3702,7 +3551,6 @@ function continueSlot(slot){
   enterRoom(data.roomId);mageMana=hero==='mage'?Math.min(mageMaxMana(),safeNumber(data.mageMana,100,0,190)):100;restoreSafePosition(data.player);hp=Math.min(playerStats().maxHealth,data.hp);arenaTime=data.arenaTime;restoreDashState(data.dashCooldown);
   // enterRoom clears transient damage effects; restore the saved run's bleeding state afterwards.
   playerBleed=data.playerBleed;shieldPaused=false;
-   document.querySelector('#shield-durability').style.display=shieldType?'flex':'none';
  }finally{loadingRun=false}
  profile.lastSlot=slot;profileDirty=true;flushProfile();savePending=false;saveError='';document.querySelector('#start-screen').hidden=true;
  if(savedTreasure?.alternative!==previousAlternative){queueCheckpoint();flushCheckpoint()}
@@ -4741,26 +4589,15 @@ function bossHint(){
 }
 function updateBossHud(){
  const panel=document.querySelector('#boss-hud');
- panel.hidden=(currentRoom?.kind!=='boss'&&!inSandbox())||!bossFight;
+ panel.hidden=!bossFight||bossFight.done||(currentRoom?.kind!=='boss'&&!inSandbox());
  if(panel.hidden)return;
- const portrait=document.querySelector('#boss-portrait');
- if(portrait.dataset.boss!==bossFight.variant){
-  portrait.dataset.boss=bossFight.variant;
-  portrait.innerHTML=bossFight.variant==='gatekeeper'?'<span class="plate-icon plate-gatekeeper" aria-hidden="true"></span>':plateIcon('beasts',BOSS_PLATES[bossFight.variant]);
- }
- const remaining=bossFight.units.reduce((sum,unit)=>sum+Math.max(0,unit.hp),0);
- document.querySelector('#boss-name').textContent=bossFight.name+(bossFight.reborn?' · REBORN':bossFight.split?' · SPLIT':'');
- document.querySelector('#boss-fill').style.width=(Math.max(0,Math.min(1,remaining/bossFight.totalMax))*100)+'%';
- document.querySelector('#boss-health').textContent=Math.ceil(remaining)+' / '+bossFight.totalMax;
- const shield=document.querySelector('#boss-shield-row');
- shield.hidden=!(bossFight.shieldHp>0);
- if(!shield.hidden){
-  const {shieldHp,shieldMax}=bossFight;
-  shield.setAttribute('aria-valuemin','0');shield.setAttribute('aria-valuemax',String(shieldMax));shield.setAttribute('aria-valuenow',String(shieldHp));
-  document.querySelector('#boss-shield-fill').style.width=(shieldHp/shieldMax*100)+'%';
-  document.querySelector('#boss-shield-label').textContent='SHIELD '+bossShieldAmount(shieldHp)+' / '+bossShieldAmount(shieldMax);
- }
- document.querySelector('#boss-hint').textContent=bossHint();
+ const max=bossFight.totalMax+bossFight.shieldMax;
+ const health=bossFight.units.reduce((sum,unit)=>sum+Math.max(0,unit.hp),0);
+ const remaining=Math.min(max,health+Math.max(0,bossFight.shieldHp));
+ const name=document.querySelector('#boss-name');
+ if(name.textContent!==bossFight.name)name.textContent=bossFight.name;
+ document.querySelector('#boss-fill').style.width=(remaining/max*100)+'%';
+ panel.setAttribute('aria-valuemax',String(max));panel.setAttribute('aria-valuenow',String(remaining));
 }
 function drawBossHazards(){
  if(!bossFight||bossFight.done)return;
@@ -4973,7 +4810,7 @@ function leaveSandbox(){
  progress=saved.progress;enterRoom(0,side);
  armourHp=saved.armourHp;mageSouls=saved.mageSouls;
  mageMana=Math.min(mageMaxMana(),saved.mageMana??100);itemHitCounter=saved.itemHitCounter;strongArrowHits=saved.strongArrowHits||0;mantleCooldown=saved.mantleCooldown;hp=saved.hp;lives=saved.lives;kills=saved.kills;inv=saved.inv;arenaTime=saved.arenaTime;shieldType=saved.shieldType;shieldHp=saved.shieldHp;shieldBroken=saved.shieldBroken;shieldCooldown=saved.shieldCooldown;shieldLastHit=saved.shieldLastHit;shieldLaserTick=saved.shieldLaserTick;bleedStacks=saved.bleedStacks;temporaryBleed=saved.temporaryBleed;playerBleed=saved.playerBleed;runStats=saved.runStats;p.a=saved.angle;p.target=saved.target;over=false;restoreDashState(saved.dashCooldown);
- document.querySelector('#sandbox-panel').hidden=true;document.querySelector('#shield-durability').style.display=shieldType?'flex':'none';hud();
+ document.querySelector('#sandbox-panel').hidden=true;hud();
 }
 function clearSandbox(){
  if(!inSandbox())return;
@@ -5511,110 +5348,57 @@ function drawRoomDoors(){
 }
 
 let mapVisible=true;
-const MAP_MARKS={
- start:'#d7bd87',boss:'#ff9479',cursed:'#d9aceb',treasure:'#f6d486',shop:'#b3d9bb',
- combat:'#f1a484',clear:'#afc7a4',unknown:'#786e64'
-};
-function mapRoomKind(room){
- if(!room.discovered&&!room.visited)return 'unknown';
- if(Object.hasOwn(MAP_MARKS,room.kind)&&room.kind!=='combat')return room.kind;
- return room.cleared?'clear':'combat';
-}
-function drawMapMark(kind,x,y,size,color=MAP_MARKS[kind]){
- const s=size/2;
- g.save();g.translate(x,y);g.scale(s,s);
- const mark=(points,fill=color)=>artPath(g,points,fill);
- if(kind==='start')mark([[-.9,-.15],[0,-.95],[.9,-.15],[.65,-.15],[.65,.86],[.23,.86],[.23,.17],[-.23,.17],[-.23,.86],[-.65,.86],[-.65,-.15]]);
- else if(kind==='boss')mark([[-.94,-.65],[-.49,-.14],[0,-.89],[.49,-.14],[.94,-.65],[.64,.69],[-.64,.69]]);
- else if(kind==='cursed'){
-  mark([[0,-.96],[.8,0],[0,.96],[-.8,0]]);
-  mark([[0,-.45],[.35,0],[0,.45],[-.35,0]],'#2d212a');
- }
- else if(kind==='treasure'){
-  g.fillStyle=color;g.fillRect(-.9,-.54,1.8,1.23);g.fillStyle='#30211d';g.fillRect(-.9,-.12,1.8,.14);g.fillRect(-.13,-.12,.26,.36);
- }else if(kind==='shop'){
-  artOval(g,0,0,.79,.86,color);
-  artOval(g,0,0,.37,.48,'#29302a');
- }else if(kind==='unknown'){
-  artOval(g,0,0,.32,.32,color);
- }else if(kind==='clear')mark([[-.88,-.01],[-.58,-.38],[-.19,.16],[.64,-.68],[.95,-.37],[-.18,.86]]);
- else mark([[0,-.74],[.72,0],[0,.74],[-.72,0]]);
- g.restore();
-}
-function drawMapFrame(x,y,w,h,title,theme){
- const board=g.createLinearGradient(x,y,x+w,y+h);
- board.addColorStop(0,theme.ground[1]);board.addColorStop(1,'#151312');
- g.fillStyle=board;g.fillRect(x,y,w,h);
- g.strokeStyle=theme.light;g.lineWidth=1;g.strokeRect(x+.5,y+.5,w-1,h-1);
- g.strokeStyle=theme.trim+'88';g.strokeRect(x+2.5,y+2.5,w-5,h-5);
- const plate=readyPainting('hud-brass-frame');
- if(plate)g.drawImage(plate,x+2,y+1,w-4,19);
- else{g.fillStyle=theme.ink;g.fillRect(x+1,y+1,w-2,15)}
- g.strokeStyle=theme.trim;g.beginPath();g.moveTo(x+2,y+19);g.lineTo(x+w-2,y+19);g.stroke();
- for(const [dx,dy] of [[4,4],[w-4,4],[4,h-4],[w-4,h-4]])artOval(g,x+dx,y+dy,1,1,theme.paper);
- g.fillStyle='#ffe0a7';g.font='bold 10px Georgia';g.textAlign='center';g.fillText(title,x+w/2,y+13);
+
+function mapExitsOpen(){
+ return currentRoom.cleared&&!victoryRecapPending();
 }
 function drawDungeonMap(){
- const boxW=139,boxH=118,x=viewW-boxW-12,y=57;
- const theme=WORLD_ART[worldArtId(selectedBiome,currentRoom.kind)];
+ if(inSandbox())return;
+ const boxW=108,boxH=78,x=viewW-boxW-10,y=55;
  const minCol=Math.min(...dungeon.map(room=>room.col)),maxCol=Math.max(...dungeon.map(room=>room.col));
  const minRow=Math.min(...dungeon.map(room=>room.row)),maxRow=Math.max(...dungeon.map(room=>room.row));
- const step=Math.min(24,(boxW-23)/(maxCol-minCol+1),71/(maxRow-minRow+1));
- const ox=x+boxW/2-(minCol+maxCol)*step/2,oy=y+56-(minRow+maxRow)*step/2;
+ const step=Math.min(18,boxW/(maxCol-minCol+1),boxH/(maxRow-minRow+1));
+ const ox=x+boxW/2-(minCol+maxCol)*step/2,oy=y+boxH/2-(minRow+maxRow)*step/2;
  const pos=room=>({x:ox+room.col*step,y:oy+room.row*step});
- const activeId=inSandbox()?0:currentRoom.id;
- g.save();drawMapFrame(x,y,boxW,boxH,inSandbox()?'Practice':'Dungeon '+dungeonDepth,theme);
+ const activeId=currentRoom.id,canLeave=mapExitsOpen()&&currentRoom.kind!=='boss';
+ g.save();g.lineWidth=1.5;
  for(const room of dungeon)for(const door of room.doors)if(door.to>room.id){
-  const target=dungeon[door.to],a=pos(room),b=pos(target),visited=room.visited&&target.visited;
-  g.strokeStyle=visited?theme.paper+'a8':theme.trim+'77';g.lineWidth=visited?2:1;
-  if(!visited)g.setLineDash([2,2]);
-  g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke();g.setLineDash([]);
+  const target=dungeon[door.to],a=pos(room),b=pos(target);
+  const active=room.id===activeId||target.id===activeId;
+  g.strokeStyle=active?(canLeave?'#fff0c9db':'#db9c7b65'):room.visited&&target.visited?'#eddfb488':'#eddfb440';
+  g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke();
  }
  for(const room of dungeon){
-  const at=pos(room),ratio=room.w/room.h,size=Math.min(17,step*.72),active=room.id===activeId;
-  const w=ratio>=1?size:Math.max(size*.82,size*ratio),h=ratio>=1?Math.max(size*.82,size/ratio):size;
-  const kind=mapRoomKind(room),ink=MAP_MARKS[kind];
-  g.fillStyle=active?'#53432a':kind==='unknown'?'#241f1e':theme.ink;
-  g.strokeStyle=active?'#fff1bf':ink+(kind==='unknown'?'aa':'ce');
-  g.lineWidth=active?1.6:.9;
-  g.beginPath();
-  if(g.roundRect)g.roundRect(at.x-w/2,at.y-h/2,w,h,Math.min(w,h)*.18);else g.rect(at.x-w/2,at.y-h/2,w,h);
-  g.fill();g.stroke();
-  drawMapMark(kind,at.x,at.y,Math.min(w,h)*.66,active?'#fff5d1':ink);
- }
- g.strokeStyle=theme.trim+'87';g.lineWidth=1;g.beginPath();g.moveTo(x+8,y+94);g.lineTo(x+boxW-8,y+94);g.stroke();
- for(const [kind,label,dx,dy] of [['start','Start',11,102],['boss','Boss',53,102],['cursed','Curse',97,102],['treasure','Treasure',11,112],['shop','Shop',97,112]]){
-  drawMapMark(kind,x+dx,y+dy-1,7);
-  g.fillStyle=theme.paper;g.textAlign='left';g.font='bold 8px Georgia';g.fillText(label,x+dx+6,y+dy+1.5);
+  const {x,y}=pos(room),size=Math.min(11,step*.65);
+  g.fillStyle=room.id===activeId?'#fff1cfe8':room.visited?'#e7d7ac8c':'#e7d7ac45';
+  g.fillRect(x-size/2,y-size/2,size,size);
  }
  g.restore();
 }
 function drawRoomMap(){
- const boxW=139,boxH=84,x=hero==='mage'?12:viewW-boxW-12,y=181,scale=Math.min((boxW-21)/W,(boxH-28)/F);
- const ox=x+(boxW-W*scale)/2,oy=y+20+(boxH-20-F*scale)/2;
- const biome=worldArtId(selectedBiome,currentRoom.kind),theme=WORLD_ART[biome];
+ const boxW=104,boxH=66,scale=Math.min(boxW/W,boxH/F);
+ const x=viewW-boxW-12,y=inSandbox()?55:139;
+ const ox=x+(boxW-W*scale)/2,oy=y+(boxH-F*scale)/2;
  const rect=a=>g.fillRect(ox+a.x*scale,oy+a.y*scale,Math.max(1,a.w*scale),Math.max(1,a.h*scale));
  const point=(a,r,color)=>artOval(g,ox+a.x*scale,oy+a.y*scale,r,r,color);
- g.save();drawMapFrame(x,y,boxW,boxH,'Room',theme);
- drawMechanicArt('compass',x+boxW-16,y+10,14,14);
- g.fillStyle=theme.ground[0];g.fillRect(ox,oy,W*scale,F*scale);
- g.strokeStyle=theme.light;g.lineWidth=1;g.strokeRect(ox,oy,W*scale,F*scale);
- g.fillStyle=biome==='red'?'#bf5a31':'#100f14';for(const a of floorGaps)rect(a);
- for(const a of holes)point(a,Math.max(1,a.r*scale),g.fillStyle);
- g.fillStyle=theme.light;for(const a of floorBridges)rect(a);
- g.fillStyle=theme.paper;for(const wall of walls)rect(wall);
+ const open=mapExitsOpen();
+ g.save();
+ g.fillStyle='#eddfb432';g.fillRect(ox,oy,W*scale,F*scale);
+ g.fillStyle=selectedBiome==='red'?'#d1643688':'#100d14ab';
+ for(const gap of floorGaps)rect(gap);
+ for(const hole of holes)point(hole,Math.max(1,hole.r*scale),g.fillStyle);
+ g.fillStyle='#eee0b277';for(const bridge of floorBridges)rect(bridge);
+ g.fillStyle='#e8dab482';for(const wall of walls)rect(wall);
  for(const door of roomDoors()){
-  const destination=BIOME_PATHS.find(path=>path.id===door.biome),angle=door.side==='east'||door.side==='west'?Math.PI/2:0;
-  g.save();g.translate(ox+door.x*scale,oy+door.y*scale);g.rotate(angle);
-  g.fillStyle=!currentRoom.cleared?'#e58c79':destination?destination.color:'#ffecc3';
-  g.fillRect(-3,-1.35,6,2.7);g.restore();
+  const vertical=door.side==='east'||door.side==='west';
+  g.save();g.translate(ox+door.x*scale,oy+door.y*scale);if(vertical)g.rotate(Math.PI/2);
+  g.fillStyle=open?'#fff3d8f0':'#d1927e95';g.fillRect(-3,-1,6,2);
+  g.restore();
  }
- for(const portal of portals)point(portal,1.6,'#b4d9e3');
- for(const enemy of enemies)if(enemy.hp>0)point(enemy,1.5,'#ffacaa');
- if(bossFight&&!bossFight.done)for(const unit of bossFight.units)if(unit.hp>0)point(unit,2.7,'#ffd176');
- drawSandboxLootMap(ox,oy,scale);
+ for(const portal of portals)point(portal,1.5,'#b5e1dbd0');
  g.translate(ox+p.x*scale,oy+p.y*scale);g.rotate(p.target||0);
- artPath(g,[[5,0],[-2.9,-3.4],[-1.6,0],[-2.9,3.4]],'#fff3c9','#171318',1.3);g.restore();
+ artPath(g,[[4,0],[-2.5,-2.7],[-1,0],[-2.5,2.7]],'#fff7e7','#1d151a',.8);
+ g.restore();
 }
 
 let arenaTime=0;
@@ -5963,20 +5747,6 @@ function mageCooldownMultiplier(build=progress,stats=playerStats(build)){
  return Math.max(.45,1-.12*itemCount('shieldBloom',build)-.1*upgradeCount('shield',build)-.1*itemCount('hourglass',build))/Math.max(.7,stats.swing);
 }
 function restoreMageMana(amount){if(hero!=='mage'||amount<=0)return 0;const before=mageMana;mageMana=Math.min(mageMaxMana(),mageMana+amount);return mageMana-before}
-function refreshManaHud(){
- const bar=document.querySelector('#mana-hud');if(!bar)return;
- bar.style.display=hero==='mage'?'flex':'none';
- if(hero!=='mage')return;
- const max=mageMaxMana();mageMana=Math.max(0,Math.min(max,mageMana));
- const value=Math.floor(mageMana+.0001);
- document.querySelector('#mana-fill').style.width=(100*mageMana/max)+'%';
- document.querySelector('#mana-label').textContent=value+'/'+max;
- bar.classList.toggle('low-mana',mageMana<18);
- bar.setAttribute('aria-valuemax',String(max));bar.setAttribute('aria-valuenow',String(value));
- const souls=document.querySelector('#mage-souls');
- souls.hidden=progress?.mageSchool!=='necromancer';
- souls.textContent='SOULS '+mageSouls+'/'+MAGE_SOUL_LIMIT;
-}
 
 const MAGE_SOUL_LIMIT=3;
 const APPRENTICE_SPELLS={
@@ -6135,7 +5905,7 @@ function mageEnemyTarget(x,y,range=620){
 }
 function gainMageSoul(){
  if(mageSouls>=MAGE_SOUL_LIMIT)return;
- mageSouls++;refreshManaHud();queueCheckpoint();
+ mageSouls++;queueCheckpoint();
 }
 function rememberMageCorpse(enemy){
  if(enemy.isTreasure)return;
@@ -6636,7 +6406,7 @@ function castMageSpell(path){
   const error=castSchoolSpell(spell.effect,aim);
   if(error){showMageFeedback('invalid',error,error,1.35);return false}
  }
- mageMana=Math.max(0,mageMana-spell.mana);refreshManaHud();
+ mageMana=Math.max(0,Math.min(mageMaxMana(),mageMana-spell.mana));
  mageCooldowns[path]=arenaTime+spell.cooldown*mageCooldownMultiplier();
  mageGlobalReady=arenaTime+.18;
  showMageFeedback('cast',path+' · '+spell.name,path+' · '+spell.name+' · -'+spell.mana+' MP',1.8);
@@ -7193,7 +6963,7 @@ function drawRuneMedallion(rune,active,invalid){
 function drawMageRunes(){
  if(hero!=='mage'||editingControls)return;
  const runes=mageRunes(),selected=mageGesture?.path||[],invalid=!!mageGesture?.invalid;
- g.save();g.globalAlpha=Math.max(.5,controls.opacity/100);g.textAlign='center';g.lineCap='round';
+ g.save();g.globalAlpha=controls.opacity/100*(mageGesture?1:.70);g.textAlign='center';g.lineCap='round';
  g.strokeStyle='#bd925f9e';g.lineWidth=1.1;g.setLineDash([2,5]);g.beginPath();g.moveTo(runes[0].x,runes[0].y);g.lineTo(runes[1].x,runes[1].y);g.lineTo(runes[2].x,runes[2].y);g.closePath();g.stroke();g.setLineDash([]);
  drawRuneTrail(runes,selected,invalid);
  for(const rune of runes)drawRuneMedallion(rune,selected.includes(rune.id),invalid);
@@ -7205,7 +6975,6 @@ function drawMageRunes(){
   drawDoorMarker(label,runes[2].x,runes[2].y-98,color,false);
  }else if(mageLastCast&&mageLastCastUntil>arenaTime)
   drawDoorMarker(mageLastCast.toUpperCase(),runes[2].x,runes[2].y-98,MAGE_FEEDBACK_COLORS[mageFeedbackKind],false);
- else drawDoorMarker('TRACE RUNES TO CAST',runes[2].x,runes[2].y-98,'#e7c795',false);
  g.restore();
 }
 
@@ -8532,20 +8301,10 @@ let child={...e,x:clamp(oldX-ux*(r+2),19+r,W-19-r),y:clamp(oldY-uy*(r+2),19+r,F-
 pendingSplits.push(child);runStats.splits++;
 elementFx.push({type:'split',x:oldX,y:oldY,life:.38,maxLife:.38});
 }
-const lifeDisplay=document.createElement('span');lifeDisplay.id='lives-count';document.querySelector('header .health').appendChild(lifeDisplay);
-const combatHeader=document.querySelector('.combat-info header');
 const enemyCounter=document.querySelector('#enemy-counter');
 const economyRoomName=document.querySelector('#economy-room-name');
-const combatHud=document.querySelector('main');
-function syncBossPanelTop(){
- const top=combatHeader.getBoundingClientRect().bottom-combatHud.getBoundingClientRect().top+4;
- combatHud.style.setProperty('--boss-top',Math.ceil(top)+'px');
-}
-if(typeof ResizeObserver==='function')new ResizeObserver(syncBossPanelTop).observe(combatHeader);
 function hud(){
- refreshElementHud();refreshManaHud();
- document.querySelector('#hp-fill').style.width=(Math.max(0,hp)/playerStats().maxHealth*100)+'%';document.querySelector('#hp-bleed').style.width=(Math.min(Math.max(0,hp),pendingBleed())/playerStats().maxHealth*100)+'%';
- document.querySelector('#hp-fill').style.background=hp/playerStats().maxHealth<=.3?'linear-gradient(#ff9c9a,#a9323f)':hp/playerStats().maxHealth<=.6?'linear-gradient(#ffe4a6,#c58b42)':'linear-gradient(#b6f0af,#409664)';document.querySelector('#hp-label').textContent=Math.round(Math.max(0,hp))+'/'+playerStats().maxHealth;lifeDisplay.textContent='LIVES '+lives+'/5';document.querySelector('#kills').textContent='KILLS '+kills;
+ if(hero==='mage')mageMana=Math.max(0,Math.min(mageMaxMana(),mageMana));
  const enemiesLeft=enemies.filter(enemy=>enemy.hp>0).length;
  const bossUnits=bossFight&&!bossFight.done?bossFight.units.filter(unit=>unit.hp>0).length:0;
  const count=document.querySelector('#enemy-count'),remaining=String(enemiesLeft+bossUnits);
@@ -8553,8 +8312,8 @@ function hud(){
  const roomName=currentRoom?.kind==='shop'?'Traveller Shop':currentRoom?.kind==='treasure'?'Treasure Room':'';
  if(economyRoomName.textContent!==roomName)economyRoomName.textContent=roomName;
  economyRoomName.hidden=!roomName||remaining!=='0';
- enemyCounter.hidden=!economyRoomName.hidden;
- updateBossHud();updateSandboxMenu();updateCharacterMenu();updateDashButton();shieldUpdate(0);updateBodyArmour();document.querySelector('#coin-total').textContent=progress?.coins||0;
+ enemyCounter.hidden=remaining==='0';
+ updateBossHud();updateSandboxMenu();updateCharacterMenu();updateDashButton();
 }
 const DEATH_TIPS={
  contact:['Enemy contact','Keep moving to leave room between you and the enemy.'],
@@ -8585,7 +8344,7 @@ function resolvePlayerDeath(){
  enterRoom(currentRoom.id,roomEntrySide);refillRoomDefences();inv=2;
  showItemNotice((lives===1?'1 life remains':lives+' lives remain')+recap,6);hud();
 }
-function reset(){saveRetryAt=0;mageMana=100;mageManaCheckpointAt=0;mageSouls=0;resetMageRoom();mageLastCast='';mageHitCount=0;mageCastCount=0;document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();armourHp=bodyArmourStats().capacity;lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;strongArrowHits=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-durability').style.display='none';document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
+function reset(){saveRetryAt=0;mageMana=100;mageManaCheckpointAt=0;mageSouls=0;resetMageRoom();mageLastCast='';mageHitCount=0;mageCastCount=0;document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();armourHp=bodyArmourStats().capacity;lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;strongArrowHits=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
 function combatInputEnabled(){
  return !!activeSlot&&!!p&&!over&&!p.falling&&!document.hidden&&!portraitLayout.matches&&
   !editingControls&&!shieldPaused&&!persistencePaused()&&settings.hidden&&
@@ -8724,7 +8483,7 @@ document.querySelector('#control-opacity').oninput=e=>{controls.opacity=Number(e
 document.querySelector('#floating-controls').onchange=e=>{controls.floating=e.target.checked;saveControls()};
 document.querySelector('#controls-reset').onclick=()=>{controls={...defaultControls,positions:defaultControls.positions.map(a=>[...a])};dashControl={x:.78,y:.76};syncControls();saveDashControl();saveControls()};async function goFullscreen(){try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock)await screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}document.querySelector('#fullscreen-toggle').onclick=goFullscreen;document.querySelector('#rotate-fullscreen').onclick=goFullscreen;
 function frame(t){updateDungeonAudio();const previousRenderAngle=p.a;const damageBefore=captureDamage(),oldPlayerHp=hp;const protectedPracticeHp=inSandbox()&&!sandbox.attacks?hp:null;pendingSplits=[];let dt=Math.min((t-last)/1000||0,.035);last=t;if(document.hidden||portraitLayout.matches||shieldPaused||!document.querySelector('#character-panel').hidden||persistencePaused()){requestAnimationFrame(frame);return}
-if(settings.hidden&&!editingControls&&document.querySelector('#sandbox-panel').hidden){recordVisibleEncounters();arenaTime+=dt;if(encounterGuideUntil>0&&arenaTime>=encounterGuideUntil){encounterGuideUntil=0;updateOpeningGuide()}updateSynergies(dt);if(!over){updateItemEffects(dt);updateBiomeWorld(dt);updateCurses(dt);updateDungeonMechanics(dt);updateFloorTraps();updateWallFixtures(dt)}if(!over){shieldUpdate(dt);rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage,true,'bleed')}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&playerBleed.length===0&&!p.swimming){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){const where=p.fallReturn||safeRespawn();p.x=where.x;p.y=where.y;p.safeX=p.x;p.safeY=p.y;p.kvx=p.kvy=p.vx=p.vy=0;p.sticky=null;p.wallContacts=new Set();p.wallCooldowns=new Map();p.portalCooldown=1;p.fallReturn=null;hp=Math.max(0,hp-25);inv=Math.max(inv,1.5);if(hp<=0){over=true;fatalHit='pit'}showItemNotice('FELL INTO THE ABYSS · -25 HP')}}
+if(settings.hidden&&!editingControls&&document.querySelector('#sandbox-panel').hidden){recordVisibleEncounters();arenaTime+=dt;if(encounterGuideUntil>0&&arenaTime>=encounterGuideUntil){encounterGuideUntil=0;updateOpeningGuide()}updateSynergies(dt);if(!over){updateItemEffects(dt);updateBiomeWorld(dt);updateCurses(dt);updateDungeonMechanics(dt);updateFloorTraps();updateWallFixtures(dt)}if(!over){rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage,true,'bleed')}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&playerBleed.length===0&&!p.swimming){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){const where=p.fallReturn||safeRespawn();p.x=where.x;p.y=where.y;p.safeX=p.x;p.safeY=p.y;p.kvx=p.kvy=p.vx=p.vy=0;p.sticky=null;p.wallContacts=new Set();p.wallCooldowns=new Map();p.portalCooldown=1;p.fallReturn=null;hp=Math.max(0,hp-25);inv=Math.max(inv,1.5);if(hp<=0){over=true;fatalHit='pit'}showItemNotice('FELL INTO THE ABYSS · -25 HP')}}
 healFx=healFx.filter(f=>(f.life-=dt)>0);wallFx=wallFx.filter(f=>{f.life-=dt;if(f.type==='particle'){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.exp(-5*dt);f.vy*=Math.exp(-5*dt)}return f.life>0});elementFx=elementFx.filter(f=>(f.life-=dt)>0);puddles=puddles.filter(q=>(q.life-=dt)>0);poisonPuddles=poisonPuddles.filter(q=>(q.life-=dt)>0);
 if(!over&&!p.falling){let l=sticks[0],ox=p.x,oy=p.y;
 poisonPlayerTimer=Math.max(0,poisonPlayerTimer-dt);playerPoisonGlow=Math.max(0,playerPoisonGlow-dt);
@@ -8940,7 +8699,7 @@ if(!p.falling){
 if(FOG_OF_WAR_ENABLED)drawFog();
 g.restore(); // Joysticks, minimap and game-over text stay in screen coordinates.
 if(mapVisible){drawDungeonMap();drawRoomMap()}
-g.save();g.globalAlpha=controls.opacity/100;for(let i=0;i<2;i++){if(hero==='mage'&&i===1&&!editingControls)continue;let s=sticks[i],radius=R*controls.size/100;g.beginPath();g.arc(s.x,s.y,radius,0,Math.PI*2);g.fillStyle=worldArt.ink;g.fill();const bezel=readyPainting('hud-compass');if(bezel&&!editingControls)g.drawImage(bezel,s.x-radius,s.y-radius,radius*2,radius*2);else{g.strokeStyle=editingControls?'#ffe17e':worldArt.trim;g.lineWidth=editingControls?4:2;g.stroke()}
+g.save();for(let i=0;i<2;i++){if(hero==='mage'&&i===1&&!editingControls)continue;let s=sticks[i],radius=R*controls.size/100;g.globalAlpha=controls.opacity/100*(editingControls||s.id!==null?1:.65);g.beginPath();g.arc(s.x,s.y,radius,0,Math.PI*2);g.fillStyle=worldArt.ink;g.fill();const bezel=readyPainting('hud-compass');if(bezel&&!editingControls)g.drawImage(bezel,s.x-radius,s.y-radius,radius*2,radius*2);else{g.strokeStyle=editingControls?'#ffe17e':worldArt.trim;g.lineWidth=editingControls?4:2;g.stroke()}
  const knob=19*controls.size/100,kx=s.x+s.dx*radius,ky=s.y+s.dy*radius;
  const knobLight=g.createRadialGradient(kx-knob*.2,ky-knob*.24,1,kx,ky,knob);knobLight.addColorStop(0,worldArt.light);knobLight.addColorStop(1,'#1c1718');
  g.beginPath();g.arc(kx,ky,knob,0,Math.PI*2);g.fillStyle=knobLight;g.fill();g.strokeStyle='#d1ab73';g.lineWidth=1;g.stroke()}g.restore()
@@ -8961,5 +8720,5 @@ if(hero==='archer'&&!editingControls){
 }
 g.textAlign='center';g.font='11px monospace';g.fillStyle='#c3bbd4';g.fillText('MOVE',sticks[0].x,Math.min(H-2,sticks[0].y+R*controls.size/100+12));if(hero!=='mage')g.fillText(hero==='archer'?'AIM':'SWING',sticks[1].x,Math.min(H-2,sticks[1].y+R*controls.size/100+12));drawMageRunes();
 if(over){g.fillStyle='#100e1acc';g.fillRect(viewW/2-168,12,336,VIEW_F-24);g.fillStyle='#fff';g.font='bold 22px monospace';g.fillText('RUN ENDED',viewW/2,110);g.fillStyle='#ff8a99';g.font='bold 11px monospace';g.fillText('NO LIVES LEFT · MENU TO RESTART',viewW/2,134);g.fillStyle='#fff';g.font='12px monospace';g.fillText('Kills '+kills+'  Time '+Math.floor(arenaTime)+'s',viewW/2,158);g.font='11px monospace';g.fillText('Best impact '+Math.round(runStats.biggestImpact)+'  Hits '+runStats.swingsHit,viewW/2,180);g.fillText('Splits '+runStats.splits+'  Fusions '+runStats.fusions,viewW/2,199);g.fillText('Healed '+Math.round(runStats.healed)+' HP',viewW/2,218);g.fillText('Sword bleeds '+bleedStacks,viewW/2,237)}
-dash.batPath=null;requestAnimationFrame(frame)}document.querySelector('#version').textContent='V8.65';loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
+dash.batPath=null;requestAnimationFrame(frame)}loadArtwork();setupExpansionUI();setupSandboxMenu();initializePersistence();setupDashUI();reset();showStartScreen();requestAnimationFrame(frame)})();
 </script></body></html>
