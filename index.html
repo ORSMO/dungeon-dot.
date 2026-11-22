@@ -133,6 +133,14 @@ button:focus-visible,input:focus-visible{outline:2px solid #f2c786;outline-offse
 .menu-home-content{width:min(35vw,395px);min-width:200px}
 .menu-crest{width:42px;height:42px;margin:0 0 15px 5px;transform:rotate(45deg);border:1px solid #ad8757;box-shadow:inset 0 0 0 4px #11131a,0 0 25px #b57c4433;display:grid;place-items:center}
 .menu-crest i{width:12px;height:12px;background:#d6a967;box-shadow:0 0 20px #bd944c90}
+@media(prefers-reduced-motion:no-preference){
+ #start-screen:not([hidden]) .menu-view:not([hidden]),#character-panel:not([hidden]),#settings-panel:not([hidden]),.preview-offer[open]{animation:panel-reveal .18s ease-out}
+ #start-screen:not([hidden]) .menu-crest i{animation:crest-breathe 3.8s ease-in-out infinite alternate}
+ .menu-action{transition:filter .14s ease,translate .14s ease}
+ .menu-action:active{translate:0 2px}
+}
+@keyframes panel-reveal{from{opacity:.65}to{opacity:1}}
+@keyframes crest-breathe{from{opacity:.66;transform:scale(.8)}to{opacity:1;transform:scale(1.1)}}
 .menu-wordmark h1{font:700 clamp(51px,8.4vw,138px)/.78 Georgia,serif;letter-spacing:-.07em;margin:0;color:#ffeccc;text-shadow:0 4px 0 #150e0d,0 14px 45px #000}
 .menu-wordmark h1 span{display:block}
 .menu-wordmark h1 span+span{color:#d7a667;margin-top:.09em}
@@ -729,7 +737,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.71</small>
+   <small>V8.72</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -1193,15 +1201,37 @@ function heroPortraitArtwork(){
  const cell=atlas==='mobs'?15:HERO_PLATES[path]??HERO_PLATES.stick;
  return {atlas,cell};
 }
+// Sprite poses are visual offsets around a fixed combat position.
+function spritePose(style,radius,speed,time,phase,braced,calm){
+ if(calm)return {lift:0,tilt:0,width:1,height:1};
+ if(braced)return {lift:0,tilt:0,width:1.04,height:.96};
+ const pace=Math.min(1,speed/95),floating=style==='float',elastic=style==='ooze';
+ const wave=Math.sin(time*(floating?3.7:6+pace*(style==='light'?14:10))+phase);
+ const stride=elastic?.11:floating?.035:.045;
+ const flex=wave*stride*(.28+.72*pace);
+ return {
+  lift:wave*Math.min(floating?2.8:1.85,radius*(floating?.14:.12))*(floating?1:.18+.82*pace),
+  tilt:floating?wave*.025:wave*.072*pace,
+  width:1-flex,height:1+flex
+ };
+}
+function applySpritePose(pose,facing=1){
+ g.translate(0,-pose.lift);g.rotate(pose.tilt);g.scale(pose.width*facing,pose.height);
+}
+const ELASTIC_SPRITES=new Set(['round','royalSlime','mini','mire','water','sponge']);
+const FLOATING_SPRITES=new Set(['icewisp','fire','electric','gravity','laser','mirror','frostcaster','healer','seeker']);
+function enemyMotionStyle(id){
+ if(ELASTIC_SPRITES.has(id))return 'ooze';
+ if(FLOATING_SPRITES.has(id))return 'float';
+ return 'stride';
+}
 function drawPaintedHero(){
  const {atlas,cell}=heroPortraitArtwork();
- const moving=Math.hypot(p.vx||0,p.vy||0)>25&&!reducedWorldMotion.matches;
- const lift=moving?Math.sin(arenaTime*21)*1.05:0;
+ const pose=spritePose(hero==='mage'?'float':hero==='archer'?'light':'stride',12,Math.hypot(p.vx||0,p.vy||0),arenaTime,0,false,reducedWorldMotion.matches);
  artOval(g,p.x,p.y+5,12,7,'#090b0de0');
  g.save();g.strokeStyle=playerPoisonGlow>0?'#aaff63':'#f8dfac';g.lineWidth=1.4;
  g.beginPath();g.ellipse(p.x,p.y+3,11,7,0,0,Math.PI*2);g.stroke();
- g.translate(p.x,p.y-2-lift);
- if(Math.cos(p.a)<0)g.scale(-1,1);
+ g.translate(p.x,p.y-2);applySpritePose(pose,Math.cos(p.a)<0?-1:1);
  const drawn=drawPlate(atlas,cell,0,0,29);
  g.restore();
  return drawn;
@@ -1210,12 +1240,12 @@ function drawPaintedEnemy(enemy,color){
  const id=enemy.bossMinion?'royalSlime':enemy.shape,art=ENEMY_PLATES[id];
  if(!art||!readyPainting(art.atlas)||enemy.isTreasure)return false;
  const {x,y,r}=enemy;
- const moving=Math.hypot(enemy.vx||0,enemy.vy||0)>33&&!reducedWorldMotion.matches;
- const lift=moving?Math.sin(arenaTime*17+x*.05)*Math.min(1.5,r*.1):0;
+ const braced=!!enemy.ability||enemy.shotWindup>0||enemy.laserState==='charge';
+ const pose=spritePose(enemyMotionStyle(id),r,Math.hypot(enemy.vx||0,enemy.vy||0),arenaTime,(x+y)*.028,braced,reducedWorldMotion.matches);
  artOval(g,x,y+r*.45,r+1,r*.64,'#080a0ce0');
  g.save();
  g.lineWidth=1.35;g.strokeStyle=color;g.beginPath();g.ellipse(x,y+r*.3,r*.92,r*.67,0,0,Math.PI*2);g.stroke();
- g.translate(x,y-r*.12-lift);if(enemy.vx<-.4)g.scale(-1,1);
+ g.translate(x,y-r*.12);applySpritePose(pose,enemy.vx<-.4?-1:1);
  drawPlate(art.atlas,art.cell,0,0,r*2.65);
  g.restore();
  if(enemy.origins?.length===2){
@@ -1231,13 +1261,16 @@ function drawPaintedBoss(unit,flash){
  const size=r*(unit.variant==='phoenix'?3.05:2.68);
  g.save();
  if(flash)g.filter='brightness(1.55)';
- const float=unit.kind==='crystal'&&!reducedWorldMotion.matches?Math.sin(arenaTime*3)*2:0;
+ const style=unit.kind==='crystal'||id==='phoenix'?'float':unit.kind==='slime'?'ooze':'stride';
+ const braced=unit.state?.endsWith('Warn')||unit.prismState==='warn';
+ const speed=unit.state==='charge'?160:Math.hypot(unit.vx||0,unit.vy||0);
+ applySpritePose(spritePose(style,r,speed,arenaTime,r*.2,braced,reducedWorldMotion.matches));
  if(portrait)g.drawImage(portrait,-size/2,-size/2-r*.13,size,size);
- else drawPlate('beasts',cell,0,-r*.13-float,size);
+ else drawPlate('beasts',cell,0,-r*.13,size);
  g.restore();
  if(unit.kind==='crystal'){
   for(let i=0;i<unit.armour;i++){
-   const a=arenaTime*.85+i*Math.PI/2,x=Math.cos(a)*(r+10),y=Math.sin(a)*(r+10);
+   const a=(reducedWorldMotion.matches?0:arenaTime*.85)+i*Math.PI/2,x=Math.cos(a)*(r+10),y=Math.sin(a)*(r+10);
    artPath(g,[[x,y-5],[x+4,y],[x,y+5],[x-4,y]],paint?.color||'#b5ddf9','#e9f6ff');
   }
  }
@@ -1281,6 +1314,7 @@ function drawWorldSeal(ctx,id,w,h,kind,art){
  artPath(ctx,marks[id],color);
  ctx.restore();
 }
+const WORLD_AMBIENCE={basic:'#edb675',red:'#ef9a63',green:'#b8cb83',blue:'#a8d2eb'};
 function drawWorldScenery(){
  const {kind,id:roomId}=currentRoom;
  const id=worldArtId(selectedBiome,kind);
@@ -1309,17 +1343,26 @@ function drawWorldScenery(){
   }
   if(!custom)paintSurfaceDetail(ctx,id,W,F,Math.imul(roomId+1,137)^Math.imul(W+F,933),.7);
   drawWorldSeal(ctx,id,W,F,kind,art);
-  worldScenery={key,layer};
+  const glow=document.createElement('canvas');glow.width=glow.height=64;
+  const light=glow.getContext('2d'),halo=light.createRadialGradient(32,32,2,32,32,32);
+  halo.addColorStop(0,WORLD_AMBIENCE[id]);halo.addColorStop(1,WORLD_AMBIENCE[id]+'00');
+  light.fillStyle=halo;light.fillRect(0,0,64,64);
+  worldScenery={key,layer,glow};
   document.querySelector('main').dataset.world=id;
  }
  g.drawImage(worldScenery.layer,0,0,W,F);
  // Decorative particles stay dim and close to the perimeter, behind combat.
  const ambienceTime=reducedWorldMotion.matches?0:arenaTime;
- const particleColor={basic:'#edb675',red:'#ef9a63',green:'#b8cb83',blue:'#a8d2eb'}[id];
+ const particleColor=WORLD_AMBIENCE[id];
  g.save();
+ for(let i=0;i<4;i++){
+  const x=i%2?W-34:34,y=i<2?F*.26:F*.74;
+  g.globalAlpha=.08+.035*Math.sin(i*2+ambienceTime*(id==='red'?3.2:1.45));
+  g.drawImage(worldScenery.glow,x-62,y-62,124,124);
+ }
  for(let i=0;i<22;i++){
   const x=21+((i*79+ambienceTime*(id==='blue'?11:5))%(W-42));
-  const distance=18+((i*13+ambienceTime*(id==='red'?18:7))%67);
+  const distance=18+((i*13+ambienceTime*(id==='red'?18:7))%67)+(id==='green'?3*Math.sin(i+ambienceTime):0);
   const y=i%2?distance:F-distance;
   g.globalAlpha=.13+.12*(1+Math.sin(i+ambienceTime));
   artOval(g,x,y,i%4===0?1.5:.8,.85,particleColor);
@@ -2660,6 +2703,7 @@ function takeNearbyLoot(relic=null){
 }
 function grantLoot(loot){
  loot.claimed=true;
+ if(currentRoom.kind==='treasure')chestOpenTimes.set(currentRoom,arenaTime);
  if(loot.kind==='item')giveItem(loot.key);else if(loot.kind==='stat')giveUpgrade(loot.key);else{healPlayer(20);showItemNotice('Healing Flask · Restored health')}
  playSoundCue('loot');nearestLoot=null;updateEconomy(0);hud();queueCheckpoint();flushCheckpoint();
 }
@@ -2749,7 +2793,7 @@ function setupPreviewMarket(){
   if(!diamondChest.open||previewWallet.gilded||previewWallet.diamonds<DIAMOND_CHEST_PRICE)return;
   const saved=saveTestWallet({diamonds:previewWallet.diamonds-DIAMOND_CHEST_PRICE,gilded:true});
   refreshDiamondChest(saved?'Gold portrait frame unlocked.':'The test wallet could not be saved.');
-  if(saved)playSoundCue('loot');
+  if(saved){chestOpenTimes.set(currentRoom,arenaTime);playSoundCue('loot')}
  };
  const revive=document.querySelector('#revive-offer');
  revive.addEventListener('cancel',event=>{event.preventDefault();endReviveOffer()});
@@ -2781,13 +2825,24 @@ function drawPropArt(name,x,y,w,h){
  g.drawImage(image,sx,sy,sw,sh,x-w/2,y-h/2,w,h);
  return true;
 }
-function drawChestArt(x,y,width,open=false){
+const chestOpenTimes=new WeakMap();
+function drawChestArt(x,y,width,open=false,openedAt){
  const image=readyPainting('ironbound-chests');
  if(!image)return drawPropArt('chest',x,y,width,width*.78);
  const [sx,sy,sw,sh]=open?[966,74,703,743]:[105,234,701,578];
  const height=sh/sw*width,bottom=y+width*.38;
  artOval(g,x,bottom-2,width*.5,width*.15,'#0c0a0bb3');
- g.drawImage(image,sx,sy,sw,sh,x-width/2,bottom-height,width,height);
+ const elapsed=arenaTime-openedAt;
+ if(open&&!reducedWorldMotion.matches&&elapsed>=0&&elapsed<.38){
+  const t=elapsed/.38,spring=Math.sin(Math.PI*2*t)*(1-t),h=height*(1+.12*spring);
+  g.drawImage(image,sx,sy,sw,sh,x-width/2,bottom-h,width,h);
+  g.save();g.globalAlpha=.65*(1-t);
+  for(const direction of [-1,1]){
+   const sparkX=x+direction*width*(.14+.24*t),sparkY=y-height*(.25+.34*t);
+   artPath(g,[[sparkX,sparkY-3],[sparkX+2,sparkY],[sparkX,sparkY+3],[sparkX-2,sparkY]],'#ffe09a');
+  }
+  g.restore();
+ }else g.drawImage(image,sx,sy,sw,sh,x-width/2,bottom-height,width,height);
  return true;
 }
 function drawPickupArt(name,x,y,size,color){
@@ -2876,13 +2931,13 @@ function drawEconomyRoomDecor(){
  }
  if(currentRoom.kind==='treasure'){
   const claimed=(currentRoom.loot||[]).every(loot=>loot.claimed);
-  if(!drawChestArt(W/2,F/2+10,60,claimed)){
+  if(!drawChestArt(W/2,F/2+10,60,claimed,chestOpenTimes.get(currentRoom))){
    g.save();g.fillStyle='#785039';g.fillRect(W/2-26,F/2+17,52,29);
    g.fillStyle='#b79555';g.fillRect(W/2-28,F/2+13,56,9);g.restore();
   }
  }
  if(currentRoom.kind==='shop'&&previewMarketEnabled()){
-  drawChestArt(W/2,F/2+100,48,previewWallet.gilded);
+  drawChestArt(W/2,F/2+100,48,previewWallet.gilded,chestOpenTimes.get(currentRoom));
   drawDoorMarker('DIAMOND CHEST',W/2,F/2+62,'#b7edff',false);
  }
 }
@@ -7418,6 +7473,7 @@ function hitProp(o,power,source='hit'){
  elementFx.push({type:'split',x:o.x,y:o.y,life:.23,maxLife:.23});
  if(o.hp>0)return true;
  o.broken=true;
+ if(o.kind==='chest')chestOpenTimes.set(o,arenaTime);
  playSoundCue(o.kind==='pot'||o.kind==='barrel'?o.kind:'wood');
  const amount=PROP_DEFS[o.kind].coins+(o.kind==='chest'?Math.floor(Math.random()*4):Math.random()<.4?1:0);
  if(!inSandbox())coinDrops.push({x:o.x,y:o.y,amount});
@@ -7485,12 +7541,14 @@ function drawPotProp(x,y,r){
 function drawRoomProps(){
  g.save();g.textAlign='center';g.textBaseline='middle';g.font='bold 13px monospace';
  for(const o of breakables){
-  if(o.kind==='chest'&&o.broken){drawChestArt(o.x,o.y,PROP_DEFS.chest.r*2,true);continue}
+  if(o.kind==='chest'&&o.broken){drawChestArt(o.x,o.y,PROP_DEFS.chest.r*2,true,chestOpenTimes.get(o));continue}
   if(o.broken)continue;
   const d=PROP_DEFS[o.kind];
-  if(o.kind==='pot'){drawPotProp(o.x,o.y,d.r);continue}
+  const recoil=reducedWorldMotion.matches?0:clamp(((o.nextHit||0)-arenaTime)/.2,0,1);
+  const offset=1.4*recoil*Math.sin(recoil*11);
+  if(o.kind==='pot'){drawPotProp(o.x+offset,o.y,d.r);continue}
   g.fillStyle=d.color;g.strokeStyle='#2a1c29';g.lineWidth=2;
-  const painted=o.kind==='chest'?drawChestArt(o.x,o.y,d.r*2):drawPropArt(o.kind,o.x,o.y,d.r*2,d.r*2);
+  const painted=o.kind==='chest'?drawChestArt(o.x+offset,o.y,d.r*2):drawPropArt(o.kind,o.x+offset,o.y,d.r*2,d.r*2);
   if(!painted){
    if(o.kind==='barrel'){g.beginPath();g.arc(o.x,o.y,d.r,0,Math.PI*2);g.fill();g.stroke()}
    else{g.fillRect(o.x-d.r,o.y-d.r,d.r*2,d.r*2);g.strokeRect(o.x-d.r,o.y-d.r,d.r*2,d.r*2)}

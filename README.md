@@ -17,6 +17,12 @@ In the Android Preview, the **Get free** button beneath **Buy** offers one test 
 
 For a paid launch, configure the production AdMob app and rewarded placements, consent flow and store disclosure. The real Diamond wallet needs Play Billing products and verified purchase, credit, spending, and recovery handling before enabling checkout.
 
+## V8.72 — Painted motion
+
+Heroes and enemies breathe, stride, hover, or squash according to their movement and type. Ranged enemies brace while aiming, and bosses brace during their existing windups. Painted sprites move around their usual combat positions. Walls, hitboxes, attack timers, and damage are separate from these poses.
+
+Biome lighting pulses softly behind play. Props recoil on impact, opening chests settle with a brief gold spark, and menus fade in. Android or browser reduced-motion preferences turn off these new motions. Existing artwork and saves carry over.
+
 ## V8.71 — Redeem a shop item with a rewarded ad
 
 In Android Preview, complete one test ad to claim the selected item for free. The option appears beneath Buy and is limited to one redemption per shop. Cancelling preserves the item and the offer. A previous shop ad claim still counts toward the limit.

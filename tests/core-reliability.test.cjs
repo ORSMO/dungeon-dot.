@@ -1300,6 +1300,7 @@ test('treasure offers distinct relics, preserves old offers and grants a single 
   method('itemCount'),method('rollItem'),method('prepareRoomLoot'),method('lootInReach'),method('lootUnavailableReason'),method('takeNearbyLoot'),method('grantLoot'),
   'const W=520,F=360,ITEM_DEFS={emberHeart:{},mossCharm:{},glassEye:{}},ITEM_STACK_LIMITS={emberHeart:3,mossCharm:3,glassEye:2};',
   'let selectedBiome="basic",progress={coins:30,items:{emberHeart:3,glassEye:2}},over=false,shopAdPending=false;const p={x:260,y:180,falling:0};',
+  'const chestOpenTimes=new WeakMap(),arenaTime=1;',
   'const awarded=[],giveItem=id=>awarded.push(id),playSoundCue=()=>{},updateEconomy=()=>{},hud=()=>{},queueCheckpoint=()=>{};let saves=0;const flushCheckpoint=()=>saves++;',
   'const currentRoom={kind:"treasure"};prepareRoomLoot(currentRoom);let nearestLoot=currentRoom.loot[0];',
   'const [first,second]=[nearestLoot.key,nearestLoot.alternative];prepareRoomLoot(currentRoom);const same=nearestLoot.alternative===second;',
@@ -1318,6 +1319,19 @@ test('treasure offers distinct relics, preserves old offers and grants a single 
  assert.ok(result.chosen.claimed&&!result.chosen.alternative);
  assert.deepEqual(result.old,{kind:'item',key:'emberHeart',claimed:false,alternative:'mossCharm'});
  assert.deepEqual(result.claimed,{kind:'item',key:'emberHeart',claimed:true});
+});
+
+test('sprite motion stays within the art bounds and reduced motion keeps a neutral pose',()=>{
+ const [neutral,braced,samples]=run([
+  method('spritePose')
+ ],'[spritePose("ooze",20,130,1,0,true,true),spritePose("stride",20,130,1,0,true,false),["ooze","float","stride","light"].map(style=>Array.from({length:30},(_,i)=>spritePose(style,40,150,i*.017,0,false,false)))]');
+ assert.deepEqual(neutral,{lift:0,tilt:0,width:1,height:1});
+ assert.deepEqual(braced,{lift:0,tilt:0,width:1.04,height:.96});
+ for(const poses of samples){
+  assert.ok(poses.some(pose=>Math.abs(pose.lift)>.1));
+  assert.ok(poses.every(pose=>Math.abs(pose.lift)<=2.8&&Math.abs(pose.tilt)<=.073&&pose.width>=.88&&pose.height>=.88));
+ }
+ assert.ok(Math.max(...samples[0].map(pose=>pose.width))>Math.max(...samples[2].map(pose=>pose.width)));
 });
 
 test('loot previews use the real caps, hero-specific stats and synergy effects without changing the build',()=>{
