@@ -66,6 +66,7 @@ footer #restart{display:none}
 #element-options button{background:#382d50;color:#fff;border:1px solid #a38cbe;padding:11px;border-radius:9px;text-align:left;min-height:75px;touch-action:manipulation;overflow-wrap:anywhere}
 #element-options strong{display:block;font-size:15px}
 #element-options small{display:block;font-size:11px;line-height:1.3;margin-top:4px;color:#d1c2df}
+#element-options button:only-child{grid-column:1/-1;justify-self:center;width:min(100%,420px)}
 @media(max-height:380px){
  #element-choice .element-dialog{padding:9px}
  #element-options{gap:6px;margin-top:8px}
@@ -559,6 +560,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
 }
 #item-notice{top:38px;color:#ffdfad;font:700 11px/1.25 system-ui;text-align:center}
 #boss-hud:not([hidden]) ~ #item-notice{top:auto;bottom:26px}
+#boss-mark-notice{position:absolute;z-index:14;top:clamp(64px,19%,150px);left:50%;transform:translateX(-50%);padding:7px 16px;border:1px solid #ad793d;border-radius:4px;background:#211508ed;color:#ffe3a3;font:700 clamp(13px,2vw,19px) Georgia,serif;box-shadow:0 2px 16px #090501bb;pointer-events:none}
 #opening-guide{
  position:absolute;z-index:13;bottom:20px;left:50%;transform:translateX(-50%);
  box-sizing:border-box;width:min(340px,48vw);padding:6px 10px;pointer-events:none;
@@ -606,6 +608,62 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
  .character-layout{grid-template-columns:minmax(110px,24%) minmax(0,1fr)}
  .pause-body{grid-template-columns:minmax(100px,.66fr) minmax(0,1.6fr)}
  .controls-body{grid-template-columns:minmax(106px,.70fr) minmax(0,1.5fr)}
+}
+/* Legacy Forge uses the same painted world and brasswork as the title screen. */
+#legacy-forge{width:min(1080px,95vw);max-width:none;height:min(680px,94dvh);max-height:none;color:#fae8c9;color-scheme:dark;padding:0;overflow:hidden;border:1px solid #a98255;border-radius:4px;background:#17171b;box-shadow:0 18px 90px #000b}
+#legacy-forge[open]{display:grid;grid-template-rows:auto minmax(0,1fr)}
+#legacy-forge::backdrop{background:#07090edb}
+.legacy-header{min-width:0;display:flex;align-items:center;gap:16px;padding:clamp(9px,1.7vw,20px) clamp(13px,2.5vw,29px);border-bottom:1px solid #9b7248;background:linear-gradient(90deg,#281b16f0,#3e281dee 58%,#211a1beb),url("art/wall-textures.webp") left top/620px auto}
+.legacy-header-text{min-width:0;flex:1}
+.legacy-header h2{color:#ffedce;font:700 clamp(25px,4.5vw,51px)/.95 Georgia,serif;letter-spacing:-.045em;margin:0}
+.legacy-header p{color:#dac2a2;font:12px/1.3 system-ui;margin:5px 0 0}
+.legacy-mark-icon{flex:none;display:inline-grid;place-items:center;inline-size:15px;block-size:15px;transform:rotate(45deg);background:linear-gradient(130deg,#ffdf91,#b5753a);border:1px solid #f8c178;box-shadow:inset 0 0 0 2px #9a5a3470,0 0 16px #ec953850;border-radius:2px}
+.legacy-mark-icon::after{content:"";inline-size:5px;block-size:5px;background:#ffe8b0;border-radius:1px}
+.legacy-balance{flex:none;display:grid;grid-template-columns:auto auto;align-items:center;column-gap:10px;padding:6px 12px;border:1px solid #a2774c;background:#201818ba}
+.legacy-balance output{color:#ffdf9d;font:700 clamp(22px,3vw,35px)/.9 Georgia,serif;font-variant-numeric:tabular-nums}
+.legacy-balance small{grid-column:1/-1;color:#efcda2;font:600 10px/1.35 system-ui}
+.legacy-body{min-height:0;display:grid;grid-template-columns:minmax(150px,25%) minmax(0,1fr)}
+.legacy-sidebar{display:flex;min-height:0;flex-direction:column;overflow:auto;padding:clamp(9px,2vw,21px);border-right:1px solid #705135;background:linear-gradient(0deg,#141217f7 4%,#1e1818e8 46%,#34231858 100%),url("art/forge.webp") center/cover}
+.legacy-loadout{margin-top:auto;padding-top:clamp(10px,4vh,30px)}
+.legacy-loadout h3,.legacy-group h3{font:700 clamp(15px,2vw,21px)/1.2 Georgia,serif;color:#f4d8ac;margin:0}
+#legacy-equipped{display:grid;gap:6px;list-style:none;margin:7px 0 0;padding:0}
+#legacy-equipped li{min-width:0;border:1px dashed #997556;background:#211b1adf;padding:6px 8px;color:#d4bb96;font:600 11px/1.35 system-ui}
+#legacy-equipped li[data-equipped=true]{border-style:solid;border-color:#bc985c;color:#ffe0a6;background:#3a2b22e8}
+.legacy-loadout p{margin:8px 0 0;color:#e0cbb1;font:11px/1.45 system-ui}
+.legacy-workbench{min-height:0;min-width:0;display:grid;grid-template-rows:auto minmax(0,1fr);background:radial-gradient(ellipse at top right,#3a282090,transparent 68%),#17181e}
+.legacy-toolbar{padding:clamp(8px,1.6vw,16px) clamp(10px,2.3vw,25px) 0;border-bottom:1px solid #705135}
+.legacy-toolbar nav{display:flex;gap:6px;align-items:center}
+#legacy-forge .legacy-toolbar button{background:#242027;border-color:#806346;padding-inline:clamp(8px,1.35vw,14px)}
+#legacy-forge .legacy-toolbar button[aria-pressed=true]{background:linear-gradient(#f1d29b,#b78553);color:#291a12;border-color:#f7d6a4}
+#legacy-status{color:#f1d0a0;font:12px/1.3 system-ui;margin:6px 0;min-height:1.3em}
+.legacy-catalog{overflow:auto;overscroll-behavior:contain;scrollbar-color:#a98558 #242028;padding:12px clamp(10px,2.3vw,25px) 20px}
+.legacy-group+.legacy-group{margin-top:18px}
+.legacy-group h3{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.legacy-group h3::after{content:"";height:1px;background:linear-gradient(90deg,#73563e,transparent);flex:1}
+.legacy-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:7px}
+.legacy-card{display:grid;grid-template-rows:auto 1fr auto;min-width:0;padding:10px;border:1px solid #715641;background:linear-gradient(150deg,#352923,#242127 65%,#1c1c22);color:#ffeccd}
+.legacy-card[data-owned=true]{border-color:#a88754}
+.legacy-card[data-equipped=true]{border-color:#dbb478;background:linear-gradient(150deg,#4a3525,#232129 75%)}
+.legacy-card h4{display:flex;align-items:center;gap:6px;margin:0;font:700 16px/1.1 Georgia,serif}
+.legacy-card .plate-icon{width:32px;flex:none;filter:drop-shadow(0 2px 3px #08080b)}
+.legacy-card .choice-spear{background:url("art/weapons.webp") 100% 0/400% 300% no-repeat}
+.legacy-card p{margin:6px 0 8px;color:#dfccb1;font:11px/1.4 system-ui}
+#legacy-forge .legacy-card button{justify-self:start;min-height:31px;padding:5px 8px;font:700 11px/1.25 system-ui}
+#legacy-forge button:disabled{cursor:default;color:#ddc7a6;background:#252229;border-color:#675747;box-shadow:none}
+#legacy-forge .legacy-card[data-equipped=true] button:not(:disabled){color:#2b1a16;background:linear-gradient(#ead0a4,#b78553);border-color:#e0b483}
+@media(prefers-reduced-motion:no-preference){#legacy-forge[open]{animation:panel-reveal .18s ease-out}}
+@media(min-width:1120px){.legacy-group[data-hero=all] .legacy-card-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-height:440px){
+ .legacy-header{gap:11px;padding:8px 12px}
+ .legacy-header h2{font-size:28px}
+ .legacy-header p{font-size:11px;margin-top:2px}
+ .legacy-catalog{padding-top:8px}
+ .legacy-toolbar{padding-top:6px}
+ #legacy-status{margin:4px 0;font-size:11px}
+}
+@media(max-width:590px){
+ .legacy-body{grid-template-columns:minmax(105px,25%) minmax(0,1fr)}
+ .legacy-card-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,138px),1fr))}
 }
 </style></head><body><div id="rotate-overlay"><div class="turn-icon" aria-hidden="true"></div><strong>DUNGEON DOT — LANDSCAPE ONLY</strong><small>Rotate your phone sideways to play the full-screen arena.</small><button id="rotate-fullscreen">GO FULLSCREEN ↗</button></div><main><div class="combat-info">
  <div id="player-vitals" role="group" aria-label="Player stats">
@@ -719,6 +777,7 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
 </dialog>
 <aside id="opening-guide" hidden role="status"><strong id="opening-guide-title"></strong><span id="opening-guide-tip"></span></aside>
 <div id="item-notice" hidden role="status"></div>
+<div id="boss-mark-notice" hidden role="status"></div>
 <section id="start-screen" hidden aria-label="Dungeon Dot main menu">
  <div class="menu-view menu-home" id="menu-home">
   <div class="menu-home-content">
@@ -731,13 +790,14 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
     <button id="resume-current" class="menu-action" type="button" hidden>Continue</button>
     <button id="menu-new" class="menu-action" type="button">New Run</button>
     <button id="menu-saves" class="menu-action" type="button" hidden>Saved Runs</button>
+    <button id="menu-legacy" class="menu-action" type="button" aria-haspopup="dialog" aria-controls="legacy-forge">Legacy Forge</button>
    </div>
   </div>
   <nav class="menu-links" aria-label="Game information">
    <button id="start-index" type="button">Enemy Index</button>
    <button id="start-sound" type="button">Sound Settings</button>
    <button id="start-privacy" type="button">Privacy Policy</button>
-   <small>V8.72</small>
+   <small>V8.73</small>
   </nav>
  </div>
  <div class="menu-view menu-workbench" id="menu-setup" hidden>
@@ -760,6 +820,32 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
   </div>
  </div>
 </section>
+<dialog id="legacy-forge" class="menu-shell" aria-labelledby="legacy-title">
+ <header class="legacy-header">
+  <div class="legacy-header-text"><h2 id="legacy-title">Legacy Forge</h2><p>Earn one Boss Mark for each boss defeated in a dungeon run.</p></div>
+  <div class="legacy-balance"><span class="legacy-mark-icon" aria-hidden="true"></span><output id="legacy-marks" aria-label="Available Boss Marks">0</output><small>Boss Marks</small></div>
+  <button id="legacy-close" class="menu-control close-control" type="button" aria-label="Close Legacy Forge">&#215;</button>
+ </header>
+ <div class="legacy-body">
+  <aside class="legacy-sidebar">
+   <div class="legacy-loadout">
+    <h3>Next run</h3>
+    <ul id="legacy-equipped" aria-label="Equipped upgrades"></ul>
+    <p>Equip up to two upgrades. Hero upgrades apply when you play their hero.</p>
+   </div>
+  </aside>
+  <div class="legacy-workbench">
+   <div class="legacy-toolbar">
+    <nav aria-label="Forge pages">
+     <button id="legacy-tab-upgrades" class="menu-control" type="button" aria-pressed="true" aria-controls="legacy-catalog">Upgrades</button>
+     <button id="legacy-tab-evolutions" class="menu-control" type="button" aria-pressed="false" aria-controls="legacy-catalog">Evolutions</button>
+    </nav>
+    <p id="legacy-status" role="status"></p>
+   </div>
+   <div id="legacy-catalog" class="legacy-catalog" tabindex="0" aria-label="Forge catalog"></div>
+  </div>
+ </div>
+</dialog>
 <section id="bestiary-panel" hidden aria-label="Enemy index">
  <div class="index-heading"><div><h1>Enemy Index</h1><p id="index-summary"></p></div><button id="index-close" aria-label="Close enemy index">×</button></div>
  <div class="index-toolbar"><button id="index-all" aria-pressed="true">All</button><button id="index-enemies" aria-pressed="false">Enemies</button><button id="index-bosses" aria-pressed="false">Bosses</button><input id="index-search" type="search" placeholder="Search enemies or bosses" aria-label="Search enemy index"></div>
@@ -792,10 +878,11 @@ main[data-world=blue]{--menu-scene:url("art/vault.webp")}
     <div><dt>Hero path</dt><dd id="victory-hero"></dd></div>
     <div><dt>Deepest dungeon</dt><dd id="victory-depth"></dd></div>
     <div><dt>Lives remaining</dt><dd id="victory-lives"></dd></div>
+    <div><dt>Boss Marks available</dt><dd id="victory-marks"></dd></div>
     <div><dt>Biggest impact</dt><dd id="victory-impact"></dd></div>
     <div><dt>Biggest damage burst</dt><dd id="victory-damage"></dd></div>
    </dl>
-   <p>Continue into Dungeon 4 toward level 8 evolution. Clear Dungeon 5 to earn the Iron Seal.</p>
+   <p>Clear Dungeon 5 to earn the Iron Seal. Spend Boss Marks at the Legacy Forge for future runs.</p>
    <div class="victory-actions">
     <button id="victory-continue" type="button">Continue deeper</button>
     <button id="victory-menu" type="button">Save and return to menu</button>
@@ -863,11 +950,12 @@ function refillRoomDefences(){
  shieldType='curved';shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;
  armourHp=bodyArmourStats().capacity;
 }
-function bodyArmourStats(character=hero,upgrades=progress?.upgrades){
+function bodyArmourStats(character=hero,upgrades=progress?.upgrades,run=progress,depth){
  if(character!=='classic')return {capacity:0,absorption:0};
  const plates=Math.min(BODY_ARMOUR_MAX_RANK,upgrades?.armourPlates||0);
  const padding=Math.min(BODY_ARMOUR_MAX_RANK,upgrades?.armourPadding||0);
- return {capacity:12+4*plates,absorption:(25+5*padding)/100};
+ const legacyPlates=hasLegacyPerk('sparePlating',run)&&(depth??dungeonDepth)===1?2:0;
+ return {capacity:12+4*plates+legacyPlates,absorption:(25+5*padding)/100};
 }
 
 function drawCharacterShield(){
@@ -1065,7 +1153,7 @@ function applySwordBleed(target){
 let runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};
 function enemyStats(e){return {mass:e.mass,elasticity:e.shape==='rubber'?1.55:.92,toughness:e.elite?145:enemyDefinition(e.shape).armour||0,stability:e.shape==='square'?100:e.shape==='armored'?95:e.shape==='rubber'?75:60,regen:e.shape==='regenerator'?1.1:0}}
 const sticks=[{x:86,y:326,dx:0,dy:0,id:null},{x:554,y:326,dx:0,dy:0,id:null}];
-const defaultControls={positions:[[viewW*.135,326],[viewW*.865,326]],size:100,opacity:75,floating:false};
+const defaultControls={positions:[[viewW*.135,326],[viewW*.865,326]],size:100,opacity:75,floating:true};
 let controls={...defaultControls,positions:defaultControls.positions.map(a=>[...a])},editingControls=false,editPointer=null;
 resizeJoysticks=ratio=>{
  controls.positions=controls.positions.map(([x,y])=>[x*ratio,y]);
@@ -1078,7 +1166,11 @@ function syncControlsPreview(){
  const preview=document.querySelector('#control-preview');
  preview.style.cssText='--demo-size:'+Math.round(controls.size*.42)+'px;--demo-opacity:'+(controls.opacity/100);
 }
-function moveStick(i,v){let m=R*controls.size/100+3;sticks[i].x=Math.max(i?viewW/2+m:m,Math.min(i?viewW-m:viewW/2-m,v.x));sticks[i].y=Math.max(m,Math.min(H-m,v.y));controls.positions[i]=[sticks[i].x,sticks[i].y]}
+function moveStick(i,v){
+ const margin=R*controls.size/100+3,stick=sticks[i];
+ stick.x=clamp(v.x,i?viewW/2+margin:margin,i?viewW-margin:viewW/2-margin);
+ stick.y=clamp(v.y,margin,H-margin);
+}
 syncControls();
 
 
@@ -2163,6 +2255,27 @@ function weaponChoices(character=hero){
 function validWeaponChoice(character,id){
  return weaponChoices(character).some(([weapon])=>weapon===id);
 }
+const LEGACY_UPGRADES=[
+ {id:'warChest',name:'War Chest',description:'Start each new run with 8 extra coins.',cost:2,hero:null},
+ {id:'fieldRations',name:'Field Rations',description:'Recover up to 6 HP after your first combat room clear.',cost:2,hero:null},
+ {id:'fleetfoot',name:'Fleetfoot',description:'Move 5% faster in Dungeon 1.',cost:3,hero:null},
+ {id:'coinfinder',name:'Coinfinder',description:'Collect coins from 12 units farther away in Dungeon 1.',cost:2,hero:null},
+ {id:'secondWind',name:'Second Wind',description:'Reduce dash cooldown by 10% in Dungeon 1.',cost:3,hero:null},
+ {id:'sparePlating',name:'Spare Plating',description:'Gain 2 body armour durability in Dungeon 1.',cost:3,hero:'classic'},
+ {id:'fortifiedShield',name:'Fortified Shield',description:'Your shield takes 8% less damage in Dungeon 1.',cost:3,hero:'classic'},
+ {id:'quickDraw',name:'Quick Draw',description:'Reduce ranged reload time by 10% in Dungeon 1.',cost:3,hero:'archer'},
+ {id:'keenEye',name:'Keen Eye',description:'Ranged projectiles travel 7% faster in Dungeon 1.',cost:2,hero:'archer'},
+ {id:'preparedCasting',name:'Prepared Casting',description:'Your first three casts cost 2 less mana each (minimum 1).',cost:3,hero:'mage'}
+];
+function hasLegacyPerk(id,run=progress){return run?.legacyPerks?.includes(id)===true}
+function evolutionChoices(character=hero){
+ return character==='mage'?Object.entries(MAGE_SCHOOLS):weaponChoices(character);
+}
+function availableEvolutionChoices(character=hero,run=progress){
+ const choices=evolutionChoices(character);
+ if(!Array.isArray(run?.legacyEvolutions)||inSandbox())return choices;
+ return choices.filter(([id])=>run.legacyEvolutions.includes(id));
+}
 function weaponForm(){return WEAPON_PATHS[hero]?.[equippedWeapon()]}
 function runHeroName(character=hero,run=progress){
  if(character==='mage')return run?.legacyMage?'Elementalist':MAGE_SCHOOLS[run?.mageSchool]?.name||'Rune Apprentice';
@@ -2178,13 +2291,16 @@ const DEEP_TRIALS={
 };
 let evolutionAt=-Infinity;
 function currentDeepTrial(){return inSandbox()?null:DEEP_TRIALS[dungeonDepth]||null}
-function hasEvolved(run=progress){return (run?.level||0)>=EVOLUTION_LEVEL}
-function evolutionAttackRate(build=progress){return hasEvolved(build)?1.1:1}
+function hasLevelEightBonus(run=progress){return (run?.level||0)>=EVOLUTION_LEVEL}
+function hasEvolved(run=progress){
+ return hasLevelEightBonus(run)&&(!Array.isArray(run.legacyEvolutions)||!!(run.weapon||run.mageSchool));
+}
+function evolutionAttackRate(build=progress){return hasLevelEightBonus(build)?1.1:1}
 function xpRequirement(level){const n=Math.max(1,level)-1;return 24+12*n+2*n*n}
 function levelChoicePending(){
  if(!progress||progress.level<3)return false;
- if(hero!=='mage')return !progress.weapon;
- if(!progress.legacyMage)return !progress.mageSchool;
+ if(hero!=='mage')return !progress.weapon&&(!Array.isArray(progress.legacyEvolutions)||availableEvolutionChoices().length>0);
+ if(!progress.legacyMage)return !progress.mageSchool&&(!Array.isArray(progress.legacyEvolutions)||availableEvolutionChoices().length>0);
  return !progress.elementPrimary;
 }
 function levelSummary(){
@@ -2206,7 +2322,7 @@ function openElementChoice(){
   document.querySelector('#element-title').textContent=mage?'LEVEL 3 · CHOOSE YOUR MAGIC SCHOOL':'LEVEL 3 · CHOOSE YOUR WEAPON';
   document.querySelector('#element-explain').textContent=practice?'This choice applies in practice.':'This choice lasts for the rest of the run.';
   const wrap=document.querySelector('#element-options');wrap.innerHTML='';
-  for(const [id,form] of mage?Object.entries(MAGE_SCHOOLS):weaponChoices()){
+  for(const [id,form] of availableEvolutionChoices()){
    const button=document.createElement('button');button.type='button';
    button.innerHTML=evolutionPortrait(id)+'<span><strong>'+form.name+'</strong><small>'+form.desc+'</small></span>';
    button.onclick=()=>mage?selectMageSchool(id):selectWeapon(id);wrap.appendChild(button);
@@ -2231,6 +2347,7 @@ function selectElement(id){
 }
 function selectMageSchool(id){
  if(hero!=='mage'||progress?.legacyMage||!Object.hasOwn(MAGE_SCHOOLS,id)||!levelChoicePending())return false;
+ if(Array.isArray(progress.legacyEvolutions)&&!availableEvolutionChoices().some(([unlocked])=>unlocked===id))return false;
  progress.mageSchool=id;
  mageCooldowns=Object.fromEntries(Object.entries(mageCooldowns).filter(([path])=>path.length===1));
  document.querySelector('#element-choice').hidden=true;
@@ -2239,6 +2356,7 @@ function selectMageSchool(id){
 }
 function selectWeapon(id){
  if(!levelChoicePending()||!validWeaponChoice(hero,id))return false;
+ if(Array.isArray(progress.legacyEvolutions)&&!availableEvolutionChoices().some(([unlocked])=>unlocked===id))return false;
  progress.weapon=id;p.flailLag=0;p.vel=0;p.target=p.a;
  arrows=[];bowShotCooldown=0;
  document.querySelector('#element-choice').hidden=true;
@@ -2254,17 +2372,21 @@ function advanceRunLevels(run,practice=false){
  return gained;
 }
 function gainRunXp(amount,practice=false){
- const hadEvolved=hasEvolved();
- const beforeHealth=hadEvolved?0:playerStats().maxHealth;
- const beforeMana=!hadEvolved&&hero==='mage'?mageMaxMana():0;
+ const hadBonus=hasLevelEightBonus();
+ const beforeHealth=hadBonus?0:playerStats().maxHealth;
+ const beforeMana=!hadBonus&&hero==='mage'?mageMaxMana():0;
  progress.xp+=amount;
  const gained=advanceRunLevels(progress,practice);
- if(!hadEvolved&&hasEvolved()){
+ if(!hadBonus&&hasLevelEightBonus()){
   healPlayer(playerStats().maxHealth-beforeHealth);
   if(hero==='mage')restoreMageMana(mageMaxMana()-beforeMana);
-  evolutionAt=arenaTime;playSoundCue('evolution');
-  showItemNotice(runHeroName()+' EVOLVED · STATS BOOSTED',5);
-  return true;
+  if(hasEvolved()){
+   evolutionAt=arenaTime;playSoundCue('evolution');
+   showItemNotice(runHeroName()+' EVOLVED · STATS BOOSTED',5);
+   return true;
+  }
+  playSoundCue('level');showItemNotice('LEVEL '+progress.level+' · STATS BOOSTED',5);
+  return false;
  }
  if(gained)playSoundCue('level');
  if(gained&&!practice)showItemNotice('LEVEL '+progress.level+' · +'+(gained*2)+'% WEAPON DAMAGE');
@@ -2304,16 +2426,18 @@ function freshProgress(){return {coins:0,items:{},upgrades:{},roomsCleared:0,syn
 function itemCount(id,build=progress){return Math.min(ITEM_STACK_LIMITS[id]??Number.MAX_SAFE_INTEGER,build?.items?.[id]||0)}
 function upgradeCount(id,build=progress){return build?.upgrades?.[id]||0}
 function playerStats(build=progress){
- const evolved=Number(hasEvolved(build)),item=id=>itemCount(id,build),upgrade=id=>upgradeCount(id,build);
+ const evolved=Number(hasLevelEightBonus(build)),item=id=>itemCount(id,build),upgrade=id=>upgradeCount(id,build);
  const livingArmour=hasSynergy('livingArmour',build);
+ const fleetfoot=hasLegacyPerk('fleetfoot',build)&&dungeonDepth===1?1.05:1;
+ const shieldReduction=hasLegacyPerk('fortifiedShield',build)&&dungeonDepth===1 ? .08 : 0;
  return {
   maxHealth:Math.min(100,Math.max(25,50+5*evolved+10*upgrade('vitality')+10*item('emberHeart')-8*item('glassEye'))),
   damage:(1+.25*upgrade('power')+(hero==='mage'?0:hero==='archer'?.2:.4)*item('glassEye')+.02*Math.max(0,(build?.level||1)-1))*(1+.15*evolved),
-  moveSpeed:(hero==='mage'?112:118)*(1+Math.min(.8,.1*upgrade('speed')+(hero==='archer'?.05*item('thornMantle'):0)))*(1+.08*evolved),
+  moveSpeed:(hero==='mage'?112:118)*(1+Math.min(.8,.1*upgrade('speed')+(hero==='archer'?.05*item('thornMantle'):0)))*(1+.08*evolved)*fleetfoot,
   swing:Math.max(.55,1+.15*upgrade('swing')-(hero==='mage'?0:.1)*item('counterweight'))*evolutionAttackRate(build),
   knockback:(1+.2*upgrade('knockback')+(hero==='mage'?.25:hero==='archer'?.12:.4)*item('counterweight'))*(1+.1*evolved),
   regen:Math.min(2.4,(hero==='mage'?.5:PLAYER_REGEN)+.15*evolved+.15*upgrade('regen')+(hero==='mage'?.18:hero==='archer'?.12:.3)*item('mossCharm')+(livingArmour?.2:0)),
-  shieldProtection:hero!=='classic'?0:Math.min(.6,.1*upgrade('shield')+.15*item('shieldBloom')),
+  shieldProtection:hero!=='classic'?0:1-(1-shieldReduction)*(1-Math.min(.6,.1*upgrade('shield')+.15*item('shieldBloom'))),
   crit:Math.min(.6,.05*upgrade('focus')+(hero==='archer'?.12*item('glassEye'):0)),
   luck:upgrade('luck')+item('luckyPenny'),
   armour:Math.min(.4,(hero==='mage'?.10:hero==='archer'?.05:0)+.05*evolved+(hero==='mage'?.06:hero==='archer'?.04:.1)*item('thornMantle')+(livingArmour?.1:0)),
@@ -2505,6 +2629,10 @@ function rewardRoom(){
   currentRoom.loot.push({id:'curse-reward',kind:'item',key:pool[Math.floor(Math.random()*pool.length)],price:0,x:W/2+85,y:F/2,claimed:false,rare:true});
  }
  progress.roomsCleared++;
+ if(progress.roomsCleared===1&&hasLegacyPerk('fieldRations')){
+  const recovered=healPlayer(6);
+  if(recovered>0)showItemNotice('FIELD RATIONS · +'+Math.round(recovered*10)/10+' HP');
+ }
  if(progress.roomsCleared%3===0){
   const keys=Object.keys(UPGRADE_DEFS).filter(upgradeAvailable);
   if(keys.length)currentRoom.loot.push({id:'room-stat',kind:'stat',key:keys[Math.floor(Math.random()*keys.length)],price:0,x:W/2,y:F/2,claimed:false});
@@ -2657,14 +2785,15 @@ function lootUnavailableReason(loot){
 }
 function updateEconomy(dt){
  const homing=roomCoinsHome(),pickup=playerStats().pickup;
+ const coinPickup=pickup+(hasLegacyPerk('coinfinder')&&dungeonDepth===1?12:0);
  for(const coin of coinDrops){
   if(coin.collected)continue;
   let dx=p.x-coin.x,dy=p.y-coin.y,distance=Math.hypot(dx,dy);
-  if(homing&&dt>0&&distance>pickup){
+  if(homing&&dt>0&&distance>coinPickup){
    const travel=Math.min(distance,Math.min(1100,300+distance*2)*dt);
    coin.x+=dx/distance*travel;coin.y+=dy/distance*travel;distance-=travel;
   }
-  if(distance<=pickup)collectCoin(coin);
+  if(distance<=coinPickup)collectCoin(coin);
  }
  coinDrops=coinDrops.filter(coin=>!coin.collected);
  if(!over&&!p.falling){
@@ -2997,7 +3126,7 @@ function updateCharacterMenu(){
  document.querySelector('#character-class-note').textContent=bossFight&&!bossFight.done?bossHint():hero==='mage'?'Trace the runes in the order shown and release to cast. Mana regenerates automatically.':(weaponForm().desc||HERO_DEFS[hero].hint);
  document.querySelector('#mage-spellbook').hidden=hero!=='mage';
  document.querySelector('#character-tab-runes').hidden=hero!=='mage';
- if(hero==='mage')document.querySelector('#mage-spell-list').innerHTML=Object.entries(mageSpellbook()).map(([path,spell])=>'<p><strong>'+path+' · '+spell.name+' · '+spell.mana+' MP</strong>'+(spell.desc?' <small>'+spell.desc+'</small>':'')+'</p>').join('');
+ if(hero==='mage')document.querySelector('#mage-spell-list').innerHTML=Object.entries(mageSpellbook()).map(([path,spell])=>'<p><strong>'+path+' · '+spell.name+' · '+mageSpellMana(spell)+' MP</strong>'+(spell.desc?' <small>'+spell.desc+'</small>':'')+'</p>').join('');
  const {atlas,cell}=heroPortraitArtwork(),portrait=document.querySelector('#character-portrait');
  portrait.className='plate-icon plate-'+atlas;
  portrait.dataset.evolved=String(hasEvolved());
@@ -3006,7 +3135,11 @@ function updateCharacterMenu(){
  document.querySelector('#character-name').textContent=runHeroName();
  document.querySelector('#character-progress').textContent=levelSummary()+(progress.elementPrimary?' · '+ELEMENTS[progress.elementPrimary].name:'')+(progress.elementSecondary?' + '+ELEMENTS[progress.elementSecondary].name:'');
  document.querySelector('#character-coins').textContent=progress.coins+' coins · Dungeon '+dungeonDepth;
- document.querySelector('#character-evolution').textContent=hasEvolved()?'Evolved · Permanent run bonuses active':'Level 8 evolution · +5 max HP, +15% damage and faster attacks'+(hero==='mage'?' · +10 max mana':'');
+ const pathAvailable=!Array.isArray(progress.legacyEvolutions)||availableEvolutionChoices().length>0;
+ const levelEightStats='+5 max HP, +15% damage and faster attacks'+(hero==='mage'?' · +10 max mana':'');
+ document.querySelector('#character-evolution').textContent=hasEvolved()?'Evolved · Level 8 bonuses active':
+  hasLevelEightBonus()?'Level 8 stat bonuses active':
+  (pathAvailable?'Level 8 evolution':'Level 8 stat bonuses')+' · '+levelEightStats;
  updateRunRecords();
  const inventory=document.querySelector('#item-inventory');inventory.innerHTML='';
  for(const [id,count] of Object.entries(progress.items)){
@@ -3097,10 +3230,12 @@ function setupSandboxEconomyUI(){
 
 // Two browser-local cleared-room checkpoints, shared audio preferences and bestiary.
 const SAVE_VERSION=1,PROFILE_KEY='dd-profile-v1';
-const HERO_DEFS={classic:{name:'Squire',hint:'Swing with the right stick. At level 3 specialize in sword, bat, flail, or spear.'},archer:{name:'Scout',hint:'Aim with the right stick, pull back, then release a stone. At level 3 specialize in bow, crossbow, or javelin.'},mage:{name:'Rune Apprentice',hint:'Cast basic runes, six two-rune spells, and ABC Arcane Wave. Choose a magic school at level 3.'}};
+const HERO_DEFS={classic:{name:'Squire',hint:'Swing with the right stick. Unlock weapon paths at the Legacy Forge to choose one at level 3.'},archer:{name:'Scout',hint:'Pull back the right stick and release to throw a stone. Unlock weapon paths at the Legacy Forge to choose one at level 3.'},mage:{name:'Rune Apprentice',hint:'Cast basic runes, six two-rune spells, and ABC Arcane Wave. Unlock magic schools at the Legacy Forge to choose one at level 3.'}};
 let hero='classic',selectedHero='classic';
 let activeSlot=null,loadingRun=false,savePending=false,saveRetryAt=0,profileDirty=false,saveError='',pendingReplacement=null;
-let profile={version:1,lastSlot:null,audio:{master:80,music:60,effects:80,muted:false},bestiary:{}};
+let profile={version:1,lastSlot:null,audio:{master:80,music:60,effects:80,muted:false},bestiary:{},legacy:emptyLegacyForge()};
+const LEGACY_EVOLUTION_COST=5,LEGACY_PERK_SLOTS=2;
+let bossMarkNoticeUntil=0;
 // Original layered cues and scores built on a shared Web Audio mix.
 const pitched=(wave,from,to,length,level,delay=0,cutoff=0,attack=.006)=>({wave,from,to,length,level,delay,cutoff,attack});
 const textured=(filter,hz,length,level,delay=0,attack=.006)=>({filter,from:hz,length,level,delay,attack});
@@ -3128,6 +3263,8 @@ const DUNGEON_SOUND={
  'spell-apprentice':[pitched('sine',370,530,.22,.15),pitched('triangle',554,740,.22,.12,.055,1600)],
  'spell-spirit':[pitched('sine',296,430,.36,.18,0,0,.065),pitched('sine',445,590,.41,.12,.065,0,.074),textured('bandpass',780,.27,.067,.015,.042)],
  'spell-grave':[pitched('triangle',165,65,.33,.23),textured('bandpass',520,.26,.15),textured('bandpass',1850,.061,.14,.065),textured('bandpass',1250,.059,.11,.142)],
+ 'spell-guardian':[pitched('triangle',175,78,.26,.19),textured('bandpass',1250,.15,.13),pitched('sine',440,442,.4,.13,.05),pitched('sine',660,662,.33,.085,.11)],
+ 'spell-raise':[pitched('triangle',110,67,.42,.18),textured('bandpass',480,.23,.12),textured('bandpass',1620,.07,.16,.06),textured('bandpass',1940,.05,.12,.14),pitched('sine',142,220,.27,.1,.08)],
  'spell-fire':[textured('bandpass',910,.29,.25,0,.021),pitched('triangle',142,53,.27,.17),textured('highpass',2500,.22,.09,.016)],
  'spell-arcane':[pitched('sine',390,590,.20,.16),pitched('triangle',581,830,.25,.15,.042,2000),pitched('sine',877,670,.29,.12,.093)],
  'hit-apprentice':[pitched('sine',560,230,.10,.08),textured('bandpass',1310,.078,.075)],
@@ -3536,6 +3673,88 @@ function knownDictionary(value,definitions){
  for(const key of Object.keys(definitions))if(Number.isFinite(value[key])&&value[key]>0)result[key]=Math.floor(safeNumber(value[key],0,0,10000));
  return result;
 }
+function emptyLegacyForge(){
+ return {marks:0,unlockedUpgrades:[],equippedUpgrades:[],unlockedEvolutions:[],bossReceipts:{}};
+}
+function legacyKnownIds(value,known){
+ return Array.isArray(value)?[...new Set(value.filter(id=>known.includes(id)))]:[];
+}
+function legacyEvolutionIds(){
+ return Object.keys(HERO_DEFS).flatMap(character=>evolutionChoices(character).map(([id])=>id));
+}
+function isLegacyRunId(id){return typeof id==='string'&&/^[\da-f-]{16,64}$/.test(id)}
+function newLegacyRunId(){
+ return globalThis.crypto?.randomUUID?.()??Date.now().toString(16)+'-'+Math.random().toString(16).slice(2).padEnd(13,'0');
+}
+function normalizeLegacyForge(raw){
+ const legacy=emptyLegacyForge();
+ if(!raw||typeof raw!=='object')return legacy;
+ legacy.marks=Math.floor(safeNumber(raw.marks));
+ legacy.unlockedUpgrades=legacyKnownIds(raw.unlockedUpgrades,LEGACY_UPGRADES.map(upgrade=>upgrade.id));
+ legacy.equippedUpgrades=legacyKnownIds(raw.equippedUpgrades,legacy.unlockedUpgrades).slice(0,LEGACY_PERK_SLOTS);
+ legacy.unlockedEvolutions=legacyKnownIds(raw.unlockedEvolutions,legacyEvolutionIds());
+ for(const [runId,depths] of Object.entries(raw.bossReceipts||{})){
+  if(isLegacyRunId(runId)&&Array.isArray(depths))legacy.bossReceipts[runId]=[...new Set(depths.filter(depth=>Number.isInteger(depth)&&depth>=1&&depth<=10000))];
+ }
+ return legacy;
+}
+function getLegacyForge(){
+ const {marks,unlockedUpgrades,equippedUpgrades,unlockedEvolutions}=profile.legacy;
+ return {marks,unlockedUpgrades:[...unlockedUpgrades],equippedUpgrades:[...equippedUpgrades],unlockedEvolutions:[...unlockedEvolutions]};
+}
+function saveLegacyForge(next){
+ const previous=profile.legacy,wasDirty=profileDirty;
+ profile.legacy=next;profileDirty=true;
+ if(flushProfile())return true;
+ profile.legacy=previous;profileDirty=wasDirty;
+ return false;
+}
+function buyLegacyUpgrade(id){
+ const upgrade=LEGACY_UPGRADES.find(entry=>entry.id===id);
+ if(!upgrade)return 'That upgrade is unavailable.';
+ const legacy=profile.legacy;
+ if(legacy.unlockedUpgrades.includes(id))return 'You already own that upgrade.';
+ if(legacy.marks<upgrade.cost)return 'You need '+upgrade.cost+' Boss Marks.';
+ const next={...legacy,marks:legacy.marks-upgrade.cost,unlockedUpgrades:[...legacy.unlockedUpgrades,id]};
+ return saveLegacyForge(next)?'':'Could not save the purchase. Try again.';
+}
+function toggleLegacyUpgrade(id){
+ const legacy=profile.legacy;
+ if(!legacy.unlockedUpgrades.includes(id))return 'Unlock this upgrade first.';
+ const equipped=legacy.equippedUpgrades;
+ if(!equipped.includes(id)&&equipped.length>=LEGACY_PERK_SLOTS)return 'Unequip an upgrade to free a slot.';
+ const next={...legacy,equippedUpgrades:equipped.includes(id)?equipped.filter(perk=>perk!==id):[...equipped,id]};
+ return saveLegacyForge(next)?'':'Could not save your loadout. Try again.';
+}
+function buyLegacyEvolution(id){
+ if(!legacyEvolutionIds().includes(id))return 'That evolution is unavailable.';
+ const legacy=profile.legacy;
+ if(legacy.unlockedEvolutions.includes(id))return 'You already own that evolution.';
+ if(legacy.marks<LEGACY_EVOLUTION_COST)return 'You need '+LEGACY_EVOLUTION_COST+' Boss Marks.';
+ const next={...legacy,marks:legacy.marks-LEGACY_EVOLUTION_COST,unlockedEvolutions:[...legacy.unlockedEvolutions,id]};
+ return saveLegacyForge(next)?'':'Could not save the purchase. Try again.';
+}
+function claimSavedBossMarks(saved,announce=false){
+ const {legacyRunId,legacyBossDepths}=saved.progress;
+ if(!legacyRunId||!legacyBossDepths?.length)return;
+ // The saved run records victories first. The profile commits Marks and their receipts together.
+ const legacy=profile.legacy,receipts=legacy.bossReceipts[legacyRunId]||[];
+ const earned=legacyBossDepths.filter(depth=>!receipts.includes(depth));
+ if(!earned.length)return;
+ const next={...legacy,marks:legacy.marks+earned.length,bossReceipts:{...legacy.bossReceipts,[legacyRunId]:[...receipts,...earned]}};
+ if(saveLegacyForge(next)&&announce){
+  const notice=document.querySelector('#boss-mark-notice');
+  notice.textContent='+'+earned.length+' Boss Mark'+(earned.length===1?'':'s');notice.hidden=false;
+  bossMarkNoticeUntil=performance.now()+3600;
+  playSoundCue('loot');
+ }
+}
+function reconcileBossMarks(){
+ for(const slot of [1,2]){
+  const saved=readSlot(slot).data;
+  if(saved)claimSavedBossMarks(saved);
+ }
+}
 function readProfile(){
  try{
   const raw=JSON.parse(localStorage.getItem(PROFILE_KEY)||'null');
@@ -3543,6 +3762,7 @@ function readProfile(){
   const audio=raw.audio||{};
   profile.audio={master:safeNumber(audio.master,80,0,100),music:safeNumber(audio.music,60,0,100),effects:safeNumber(audio.effects,80,0,100),muted:!!audio.muted};
   profile.lastSlot=raw.lastSlot===1||raw.lastSlot===2?raw.lastSlot:null;
+  profile.legacy=normalizeLegacyForge(raw.legacy);
   const valid=new Set(bestiaryCatalog().map(entry=>entry.id));
   if(raw.bestiary&&typeof raw.bestiary==='object')for(const [id,record] of Object.entries(raw.bestiary))if(valid.has(id)&&record&&typeof record==='object'){
    profile.bestiary[id]={encounters:Math.floor(safeNumber(record.encounters)),kills:Math.floor(safeNumber(record.kills)),firstSeen:safeNumber(record.firstSeen,0,0,8.64e15),lastSeen:safeNumber(record.lastSeen,0,0,8.64e15)};
@@ -3585,7 +3805,7 @@ function normalizeSavedRun(raw){
   if(!seen.has(door.to)){seen.add(door.to);queue.push(door.to)}
  }
  if(seen.size!==rooms.length)throw Error('Disconnected dungeon');
- const {weapon,levelsThisDepth,mageSchool,legacyMage,trialsCleared,reviveUsed,reviveAds}=raw.progress;
+ const {weapon,levelsThisDepth,mageSchool,legacyMage,trialsCleared,reviveUsed,reviveAds,legacyRunId,legacyBossDepths,legacyEvolutions,legacyPerks,legacyPreparedCasts}=raw.progress;
  raw.progress={coins:Math.floor(safeNumber(raw.progress.coins)),items:knownDictionary(raw.progress.items,ITEM_DEFS),upgrades:knownDictionary(raw.progress.upgrades,UPGRADE_DEFS),roomsCleared:Math.floor(safeNumber(raw.progress.roomsCleared)),synergyCoins:Math.floor(safeNumber(raw.progress.synergyCoins,0,0,9)),level:Math.floor(safeNumber(raw.progress.level,1,1,30)),xp:safeNumber(raw.progress.xp,0,0,100000),elementPrimary:ELEMENTS[raw.progress.elementPrimary]?raw.progress.elementPrimary:null,elementSecondary:ELEMENTS[raw.progress.elementSecondary]&&raw.progress.elementSecondary!==raw.progress.elementPrimary?raw.progress.elementSecondary:null};
  raw.progress.levelsThisDepth=Math.floor(safeNumber(levelsThisDepth,0,0,2));
  raw.mageMana=safeNumber(raw.mageMana,100,0,190);
@@ -3596,7 +3816,14 @@ function normalizeSavedRun(raw){
  raw.progress.reviveAds=raw.lives===0&&!raw.progress.reviveUsed&&Number.isInteger(reviveAds)&&reviveAds>=0&&reviveAds<=REVIVE_ADS_REQUIRED?reviveAds:null;
  const clearedDepth=raw.depth-Number(!rooms.some(room=>room.kind==='boss'&&room.bossDefeated));
  raw.progress.trialsCleared=Array.isArray(trialsCleared)?Object.keys(DEEP_TRIALS).map(Number).filter(depth=>depth<=clearedDepth&&trialsCleared.includes(depth)):[];
- const armourCapacity=bodyArmourStats(raw.hero,raw.progress.upgrades).capacity;
+ if(isLegacyRunId(legacyRunId)){
+  raw.progress.legacyRunId=legacyRunId;
+  raw.progress.legacyBossDepths=Array.isArray(legacyBossDepths)?[...new Set(legacyBossDepths.filter(depth=>Number.isInteger(depth)&&depth>=1&&depth<=clearedDepth))]:[];
+ }
+ if(Array.isArray(legacyEvolutions))raw.progress.legacyEvolutions=legacyKnownIds(legacyEvolutions,evolutionChoices(raw.hero).map(([id])=>id));
+ if(Array.isArray(legacyPerks))raw.progress.legacyPerks=legacyKnownIds(legacyPerks,LEGACY_UPGRADES.filter(upgrade=>!upgrade.hero||upgrade.hero===raw.hero).map(upgrade=>upgrade.id)).slice(0,LEGACY_PERK_SLOTS);
+ if(raw.progress.legacyPerks?.length)raw.progress.legacyPreparedCasts=Math.floor(safeNumber(legacyPreparedCasts,0,0,3));
+ const armourCapacity=bodyArmourStats(raw.hero,raw.progress.upgrades,raw.progress,raw.depth).capacity;
  raw.armourHp=safeNumber(raw.armourHp,armourCapacity,0,armourCapacity);
  raw.progress.weapon=raw.progress.level>=3&&validWeaponChoice(raw.hero,weapon)?weapon:null;
  raw.progress.mageSchool=raw.hero==='mage'&&raw.progress.level>=3&&Object.hasOwn(MAGE_SCHOOLS,mageSchool)?mageSchool:null;
@@ -3639,11 +3866,14 @@ function flushCheckpoint(){
  if(!savePending)return true;
  if(Date.now()<saveRetryAt)return false;
  if(loadingRun||!activeSlot||inSandbox()||!currentRoom?.cleared||over)return false;
+ let saved;
  try{
-  localStorage.setItem(slotKey(activeSlot),JSON.stringify(snapshotRun()));savePending=false;saveRetryAt=0;saveError='';
-  updateSaveIndicator();
-  return true;
+  saved=snapshotRun();
+  localStorage.setItem(slotKey(activeSlot),JSON.stringify(saved));savePending=false;saveRetryAt=0;saveError='';
  }catch(error){savePending=true;saveRetryAt=Date.now()+5000;saveError='Could not save. Will retry automatically when storage is available.';updateSaveIndicator();return false}
+ claimSavedBossMarks(saved,true);
+ updateSaveIndicator();
+ return true;
 }
 function updateSaveIndicator(){
  const label=document.querySelector('#save-indicator');label.hidden=!saveError;label.textContent=saveError;
@@ -3675,6 +3905,7 @@ function showVictoryRecap(){
  document.querySelector('#victory-hero').textContent=runHeroName()+(hasEvolved()?' · Evolved':'');
  document.querySelector('#victory-depth').textContent=dungeonDepth;
  document.querySelector('#victory-lives').textContent=lives;
+ document.querySelector('#victory-marks').textContent=getLegacyForge().marks;
  document.querySelector('#victory-impact').textContent=runStats.biggestImpact?Math.round(runStats.biggestImpact):'—';
  document.querySelector('#victory-damage').textContent=runStats.biggestDamageBurst?Number(runStats.biggestDamageBurst.toFixed(2))+' HP':'—';
  document.querySelector('#victory-recap').showModal();playDungeonOutcome('victory',1.7);
@@ -3706,6 +3937,7 @@ function setStartView(view,focus=false){
 }
 function showStartScreen(){
  stopMenuControls();closeGamePanels();queueCheckpoint();flushCheckpoint();flushProfile();
+ reconcileBossMarks();document.querySelector('#boss-mark-notice').hidden=true;
  document.querySelector('#start-screen').hidden=false;setStartView('home');updateSaveIndicator();
 }
 function resumableSave(data){
@@ -3793,7 +4025,13 @@ function beginNewSlot(slot,confirmed=false){
  if(slot!==1&&slot!==2)return false;
  if(readSlot(slot).exists&&!confirmed){pendingReplacement=slot;renderSaveSlots();return false}
  prepareSlotSwitch();loadingRun=true;activeSlot=slot;hero=selectedHero;
- try{reset()}finally{loadingRun=false}
+ const legacy=getLegacyForge();
+ const usablePerks=LEGACY_UPGRADES.filter(upgrade=>!upgrade.hero||upgrade.hero===hero).map(upgrade=>upgrade.id);
+ const usableEvolutions=evolutionChoices(hero).map(([id])=>id);
+ try{
+  reset({legacyPerks:legacyKnownIds(legacy.equippedUpgrades,usablePerks),legacyEvolutions:legacyKnownIds(legacy.unlockedEvolutions,usableEvolutions),legacyPreparedCasts:0});
+  progress.legacyRunId=newLegacyRunId();progress.legacyBossDepths=[];
+ }finally{loadingRun=false}
  profile.lastSlot=slot;profileDirty=true;flushProfile();saveError='';document.querySelector('#start-screen').hidden=true;
  queueCheckpoint();flushCheckpoint();updateSaveIndicator();return true;
 }
@@ -3811,6 +4049,8 @@ function continueSlot(slot){
  const previousShopPrices=savedRoom.kind==='shop'?(savedRoom.loot||[]).map(loot=>loot.price):null;
  try{
   progress=data.progress;dungeon=data.dungeon;dungeonDepth=data.depth;selectedBiome=data.biome;lastDungeonSignature=dungeonSignature(dungeon);arenaTime=data.arenaTime;
+  claimSavedBossMarks(data);
+  if(!progress.legacyRunId){progress.legacyRunId=newLegacyRunId();progress.legacyBossDepths=[]}
   hero=data.hero;mageSouls=data.mageSouls;mageMana=safeNumber(data.mageMana,100,0,190);hp=data.hp;armourHp=data.armourHp;lives=data.lives;kills=data.kills;shieldType=data.shieldType;shieldHp=data.shieldHp;shieldBroken=!!data.shieldBroken;shieldCooldown=data.shieldCooldown;shieldLastHit=data.shieldLastHit;shieldLaserTick=safeNumber(data.shieldLaserTick);
   bleedStacks=data.bleedStacks;temporaryBleed=data.temporaryBleed;playerBleed=data.playerBleed;runStats=data.runStats;itemHitCounter=Math.floor(safeNumber(data.itemHitCounter));strongArrowHits=Math.floor(safeNumber(data.strongArrowHits));mantleCooldown=safeNumber(data.mantleCooldown,0,0,3);
   over=false;inv=1.2;sandboxSavedRun=null;sandboxRoom=null;currentRoom=null;
@@ -4072,8 +4312,98 @@ function showSoundSettings(){
  document.querySelector('#sound-muted').checked=profile.audio.muted;
  document.querySelector('#sound-close').focus?.();
 }
+function initializeLegacyForge(){
+ const launcher=document.querySelector('#menu-legacy'),dialog=document.querySelector('#legacy-forge');
+ const close=document.querySelector('#legacy-close'),catalog=document.querySelector('#legacy-catalog');
+ const status=document.querySelector('#legacy-status'),loadout=document.querySelector('#legacy-equipped');
+ const tabs={upgrades:document.querySelector('#legacy-tab-upgrades'),evolutions:document.querySelector('#legacy-tab-evolutions')};
+ let page='upgrades';
+
+ function render(message='',focusId=''){
+  const forge=getLegacyForge();
+  const isUpgrades=page==='upgrades';
+  document.querySelector('#legacy-marks').textContent=forge.marks;
+  status.textContent=message||(isUpgrades?'Equipped upgrades apply when you start a new run.':'Each path costs '+LEGACY_EVOLUTION_COST+' Marks. Start a new run to use unlocked paths at level 3.');
+  for(const [key,tab] of Object.entries(tabs))tab.setAttribute('aria-pressed',String(key===page));
+  loadout.replaceChildren();
+  for(let index=0;index<LEGACY_PERK_SLOTS;index++){
+   const item=document.createElement('li');
+   const upgrade=LEGACY_UPGRADES.find(({id})=>id===forge.equippedUpgrades[index]);
+   item.dataset.equipped=String(Boolean(upgrade));
+   item.textContent=upgrade?.name||'Empty slot';
+   loadout.append(item);
+  }
+  catalog.replaceChildren();
+  for(const heroId of isUpgrades?[null,'classic','archer','mage']:['classic','archer','mage']){
+   const section=document.createElement('section'),heading=document.createElement('h3'),grid=document.createElement('div');
+   section.className='legacy-group';section.dataset.hero=heroId||'all';grid.className='legacy-card-grid';
+   heading.textContent=heroId?HERO_DEFS[heroId].name:'All heroes';
+   section.append(heading,grid);
+   if(isUpgrades){
+    for(const upgrade of LEGACY_UPGRADES.filter(({hero})=>hero===heroId))grid.append(upgradeCard(upgrade,forge));
+   }else{
+    for(const [id,form] of evolutionChoices(heroId))grid.append(evolutionCard(id,form,forge));
+   }
+   catalog.append(section);
+  }
+  if(focusId){
+   const replacement=catalog.querySelector('button[data-legacy-id="'+focusId+'"]');
+   (replacement&&!replacement.disabled?replacement:tabs[page]).focus?.({preventScroll:true});
+  }
+ }
+
+ function cardFor(id,name,description,evolution){
+  const article=document.createElement('article'),heading=document.createElement('h4'),copy=document.createElement('p'),button=document.createElement('button');
+  article.className='legacy-card';
+  heading.textContent=name;
+  if(evolution)heading.insertAdjacentHTML('afterbegin',evolutionPortrait(id));
+  copy.textContent=description;
+  button.type='button';button.className='menu-control';button.dataset.legacyId=id;
+  article.append(heading,copy,button);
+  return {article,button};
+ }
+
+ function upgradeCard({id,name,description,cost},forge){
+  const {article,button}=cardFor(id,name,description,false);
+  const owned=forge.unlockedUpgrades.includes(id),equipped=forge.equippedUpgrades.includes(id);
+  article.dataset.legacyUpgrade=id;
+  article.dataset.owned=String(owned);article.dataset.equipped=String(equipped);
+  if(owned){
+   button.dataset.legacyAction='toggle-upgrade';
+   button.textContent=equipped?'Unequip':'Equip';
+   button.setAttribute('aria-label',button.textContent+' '+name);
+   button.onclick=()=>render(toggleLegacyUpgrade(id)||(equipped?name+' unequipped.':name+' equipped for your next run.'),id);
+  }else{
+   button.dataset.legacyAction='buy-upgrade';
+   button.textContent=forge.marks>=cost?'Unlock · '+cost+' Marks':cost+' Marks';
+   button.setAttribute('aria-label','Unlock '+name+' for '+cost+' Boss Marks');
+   button.disabled=forge.marks<cost;
+   button.onclick=()=>render(buyLegacyUpgrade(id)||name+' unlocked. Equip it for your next run.',id);
+  }
+  return article;
+ }
+
+ function evolutionCard(id,{name,desc},forge){
+  const {article,button}=cardFor(id,name,desc,true);
+  const owned=forge.unlockedEvolutions.includes(id),cost=LEGACY_EVOLUTION_COST;
+  article.dataset.legacyEvolution=id;article.dataset.owned=String(owned);
+  button.dataset.legacyAction='buy-evolution';
+  button.textContent=owned?'Unlocked':(forge.marks>=cost?'Unlock · ':'')+cost+' Marks';
+  button.setAttribute('aria-label',owned?name+' unlocked':'Unlock '+name+' for '+cost+' Boss Marks');
+  button.disabled=owned||forge.marks<cost;
+  button.onclick=()=>render(buyLegacyEvolution(id)||name+' unlocked for future runs.',id);
+  return article;
+ }
+
+ launcher.onclick=()=>{stopMenuControls();page='upgrades';render();catalog.scrollTop=0;dialog.showModal();close.focus?.()};
+ close.onclick=()=>dialog.close();
+ dialog.addEventListener('close',()=>launcher.focus?.());
+ for(const [key,tab] of Object.entries(tabs))tab.onclick=()=>{page=key;render();catalog.scrollTop=0};
+}
+
 function initializePersistence(){
  readProfile();
+ initializeLegacyForge();
  document.querySelector('#victory-recap').addEventListener('cancel',event=>event.preventDefault());
  document.querySelector('#victory-continue').onclick=acknowledgeVictory;
  document.querySelector('#victory-menu').onclick=()=>{acknowledgeVictory();showStartScreen()};
@@ -4206,7 +4536,8 @@ function requestDash(){
  if(!combatInputEnabled()||dashCooldown()>0||dash.remaining>0)return false;
  let dx=sticks[0].dx,dy=sticks[0].dy,d=Math.hypot(dx,dy);
  if(d<.15){dx=Math.cos(p.a);dy=Math.sin(p.a);d=1}
- dash.dx=dx/d;dash.dy=dy/d;dash.remaining=DASH_DURATION;dash.readyAt=arenaTime+DASH_COOLDOWN;
+ const cooldown=hasLegacyPerk('secondWind')&&dungeonDepth===1 ? .9 : 1;
+ dash.dx=dx/d;dash.dy=dy/d;dash.remaining=DASH_DURATION;dash.readyAt=arenaTime+DASH_COOLDOWN*cooldown;
  dash.batHits.clear();
  p.kvx=p.kvy=0;
  if(hero!=='classic'){dash.immuneUntil=arenaTime+DASH_DURATION;inv=Math.max(inv,DASH_DURATION)}
@@ -4766,6 +5097,12 @@ function finishBossFight(){
  bossFight.shots=[];bossFight.hazards=[];enemies=[];pendingSplits=[];
  projectiles=[];artillery=[];gravityWells=[];reactionZones=[];shards=[];poisonPuddles=[];
  const oldKills=kills;kills++;if(!shieldType&&oldKills<10&&kills>=10)showShieldChoice();
+ if(activeSlot){
+  progress.legacyRunId??=newLegacyRunId();
+  progress.legacyBossDepths??=[];
+  if(!progress.legacyBossDepths.includes(dungeonDepth))progress.legacyBossDepths.push(dungeonDepth);
+  flushCheckpoint();
+ }
  elementFx.push({type:'fusion',x:W/2,y:F/2,life:1,maxLife:1});
 }
 function updateBossFight(dt,previousAngle,previousLag=0,playerStart=p){
@@ -5714,12 +6051,14 @@ function rangedWeaponShot(weapon,power){
 }
 function rangedReloadTime(shot,build=progress){
  const reloadRate=(1+.15*upgradeCount('swing',build))*evolutionAttackRate(build);
- return Math.max(shot.minReload,shot.reload/reloadRate)*(1+.1*itemCount('counterweight',build))*(1-Math.min(.5,.1*upgradeCount('shield',build)));
+ const quickDraw=hasLegacyPerk('quickDraw',build)&&dungeonDepth===1 ? .9 : 1;
+ return Math.max(shot.minReload,shot.reload/reloadRate)*(1+.1*itemCount('counterweight',build))*(1-Math.min(.5,.1*upgradeCount('shield',build)))*quickDraw;
 }
 function fireArrow(power,angle){
  if(hero!=='archer'||!combatInputEnabled()||bowShotCooldown>0||bowDrawStage(power)==='idle')return false;
  const weapon=equippedWeapon(),shot=rangedWeaponShot(weapon,power);
- const ux=Math.cos(angle),uy=Math.sin(angle),speed=shot.speed*(1+.12*itemCount('shieldBloom'))*(1+.15*itemCount('mirrorLens'));
+ const keenEye=hasLegacyPerk('keenEye')&&dungeonDepth===1?1.07:1;
+ const ux=Math.cos(angle),uy=Math.sin(angle),speed=shot.speed*(1+.12*itemCount('shieldBloom'))*(1+.15*itemCount('mirrorLens'))*keenEye;
  arrows.push({weapon,x:p.x+ux*23,y:p.y+uy*23,vx:ux*speed,vy:uy*speed,r:shot.r,life:shot.life,power:shot.power,damage:shot.damage,
   impact:shot.impact,reflected:true,deflections:0,pierce:shot.pierce+Math.min(2,itemCount('counterweight')),hitTargets:new Set()});
  bowShotCooldown=rangedReloadTime(shot);
@@ -6013,8 +6352,8 @@ function drawMeleeWeapon(travel=0){
 }
 
 
-function mageMaxMana(build=progress){return Math.min(190,100+(hasEvolved(build)?10:0)+15*itemCount('shieldBloom',build))}
-function mageManaRegen(build=progress){return Math.min(22,8+Number(hasEvolved(build))+1.5*upgradeCount('regen',build)+1.5*itemCount('shieldBloom',build)+.75*itemCount('mossCharm',build))}
+function mageMaxMana(build=progress){return Math.min(190,100+(hasLevelEightBonus(build)?10:0)+15*itemCount('shieldBloom',build))}
+function mageManaRegen(build=progress){return Math.min(22,8+Number(hasLevelEightBonus(build))+1.5*upgradeCount('regen',build)+1.5*itemCount('shieldBloom',build)+.75*itemCount('mossCharm',build))}
 function mageCooldownMultiplier(build=progress,stats=playerStats(build)){
  return Math.max(.45,1-.12*itemCount('shieldBloom',build)-.1*upgradeCount('shield',build)-.1*itemCount('hourglass',build))/Math.max(.7,stats.swing);
 }
@@ -6041,28 +6380,28 @@ const MAGE_SCHOOLS={
   BC:{name:'Pack Command',mana:14,cooldown:2.8,effect:'pack',desc:'Send familiars after one enemy. Close-timed hits deal bonus damage.'},
   BA:{name:'Spirit Dart',mana:12,cooldown:.85,effect:'spiritDart',desc:'Mark an enemy for bonus damage from the next familiar strike.'},
   AC:{name:'Recall',mana:13,cooldown:2.8,effect:'recall',desc:'Call familiars back. They shove enemies in their path.'},
-  CA:{name:'Guardian Step',mana:11,cooldown:2.5,effect:'guardianStep',desc:'Move an active guardian to the direction you are moving or aiming.'},
+  CA:{name:'Guardian Step',mana:11,cooldown:2.5,effect:'guardianStep',desc:'Reposition your guardian and slam at its landing point. Move to steer the landing.'},
   CB:{name:'Twin Hunt',mana:16,cooldown:3.4,effect:'twinHunt',desc:'Send familiars after separate nearby targets.'},
-  ABC:{name:'Guardian Pact',mana:40,cooldown:8,effect:'guardian',desc:'Conjure a guardian that intercepts shots and slams the ground.'},
-  ACB:{name:'Spirit Relay',mana:29,cooldown:5.5,effect:'spiritRelay',desc:'Your guardian and familiars slam from their own positions. Each enemy takes one hit.'},
+  ABC:{name:'Guardian Pact',mana:40,cooldown:8,effect:'guardian',desc:'Plant a guardian that slams on arrival and blocks shots for 5.8 seconds. Move to steer the summon.'},
+  ACB:{name:'Spirit Relay',mana:29,cooldown:5.5,effect:'spiritRelay',desc:'Trigger a shockwave from each active summon. Needs at least one summon. Each enemy takes one hit.'},
   BAC:{name:'Spirit Stampede',mana:36,cooldown:5.2,effect:'stampede',desc:'Launch three lines of spectral runners that pierce crowds.'},
   BCA:{name:'Sanctuary',mana:36,cooldown:8,effect:'sanctuary',desc:'Take 40% less damage while standing inside a temporary ward.'},
   CAB:{name:'Astral Lure',mana:32,cooldown:6,effect:'astralLure',desc:'Place an idol that draws in regular enemies and bursts after a delay.'},
   CBA:{name:'Grand Conjuration',mana:39,cooldown:7.5,effect:'grandConjuration',desc:'Empower your familiars for stronger, faster attacks. Conjure one if needed.'}
  }},
  necromancer:{name:'Necromancer',color:'#d5b2ef',desc:'Mark enemies to earn Souls, detonate corpses and raise skeletons.',spells:{
-  AB:{name:'Grave Mark',mana:14,cooldown:1.25,effect:'grave',desc:'Curse a target. Marked kills and three hits on a marked boss grant a Soul.'},
-  BC:{name:'Corpse Burst',mana:18,cooldown:1.8,effect:'corpse',desc:'Explode a visible corpse or spend one Soul to blast your target.'},
-  BA:{name:'Bone Spear',mana:15,cooldown:1.15,effect:'boneSpear',desc:'Pierce a line of enemies with a fast spear.'},
+  AB:{name:'Grave Mark',mana:12,cooldown:1.05,effect:'grave',desc:'Fire a fast mark that sticks through boss shields. Marked kills and three staggered hits on a marked boss grant Souls.'},
+  BC:{name:'Corpse Burst',mana:18,cooldown:1.8,effect:'corpse',desc:'Detonate a nearby corpse for a stronger blast, or spend one Soul to blast the ground ahead.'},
+  BA:{name:'Bone Spear',mana:15,cooldown:1.15,effect:'boneSpear',desc:'Pierce up to three enemies. Marked targets take 22% more damage.'},
   AC:{name:'Grave Snare',mana:16,cooldown:2.8,effect:'graveSnare',desc:'Skeletal hands snare up to three enemies. Bosses are slowed.'},
   CA:{name:'Bone Guard',mana:13,cooldown:3.5,effect:'boneGuard',desc:'Spend one Soul to absorb 35% of the next hit.'},
   CB:{name:'Soul Rend',mana:18,cooldown:2.5,effect:'soulRend',desc:'Cleave nearby enemies. Recover 2 HP if you kill a marked enemy.'},
-  ABC:{name:'Raise the Fallen',mana:32,cooldown:5.5,effect:'raise',desc:'Spend up to three Souls. Each skeleton rushes a target and bursts on impact.'},
+  ABC:{name:'Raise the Fallen',mana:30,cooldown:5.5,effect:'raise',desc:'Raise one skeleton per Soul, or use a corpse when empty. Skeletons split up and burst on impact.'},
   ACB:{name:'Grave Dominion',mana:34,cooldown:6,effect:'graveDominion',desc:'Detonate up to three corpses in sequence. Spend a Soul for one blast if needed.'},
   BAC:{name:'Reaper’s Scythe',mana:36,cooldown:5,effect:'reaperScythe',desc:'Sweep a wide arc. Marked targets take bonus damage.'},
-  BCA:{name:'Ossuary',mana:34,cooldown:7,effect:'ossuary',desc:'Raise temporary bone barricades to split a room.'},
-  CAB:{name:'Haunt',mana:29,cooldown:6,effect:'haunt',desc:'Spend one Soul to send a shade after one target. It bursts if the target dies.'},
-  CBA:{name:'Soul Harvest',mana:32,cooldown:7,effect:'soulHarvest',desc:'Mark a group of enemies. Gain one Soul if any were already marked.'}
+  BCA:{name:'Ossuary',mana:30,cooldown:7,effect:'ossuary',desc:'Raise temporary bone barricades and repel enemies near you.'},
+  CAB:{name:'Haunt',mana:26,cooldown:6,effect:'haunt',desc:'Spend one Soul to mark and haunt a target. The shade bursts if the target dies.'},
+  CBA:{name:'Soul Harvest',mana:29,cooldown:7,effect:'soulHarvest',desc:'Mark a group of enemies and collect one Soul from a mark you have not harvested before.'}
  }},
  pyromancer:{name:'Pyromancer',color:'#ffb478',desc:'Pierce enemies with fire and ignite burning crowds with a meteor.',spells:{
   AB:{name:'Fire Lance',mana:17,cooldown:1.35,effect:'lance',desc:'Pierce up to three enemies and set them burning.'},
@@ -6176,8 +6515,18 @@ function mageEnemyTarget(x,y,range=620){
  return target;
 }
 function gainMageSoul(){
- if(mageSouls>=MAGE_SOUL_LIMIT)return;
- mageSouls++;queueCheckpoint();
+ if(mageSouls>=MAGE_SOUL_LIMIT)return false;
+ mageSouls++;queueCheckpoint();return true;
+}
+function markForSouls(target){
+ if(!(target.graveMarkUntil>arenaTime))target.graveHits=0;
+ target.graveMarkUntil=arenaTime+9;
+}
+function trackMarkedBossHit(target){
+ if(!(target.graveMarkUntil>arenaTime)||arenaTime<(target.graveSoulReadyAt||0))return;
+ target.graveSoulReadyAt=arenaTime+.3;
+ target.graveHits=(target.graveHits||0)+1;
+ if(target.graveHits>=3){target.graveHits=0;gainMageSoul()}
 }
 function rememberMageCorpse(enemy){
  if(enemy.isTreasure)return;
@@ -6199,17 +6548,13 @@ function mageOnHit(target){
 function mageHurt(target,base,kind='arc'){
  if(!target||target.hp<=0)return false;
  if(!progress?.legacyMage&&target.state==='jump')return false;
+ const necromancer=progress?.mageSchool==='necromancer'&&target.state!=='rebirth';
+ if(necromancer&&kind==='grave')markForSouls(target);
  if(!target.kind&& !canDamage(target,160))return false;
- const before=target.hp,plates=target.armour;target.lastHitBy='mage';
+ const before=target.hp,plates=target.armour,shield=bossFight?.shieldHp;target.lastHitBy='mage';
  // Boss projectiles can open Gatekeeper defenses and remove Crystal Eye armor.
  const done=friendlyDamage(target,base*(1+itemCount('glassEye')*.25),'projectile',true);
- if(progress?.mageSchool==='necromancer'&&(target.hp<before||target.armour<plates)){
-  if(kind==='grave')target.graveMarkUntil=arenaTime+9;
-  if(target.kind&&target.graveMarkUntil>arenaTime){
-   target.graveHits=(target.graveHits||0)+1;
-   if(target.graveHits>=3){target.graveHits=0;gainMageSoul()}
-  }
- }
+ if(necromancer&&target.kind&&(target.hp<before||target.armour<plates||bossFight?.shieldHp<shield))trackMarkedBossHit(target);
  if(done&&target.hp<before){mageOnHit(target);
   if(before-target.hp>=.7)queueCombatHit(spellArtKind(kind,progress?.mageSchool),target.x,target.y,Math.atan2(target.y-p.y,target.x-p.x));
   if(kind==='fire'){target.burnUntil=Math.max(target.burnUntil||0,arenaTime+2.4);target.burnPower=Math.max(target.burnPower||0,.6)}
@@ -6279,21 +6624,33 @@ function mageWall(a,kind='ice'){
  else if(kind==='bone')return 'NO ROOM FOR BARRICADES';
  else mageArea(tx,ty,36,1.4,'ice',20);
 }
-function magePlacement(angle,reach,radius){
+function magePlacement(angle,reach,radius,canLand=safeFloor){
  for(let distance=reach;distance>=12;distance-=8){
   const x=p.x+Math.cos(angle)*distance,y=p.y+Math.sin(angle)*distance;
-  if(safeFloor(x,y,radius)&&weaponLineClear(p.x,p.y,x,y,radius))return {x,y};
+  if(canLand(x,y,radius)&&weaponLineClear(p.x,p.y,x,y,radius))return {x,y};
  }
  return {x:p.x,y:p.y};
 }
+const GUARDIAN={radius:21,reach:76,life:5.8,arrivalDelay:.18,slamInterval:1.42};
 function mageSummon(type,x,y){
- const life=type==='guardian'?4.8:type==='skeleton'?3.8:10;
- const r=type==='guardian'?21:type==='skeleton'?7:9;
- mageSummons.push({type,x,y,life,r,attackAt:arenaTime+.25,command:null});
+ const guardian=type==='guardian',life=guardian?GUARDIAN.life:type==='skeleton'?3.8:10;
+ const r=guardian?GUARDIAN.radius:type==='skeleton'?7:9;
+ const unit={type,x,y,life,r,attackAt:arenaTime+(guardian?GUARDIAN.arrivalDelay:.25),command:null};
+ if(guardian){unit.arriving=true;unit.angle=0;unit.guardFlashUntil=0}
+ mageSummons.push(unit);return unit;
 }
 function mageMoveAim(fallback){
  const move=sticks[0];
  return Math.hypot(move.dx,move.dy)>.15?Math.atan2(move.dy,move.dx):fallback;
+}
+function guardianLanding(aim,allowAtCaster=false){
+ const angle=mageMoveAim(aim),{x,y}=magePlacement(angle,GUARDIAN.reach,GUARDIAN.radius,navigationClear);
+ if(x===p.x&&y===p.y&&(!allowAtCaster||!navigationClear(x,y,GUARDIAN.radius)))return null;
+ return {x,y,angle};
+}
+function guardianSlam(unit,damage,radius,push){
+ mageArea(unit.x,unit.y,radius,damage,'arc',push,true);
+ unit.attackAt=arenaTime+GUARDIAN.slamInterval;unit.arriving=false;
 }
 function mageBlink(angle){
  angle=mageMoveAim(angle);
@@ -6365,31 +6722,26 @@ function castSchoolSpell(effect,aim){
    break;
   }
   case 'guardian':{
-   const point=magePlacement(a,76,21);
+   const point=guardianLanding(a,true);
+   if(!point)return 'NO ROOM FOR THE GUARDIAN';
    mageSummons=mageSummons.filter(unit=>unit.type!=='guardian');
-   mageSummon('guardian',point.x,point.y);break;
+   const guardian=mageSummon('guardian',point.x,point.y);
+   guardian.angle=point.angle;bossSpark(guardian.x,guardian.y,'#b5ffdd');break;
   }
-  case 'grave':mageBolt(a,2.8,440,'grave');break;
+  case 'grave':mageBolt(a,2.8,610,'grave',{r:6});break;
   case 'corpse':{
    const corpse=mageVisibleCorpses(tx,ty)[0];
    if(corpse){
     mageCorpses.splice(mageCorpses.indexOf(corpse),1);
-    mageArea(corpse.x,corpse.y,65,4.6,'arc',105,true);
+    mageArea(corpse.x,corpse.y,69,5.7,'arc',120,true);
    }else{
     if(!mageSouls)return 'NEED A CORPSE OR SOUL';
-    mageSouls--;mageArea(tx,ty,59,4.2,'arc',95,true);
+    const point=magePlacement(a,Math.min(178,Math.hypot(tx-p.x,ty-p.y)),4);
+    mageSouls--;mageArea(point.x,point.y,59,4.2,'arc',95,true);
    }
    break;
   }
-  case 'raise':{
-   if(!mageSouls)return 'NEED AT LEAST ONE SOUL';
-   const count=mageSouls;mageSouls=0;
-   for(let i=0;i<count;i++){
-    const point=magePlacement(a+(i-(count-1)/2)*.55,24,7);
-    mageSummon('skeleton',point.x,point.y);
-   }
-   break;
-  }
+  case 'raise':return raiseMageSkeletons(a,tx,ty);
   case 'lance':mageBolt(a,4.1,510,'fire',{pierce:2,r:6});break;
   case 'trail':mageTrail={until:arenaTime+3.6,x:p.x,y:p.y,next:arenaTime+.22};break;
   case 'meteor':mageZone('fireMeteor',clamp(tx,40,W-40),clamp(ty,40,F-40),72,1.2,8.5,1.15);break;
@@ -6432,9 +6784,12 @@ function castSummonerCombo(effect,{a}){
   }
   case 'guardianStep':{
    if(!guardian)return 'SUMMON A GUARDIAN FIRST';
-   const point=magePlacement(mageMoveAim(a),76,guardian.r);
-   if(point.x===p.x&&point.y===p.y)return 'NO ROOM FOR THE GUARDIAN';
-   guardian.x=point.x;guardian.y=point.y;bossSpark(point.x,point.y,'#b5ffdd');break;
+   const point=guardianLanding(a);
+   if(!point)return 'NO ROOM FOR THE GUARDIAN';
+   if(Math.hypot(guardian.x-point.x,guardian.y-point.y)<=10)return 'GUARDIAN IS ALREADY THERE';
+   mageLink(guardian,point,'#a9f3d6');
+   guardian.x=point.x;guardian.y=point.y;guardian.angle=point.angle;
+   guardianSlam(guardian,3.2,58,105);bossSpark(point.x,point.y,'#b5ffdd');break;
   }
   case 'twinHunt':{
    if(familiars.length<2)return 'SUMMON TWO FAMILIARS FIRST';
@@ -6446,9 +6801,14 @@ function castSummonerCombo(effect,{a}){
    break;
   }
   case 'spiritRelay':{
-   if(!guardian||!familiars.length)return 'NEED A GUARDIAN AND FAMILIAR';
+   const summons=guardian?[guardian,...familiars]:familiars;
+   if(!summons.length)return 'SUMMON A GUARDIAN OR FAMILIAR FIRST';
    const hit=new Set();
-   [guardian,...familiars].forEach((unit,i)=>mageDelayedBurst(unit.x,unit.y,i?58:68,i?5.6:7,.16+i*.25,'arc',hit,130));
+   summons.forEach((unit,i)=>{
+    const isGuard=unit.type==='guardian';
+    mageLink(p,unit,'#a9f3d6');
+    mageDelayedBurst(unit.x,unit.y,isGuard?68:58,isGuard?7:5.6,.14+i*.18,'arc',hit,130);
+   });
    break;
   }
   case 'stampede':{
@@ -6477,9 +6837,29 @@ function castSummonerCombo(effect,{a}){
   default:return 'SPELL UNAVAILABLE';
  }
 }
+function raiseMageSkeletons(angle,x,y){
+ const active=mageSummons.filter(unit=>unit.type==='skeleton'&&unit.life>0).length;
+ if(active>=MAGE_SOUL_LIMIT)return 'SKELETONS ALREADY ACTIVE';
+ const spent=Math.min(mageSouls,MAGE_SOUL_LIMIT-active);
+ const corpse=spent ? null : mageVisibleCorpses(x,y)[0];
+ if(!spent&&!corpse)return 'NEED A CORPSE OR SOUL';
+ if(corpse)mageCorpses.splice(mageCorpses.indexOf(corpse),1);
+ mageSouls-=spent;
+ const targets=mageTargetsNear(p.x,p.y,280);
+ targets.sort((first,second)=>Math.hypot(first.x-x,first.y-y)-Math.hypot(second.x-x,second.y-y));
+ const count=spent||1;
+ for(let i=0;i<count;i++){
+  const direction=angle+(i-(count-1)/2)*.65;
+  const point=corpse&&safeFloor(corpse.x,corpse.y,8) ? corpse : magePlacement(direction,34,7);
+  const unit=mageSummon('skeleton',point.x,point.y);
+  unit.attackAt=arenaTime+.20+i*.34;
+  const target=targets[i]||targets[0];
+  if(target)unit.command={target,until:arenaTime+unit.life};
+ }
+}
 function castNecromancerCombo(effect,{a,tx,ty}){
  switch(effect){
-  case 'boneSpear':mageBolt(a,3.8,540,'arc',{pierce:2,r:5});break;
+  case 'boneSpear':mageBolt(a,3.8,565,'arc',{pierce:2,r:6,onImpact:'boneSpear'});break;
   case 'graveSnare':{
    const point=magePlacement(a,Math.min(125,Math.hypot(tx-p.x,ty-p.y)),4);
    mageZone('graveSnare',point.x,point.y,43,3.2,0,0,{charges:3,hit:new Set()});break;
@@ -6503,7 +6883,8 @@ function castNecromancerCombo(effect,{a,tx,ty}){
    const corpses=mageVisibleCorpses(tx,ty).slice(0,3);
    if(!corpses.length){
     if(!mageSouls)return 'NEED A CORPSE OR SOUL';
-    mageSouls--;mageDelayedBurst(tx,ty,66,8.1,.35,'arc',new Set(),110);
+    const point=magePlacement(a,Math.min(178,Math.hypot(tx-p.x,ty-p.y)),4);
+    mageSouls--;mageDelayedBurst(point.x,point.y,66,8.1,.26,'arc',new Set(),110);
    }else{
     mageCorpses=mageCorpses.filter(body=>!corpses.includes(body));
     corpses.forEach((body,i)=>mageDelayedBurst(body.x,body.y,67,6.3,.28+i*.44,'arc',new Set(),105));
@@ -6514,18 +6895,24 @@ function castNecromancerCombo(effect,{a,tx,ty}){
    for(const enemy of mageCone(a,124,1.55))mageHurt(enemy,enemy.graveMarkUntil>arenaTime?9.5:6.2);
    mageArcFlash(a,124,'#dbc0ef');break;
   }
-  case 'ossuary':return mageWall(mageMoveAim(a),'bone');
+  case 'ossuary':{
+   const error=mageWall(mageMoveAim(a),'bone');
+   if(error)return error;
+   mageArea(p.x,p.y,64,1.2,'arc',150,true);break;
+  }
   case 'haunt':{
    const target=mageEnemyTarget(p.x,p.y);
    if(!target)return 'NO VISIBLE TARGET';
    if(!mageSouls)return 'NEED AT LEAST ONE SOUL';
-   mageSouls--;mageZone('haunt',target.x,target.y,24,3.25,1.9,0,{target});break;
+   mageSouls--;markForSouls(target);
+   mageZone('haunt',target.x,target.y,24,3,1.75,0,{target,tick:.43});break;
   }
   case 'soulHarvest':{
    const targets=mageTargetsNear(p.x,p.y,180);
    if(!targets.length)return 'NO VISIBLE TARGET';
-   if(targets.some(enemy=>enemy.graveMarkUntil>arenaTime))gainMageSoul();
-   for(const enemy of targets)enemy.graveMarkUntil=arenaTime+9;
+   const marked=targets.find(enemy=>enemy.graveMarkUntil>arenaTime&&!enemy.soulHarvested);
+   if(marked&&gainMageSoul())marked.soulHarvested=true;
+   for(const enemy of targets)markForSouls(enemy);
    mageZone('sigil',p.x,p.y,175,.38,0);break;
   }
   default:return 'SPELL UNAVAILABLE';
@@ -6658,6 +7045,11 @@ function castArcaneCombo(effect,{a,tx,ty}){
   default:return 'SPELL UNAVAILABLE';
  }
 }
+function mageSpellMana(spell){
+ const prepared=hasLegacyPerk('preparedCasting')&&(progress.legacyPreparedCasts||0)<3;
+ return prepared?Math.max(1,spell.mana-2):spell.mana;
+}
+const MAGE_SIGNATURE_SOUNDS={guardian:'spell-guardian',raise:'spell-raise'};
 function castMageSpell(path){
  if(!mageInputEnabled())return false;
  const spell=mageSpell(path);
@@ -6668,8 +7060,9 @@ function castMageSpell(path){
   showMageFeedback('cooldown','RECHARGING · '+time,spell.name+' recharging ('+time+')',.9);
   return false;
  }
- if(mageMana+1e-6<spell.mana){
-  showMageFeedback('mana','LOW MANA · NEED '+spell.mana+' MP','Not enough mana for '+spell.name+' (need '+spell.mana+' MP)',1.35);
+ const manaCost=mageSpellMana(spell);
+ if(mageMana+1e-6<manaCost){
+  showMageFeedback('mana','LOW MANA · NEED '+manaCost+' MP','Not enough mana for '+spell.name+' (need '+manaCost+' MP)',1.35);
   return false;
  }
  const aim=mageAim();
@@ -6678,12 +7071,13 @@ function castMageSpell(path){
   const error=castSchoolSpell(spell.effect,aim);
   if(error){showMageFeedback('invalid',error,error,1.35);return false}
  }
- mageMana=Math.max(0,Math.min(mageMaxMana(),mageMana-spell.mana));
+ if(manaCost<spell.mana)progress.legacyPreparedCasts=(progress.legacyPreparedCasts||0)+1;
+ mageMana=Math.max(0,Math.min(mageMaxMana(),mageMana-manaCost));
  mageCooldowns[path]=arenaTime+spell.cooldown*mageCooldownMultiplier();
  mageGlobalReady=arenaTime+.18;
- showMageFeedback('cast',path+' · '+spell.name,path+' · '+spell.name+' · -'+spell.mana+' MP',1.8);
+ showMageFeedback('cast',path+' · '+spell.name,path+' · '+spell.name+' · -'+manaCost+' MP',1.8);
  pulseMageRunes(path,'cast');
- playSoundCue('spell-'+spellArtKind(null,progress.mageSchool));
+ playSoundCue(MAGE_SIGNATURE_SOUNDS[spell.effect]??'spell-'+spellArtKind(null,progress.mageSchool));
  mageCastCount++;queueCheckpoint();
  if(itemCount('mossCharm')&&mageCastCount%5===0)healPlayer(itemCount('mossCharm'));
  return true;
@@ -6738,7 +7132,7 @@ function mageBlocksShot(shot,oldX,oldY){
  if(hero!=='mage'||shot.reflected||shot.life<=0)return false;
  const span={x1:oldX,y1:oldY,x2:shot.x,y2:shot.y};
  const guardian=mageSummons.find(unit=>unit.type==='guardian'&&unit.life>0&&laserDistance(unit.x,unit.y,span)<=unit.r+shot.r);
- if(guardian){shot.life=0;bossSpark(guardian.x,guardian.y,'#b5ffdd');return true}
+ if(guardian){shot.life=0;guardian.guardFlashUntil=arenaTime+.18;bossSpark(guardian.x,guardian.y,'#b5ffdd');return true}
  const orbit=mageActiveZone('orbit');
  if(!orbit)return false;
  for(let i=0;i<orbit.shields.length;i++){
@@ -6763,7 +7157,8 @@ function updateMageSummons(dt){
   unit.life-=dt;if(unit.life<=0)continue;
   if(unit.type==='guardian'){
    if(arenaTime>=unit.attackAt){
-    mageArea(unit.x,unit.y,53,2.3,'arc',90,true);unit.attackAt=arenaTime+1.15;
+    if(unit.arriving)guardianSlam(unit,3.4,60,110);
+    else guardianSlam(unit,2.3,53,90);
    }
    continue;
   }
@@ -6785,11 +7180,12 @@ function updateMageSummons(dt){
   }
   const withinReach=Math.hypot(unit.x-target.x,unit.y-target.y)<unit.r+target.r+9;
   if(!withinReach||!weaponLineClear(unit.x,unit.y,target.x,target.y,3)){
-   moveMageSummon(unit,target,unit.command||unit.type==='skeleton'?205:unit.empoweredUntil>arenaTime?164:126,dt);continue;
+   const speed=unit.type==='skeleton'?225:unit.command?205:unit.empoweredUntil>arenaTime?164:126;
+   moveMageSummon(unit,target,speed,dt);continue;
   }
-  if((arenaTime<unit.attackAt&&!unit.command)||target.state==='jump'||target.state==='rebirth')continue;
+  if((arenaTime<unit.attackAt&&(!unit.command||unit.type==='skeleton'))||target.state==='jump'||target.state==='rebirth')continue;
   if(unit.type==='skeleton'){
-   mageHurt(target,2.1);mageArea(unit.x,unit.y,35,1.5,'arc',85,true);unit.life=0;
+   mageHurt(target,2.6);mageArea(unit.x,unit.y,43,2,'arc',100,true);unit.life=0;
   }else{
    const command=unit.command,empowered=unit.empoweredUntil>arenaTime;
    const marked=target.spiritMarkUntil>arenaTime;
@@ -6998,7 +7394,8 @@ function updateMage(dt){
    weaponLineClear(ox,oy,e.x,e.y,2)).sort((a,b)=>(a.x-b.x)*dx+(a.y-b.y)*dy);
   for(const target of targets){
    bolt.hit.add(target);
-   const landed=mageHurt(target,bolt.damage,bolt.kind);
+   const damage=bolt.onImpact==='boneSpear'&&target.graveMarkUntil>arenaTime ? bolt.damage*1.22 : bolt.damage;
+   const landed=mageHurt(target,damage,bolt.kind);
    if(bolt.onImpact)applyMageBoltImpact(bolt,target,landed);
    if(bolt.pierce>0){bolt.pierce--;bolt.damage*=.72}
    else{bolt.life=0;break}
@@ -7011,7 +7408,7 @@ function updateMage(dt){
  mageBolts=mageBolts.filter(b=>b.life>0);
 }
 const SPELL_ART={
- apprentice:['#b8b6f1','#544a7730'],spirit:['#a5f9dc','#28665329'],grave:['#f4dcc4','#60504d2c'],
+ apprentice:['#b8b6f1','#544a7730'],spirit:['#a5f9dc','#28665329'],grave:['#eed3ff','#693c833a'],
  fire:['#ffb262','#cc442b35'],arcane:['#d6bdff','#5540862d'],ice:['#b9e8ff','#2f638e2e']
 };
 const SPELL_ZONE_ART={
@@ -7117,6 +7514,21 @@ function drawSpellProjectile(bolt){
  }
  g.restore();
 }
+function drawMageGuardian(unit){
+ const r=unit.r,flashing=unit.guardFlashUntil>arenaTime;
+ const ward=flashing?'#eaffb7':'#b0efd4';
+ artOval(g,0,0,r,r,'#72cda320');
+ g.strokeStyle=ward;g.lineWidth=flashing?2.8:1.3;
+ g.beginPath();g.arc(0,0,r,0,Math.PI*2);g.stroke();
+ artOval(g,-2,2,r*.77,r*.57,'#18333180');
+ g.rotate(unit.angle);
+ artPath(g,[[-r*.86,-r*.34],[-r*.47,-r*.68],[r*.13,-r*.65],[r*.41,0],[r*.13,r*.65],[-r*.46,r*.69],[-r*.86,r*.34]],'#244a44','#85c8aa',1.5);
+ artOval(g,-r*.28,0,r*.31,r*.33,'#14352e');
+ artPath(g,[[-r*.39,-r*.18],[-r*.09,0],[-r*.39,r*.18]],null,'#d9ffdc',1.3);
+ const shield=[[r*.08,-r*.66],[r*.65,-r*.55],[r*.86,0],[r*.65,r*.55],[r*.08,r*.66],[r*.21,0]];
+ artPath(g,shield,'#457e68',ward,2);
+ artPath(g,[[r*.39,-r*.32],[r*.63,0],[r*.39,r*.32],[r*.27,0]],'#9de0b5','#edfbd6',.8);
+}
 function drawMageEffects(){
  if(hero!=='mage')return;
  g.save();
@@ -7124,16 +7536,26 @@ function drawMageEffects(){
   z.shields.forEach((active,i)=>{if(active){const point=mageOrbPosition(z,i);spellPolygon(point.x,point.y,8,6,i*.6,'#d9c5fa',2)}});
  }
  for(const body of mageCorpses){
-  g.globalAlpha=.65;g.strokeStyle='#dcc7e9';g.lineWidth=2;g.beginPath();
-  g.moveTo(body.x-5,body.y-4);g.lineTo(body.x+5,body.y+4);g.moveTo(body.x+5,body.y-4);g.lineTo(body.x-5,body.y+4);g.stroke();
+  g.globalAlpha=clamp((body.until-arenaTime)*.9,0,.9);
+  artOval(g,body.x,body.y,13,10,'#2c183be8');
+  spellPolygon(body.x,body.y,11,4,0,'#b387cf',1);
+  artPath(g,[[body.x-4,body.y-3],[body.x+4,body.y+3]],null,'#f1d7c0',1.8);
+  artPath(g,[[body.x+4,body.y-3],[body.x-4,body.y+3]],null,'#f1d7c0',1.8);
  }
+ g.globalAlpha=1;
  for(const unit of mageSummons){
   const skeleton=unit.type==='skeleton',energy=unit.empoweredUntil>arenaTime?'#d7ffab':'#a3e8d3',r=unit.r;
   g.save();g.globalAlpha=clamp(unit.life*2,0,1);g.translate(unit.x,unit.y);
   if(skeleton){
-   artOval(g,0,1,r*.85,r*.8,'#5a414b');artOval(g,0,-1,r*.65,r*.68,'#f0dcbb');
-   g.fillStyle='#261c29';g.fillRect(-r*.39,-r*.22,r*.23,r*.20);g.fillRect(r*.16,-r*.22,r*.23,r*.20);
-   artPath(g,[[-r*.31,r*.33],[r*.31,r*.33]],null,'#5a414b',1.15);
+   artOval(g,0,r*.44,r*1.06,r*.73,'#392544');
+   artPath(g,[[-r*.79,r*.31],[r*.79,r*.31]],null,'#b79d9c',1.4);
+   artPath(g,[[-r*.49,r*.63],[r*.49,r*.63]],null,'#b79d9c',1.2);
+   artOval(g,0,-r*.4,r*.72,r*.67,'#f0dcbb');
+   artPath(g,[[-r*.36,-r*.12],[r*.36,-r*.12],[r*.29,r*.24],[-r*.29,r*.24]],'#e6c8ab');
+   artOval(g,-r*.26,-r*.41,r*.14,r*.15,'#764f9f');
+   artOval(g,r*.26,-r*.41,r*.14,r*.15,'#764f9f');
+  }else if(unit.type==='guardian'){
+   drawMageGuardian(unit);
   }else{
    const speed=Math.hypot(unit.vx||0,unit.vy||0);
    const a=speed>4?Math.atan2(unit.vy,unit.vx):0;
@@ -7145,7 +7567,10 @@ function drawMageEffects(){
   if(unit.command&&unit.command.target.hp>0)artPath(g,[[unit.x,unit.y],[unit.command.target.x,unit.command.target.y]],null,'#c2ffd85e',1.1);
  }
  for(const enemy of mageTargets())if(enemy.graveMarkUntil>arenaTime){
-  g.globalAlpha=.75;g.strokeStyle='#e8b0df';g.lineWidth=2;g.beginPath();g.arc(enemy.x,enemy.y,enemy.r+4,0,Math.PI*2);g.stroke();
+  const y=enemy.y-enemy.r-9;
+  g.globalAlpha=.86;g.strokeStyle='#c99af1';g.lineWidth=1.5;
+  g.beginPath();g.arc(enemy.x,enemy.y,enemy.r+4,.35,Math.PI-.35);g.stroke();
+  artPath(g,[[enemy.x-5,y],[enemy.x,y-5],[enemy.x+5,y],[enemy.x,y+5]],'#463059','#edcaff',1.25);
  }
  for(const enemy of mageTargets())if(enemy.spiritMarkUntil>arenaTime||enemy.mageStasisUntil>arenaTime){
   g.globalAlpha=.67;g.strokeStyle=enemy.spiritMarkUntil>arenaTime?'#bdffd9':'#d7c5ff';g.lineWidth=2;g.beginPath();g.arc(enemy.x,enemy.y,enemy.r+4,0,Math.PI*2);g.stroke();
@@ -7242,8 +7667,9 @@ function drawMageRunes(){
  g.globalAlpha=1;
  if(mageGesture){
   const sequence=selected.join(''),spell=mageSpell(sequence);
-  const color=invalid?MAGE_FEEDBACK_COLORS.invalid:spell&&mageMana<spell.mana?MAGE_FEEDBACK_COLORS.mana:MAGE_FEEDBACK_COLORS.cast;
-  const label=invalid?'INVALID TRACE':sequence+(spell?' \u00b7 '+spell.name.toUpperCase()+' \u00b7 '+spell.mana+' MP':' \u00b7 UNAVAILABLE');
+  const cost=spell?mageSpellMana(spell):0;
+  const color=invalid?MAGE_FEEDBACK_COLORS.invalid:spell&&mageMana<cost?MAGE_FEEDBACK_COLORS.mana:MAGE_FEEDBACK_COLORS.cast;
+  const label=invalid?'INVALID TRACE':sequence+(spell?' \u00b7 '+spell.name.toUpperCase()+' \u00b7 '+cost+' MP':' \u00b7 UNAVAILABLE');
   drawDoorMarker(label,runes[2].x,runes[2].y-98,color,false);
  }else if(mageLastCast&&mageLastCastUntil>arenaTime)
   drawDoorMarker(mageLastCast.toUpperCase(),runes[2].x,runes[2].y-98,MAGE_FEEDBACK_COLORS[mageFeedbackKind],false);
@@ -8701,7 +9127,7 @@ async function watchReviveAds(){
  revivePending=false;
  if(dialog.open&&progress===run)grantAdRevive();
 }
-function reset(){saveRetryAt=0;mageMana=100;mageManaCheckpointAt=0;mageSouls=0;resetMageRoom();mageLastCast='';mageHitCount=0;mageCastCount=0;document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress=freshProgress();armourHp=bodyArmourStats().capacity;lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;strongArrowHits=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});dungeonDepth=1;selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
+function reset(legacy){dungeonDepth=1;saveRetryAt=0;mageMana=100;mageManaCheckpointAt=0;mageSouls=0;resetMageRoom();mageLastCast='';mageHitCount=0;mageCastCount=0;document.querySelector('#element-choice').hidden=true;elementHitCounter=0;elementComboClock=0;resetRoomSynergies();progress={...freshProgress(),...legacy};if(hasLegacyPerk('warChest'))progress.coins=8;armourHp=bodyArmourStats().capacity;lives=3;coinDrops=[];heartDrops=[];lifeDrops=[];friendlyZones=[];hostileZones=[];damageNumbers=[];itemHitCounter=0;strongArrowHits=0;mantleCooldown=0;document.querySelector('#character-panel').hidden=true;document.querySelector('#loot-panel').hidden=true;document.querySelector('#item-notice').hidden=true;sandboxSavedRun=null;sandboxRoom=null;document.querySelector('#sandbox-panel').hidden=true;shieldType='curved';shieldPaused=false;shieldHp=100;shieldBroken=false;shieldCooldown=0;shieldLastHit=-99;shieldLaserTick=0;document.querySelector('#shield-choice').style.display='none';projectiles=[];artillery=[];gravityWells=[];reactionZones=[];playerBleed=[];bleedStacks=0;temporaryBleed=[];runStats={biggestImpact:0,swingsHit:0,splits:0,fusions:0,healed:0};p={x:320,y:104,a:0,target:0,vel:0,vx:0,vy:0};enemies=[];arrows=[];bowShotCooldown=0;hp=playerStats().maxHealth;kills=0;healFx=[];wallFx=[];elementFx=[];puddles=[];poisonPuddles=[];poisonPlayerTimer=0;playerPoisonGlow=0;shards=[];portalFx=[];fallingFx=[];arenaTime=0;restoreDashState();for(let w of walls)if(w.moving){w.x=w.baseX;w.y=w.baseY;w.vx=0;w.vy=0}inv=0;over=false;spawnClock=0;sticks.forEach(s=>{s.id=null;s.dx=s.dy=0});selectedBiome=null;buildDungeon();enterRoom(0);updateHeroHud();hud()}
 function combatInputEnabled(){
  return !!activeSlot&&!!p&&!over&&!p.falling&&!document.hidden&&!portraitLayout.matches&&
   !editingControls&&!shieldPaused&&!persistencePaused()&&settings.hidden&&
@@ -8714,7 +9140,7 @@ function cancelHeldInputs(){
  const canvasPointers=[mageGesture?.id,editPointer?.id,...sticks.map(stick=>stick.id)];
  if(editPointer)saveControls();
  mageGesture=null;editPointer=null;
- for(const stick of sticks){stick.id=null;stick.dx=stick.dy=0}
+ for(const stick of sticks){stick.id=null;stick.touchOrigin=null;stick.dx=stick.dy=0}
  if(p){p.target=p.a;p.vel=0}
  for(const id of canvasPointers)releaseCapture(c,id);
  if(dashDrag!=null){
@@ -8724,7 +9150,8 @@ function cancelHeldInputs(){
 }
 function pt(e){let r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*viewW/r.width,y:(e.clientY-r.top)*H/r.height}}
 function setStick(stick,point){
- const dx=point.x-stick.x,dy=point.y-stick.y,distance=Math.hypot(dx,dy);
+ const origin=stick.touchOrigin??stick;
+ const dx=point.x-origin.x,dy=point.y-origin.y,distance=Math.hypot(dx,dy);
  const radius=R*controls.size/100,scale=1/Math.max(radius,distance);
  stick.dx=dx*scale;stick.dy=dy*scale;
  if(stick===sticks[1]&&hero==='classic'&&distance>=radius*CLASSIC_BAT_DEAD_ZONE){
@@ -8749,7 +9176,8 @@ c.addEventListener('pointerdown',event=>{
   pulseMageRunes(rune.id,'trace');
  }else{
   if(stick.id!==null)return;
-  if(controls.floating)moveStick(index,point);
+  stick.touchOrigin=controls.floating?point:null;
+  if(stick.touchOrigin)moveStick(index,point);
   stick.id=event.pointerId;
   setStick(stick,point);
  }
@@ -8757,7 +9185,9 @@ c.addEventListener('pointerdown',event=>{
 });
 c.addEventListener('pointermove',event=>{
  if(editPointer?.id===event.pointerId){
-  event.preventDefault();moveStick(editPointer.i,pt(event));return;
+  event.preventDefault();moveStick(editPointer.i,pt(event));
+  const stick=sticks[editPointer.i];
+  controls.positions[editPointer.i]=[stick.x,stick.y];return;
  }
  if(!combatInputEnabled())return;
  if(mageGesture?.id===event.pointerId){
@@ -8791,7 +9221,7 @@ function endCanvasPointer(event){
   }
   if(hero==='classic'&&stick===sticks[1])setStick(stick,pt(event));
  }else if(hero==='classic'&&stick===sticks[1]&&p){p.target=p.a;p.vel=0}
- stick.id=null;stick.dx=stick.dy=0;
+ stick.id=null;stick.touchOrigin=null;stick.dx=stick.dy=0;
 }
 for(const type of ['pointerup','pointercancel','lostpointercapture'])c.addEventListener(type,endCanvasPointer);
 const portraitLayout=window.matchMedia('(orientation: portrait)');
@@ -8837,9 +9267,11 @@ document.querySelector('#edit-controls').onclick=()=>{cancelHeldInputs();editing
 document.querySelector('#edit-done').onclick=endEditing;
 document.querySelector('#control-size').oninput=e=>{controls.size=Number(e.target.value);syncControls();saveControls()};
 document.querySelector('#control-opacity').oninput=e=>{controls.opacity=Number(e.target.value);syncControls();saveControls()};
-document.querySelector('#floating-controls').onchange=e=>{controls.floating=e.target.checked;saveControls()};
+document.querySelector('#floating-controls').onchange=e=>{controls.floating=e.target.checked;syncControls();saveControls()};
 document.querySelector('#controls-reset').onclick=()=>{controls={...defaultControls,positions:defaultControls.positions.map(a=>[...a])};dashControl={x:.78,y:.76};syncControls();saveDashControl();saveControls()};async function goFullscreen(){try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock)await screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}document.querySelector('#fullscreen-toggle').onclick=goFullscreen;document.querySelector('#rotate-fullscreen').onclick=goFullscreen;
-function frame(t){updateDungeonAudio();const previousRenderAngle=p.a;const damageBefore=captureDamage(),oldPlayerHp=hp;const protectedPracticeHp=inSandbox()&&!sandbox.attacks?hp:null;pendingSplits=[];let dt=Math.min((t-last)/1000||0,.035);last=t;if(document.hidden||portraitLayout.matches||shieldPaused||!document.querySelector('#character-panel').hidden||persistencePaused()){requestAnimationFrame(frame);return}
+function frame(t){
+if(bossMarkNoticeUntil&&t>=bossMarkNoticeUntil){document.querySelector('#boss-mark-notice').hidden=true;bossMarkNoticeUntil=0}
+updateDungeonAudio();const previousRenderAngle=p.a;const damageBefore=captureDamage(),oldPlayerHp=hp;const protectedPracticeHp=inSandbox()&&!sandbox.attacks?hp:null;pendingSplits=[];let dt=Math.min((t-last)/1000||0,.035);last=t;if(document.hidden||portraitLayout.matches||shieldPaused||!document.querySelector('#character-panel').hidden||persistencePaused()){requestAnimationFrame(frame);return}
 if(settings.hidden&&!editingControls&&document.querySelector('#sandbox-panel').hidden){recordVisibleEncounters();arenaTime+=dt;if(encounterGuideUntil>0&&arenaTime>=encounterGuideUntil){encounterGuideUntil=0;updateOpeningGuide()}updateSynergies(dt);if(!over){updateItemEffects(dt);updateBiomeWorld(dt);updateCurses(dt);updateDungeonMechanics(dt);updateFloorTraps();updateWallFixtures(dt)}if(!over){rangedUpdate(dt);updateReactions(dt);updateLasers(dt)}if(!over&&hp>0&&playerBleed.length){for(let b of playerBleed){let damage=Math.min(b.remaining,b.rate*dt);b.remaining-=damage;hp=damagedHealth(damage,true,'bleed')}playerBleed=playerBleed.filter(b=>b.remaining>.001);if(hp<=0)over=true}temporaryBleed=temporaryBleed.filter(expire=>expire>arenaTime);if(!over&&hp>0&&playerBleed.length===0&&!p.swimming){let gained=Math.max(0,Math.min(playerStats().maxHealth-hp,playerStats().regen*dt));hp+=gained;runStats.healed+=gained}for(let w of walls)if(w.moving){let oldX=w.x,oldY=w.y,offset=Math.sin(arenaTime*w.speed+w.phase)*w.range;w.x=w.baseX+(w.axis==='x'?offset:0);w.y=w.baseY+(w.axis==='y'?offset:0);w.vx=(w.x-oldX)/Math.max(dt,.001);w.vy=(w.y-oldY)/Math.max(dt,.001)}portalFx=portalFx.filter(f=>(f.life-=dt)>0);fallingFx=fallingFx.filter(f=>(f.life-=dt)>0);if(p&&p.falling>0){p.falling=Math.max(0,p.falling-dt);if(p.falling===0){const where=p.fallReturn||safeRespawn();p.x=where.x;p.y=where.y;p.safeX=p.x;p.safeY=p.y;p.kvx=p.kvy=p.vx=p.vy=0;p.sticky=null;p.wallContacts=new Set();p.wallCooldowns=new Map();p.portalCooldown=1;p.fallReturn=null;hp=Math.max(0,hp-25);inv=Math.max(inv,1.5);if(hp<=0){over=true;fatalHit='pit'}showItemNotice('FELL INTO THE ABYSS · -25 HP')}}
 healFx=healFx.filter(f=>(f.life-=dt)>0);wallFx=wallFx.filter(f=>{f.life-=dt;if(f.type==='particle'){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.exp(-5*dt);f.vy*=Math.exp(-5*dt)}return f.life>0});elementFx=elementFx.filter(f=>(f.life-=dt)>0);puddles=puddles.filter(q=>(q.life-=dt)>0);poisonPuddles=poisonPuddles.filter(q=>(q.life-=dt)>0);
 if(!over&&!p.falling){let l=sticks[0],ox=p.x,oy=p.y;

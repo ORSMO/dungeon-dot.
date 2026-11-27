@@ -68,8 +68,11 @@ function runComboChecks(testSchool) {
      mageSummon('familiar',p.x+90,p.y);const pet=mageSummons[0];cast();tick(7);
      if(pet.x>=p.x+65||target.vx===0)throw Error('Recall did not pull the pet back and shove the enemy');
     },
-    CA:({cast})=>{
+    CA:({target,cast})=>{
      mageSummon('guardian',p.x+180,p.y);cast();if(mageSummons[0].x!==p.x+76)throw Error('Guardian Step did not move the guardian');
+     if(target.hp>=60)throw Error('Guardian Step did not slam on landing');
+     mageGlobalReady=0;mageCooldowns={};const mana=mageMana;
+     if(castMageSpell('CA')||mageMana!==mana||mageCooldowns.CA)throw Error('Guardian Step charged for an unchanged position');
     },
     CB:({cast})=>{
      mageSummon('familiar',p.x+25,p.y);mageSummon('familiar',p.x+28,p.y);dummy(p.x+95,p.y+20);
@@ -79,6 +82,22 @@ function runComboChecks(testSchool) {
      mageSummon('guardian',target.x,target.y);mageSummon('familiar',target.x,target.y);
      for(const unit of mageSummons)unit.attackAt=arenaTime+20;
      cast();tick(22);if(Math.abs(60-target.hp-7*playerStats().damage)>1e-8)throw Error('Spirit Relay hit the same target more than once');
+     mageSummons=mageSummons.filter(unit=>unit.type==='guardian');target.hp=60;
+     goodCast('ACB');tick(12);if(Math.abs(60-target.hp-7*playerStats().damage)>1e-8)throw Error('Spirit Relay did not work with just the guardian');
+    },
+    ABC:({target,cast,tick})=>{
+     mageSummon('familiar',p.x-45,p.y);cast();
+     const guardian=mageSummons.find(unit=>unit.type==='guardian');
+     if(!guardian||target.hp!==60||mageSummons.length!==2)throw Error('Guardian Pact did not deploy with a telegraphed slam');
+     tick(7);if(target.hp>=60)throw Error('Guardian Pact failed to damage a close target on arrival');
+     const shot={x:guardian.x+30,y:guardian.y,r:3,life:1};
+     if(!mageBlocksShot(shot,guardian.x-30,guardian.y)||shot.life!==0)throw Error('Guardian Pact did not intercept a crossing hostile shot');
+     const reflected={...shot,life:1,reflected:true};
+     if(mageBlocksShot(reflected,guardian.x-30,guardian.y))throw Error('Guardian Pact intercepted a friendly shot');
+     sticks[0].dy=1;goodCast('ABC');
+     const replacement=mageSummons.filter(unit=>unit.type==='guardian');
+     if(replacement.length!==1||replacement[0].y<=p.y+65)throw Error('Guardian Pact did not replace the old guardian in the movement direction');
+     tick(182);if(mageSummons.some(unit=>unit.type==='guardian'))throw Error('The guardian outlasted its duration');
     },
     BAC:({target,cast,tick})=>{
      cast();if(mageBolts.length!==3)throw Error('Stampede did not launch its three lanes');tick(10);
@@ -94,6 +113,26 @@ function runComboChecks(testSchool) {
     }
    },
    necromancer:{
+    AB:({cast,tick})=>{
+     enemies=[];startBossFight('gatekeeper');const boss=bossFight.units[0];boss.x=p.x+90;boss.y=p.y;
+     const health=boss.hp,shield=bossFight.shieldHp;
+     cast();tick(8);
+     if(boss.hp!==health||bossFight.shieldHp>=shield||boss.graveMarkUntil<=arenaTime)throw Error('Grave Mark did not stick through the shield');
+     mageHurt(boss,1.85);mageHurt(boss,1.85);
+     if(mageSouls)throw Error('Simultaneous hits paid out a Soul');
+     arenaTime+=.32;mageHurt(boss,1.85);arenaTime+=.32;mageHurt(boss,1.85);
+     if(mageSouls!==1)throw Error('Three spaced shield hits did not earn a Soul');
+    },
+    BC:({target,cast})=>{
+     const mana=mageMana;
+     if(castMageSpell('BC')||mageMana!==mana||mageCooldowns.BC)throw Error('Corpse Burst charged without a body or Soul');
+     mageSouls=1;mageCorpses=[{x:target.x-10,y:target.y,until:arenaTime+8}];
+     cast();
+     if(mageCorpses.length||mageSouls!==1||target.hp>=60)throw Error('Corpse Burst did not use the nearby corpse first');
+     const before=target.hp;
+     goodCast('BC');
+     if(mageSouls||target.hp>=before)throw Error('Corpse Burst did not use one Soul when no body remained');
+    },
     BA:({target,cast,tick})=>{const second=dummy(p.x+102,p.y);cast();tick(12);if(target.hp>=60||second.hp>=20)throw Error('Bone Spear did not pierce')},
     AC:({target,cast,tick})=>{cast();tick(1);if(!(target.mageStasisUntil>arenaTime))throw Error('Grave Snare did not restrain')},
     CA:({cast})=>{
@@ -104,6 +143,22 @@ function runComboChecks(testSchool) {
     CB:({target,cast})=>{
      hp=30;target.hp=1;target.graveMarkUntil=arenaTime+5;cast();
      if(hp!==32||target.hp>0)throw Error('Soul Rend did not heal after the marked kill');
+    },
+    ABC:({target,cast,tick})=>{
+     const mana=mageMana;
+     if(castMageSpell('ABC')||mageMana!==mana||mageCooldowns.ABC)throw Error('Raise the Fallen charged without a Soul or corpse');
+     mageCorpses=[{x:p.x+28,y:p.y,until:arenaTime+8}];
+     cast();
+     if(mageCorpses.length||mageSummons.filter(unit=>unit.type==='skeleton').length!==1)throw Error('No-Soul Raise did not animate one corpse');
+     tick(34);if(target.hp>=60)throw Error('Raised skeleton never reached and damaged its target');
+     mageSummons=[];mageSouls=3;
+     dummy(p.x+104,p.y-44);dummy(p.x+108,p.y+50);
+     goodCast('ABC');
+     if(mageSouls||mageSummons.filter(unit=>unit.type==='skeleton').length!==3)throw Error('Raise the Fallen did not convert three Souls into three skeletons');
+     if(new Set(mageSummons.map(unit=>unit.command?.target)).size!==3||new Set(mageSummons.map(unit=>unit.attackAt)).size!==3)throw Error('Raised skeletons did not coordinate separate targets or stagger their attacks');
+     mageSouls=1;mageGlobalReady=0;mageCooldowns={};
+     const after=mageMana;
+     if(castMageSpell('ABC')||mageSouls!==1||mageMana!==after||mageSummons.length!==3)throw Error('Raise the Fallen spent resources while all skeleton slots were occupied');
     },
     ACB:({target,cast,tick})=>{
      mageCorpses=[0,12,24].map(n=>({x:target.x+n,y:target.y,until:arenaTime+8}));
@@ -120,12 +175,14 @@ function runComboChecks(testSchool) {
     },
     CAB:({target,cast,tick})=>{
      mageSouls=1;target.hp=1;const neighbor=dummy(target.x+28,target.y);
-     cast();tick(26);
+     cast();if(target.graveMarkUntil<=arenaTime)throw Error('Haunt did not immediately mark its target');tick(26);
      if(mageSouls||target.hp>0||neighbor.hp>=20||mageActiveZone('haunt'))throw Error('Haunt did not spend a Soul and burst');
     },
     CBA:({target,cast})=>{
      const second=dummy(p.x+102,p.y);target.graveMarkUntil=arenaTime+5;cast();
      if(mageSouls!==1||!(second.graveMarkUntil>arenaTime))throw Error('Soul Harvest did not mark the group and collect one Soul');
+     second.hp=0;goodCast('CBA');
+     if(mageSouls!==1)throw Error('Soul Harvest paid twice for one target');
     }
    },
    pyromancer:{
@@ -240,7 +297,7 @@ function runComboChecks(testSchool) {
   return advancedCount;
 }
 
-for (const [school,total] of [['apprentice',7],['summoner',9],['necromancer',9],['pyromancer',9],['arcane',9]]) {
+for (const [school,total] of [['apprentice',7],['summoner',10],['necromancer',12],['pyromancer',9],['arcane',9]]) {
   test(school+' casts and applies all '+total+' combinations in the game runtime', () => {
     let count;
     const probe = 'report((' + runComboChecks.toString() + ')(' + JSON.stringify(school) + '));';

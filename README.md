@@ -17,6 +17,25 @@ In the Android Preview, the **Get free** button beneath **Buy** offers one test 
 
 For a paid launch, configure the production AdMob app and rewarded placements, consent flow and store disclosure. The real Diamond wallet needs Play Billing products and verified purchase, credit, spending, and recovery handling before enabling checkout.
 
+## V8.73 — Legacy Forge
+
+Defeat a boss in a saved run to earn one Boss Mark for the entire encounter. The Forge shares your balance between both save slots in the same browser or app installation. Replaying a boss in a fresh run earns another Mark. Practice fights and reopening a completed checkpoint do not award Marks.
+
+Open **Legacy Forge** on the main menu to unlock ten starting perks and equip up to two. Each of the eleven evolutions costs five Marks and becomes available to its hero in fresh runs. Your evolution options and equipped perks are set when you start a run. Level 3 skips the choice if you have no unlocked form. Level 8 still grants its stat boost, with the evolved title and effect reserved for a chosen form.
+
+- **All heroes** can unlock War Chest, Field Rations, Fleetfoot, Coinfinder, and Second Wind.
+- **Squire** can unlock Spare Plating and Fortified Shield. **Scout** can unlock Quick Draw and Keen Eye. **Rune Apprentice** can unlock Prepared Casting.
+
+Existing saves keep their class progression and can earn Marks from their next boss. Fresh runs still start with 50 HP and three lives. The Test Room keeps all forms available for practice.
+
+Floating joysticks are on by default. Turn them off under **Pause → Controls** to use fixed positions. The game remembers your choice.
+
+### Necromancer and Guardian spells
+
+Necromancer's Grave Mark is faster and sticks through boss shields. Spread out your hits against marked bosses to collect Souls. Raise the Fallen sends skeletons after separate targets when possible and can raise one from a corpse when you're out of Souls. Corpses and marked enemies are easier to spot during combat.
+
+Summoner's Guardian Pact plants a shield-bearing guardian that slams on arrival and blocks shots for 5.8 seconds. Aim the placement with the movement stick, then use Guardian Step to reposition it and slam again. Spirit Relay works with any active summon and hits each enemy once, even where shockwaves overlap.
+
 ## V8.72 — Painted motion
 
 Heroes and enemies breathe, stride, hover, or squash according to their movement and type. Ranged enemies brace while aiming, and bosses brace during their existing windups. Painted sprites move around their usual combat positions. Walls, hitboxes, attack timers, and damage are separate from these poses.

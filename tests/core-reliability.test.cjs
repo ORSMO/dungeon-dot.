@@ -62,7 +62,7 @@ test('arena uses high-density phone pixels and limits oversized displays without
  assert.ok(Math.max(...result.huge)<=4096);
  assert.equal(result.quality,'medium');
 });
-const evolutionMethods=[declaration('EVOLUTION_LEVEL'),method('hasEvolved'),method('evolutionAttackRate')];
+const evolutionMethods=[declaration('EVOLUTION_LEVEL'),method('hasLevelEightBonus'),method('hasEvolved'),method('evolutionAttackRate'),method('hasLegacyPerk')];
 
 test('joined wall and bridge artwork removes internal seams without filling gaps', () => {
   const result = run([
@@ -333,7 +333,7 @@ test('stored props that block the way are removed without deleting the chest', (
 test('boss hint survives the final-hit frame and victory rewards are idempotent', () => {
   const result = run([
     'let bossFight={done:false,units:[],name:"TEST"},currentRoom={kind:"boss",bossDefeated:false,cleared:false},wins=0,rewards=0,records=0,kills=0,coinDrops=[],enemies=[{hp:2}],pendingSplits=[],projectiles=[],artillery=[],gravityWells=[],reactionZones=[],shards=[],poisonPuddles=[],elementFx=[],W=720,F=640,shieldType="curved";',
-    'const inSandbox=()=>false,rewardBoss=()=>rewards++,recordBossKill=()=>records++,queueCheckpoint=()=>wins++,showShieldChoice=()=>{},itemCount=()=>0,healPlayer=()=>{};',
+    'const activeSlot=null,inSandbox=()=>false,rewardBoss=()=>rewards++,recordBossKill=()=>records++,queueCheckpoint=()=>wins++,showShieldChoice=()=>{},itemCount=()=>0,healPlayer=()=>{};',
     method('bossHint'), method('finishBossFight'),
     'const hint=bossHint();finishBossFight();finishBossFight();'
   ], '{hint,done:bossFight.done,cleared:currentRoom.cleared,rewards,records,wins,kills}');
@@ -510,7 +510,7 @@ test('index damage uses combat values for elite slams and boss signatures', () =
 test('Classic is protected through the final moving dash frame and loses protection afterwards', () => {
   const result=run([
     declaration('DASH_DURATION'),method('dashCooldown'),method('classicDashBatActive'),method('classicDashProtected'),
-    method('dashInvulnerable'),method('requestDash'),method('moveDash'),method('damagedHealth'),method('bodyArmourStats'),declaration('BODY_ARMOUR_MAX_RANK'),
+    method('dashInvulnerable'),method('requestDash'),method('moveDash'),method('damagedHealth'),method('bodyArmourStats'),method('hasLegacyPerk'),declaration('BODY_ARMOUR_MAX_RANK'),
     'const hero="classic",W=480,F=480,sticks=[{dx:1,dy:0}],holes=[],p={x:100,y:100,a:0};',
     'const dash={remaining:0,readyAt:0,immuneUntil:0,trail:[],batPath:null,batHits:new Set()};',
     'let arenaTime=10,inv=0,hp=50,wall=false,armourHp=12;const progress={upgrades:{}};',
@@ -542,7 +542,7 @@ test('Classic dash sweeps the travel path, respects cover, and boosts only bat d
 test('failed checkpoint writes are retained, throttled and retried successfully', () => {
   const result = run([
     'let savePending=true,saveRetryAt=0,saveError="",activeSlot=1,currentRoom={cleared:true},loadingRun=false,over=false,writes=0,clock=1000,allow=false,notes=0;',
-    'const Date={now:()=>clock},inSandbox=()=>false,slotKey=n=>"slot"+n,snapshotRun=()=>({n:1}),localStorage={setItem(){writes++;if(!allow)throw Error("Quota")}},document={querySelector:()=>({set textContent(v){}})},updateSaveIndicator=()=>notes++;',
+    'const Date={now:()=>clock},inSandbox=()=>false,slotKey=n=>"slot"+n,snapshotRun=()=>({n:1}),localStorage={setItem(){writes++;if(!allow)throw Error("Quota")}},document={querySelector:()=>({set textContent(v){}})},updateSaveIndicator=()=>notes++,claimSavedBossMarks=()=>{};',
     method('flushCheckpoint'),
     'const failure=flushCheckpoint(),pendingAfterFailure=savePending;flushCheckpoint();const writesDuringThrottle=writes;',
     'allow=true;clock+=5001;const success=flushCheckpoint();'
@@ -796,7 +796,7 @@ test('healer enemies support allies without granting free player healing on cont
 
 test('body armour absorbs a share, exhausts its durability on the breaking hit, and refills on room entry', () => {
   const result=run([
-    declaration('BODY_ARMOUR_MAX_RANK'),
+    declaration('BODY_ARMOUR_MAX_RANK'),method('hasLegacyPerk'),
     'const hero="classic",progress={upgrades:{}},sandbox={attacks:false};',
     'let hp=50,armourHp=12,breaks=0,practice=false,checkpoints=0;',
     'let shieldType="curved",shieldHp=100,shieldBroken=false,shieldCooldown=0,shieldLastHit=-99,shieldLaserTick=0;',
@@ -856,7 +856,7 @@ test('every level-three evolution card selects the option named on the card', ()
   const result=run([
     ...schoolSpells,declaration('WEAPON_PATHS'),
     declaration('ART_ROWS'),declaration('HERO_PLATES'),
-    ...['plateIcon','evolutionPortrait','equippedWeapon','weaponChoices','validWeaponChoice','runHeroName','levelChoicePending','openElementChoice','selectMageSchool','selectWeapon'].map(method),
+    ...['plateIcon','evolutionPortrait','equippedWeapon','weaponChoices','validWeaponChoice','evolutionChoices','availableEvolutionChoices','runHeroName','levelChoicePending','openElementChoice','selectMageSchool','selectWeapon'].map(method),
     'let hero,progress,arrows=[],bowShotCooldown=0,mageCooldowns={};const p={a:0};',
     'const panel={hidden:true},title={},description={},options={children:[],set innerHTML(value){this.children=[]},appendChild(card){this.children.push(card)}};',
     'const nodes={"#element-choice":panel,"#element-title":title,"#element-explain":description,"#element-options":options};',
@@ -876,8 +876,8 @@ test('every level-three evolution card selects the option named on the card', ()
 
 test('failed magic casts preserve mana and a successful cast enforces both cooldowns', () => {
   const result=run([
-    declaration('SPELL_ZONE_ART'),method('spellArtKind'),'const soundCues=[],playSoundCue=id=>soundCues.push(id);',
-    ...schoolSpells,method('castMageSpell'),method('mageCooldownMultiplier'),method('pulseMageRunes'),
+    declaration('SPELL_ZONE_ART'),declaration('MAGE_SIGNATURE_SOUNDS'),method('spellArtKind'),'const soundCues=[],playSoundCue=id=>soundCues.push(id);',
+    ...schoolSpells,method('castMageSpell'),method('mageSpellMana'),method('hasLegacyPerk'),method('mageCooldownMultiplier'),method('pulseMageRunes'),
     'let mageMana=100,arenaTime=1,mageGlobalReady=0,mageCastCount=0,mageRuneFx=[],resource=false,feedback="";',
     'const progress={mageSchool:"necromancer"},mageCooldowns={},mageInputEnabled=()=>true,mageAim=()=>({a:0});',
     'const castSchoolSpell=()=>resource?undefined:"NEED A SOUL",itemCount=()=>0,upgradeCount=()=>0,playerStats=()=>({swing:1});',
@@ -887,22 +887,24 @@ test('failed magic casts preserve mana and a successful cast enforces both coold
   ],'{locked,failed,before,applied,duringGlobal,duringSpell,mageMana,mageCastCount,ready:mageCooldowns.ABC,flashes:mageRuneFx.map(f=>f.id+":"+f.kind),soundCues}');
   assert.deepEqual(result,{
     locked:false,failed:false,before:{mageMana:100,mageGlobalReady:0,feedback:'NEED A SOUL'},
-    applied:true,duringGlobal:false,duringSpell:false,mageMana:68,mageCastCount:1,ready:6.5,flashes:['A:cast','B:cast','C:cast'],soundCues:['spell-grave']
+    applied:true,duringGlobal:false,duringSpell:false,mageMana:70,mageCastCount:1,ready:6.5,flashes:['A:cast','B:cast','C:cast'],soundCues:['spell-raise']
   });
 });
 
 test('Grave Mark earns Souls from corpses and hits on a solo boss up to the cap', () => {
   const result=run([
     'const playSoundCue=()=>{};',
-    declaration('MAGE_SOUL_LIMIT'),method('gainMageSoul'),method('mageHurt'),method('rememberMageCorpse'),
+    declaration('MAGE_SOUL_LIMIT'),method('gainMageSoul'),method('markForSouls'),method('trackMarkedBossHit'),method('mageHurt'),method('rememberMageCorpse'),
     declaration('SPELL_ZONE_ART'),method('spellArtKind'),method('queueCombatHit'),
     'const progress={mageSchool:"necromancer"},itemCount=()=>0,canDamage=()=>true,refreshManaHud=()=>{},queueCheckpoint=()=>{},mageOnHit=()=>{};',
-    'let arenaTime=1,mageSouls=0;const p={x:0,y:0},combatHits=[],mageCorpses=[],friendlyDamage=(enemy,amount)=>{enemy.hp=Math.max(0,enemy.hp-amount);return true};',
+    'let arenaTime=1,mageSouls=0;const bossFight=null,p={x:0,y:0},combatHits=[],mageCorpses=[],friendlyDamage=(enemy,amount)=>{enemy.hp=Math.max(0,enemy.hp-amount);return true};',
     'const enemy={x:10,y:18,hp:2};mageHurt(enemy,2.8,"grave");rememberMageCorpse(enemy);const afterKill=mageSouls;',
-    'const boss={hp:90,kind:"gatekeeper"};mageHurt(boss,2.8,"grave");mageHurt(boss,1.85);mageHurt(boss,1.85);const fromBoss=mageSouls;',
-    'for(let i=0;i<9;i++)mageHurt(boss,1.85);'
-  ],'{afterKill,fromBoss,mageSouls,corpses:mageCorpses.length}');
-  assert.deepEqual(result,{afterKill:1,fromBoss:2,mageSouls:3,corpses:1});
+    'const boss={hp:90,kind:"gatekeeper"};mageHurt(boss,2.8,"grave");arenaTime+=.31;mageHurt(boss,1.85);',
+    'arenaTime+=9;mageHurt(boss,2.8,"grave");const hitsOnRemark=boss.graveHits;',
+    'for(let i=0;i<2;i++){arenaTime+=.31;mageHurt(boss,1.85)}const fromBoss=mageSouls;',
+    'for(let i=0;i<9;i++){arenaTime+=.31;mageHurt(boss,1.85)}'
+  ],'{afterKill,hitsOnRemark,fromBoss,mageSouls,corpses:mageCorpses.length}');
+  assert.deepEqual(result,{afterKill:1,hitsOnRemark:1,fromBoss:2,mageSouls:3,corpses:1});
 });
 
 test('Ricochet Orb reflects off a wall and can bounce only as many times as configured', () => {
@@ -1139,7 +1141,7 @@ test('Mage rune tracing detects a fast edge pass and rejects returning to a used
 test('Interrupting controls clears both sticks, the rune trace and any bat momentum', () => {
   const result = run([
     'let mageGesture={id:3},editPointer=null,dashDrag=null;',
-    'const sticks=[{id:1,dx:1,dy:0},{id:2,dx:0,dy:1}],p={a:1,target:2,vel:3};',
+    'const sticks=[{id:1,dx:1,dy:0,touchOrigin:{x:8,y:12}},{id:2,dx:0,dy:1}],p={a:1,target:2,vel:3};',
     'const captured=new Set([1,2,3]);',
     'const c={hasPointerCapture:id=>captured.has(id),releasePointerCapture:id=>captured.delete(id)};',
     method('releaseCapture'), method('cancelHeldInputs'),
@@ -1147,7 +1149,7 @@ test('Interrupting controls clears both sticks, the rune trace and any bat momen
   ], '{mageGesture,sticks,p,captured:[...captured]}');
   assert.deepEqual(result, {
     mageGesture:null,
-    sticks:[{id:null,dx:0,dy:0},{id:null,dx:0,dy:0}],
+    sticks:[{id:null,dx:0,dy:0,touchOrigin:null},{id:null,dx:0,dy:0,touchOrigin:null}],
     p:{a:1,target:1,vel:0},
     captured:[]
   });
